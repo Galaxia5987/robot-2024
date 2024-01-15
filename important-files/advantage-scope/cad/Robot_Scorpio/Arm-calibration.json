@@ -1,0 +1,86 @@
+{
+  "version": "3.0.0-beta-3",
+  "layout": [
+    {
+      "type": 6,
+      "fields": [],
+      "listFields": [
+        [
+          {
+            "type": "Component (Robot)",
+            "key": "NT:/AdvantageKit/RealOutputs/BottomArmPose",
+            "sourceTypeIndex": 0,
+            "sourceType": 5
+          },
+          {
+            "type": "Component (Robot)",
+            "key": "NT:/AdvantageKit/RealOutputs/TopArmPose",
+            "sourceTypeIndex": 0,
+            "sourceType": 5
+          },
+          {
+            "type": "Component (Robot)",
+            "key": "NT:/AdvantageKit/RealOutputs/IntakePose",
+            "sourceTypeIndex": 0,
+            "sourceType": 5
+          }
+        ],
+        [
+          {
+            "type": "Robot",
+            "key": "NT:/AdvantageKit/SwerveDrive/BotPose",
+            "sourceTypeIndex": 0,
+            "sourceType": 5
+          }
+        ]
+      ],
+      "options": {
+        "field": "Axes",
+        "alliance": "blue",
+        "robot": "Scorpio",
+        "unitDistance": "meters",
+        "unitRotation": "radians",
+        "cameraIndex": -1,
+        "fov": 50
+      },
+      "configHidden": false,
+      "title": "3D Field"
+    },
+    {
+      "type": 1,
+      "legends": {
+        "left": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": [
+            {
+              "key": "NT:/AdvantageKit/Arm/ShoulderAngle",
+              "color": "#2b66a2",
+              "show": true
+            },
+            {
+              "key": "NT:/AdvantageKit/Arm/ShoulderAppliedVoltage",
+              "color": "#e5b31b",
+              "show": true
+            }
+          ]
+        },
+        "discrete": {
+          "fields": []
+        },
+        "right": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": []
+        }
+      },
+      "title": "Line Graph"
+    }
+  ]
+}
