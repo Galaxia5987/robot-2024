@@ -44,10 +44,10 @@ public class ExampleSubsystemIOSim implements ExampleSubsystemIO {
     public void updateInputs() {
         motor.update(Timer.getFPGATimestamp());
 
-        inputs.angle = Rotation2d.fromRotations(motor.getPosition());
+        inputs.angle = Rotation2d.fromRotations(motor.getRotorPosition());
         inputs.tipPosition =
                 new Translation2d(inputs.angle.getCos(), inputs.angle.getSin())
                         .times(ExampleSubsystemConstants.LENGTH);
-        inputs.velocity = Rotation2d.fromRotations(Units.rpmToRps(motor.getVelocity()));
+        inputs.velocity = Rotation2d.fromRotations(Units.rpmToRps(motor.getRotorVelocity()));
     }
 }
