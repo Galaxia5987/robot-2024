@@ -15,6 +15,8 @@ public class Hood extends SubsystemBase {
     private final HoodInputsAutoLogged inputs = HoodIO.inputs;
     private final HoodIO io;
 
+    private ControlMode controlMode = ControlMode.POSITION;
+
     /**
      * Constructor for Hood subsystem.
      *
@@ -37,15 +39,6 @@ public class Hood extends SubsystemBase {
         INSTANCE = new Hood(io);
     }
 
-    /**
-     * Sets the position of the hood.
-     *
-     * @param angle The angle of the hood to set.
-     */
-    private void setAngle(MutableMeasure<Angle> angle) {
-
-    }
-
     public MutableMeasure<Angle> getAngle() {
         return inputs.angle;
     }
@@ -55,7 +48,7 @@ public class Hood extends SubsystemBase {
     }
 
     public Command setAngle(Supplier<Rotation2d> angle){
-        return run(() -> inputs.angleSetpoint.mut_replace(angle.get().getRadians(), Radians));
+        controlMode = ControlMode.POSITION;
         return runOnce(() -> inputs.angleSetpoint.mut_replace(angle.get().getRadians(), Radians));
     }
         return runOnce(() -> inputs.powerSetpoint = power.get());
@@ -72,9 +65,18 @@ public class Hood extends SubsystemBase {
     /** Updates the state of the hood. */
     @Override
     public void periodic() {
-        io.setAngle(inputs.angleSetpoint);
-
         io.updateInputs();
         Logger.processInputs("Hood", inputs);
+
+        if (controlMode == ControlMode.POSITION) {
+            io.setAngle(inputs.angleSetpoint);
+        } else {
+            io.setPower(inputs.powerSetpoint);
+        }
+    }
+
+    public enum ControlMode {
+        POSITION,
+        POWER
     }
 }
