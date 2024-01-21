@@ -1,11 +1,14 @@
 package frc.robot.subsystems.hood;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
+import java.util.function.Supplier;
+
+import static edu.wpi.first.units.Units.Radians;
 
 public class Hood extends SubsystemBase {
     private static Hood INSTANCE = null;
@@ -49,6 +52,10 @@ public class Hood extends SubsystemBase {
 
     public boolean atSetpoint() {
         return io.atSetpoint();
+    }
+
+    public Command setAngle(Supplier<Rotation2d> angle){
+        return run(() -> inputs.angleSetpoint.mut_replace(angle.get().getRadians(), Radians));
     }
 
     public Command getResetAbsoluteEncoderCommand(){
