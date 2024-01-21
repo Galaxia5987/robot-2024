@@ -9,7 +9,7 @@ public interface ShooterIO {
     ShooterInputsAutoLogged inputs = new ShooterInputsAutoLogged();
 
     /**
-     * Set the position of the hood
+     * Sets the position of the hood.
      *
      * @param velocity The position of the subsystem.
      */
