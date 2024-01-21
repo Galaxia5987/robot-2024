@@ -1,30 +1,25 @@
 package frc.robot.subsystems.elevator;
 
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.MutableMeasure;
+
 public interface ElevatorIO {
 
-    default void getInstance() {
-    }
+    void setPower(double power);
 
-    default void setPower(double power) {
-    }
+    void getPower();
 
-    default void getPower() {
-    }
+    void setHeight(MutableMeasure<Distance> height);
 
-    default void setHeight(double height) {
-    }
+    void getHeight();
 
-    default void getHeight() {
-    }
+    void getTopSensor();
 
-    default void getTopSensor() {
-    }
+    void getBottomSensor();
 
-    default void getBottomSensor() {
-    }
+    void getControlMode();
 
-    default void getControlMode(){
-    }
+    void resetEncoder(boolean isBottom);
 
     enum ControlMode {
         PERCENT_OUTPUT,
