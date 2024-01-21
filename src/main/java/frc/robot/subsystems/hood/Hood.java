@@ -70,7 +70,7 @@ public class Hood extends SubsystemBase {
 
     public Command ResetAbsoluteEncoder() {
         return setPower(() -> HoodConstants.resetPower)
-                .andThen(runOnce(() -> io.resetAbsoluteEncoder()))
+                .andThen(runOnce(io::resetAbsoluteEncoder))
                 .andThen(setPower(() -> 0.0));
     }
 
