@@ -60,9 +60,9 @@ public class Hood extends SubsystemBase {
         return Utils.epsilonEquals(inputs.powerSetpoint * 12, inputs.voltage.in(Units.Volts));
     }
 
-    public Command setAngle(Supplier<Rotation2d> angle){
+    public Command setAngle(Supplier<MutableMeasure<Angle>> angle){
         controlMode = ControlMode.POSITION;
-        return runOnce(() -> inputs.angleSetpoint.mut_replace(angle.get().getRadians(), Radians));
+        return runOnce(() -> inputs.angleSetpoint.mut_replace(angle.get()));
     }
 
     public Command setPower(Supplier<Double> power){
