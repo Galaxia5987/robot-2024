@@ -70,13 +70,11 @@ public class Hood extends SubsystemBase {
         return runOnce(() -> inputs.powerSetpoint = power.get());
     }
 
-    public Command getResetAbsoluteEncoderCommand(){
-        return setPower(() -> -0.3).andThen(runOnce(() -> io.resetAbsoluteEncoder()));
     public Command ResetAbsoluteEncoder(){
         return setPower(() -> HoodConstants.resetForce).andThen(runOnce(() -> io.resetAbsoluteEncoder()));
     }
 
-    public Command getUpdateInternalEncoderCommand(){
+    public Command UpdateInternalEncoder(){
         return runOnce(() -> io.updateInternalEncoder());
     }
 
