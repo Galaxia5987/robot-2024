@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.Supplier;
-import lib.Utils;
+
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -54,7 +54,7 @@ public class Hood extends SubsystemBase {
     }
 
     public boolean atSetpoint() {
-        return inputs.voltage.isNear(MutableMeasure.mutable(inputs.voltage), HoodConstants.velocityTolerance);
+        return inputs.angle.isNear(inputs.angleSetpoint, HoodConstants.positionTolerance);
     }
 
     public Command setAngle(Supplier<MutableMeasure<Angle>> angle) {
