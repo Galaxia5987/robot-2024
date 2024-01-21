@@ -12,6 +12,8 @@ public interface ElevatorIO {
 
     void resetEncoder(boolean isBottom);
 
+    void updateInputs(ElevatorInputs inputs);
+
     enum ControlMode {
         PERCENT_OUTPUT,
         POSITION
