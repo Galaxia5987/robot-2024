@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.Supplier;
 import lib.Utils;
@@ -67,9 +68,10 @@ public class Hood extends SubsystemBase {
     }
 
     public Command ResetAbsoluteEncoder() {
-        return setPower(() -> HoodConstants.resetPower)
-                .andThen(runOnce(io::resetAbsoluteEncoder))
-                .andThen(setPower(() -> 0.0));
+        return Commands.sequence(
+                setPower(() -> HoodConstants.resetPower),
+                runOnce(io::resetAbsoluteEncoder),
+                setPower(() -> 0.0));
     }
 
     public Command UpdateInternalEncoder() {
