@@ -51,7 +51,11 @@ public class Hood extends SubsystemBase {
         controlMode = ControlMode.POSITION;
         return runOnce(() -> inputs.angleSetpoint.mut_replace(angle.get().getRadians(), Radians));
     }
+
+    public Command setPower(Supplier<Double> power){
+        controlMode = ControlMode.POWER;
         return runOnce(() -> inputs.powerSetpoint = power.get());
+    }
 
     public Command getResetAbsoluteEncoderCommand(){
         return run(() -> io.resetAbsoluteEncoder());
