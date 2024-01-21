@@ -1,20 +1,25 @@
 package frc.robot.subsystems.intake;
 
-import static edu.wpi.first.units.Units.*;
-
-import edu.wpi.first.units.*;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import org.littletonrobotics.junction.AutoLog;
+
+import static edu.wpi.first.units.Units.*;
 
 public interface IntakeIO {
 
-IntakeInputsAutoLogged inputs = new IntakeInputsAutoLogged();
-    default void setAngle(MutableMeasure angle) {} // [Rad]
+    IntakeInputsAutoLogged inputs = new IntakeInputsAutoLogged();
 
-    default void setRollerSpeed(MutableMeasure speed) {} // [Rps]
+    default void setAngle(MutableMeasure angle) {
+    } // [Rad]
 
-    default void setCenterRoller(MutableMeasure speed) {}
+    default void setRollerSpeed(MutableMeasure speed) {
+    } // [Rps]
+
+    default void setCenterRoller(MutableMeasure speed) {
+    }
 
     void updateInputs();
 
