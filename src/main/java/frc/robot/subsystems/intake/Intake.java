@@ -51,5 +51,8 @@ public class Intake extends SubsystemBase {
     }
 
 
+<<<<<<< HEAD
     
+=======
+>>>>>>> c83c3363eeabff8038a9ce045ed24845a10f93a3
 }
