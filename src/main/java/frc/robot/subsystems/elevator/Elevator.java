@@ -29,10 +29,7 @@ public class Elevator extends SubsystemBase {
         inputs.power = power;
         inputs.controlMode = ElevatorIO.ControlMode.PERCENT_OUTPUT;
     }
-
-    public double getPower() {
-        return inputs.power;
-    }
+    
 
     public void setHeight(MutableMeasure<Distance> height) {
         inputs.height = height;
