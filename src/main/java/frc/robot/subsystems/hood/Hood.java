@@ -59,11 +59,11 @@ public class Hood extends SubsystemBase {
     }
 
     public Command getResetAbsoluteEncoderCommand(){
-        return new RunCommand(() -> io.resetAbsoluteEncoder(), this);
+        return run(() -> io.resetAbsoluteEncoder());
     }
 
     public Command getUpdateInternalEncoderCommand(){
-        return new RunCommand(() -> io.updateInternalEncoder(), this);
+        return run(() -> io.updateInternalEncoder());
     }
 
     /** Updates the state of the hood. */
