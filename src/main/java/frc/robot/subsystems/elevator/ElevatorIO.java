@@ -7,17 +7,7 @@ public interface ElevatorIO {
 
     void setPower(double power);
 
-    void getPower();
-
     void setHeight(MutableMeasure<Distance> height);
-
-    void getHeight();
-
-    void getTopSensor();
-
-    void getBottomSensor();
-
-    void getControlMode();
 
     void resetEncoder(boolean isBottom);
 
