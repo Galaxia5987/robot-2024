@@ -1,0 +1,58 @@
+package frc.robot.subsystems.elevator;
+
+import com.ctre.phoenix6.controls.ControlRequest;
+import com.ctre.phoenix6.signals.ControlModeValue;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
+
+import static frc.robot.subsystems.elevator.ElevatorConstants.*;
+
+
+public class Elevator extends SubsystemBase {
+    private static Elevator INSTANCE;
+    private final ElevatorInputs inputs = new ElevatorInputs();
+    private final ElevatorIO io;
+    private final Mechanism2d mechanism2d = new Mechanism2d(MECHANISM_WIDTH, MECHANISM_HEIGHT);
+    private final MechanismRoot2d root = mechanism2d.getRoot("Elevator", ROOT_X, ROOT_Y);
+    private ControlModeValue controlMode;
+
+    private Elevator(ElevatorIO io) {
+        this.io = io;
+    }
+
+    public void setPower(double power) {
+        inputs.power = power;
+        inputs.controlMode = ElevatorIO.ControlMode.PERCENT_OUTPUT;
+    }
+
+    public double getPower() {
+        return inputs.power;
+    }
+
+    public void setHeight(MutableMeasure<Distance> height){
+        inputs.height = height;
+        inputs.controlMode = ElevatorIO.ControlMode.POSITION;
+    }
+
+    public MutableMeasure<Distance> getHeight(){
+        return inputs.height;
+    }
+
+    public MutableMeasure<Distance> getHeightSetpoint(){
+        return inputs.heightSetpoint;
+    }
+
+    public void resetEncoder(boolean isBottom) {
+        io.resetEncoder(isBottom);
+    }
+
+    public void stop() {
+        inputs.controlMode = null;
+    }
+
+}
