@@ -41,7 +41,7 @@ public class Intake extends SubsystemBase {
     }
 
     public Command setCenterRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
-        return runOnce(() -> io.setCenterRoller(speed));
+        return runOnce(() -> io.setCenterRollerSpeed(speed));
     }
 
     @Override
@@ -49,10 +49,4 @@ public class Intake extends SubsystemBase {
         io.updateInputs();
         Logger.processInputs("Intake", inputs);
     }
-
-
-<<<<<<< HEAD
-    
-=======
->>>>>>> c83c3363eeabff8038a9ce045ed24845a10f93a3
 }
