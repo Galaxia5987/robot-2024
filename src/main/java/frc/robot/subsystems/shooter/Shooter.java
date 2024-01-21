@@ -48,10 +48,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean atSetpoint() {
-        return Utils.epsilonEquals(
-                inputs.velocity.in(Units.RotationsPerSecond),
-                inputs.velocitySetpoint.in(Units.RotationsPerSecond),
-                ShooterConstants.atSetpointTolerance);
+        return inputs.velocity.isNear(inputs.velocitySetpoint, ShooterConstants.atSetpointTolerance);
     }
 
     /** Updates the state of the shooter. */
