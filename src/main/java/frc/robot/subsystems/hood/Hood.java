@@ -56,14 +56,17 @@ public class Hood extends SubsystemBase {
 
     public Command setAngle(Supplier<Rotation2d> angle){
         return run(() -> inputs.angleSetpoint.mut_replace(angle.get().getRadians(), Radians));
+        return runOnce(() -> inputs.angleSetpoint.mut_replace(angle.get().getRadians(), Radians));
     }
+        return runOnce(() -> inputs.powerSetpoint = power.get());
 
     public Command getResetAbsoluteEncoderCommand(){
         return run(() -> io.resetAbsoluteEncoder());
+        return runOnce(() -> io.resetAbsoluteEncoder());
     }
 
     public Command getUpdateInternalEncoderCommand(){
-        return run(() -> io.updateInternalEncoder());
+        return runOnce(() -> io.updateInternalEncoder());
     }
 
     /** Updates the state of the hood. */
