@@ -3,6 +3,10 @@ package frc.robot.subsystems.hood;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
@@ -14,6 +18,13 @@ public class Hood extends SubsystemBase {
     private static Hood INSTANCE = null;
     private final HoodInputsAutoLogged inputs = HoodIO.inputs;
     private final HoodIO io;
+    private final Mechanism2d mechanism2d = new Mechanism2d(
+            3,3
+    );
+    private final MechanismRoot2d root = mechanism2d.getRoot("Hood", HoodConstants.mechanism2dPose.getFirst(), HoodConstants.mechanism2dPose.getSecond());
+    private final MechanismLigament2d hood = root.append(
+        new MechanismLigament2d("Hood", HoodConstants.HoodLength, 45)
+    );
 
     private ControlMode controlMode = ControlMode.POSITION;
 
@@ -71,6 +82,7 @@ public class Hood extends SubsystemBase {
     public void periodic() {
         io.updateInputs();
         Logger.processInputs("Hood", inputs);
+        SmartDashboard.putData("IntakeMech", mechanism2d);
 
         if (controlMode == ControlMode.POSITION) {
             io.setAngle(inputs.angleSetpoint);
