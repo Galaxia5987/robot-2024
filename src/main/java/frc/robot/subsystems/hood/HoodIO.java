@@ -19,8 +19,6 @@ public interface HoodIO {
 
     void setPower(double power);
 
-    boolean atSetpoint();
-
     /** Update the inputs of the hood */
     void updateInputs();
 
