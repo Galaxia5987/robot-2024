@@ -1,12 +1,11 @@
 package frc.robot.subsystems.shooter;
 
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.Supplier;
+
+import lib.Utils;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
@@ -50,7 +49,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean atSetpoint() {
-        return io.atSetpoint();
+        return Utils.epsilonEquals(inputs.velocity.in(Units.RotationsPerSecond), inputs.velocitySetpoint.in(Units.RotationsPerSecond), ShooterConstants.atSetpointTolerance);
     }
 
     /** Updates the state of the shooter. */
