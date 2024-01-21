@@ -2,25 +2,22 @@ package frc.robot.subsystems.hood;
 
 import static edu.wpi.first.units.Units.*;
 
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Voltage;
+import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj2.command.Command;
 import org.littletonrobotics.junction.AutoLog;
+
+import java.util.function.Supplier;
 
 public interface HoodIO {
     HoodInputsAutoLogged inputs = new HoodInputsAutoLogged();
 
-    /**
-     * Set the position of the hood
-     *
-     * @param angle The position of the subsystem.
-     */
-    void setAngle(Measure<Angle> angle);
-
     void updateInternalEncoder();
 
     void resetAbsoluteEncoder();
+
+    void setAngle(MutableMeasure<Angle> angle);
+
+    void setPower(double power);
 
     boolean atSetpoint();
 
