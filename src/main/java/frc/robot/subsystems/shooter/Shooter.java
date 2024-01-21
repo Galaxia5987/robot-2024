@@ -1,9 +1,13 @@
 package frc.robot.subsystems.shooter;
 
+import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
@@ -38,8 +42,8 @@ public class Shooter extends SubsystemBase {
      *
      * @param velocity The velocity of the Shooter to set.
      */
-    public void setVelocity(MutableMeasure<Velocity<Angle>> velocity) {
-        inputs.velocitySetpoint = velocity;
+    public Command setVelocity(Supplier<Double> velocity) {
+        return run(() -> inputs.velocitySetpoint.mut_replace(velocity.get(), RotationsPerSecond));
     }
 
     public MutableMeasure<Velocity<Angle>> getVelocity() {
