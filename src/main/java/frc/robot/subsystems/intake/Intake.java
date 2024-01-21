@@ -5,6 +5,7 @@ import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.intake.IntakeConstants.IntakePose;
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
@@ -28,12 +29,8 @@ public class Intake extends SubsystemBase {
         return runOnce(() -> io.setAngle(angle));
     }
 
-    public Command setAngle(IntakeConstants.IntakePose intakePose) {
-        if (intakePose == IntakeConstants.IntakePose.UP) {
-            return setAngle(IntakeConstants.IntakePose.UP.intakePose);
-        } else {
-            return setAngle(IntakeConstants.IntakePose.DOWN.intakePose);
-        }
+    public Command setAngle(IntakePose intakePose) {
+        return setAngle(intakePose.intakePose);
     }
 
     public Command setRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
