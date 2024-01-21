@@ -9,8 +9,10 @@ import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
+
     private static Elevator INSTANCE;
     private final ElevatorInputs inputs = new ElevatorInputs();
     private final ElevatorIO io;
@@ -29,7 +31,7 @@ public class Elevator extends SubsystemBase {
         inputs.power = power;
         inputs.controlMode = ElevatorIO.ControlMode.PERCENT_OUTPUT;
     }
-    
+
 
     public void setHeight(MutableMeasure<Distance> height) {
         inputs.height = height;
@@ -46,5 +48,12 @@ public class Elevator extends SubsystemBase {
 
     public void stop() {
         inputs.controlMode = null;
+    }
+
+    @Override
+    public void periodic() {
+        io.updateInputs(inputs);
+        Logger.processInputs("Elevator", inputs);
+        currentCommand = getCurrentCommand();
     }
 }
