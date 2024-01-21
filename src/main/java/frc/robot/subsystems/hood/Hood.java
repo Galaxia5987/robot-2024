@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import lib.Utils;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 import java.util.function.Supplier;
 
@@ -27,6 +28,7 @@ public class Hood extends SubsystemBase {
     private final MechanismLigament2d hood = root.append(
         new MechanismLigament2d("Hood", HoodConstants.HoodLength, 45)
     );
+    @AutoLogOutput
 
     private ControlMode controlMode = ControlMode.POSITION;
 
@@ -70,8 +72,9 @@ public class Hood extends SubsystemBase {
         return runOnce(() -> inputs.powerSetpoint = power.get());
     }
 
-    public Command ResetAbsoluteEncoder(){
-        return setPower(() -> HoodConstants.resetForce).andThen(runOnce(() -> io.resetAbsoluteEncoder()));
+    public Command ResetAbsoluteEncoder() {
+        return setPower(() -> HoodConstants.resetForce)
+                .andThen(runOnce(() -> io.resetAbsoluteEncoder()))
                 .andThen(setPower(() -> 0.0));
     }
 
@@ -84,7 +87,6 @@ public class Hood extends SubsystemBase {
     public void periodic() {
         io.updateInputs();
         Logger.processInputs("Hood", inputs);
-        SmartDashboard.putData("IntakeMech", mechanism2d);
 
         if (controlMode == ControlMode.POSITION) {
             io.setAngle(inputs.angleSetpoint);
