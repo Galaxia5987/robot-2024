@@ -21,3 +21,26 @@ intake[Intake] --> fold_gripper[Fold Gripper]
     set_gripper_intake_power & deploy_intake & power_intake --> wait_for_intake_sensor["<i>Wait for intake sensor</i>"]
     wait_for_intake_sensor --> stop_gripper & fold_intake & stop_intake
 ```
+## Score
+```mermaid
+flowchart TD
+    score[Score] -->  check_objective{Check Objective}
+    check_objective --> set_trap_angle & drive_speaker_amp["<i>Drive to Speaker/Amp pose</i>"]
+    drive_speaker_amp --> check_speaker_amp{Check Speaker/Amp}
+    check_speaker_amp --> wait_shoot
+    subgraph Speaker
+        wait_shoot[Wait for shooter] --> feed[Feed]
+    end
+    
+    check_speaker_amp --> Amplify
+    subgraph Amplify
+        set_amp_height[Set elevator to Amp height]
+        set_amp_angle[Set gripper to Amp angle]
+        set_amp_height & set_amp_angle --> set_gripper_amp_power[Set gripper Amp power]
+    end
+
+    subgraph Trap
+        set_trap_angle[Set gripper to Trap angle] -->
+        set_gripper_trap_power[Set gripper Trap power]
+    end
+```
