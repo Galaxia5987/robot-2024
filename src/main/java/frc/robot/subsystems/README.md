@@ -44,3 +44,10 @@ flowchart TD
         set_gripper_trap_power[Set gripper Trap power]
     end
 ```
+## Climb
+```mermaid
+flowchart  TD
+climb[Climb]  -->  dtop["<i>Drive to optimal pose</i>"]  &  set_start_height[Set elevator start height]
+dtop  &  set_start_height  -->  set_pid_slot[Set climbing PID slot]
+set_pid_slot  -->  set_finish_height[Set elevator finish height]
+```
