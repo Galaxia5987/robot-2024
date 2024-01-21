@@ -1,8 +1,6 @@
 package frc.robot.subsystems.hood;
 
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -55,7 +53,7 @@ public class Hood extends SubsystemBase {
     }
 
     public boolean atSetpoint() {
-        return Utils.epsilonEquals(inputs.powerSetpoint * 12, inputs.voltage.in(Units.Volts));
+        return inputs.voltage.isNear(MutableMeasure.mutable(inputs.voltage), HoodConstants.velocityTolerance);
     }
 
     public Command setAngle(Supplier<MutableMeasure<Angle>> angle) {
