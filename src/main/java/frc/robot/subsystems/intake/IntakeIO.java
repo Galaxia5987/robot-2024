@@ -12,11 +12,9 @@ public interface IntakeIO {
 
     IntakeInputsAutoLogged inputs = new IntakeInputsAutoLogged();
 
-    default void setAngle(MutableMeasure angle) {} // [Rad]
-
-    default void setRollerSpeed(MutableMeasure speed) {} // [Rps]
-
-    default void setCenterRoller(MutableMeasure speed) {}
+     void setAngle(MutableMeasure<Angle> angle);
+     void setRollerSpeed(MutableMeasure<Velocity<Angle>> speed);
+     void setCenterRoller(MutableMeasure<Velocity<Angle>> speed);
 
     void updateInputs();
 
