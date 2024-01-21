@@ -15,8 +15,6 @@ public interface ShooterIO {
      */
     void setVelocity(MutableMeasure<Velocity<Angle>> velocity);
 
-    boolean atSetpoint();
-
     /** Update the inputs of the Shooter */
     void updateInputs();
 
