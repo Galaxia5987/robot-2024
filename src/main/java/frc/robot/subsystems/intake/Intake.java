@@ -1,14 +1,14 @@
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
-    Intake INSTANCE = null;
+    private static Intake INSTANCE = null;
     private IntakeIO io = null;
     private final IntakeInputsAutoLogged inputs = io.inputs;
 
@@ -16,33 +16,32 @@ public class Intake extends SubsystemBase {
         this.io = io;
     }
 
-    public Intake getINSTANCE() {
+    public Intake getInstance() {
         return INSTANCE;
     }
 
-    public void Initialize(IntakeIO io) {
-        new Intake(io);
+    public void initialize(IntakeIO io) {
+        INSTANCE = new Intake(io);
     }
 
-    public Command setAngle(MutableMeasure angle) {
-        return new InstantCommand(() -> io.setAngle(angle));
+    public Command setAngle(MutableMeasure<Angle> angle) {
+        return runOnce(() -> io.setAngle(angle));
     }
 
-    public Command setAngle(IntakePose intakePose) {
-        if (intakePose == IntakePose.UP) {
-            setAngle((MutableMeasure) Units.Radians.of(IntakeConstants.DOWN_ANGLE));
+    public Command setAngle(IntakeConstants.IntakePose intakePose) {
+        if (intakePose == IntakeConstants.IntakePose.UP) {
+            return setAngle(IntakeConstants.IntakePose.UP.intakePose);
         } else {
-            setAngle((MutableMeasure) Units.Radians.of(IntakeConstants.UP_ANGLE));
+            return setAngle(IntakeConstants.IntakePose.DOWN.intakePose);
         }
-        return new InstantCommand();
     }
 
-    public Command setRollerSpeed(MutableMeasure speed) {
-        return new InstantCommand(() -> io.setRollerSpeed(speed));
+    public Command setRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
+        return runOnce(() -> io.setRollerSpeed(speed));
     }
 
-    public Command setCenterRollerSpeed(MutableMeasure speed) {
-        return new InstantCommand(() -> io.setCenterRoller(speed));
+    public Command setCenterRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
+        return runOnce(() -> io.setCenterRoller(speed));
     }
 
     @Override
@@ -51,8 +50,6 @@ public class Intake extends SubsystemBase {
         Logger.processInputs("Intake", inputs);
     }
 
-    enum IntakePose {
-        UP,
-        DOWN
-    }
+
+    
 }
