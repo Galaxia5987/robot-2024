@@ -31,8 +31,7 @@ public class Intake extends SubsystemBase {
     public Command setAngle(IntakePose intakePose) {
         if (intakePose == IntakePose.UP) {
             setAngle((MutableMeasure) Units.Radians.of(IntakeConstants.DOWN_ANGLE));
-        }
-        else{
+        } else {
             setAngle((MutableMeasure) Units.Radians.of(IntakeConstants.UP_ANGLE));
         }
         return new InstantCommand();
