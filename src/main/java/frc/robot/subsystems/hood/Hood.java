@@ -39,8 +39,8 @@ public class Hood extends SubsystemBase {
      *
      * @param angle The angle of the hood to set.
      */
-    public void setAngle(MutableMeasure<Angle> angle) {
-        inputs.angleSetpoint = angle;
+    private void setAngle(MutableMeasure<Angle> angle) {
+
     }
 
     public MutableMeasure<Angle> getAngle() {
