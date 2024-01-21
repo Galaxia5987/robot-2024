@@ -4,6 +4,7 @@ import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.MutableMeasure;
 
 public interface ElevatorIO {
+    ElevatorInputs inputs = new ElevatorInputs();
 
     void setPower(double power);
 
@@ -15,6 +16,4 @@ public interface ElevatorIO {
         PERCENT_OUTPUT,
         POSITION
     }
-
 }
-
