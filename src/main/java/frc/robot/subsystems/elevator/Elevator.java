@@ -7,6 +7,7 @@ import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 
@@ -20,6 +21,9 @@ public class Elevator extends SubsystemBase {
     private final Mechanism2d mechanism2d = new Mechanism2d(MECHANISM_WIDTH, MECHANISM_HEIGHT);
     private final MechanismRoot2d root = mechanism2d.getRoot("Elevator", ROOT_X, ROOT_Y);
     private ControlModeValue controlMode;
+    private Command lastCommand = null;
+    private Command currentCommand = null;
+    private boolean changedToDefaultCommand = false;
 
     private Elevator(ElevatorIO io) {
         this.io = io;
