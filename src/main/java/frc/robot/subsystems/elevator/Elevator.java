@@ -5,6 +5,7 @@ import static frc.robot.subsystems.elevator.ElevatorConstants.MECHANISM_WIDTH;
 
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -56,7 +57,7 @@ public class Elevator extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs(inputs);
-        elevator.setLength(0);
+        elevator.setLength(getCurrentHeight().in(Units.Meters));
         Logger.processInputs(this.getClass().getSimpleName(), inputs);
     }
 }
