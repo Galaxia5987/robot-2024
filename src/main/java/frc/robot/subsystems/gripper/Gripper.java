@@ -6,9 +6,8 @@ import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.example.ExampleSubsystem;
-import frc.robot.subsystems.example.ExampleSubsystemIO;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -36,7 +35,7 @@ public class Gripper extends SubsystemBase {
         INSTANCE = new Gripper(io);
     }
 
-    public void setSpeedMotorPower(double power) {
+    public void setRollerMotorPower(double power) {
         io.setSpeedMotorPower(power);
         controlMode = GripperIO.ControlMode.PERCENT_OUTPUT;
     }
@@ -69,6 +68,20 @@ public class Gripper extends SubsystemBase {
 
     public MutableMeasure<Voltage> getAngleMotorVoltage() {
         return inputs.angleMotorVoltage;
+    }
+
+    public Command setRollerPower(double power){
+       return run(()-> setRollerMotorPower(power));
+    }
+    public Command intake(MutableMeasure<Angle> angle, double power){
+       return run(()-> setWristPosition(angle).alongWith(setRollerPower(power)));
+    }
+    public Command outtake(MutableMeasure<Angle> angle, double power){
+        return run(()-> setWristPosition(angle).alongWith(setRollerPower(power)));
+    }
+
+    public Command setWristPosition(MutableMeasure<Angle> angle){;
+        return run(()->this.setAngle(angle));
     }
 
     @Override
