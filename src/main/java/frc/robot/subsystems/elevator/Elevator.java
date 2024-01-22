@@ -39,14 +39,7 @@ public class Elevator extends SubsystemBase {
     public MutableMeasure<Distance> getHeightSetpoint() {
         return inputs.heightSetpoint;
     }
-
-    public boolean isBottom() {
-        return inputs.isBottom;
-    }
-
-    public boolean isTop() {
-        return inputs.isTop;
-    }
+    
 
     @Override
     public void periodic() {
