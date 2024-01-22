@@ -2,9 +2,10 @@ package frc.robot.subsystems.elevator;
 
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.MutableMeasure;
+import org.littletonrobotics.junction.AutoLog;
 
 public interface ElevatorIO {
-    ElevatorInputs inputs = new ElevatorInputs();
+    ElevatorInputsAutoLogged inputs = new ElevatorInputsAutoLogged();
 
     void setPower(double power);
 
