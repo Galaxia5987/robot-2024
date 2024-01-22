@@ -44,6 +44,6 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs();
-        Logger.processInputs("Intake", inputs);
+        Logger.processInputs(this.getClass().getName(), inputs);
     }
 }
