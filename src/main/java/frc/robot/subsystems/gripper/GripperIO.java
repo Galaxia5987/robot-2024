@@ -1,4 +1,10 @@
 package frc.robot.subsystems.gripper;
 
-public class GripperIO {
+import edu.wpi.first.units.*;
+import org.littletonrobotics.junction.AutoLog;
+
+public interface GripperIO {
+
+
+
 }
