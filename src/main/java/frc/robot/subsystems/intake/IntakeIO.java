@@ -18,8 +18,6 @@ public interface IntakeIO {
 
     void setCenterRollerSpeed(MutableMeasure<Velocity<Angle>> speed);
 
-    void setCenterRoller(MutableMeasure<Velocity<Angle>> speed);
-
     void updateInputs();
 
     @AutoLog
@@ -31,6 +29,5 @@ public interface IntakeIO {
         MutableMeasure<Voltage> angleMotorVoltage = MutableMeasure.zero(Volts);
         MutableMeasure<Voltage> spinMotorVoltage = MutableMeasure.zero(Volts);
         MutableMeasure<Voltage> centerMotorVoltage = MutableMeasure.zero(Volts);
-        boolean hasNote = false;
     }
 }
