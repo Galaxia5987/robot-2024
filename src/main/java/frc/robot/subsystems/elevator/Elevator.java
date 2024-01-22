@@ -55,6 +55,5 @@ public class Elevator extends SubsystemBase {
         Logger.processInputs(this.getClass().getSimpleName(), inputs);
 
         Logger.recordOutput("current height", getCurrentHeight());
-        SmartDashboard.putData("Elevator Mechanism", mechanism2d);
     }
 }
