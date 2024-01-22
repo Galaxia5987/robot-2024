@@ -21,9 +21,6 @@ public class Elevator extends SubsystemBase {
     private final Mechanism2d mechanism2d = new Mechanism2d(MECHANISM_WIDTH, MECHANISM_HEIGHT);
     private final MechanismRoot2d root = mechanism2d.getRoot("Elevator", 0, 0);
     private final MechanismLigament2d elevator = root.append(new MechanismLigament2d("Elevator", 0, 0));
-    private Command lastCommand = null;
-    private Command currentCommand = null;
-    private boolean changedToDefaultCommand = false;
 
     private Elevator(ElevatorIO io) {
         this.io = io;
@@ -57,7 +54,6 @@ public class Elevator extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs(this.getClass().getSimpleName(),  inputs);
-        currentCommand = getCurrentCommand();
         SmartDashboard.putData("Elevator Mechanism", mechanism2d);
     }
 }
