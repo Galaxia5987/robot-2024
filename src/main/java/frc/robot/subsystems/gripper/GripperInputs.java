@@ -9,7 +9,7 @@ public class GripperInputs {
     public MutableMeasure<Angle> angleSetpoint;
     public double rollerSpeed;
     public MutableMeasure<Voltage> angleMotorVoltage;
-    public MutableMeasure<Voltage> spinMotorVoltage;
+    public MutableMeasure<Voltage> rollerMotorVoltage;
     public boolean hasNote;
     public MutableMeasure<Velocity<Velocity<Distance>>> acceleration;
 }
