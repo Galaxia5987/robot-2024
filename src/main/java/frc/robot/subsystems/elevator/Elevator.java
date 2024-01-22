@@ -44,10 +44,6 @@ public class Elevator extends SubsystemBase {
         return inputs.heightSetpoint;
     }
 
-    public void stop() {
-        inputs.controlMode = null;
-    }
-
     public boolean isBottom(){
         return inputs.isBottom;
     }
