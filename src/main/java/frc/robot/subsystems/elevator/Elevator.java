@@ -17,8 +17,7 @@ public class Elevator extends SubsystemBase {
     private final ElevatorInputsAutoLogged inputs = new ElevatorInputsAutoLogged();
     private final ElevatorIO io;
     private final Mechanism2d mechanism2d = new Mechanism2d(MECHANISM_WIDTH, MECHANISM_HEIGHT);
-    private final MechanismRoot2d root = mechanism2d.getRoot("Elevator", ROOT_X, ROOT_Y);
-    private ControlModeValue controlMode;
+    private final MechanismRoot2d root = mechanism2d.getRoot("Elevator", 0, 0);
     private Command lastCommand = null;
     private Command currentCommand = null;
     private boolean changedToDefaultCommand = false;
