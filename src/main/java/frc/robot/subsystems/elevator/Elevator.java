@@ -48,6 +48,14 @@ public class Elevator extends SubsystemBase {
         inputs.controlMode = null;
     }
 
+    public boolean isBottom(){
+        return inputs.isBottom;
+    }
+
+    public boolean isTop(){
+        return inputs.isTop;
+    }
+
     @Override
     public void periodic() {
         io.updateInputs(inputs);

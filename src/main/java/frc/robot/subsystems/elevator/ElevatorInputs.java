@@ -12,4 +12,6 @@ public class ElevatorInputs {
     public MutableMeasure<Distance> heightSetpoint;
     public MutableMeasure<Velocity<Velocity<Distance>>> acceleration;
     public ElevatorIO.ControlMode controlMode;
+    public boolean isBottom;
+    public boolean isTop;
 }

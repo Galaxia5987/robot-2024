@@ -9,7 +9,7 @@ public interface ElevatorIO {
     void setPower(double power);
 
     void setHeight(MutableMeasure<Distance> height);
-    
+
     void updateInputs(ElevatorInputs inputs);
 
     enum ControlMode {
