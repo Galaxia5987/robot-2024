@@ -32,11 +32,12 @@ public class Elevator extends SubsystemBase {
         this.io = io;
     }
 
-    public Elevator getInstance(){
-        if (INSTANCE == null){
-            INSTANCE = new Elevator(io);
-        }
+    public Elevator getInstance() {
         return INSTANCE;
+    }
+
+    public static void initialize(ElevatorIO io) {
+        INSTANCE = new Elevator(io);
     }
 
     public void setPower(double power) {
