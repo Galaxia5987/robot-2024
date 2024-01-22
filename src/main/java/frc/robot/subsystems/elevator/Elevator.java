@@ -49,11 +49,9 @@ public class Elevator extends SubsystemBase {
         return inputs.heightSetpoint;
     }
 
-    public Command setHeight(double height){
-        return new RunCommand(()->this.setHeight(height));
+    public Command setHeight(double height) {
+        return new RunCommand(() -> this.setHeight(height));
     }
-
-
 
     @Override
     public void periodic() {
