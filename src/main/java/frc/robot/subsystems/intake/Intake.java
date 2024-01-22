@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake;
 
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -53,6 +54,6 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         io.updateInputs();
         Logger.processInputs(this.getClass().getName(), inputs);
-        intakeLigament.setAngle(inputs.currentAngle.baseUnitMagnitude());
+        intakeLigament.setAngle(inputs.currentAngle.in(Units.Radians));
     }
 }
