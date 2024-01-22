@@ -15,11 +15,10 @@ public class IntakeIOSim implements IntakeIO {
     private SparkMaxSim centerRoller;
     private PositionVoltage positionRequest = new PositionVoltage(0);
 
-    private IntakeIOSim(PIDController angleController) {
+    public IntakeIOSim(PIDController angleController) {
         angleMotor = new TalonFXSim(1, IntakeConstants.GEAR_RATIO, 0.3);
         frontRoller = new SparkMaxSim(1, 1, 0);
         centerRoller = new SparkMaxSim(1, 1, 0);
-
         angleMotor.setController(angleController);
     }
 
