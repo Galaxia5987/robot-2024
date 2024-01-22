@@ -7,15 +7,20 @@ import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Gripper extends SubsystemBase {
     private static Gripper INSTANCE;
     private final GripperInputs inputs = new GripperInputs();
     private final GripperIO io;
+
+    @AutoLogOutput
     private final Mechanism2d mechanism2d = new Mechanism2d(0, 0);
+
     private final MechanismRoot2d root = mechanism2d.getRoot("Gripper", 0, 0);
-    private final MechanismLigament2d shoulder =
+    private final MechanismLigament2d gripper =
             root.append(new MechanismLigament2d("Gripper", 0, 0));
     private final GripperInputsAutoLogged input = new GripperInputsAutoLogged();
 
@@ -25,6 +30,7 @@ public class Gripper extends SubsystemBase {
 
     public void setSpeedMotorPower(double power) {
         io.setSpeedMotorPower(power);
+        
     }
 
     public void setAngleMotorPower(double power) {

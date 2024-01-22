@@ -3,24 +3,16 @@ package frc.robot.subsystems.gripper;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 
-public class GriperIOSim implements GripperIO{
+public class GriperIOSim implements GripperIO {
     @Override
-    public void setSpeedMotorPower(double power) {
-
-    }
+    public void setSpeedMotorPower(double power) {}
 
     @Override
-    public void setAngleMotorPower(double power) {
-
-    }
+    public void setAngleMotorPower(double power) {}
 
     @Override
-    public void setAngle(MutableMeasure<Angle> angle) {
-
-    }
+    public void setAngle(MutableMeasure<Angle> angle) {}
 
     @Override
-    public void updateInputs(GripperInputs inputs) {
-
-    }
+    public void updateInputs(GripperInputs inputs) {}
 }
