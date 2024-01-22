@@ -32,6 +32,13 @@ public class Elevator extends SubsystemBase {
         this.io = io;
     }
 
+    public Elevator getInstance(){
+        if (INSTANCE == null){
+            INSTANCE = new Elevator(io);
+        }
+        return INSTANCE;
+    }
+
     public void setPower(double power) {
         io.setPower(power);
         inputs.controlMode = ElevatorIO.ControlMode.PERCENT_OUTPUT;
