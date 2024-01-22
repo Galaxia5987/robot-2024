@@ -14,13 +14,13 @@ public class Gripper extends SubsystemBase {
     private static Gripper INSTANCE;
     private final GripperIO io;
     public GripperIO.ControlMode controlMode;
+    private final GripperInputsAutoLogged inputs = GripperIO.inputs;
 
     @AutoLogOutput private final Mechanism2d mechanism2d = new Mechanism2d(0, 0);
 
     private final MechanismRoot2d root = mechanism2d.getRoot("Gripper", 0, 0);
     private final MechanismLigament2d gripper =
             root.append(new MechanismLigament2d("Gripper", 0, 0));
-    private final GripperInputsAutoLogged inputs = new GripperInputsAutoLogged();
 
     public Gripper(GripperIO io) {
         this.io = io;
@@ -53,8 +53,8 @@ public class Gripper extends SubsystemBase {
         return inputs.hasNote;
     }
 
-    public MutableMeasure<Voltage> getSpinMotorVoltage() {
-        return inputs.spinMotorVoltage;
+    public MutableMeasure<Voltage> getRollerMotorVoltage() {
+        return inputs.rollerMotorVoltage;
     }
 
     public MutableMeasure<Voltage> getAngleMotorVoltage() {
