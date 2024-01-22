@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.example.ExampleSubsystem;
+import frc.robot.subsystems.example.ExampleSubsystemIO;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -22,8 +24,16 @@ public class Gripper extends SubsystemBase {
     private final MechanismLigament2d gripper =
             root.append(new MechanismLigament2d("Gripper", 0, 0));
 
-    public Gripper(GripperIO io) {
+    private Gripper(GripperIO io) {
         this.io = io;
+    }
+
+    public static Gripper getInstance() {
+        return INSTANCE;
+    }
+
+    public static void initialize(GripperIO io) {
+        INSTANCE = new Gripper(io);
     }
 
     public void setSpeedMotorPower(double power) {
