@@ -1,26 +1,23 @@
 package frc.robot.subsystems.elevator;
 
+import static frc.robot.subsystems.elevator.ElevatorConstants.MECHANISM_HEIGHT;
+import static frc.robot.subsystems.elevator.ElevatorConstants.MECHANISM_WIDTH;
+
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.example.ExampleSubsystemIO;
-import frc.robot.subsystems.example.ExampleSubsystemInputsAutoLogged;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
-
-import static frc.robot.subsystems.elevator.ElevatorConstants.MECHANISM_HEIGHT;
-import static frc.robot.subsystems.elevator.ElevatorConstants.MECHANISM_WIDTH;
 
 public class Elevator extends SubsystemBase {
 
     private static Elevator INSTANCE;
 
-    private final ElevatorInputsAutoLogged inputs =  ElevatorIO.inputs;
+    private final ElevatorInputsAutoLogged inputs = ElevatorIO.inputs;
     private final ElevatorIO io;
 
     @AutoLogOutput
