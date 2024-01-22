@@ -87,9 +87,9 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     implementation 'junit:junit:4.13.2'
 
-    annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:3.0.0-beta-6"
+    annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:3.0.0"
 
-    implementation 'com.github.galaxia5987:common:0160f4c997'
+    implementation 'com.github.galaxia5987:common:2024.1.1'
 }
 
 configurations.all {
@@ -127,6 +127,13 @@ gversion {
     dateFormat   = "yyyy-MM-dd HH:mm:ss z"
     timeZone     = "Asia/Jerusalem"
     indent       = "  "
+}
+
+copy {
+    from "."
+    include "pre-commit"
+    into ".git/hooks"
+    fileMode 0777
 }
 
 spotless {
