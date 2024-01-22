@@ -26,10 +26,12 @@ public class Elevator extends SubsystemBase {
 
     public void setPower(double power) {
         io.setPower(power);
+        inputs.controlMode = ElevatorIO.ControlMode.PERCENT_OUTPUT;
     }
 
     public void setHeight(MutableMeasure<Distance> height) {
         io.setHeight(height);
+        inputs.controlMode = ElevatorIO.ControlMode.POSITION;
     }
 
     public MutableMeasure<Distance> getCurrentHeight() {
@@ -39,7 +41,7 @@ public class Elevator extends SubsystemBase {
     public MutableMeasure<Distance> getHeightSetpoint() {
         return inputs.heightSetpoint;
     }
-    
+
 
     @Override
     public void periodic() {
