@@ -50,7 +50,7 @@ public class Elevator extends SubsystemBase {
     }
 
     public Command setHeight(double height) {
-        return new RunCommand(() -> this.setHeight(height));
+        return run(() -> this.setHeight(height));
     }
 
     @Override
