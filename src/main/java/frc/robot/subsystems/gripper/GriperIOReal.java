@@ -1,4 +1,3 @@
 package frc.robot.subsystems.gripper;
 
-public class GriperIOReal {
-}
+public class GriperIOReal extends GripperInputs {}

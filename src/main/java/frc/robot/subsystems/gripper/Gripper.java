@@ -13,23 +13,22 @@ public class Gripper extends SubsystemBase {
     private static Gripper INSTANCE;
     private final GripperInputs inputs = new GripperInputs();
     private final GripperIO io;
-    private final Mechanism2d mechanism2d = new Mechanism2d(
-            0, 0
-    );
+    private final Mechanism2d mechanism2d = new Mechanism2d(0, 0);
     private final MechanismRoot2d root = mechanism2d.getRoot("Gripper", 0, 0);
-    private final MechanismLigament2d shoulder = root.append(
-            new MechanismLigament2d("Gripper", 0, 0)
-    );
-    private final GripperInputsAutoLogged inputs = new GripperInputsAutoLogged();
-
+    private final MechanismLigament2d shoulder =
+            root.append(new MechanismLigament2d("Gripper", 0, 0));
+    private final GripperInputsAutoLogged input = new GripperInputsAutoLogged();
 
     public Gripper(GripperIO io) {
         this.io = io;
     }
 
-
     public void setSpeedMotorPower(double power) {
-        io.setPower(power);
+        io.setSpeedMotorPower(power);
+    }
+
+    public void setAngleMotorPower(double power) {
+        io.setAngleMotorPower(power);
     }
 
     public void setAngle(MutableMeasure<Angle> angle) {
@@ -48,21 +47,19 @@ public class Gripper extends SubsystemBase {
         return inputs.hasNote;
     }
 
-    public MutableMeasure<Voltage> spinMotorVoltage(){
+    public MutableMeasure<Voltage> spinMotorVoltage() {
         return inputs.spinMotorVoltage;
     }
-    public MutableMeasure<Voltage> angleMotorVoltage(){
+
+    public MutableMeasure<Voltage> angleMotorVoltage() {
         return inputs.angleMotorVoltage;
     }
-
 
     @Override
     public void periodic() {
         io.updateInputs(inputs);
-        Logger.processInputs(this.getClass().getSimpleName(), inputs);
+        Logger.processInputs(this.getClass().getSimpleName(), input);
 
         Logger.recordOutput("current angle", getCurrentAngle());
     }
 }
-
-
