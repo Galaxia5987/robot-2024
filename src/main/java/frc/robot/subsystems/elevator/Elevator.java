@@ -14,7 +14,7 @@ import org.littletonrobotics.junction.Logger;
 public class Elevator extends SubsystemBase {
 
     private static Elevator INSTANCE;
-    private final ElevatorInputs inputs = new ElevatorInputs();
+    private final ElevatorInputsAutoLogged inputs = new ElevatorInputsAutoLogged();
     private final ElevatorIO io;
     private final Mechanism2d mechanism2d = new Mechanism2d(MECHANISM_WIDTH, MECHANISM_HEIGHT);
     private final MechanismRoot2d root = mechanism2d.getRoot("Elevator", ROOT_X, ROOT_Y);
@@ -31,7 +31,6 @@ public class Elevator extends SubsystemBase {
         inputs.power = power;
         inputs.controlMode = ElevatorIO.ControlMode.PERCENT_OUTPUT;
     }
-
 
     public void setHeight(MutableMeasure<Distance> height) {
         inputs.height = height;
@@ -53,7 +52,7 @@ public class Elevator extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs(inputs);
-        Logger.processInputs("Elevator", inputs);
+        Logger.processInputs("Elevator",  inputs);
         currentCommand = getCurrentCommand();
     }
 }
