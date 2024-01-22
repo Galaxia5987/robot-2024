@@ -26,11 +26,11 @@ public class Intake extends SubsystemBase {
         this.io = io;
     }
 
-    public Intake getInstance() {
+    public static Intake getInstance() {
         return INSTANCE;
     }
 
-    public void initialize(IntakeIO io) {
+    public static void initialize(IntakeIO io) {
         INSTANCE = new Intake(io);
     }
 
