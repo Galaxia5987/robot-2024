@@ -8,7 +8,7 @@ import org.littletonrobotics.junction.AutoLog;
 @AutoLog
 public class ElevatorInputs {
     public double power;
-    public MutableMeasure<Distance> height;
+    public MutableMeasure<Distance> currentHeight;
     public MutableMeasure<Distance> heightSetpoint;
     public MutableMeasure<Velocity<Velocity<Distance>>> acceleration;
     public ElevatorIO.ControlMode controlMode;
