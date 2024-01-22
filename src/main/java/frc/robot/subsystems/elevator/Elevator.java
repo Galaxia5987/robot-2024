@@ -5,6 +5,8 @@ import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -46,6 +48,11 @@ public class Elevator extends SubsystemBase {
     public MutableMeasure<Distance> getHeightSetpoint() {
         return inputs.heightSetpoint;
     }
+
+    public Command setHeight(double height){
+        return new RunCommand(()->this.setHeight(height));
+    }
+
 
 
     @Override
