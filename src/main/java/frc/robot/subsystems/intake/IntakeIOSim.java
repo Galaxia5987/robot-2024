@@ -1,7 +1,6 @@
 package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix6.controls.PositionVoltage;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
@@ -10,16 +9,18 @@ import lib.motors.SparkMaxSim;
 import lib.motors.TalonFXSim;
 
 public class IntakeIOSim implements IntakeIO {
-    private TalonFXSim angleMotor;
-    private SparkMaxSim frontRoller;
-    private SparkMaxSim centerRoller;
-    private PositionVoltage positionRequest = new PositionVoltage(0);
+    private final TalonFXSim angleMotor;
+    private final SparkMaxSim frontRoller;
+    private final SparkMaxSim centerRoller;
+    private final PositionVoltage positionRequest = new PositionVoltage(0);
 
-    public IntakeIOSim(PIDController angleController) {
-        angleMotor = new TalonFXSim(1, IntakeConstants.GEAR_RATIO, 0.3);
-        frontRoller = new SparkMaxSim(1, 1, 0);
-        centerRoller = new SparkMaxSim(1, 1, 0);
-        angleMotor.setController(angleController);
+    public IntakeIOSim() {
+        angleMotor =
+                new TalonFXSim(
+                        1, IntakeConstants.GEAR_RATIO, 0.3, 360 * IntakeConstants.GEAR_RATIO);
+        frontRoller = new SparkMaxSim(1, 1, 0.5, 1);
+        centerRoller = new SparkMaxSim(1, 1, 0.5, 1);
+        angleMotor.setController(IntakeConstants.angleController);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class IntakeIOSim implements IntakeIO {
 
     @Override
     public void updateInputs() {
-        inputs.currentAngle.mut_replace((angleMotor.getRotorPosition()), Units.Rotations);
+        inputs.currentAngle.mut_replace((angleMotor.getPosition()), Units.Rotations);
         inputs.rollerSpeed.mut_replace(frontRoller.getVelocity(), Units.RotationsPerSecond);
         inputs.centerRollerSpeed.mut_replace(centerRoller.getVelocity(), Units.RotationsPerSecond);
         inputs.angleMotorVoltage.mut_replace(angleMotor.getAppliedVoltage(), Units.Volts);

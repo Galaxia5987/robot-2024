@@ -54,6 +54,6 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         io.updateInputs();
         Logger.processInputs(this.getClass().getName(), inputs);
-        intakeLigament.setAngle(inputs.currentAngle.in(Units.Radians));
+        intakeLigament.setAngle(inputs.currentAngle.in(Units.Degrees));
     }
 }
