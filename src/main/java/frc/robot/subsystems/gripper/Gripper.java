@@ -2,6 +2,7 @@ package frc.robot.subsystems.gripper;
 
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -94,6 +95,6 @@ public class Gripper extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.processInputs(this.getClass().getSimpleName(), inputs);
 
-        Logger.recordOutput("current angle", getCurrentAngle());
+        gripper.setLength(getCurrentAngle().in(Units.Radians));
     }
 }
