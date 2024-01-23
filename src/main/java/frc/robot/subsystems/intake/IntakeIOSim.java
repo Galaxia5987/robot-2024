@@ -13,7 +13,7 @@ public class IntakeIOSim implements IntakeIO {
     private final TalonFXSim angleMotor;
     private final SparkMaxSim frontRoller;
     private final SparkMaxSim centerRoller;
-    private PositionVoltage positionRequest = new PositionVoltage(0);
+    private final PositionVoltage positionRequest = new PositionVoltage(0);
 
     public IntakeIOSim() {
         angleMotor =
@@ -27,9 +27,7 @@ public class IntakeIOSim implements IntakeIO {
     @Override
     public void setAngle(MutableMeasure<Angle> angle) {
         inputs.angleSetPoint = angle;
-        inputs.currentAngle = Units.Degrees.of(75).mutableCopy();
-        angleMotor.setControl(positionRequest.withPosition(angle.in(Units.Degrees)));
-        System.out.println(inputs.currentAngle);
+        angleMotor.setControl(positionRequest.withPosition(Math.IEEEremainder( angle.in(Units.Degrees), 180)));
     }
 
     @Override

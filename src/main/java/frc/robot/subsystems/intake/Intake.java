@@ -1,5 +1,8 @@
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
@@ -18,6 +21,7 @@ public class Intake extends SubsystemBase {
     private final IntakeIO io;
     private final IntakeInputsAutoLogged inputs = IntakeIO.inputs;
     @AutoLogOutput private final Mechanism2d intakeMechanism = new Mechanism2d(2, 3);
+    @AutoLogOutput private final Pose3d RobotPose = new Pose3d(new Translation3d(0,0,0), new Rotation3d(0,0,0));//TODO:make this smarter
     private final MechanismRoot2d root = intakeMechanism.getRoot("Intake", 1, 1);
 
     private final MechanismLigament2d intakeLigament =
@@ -56,6 +60,7 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         io.updateInputs();
         Logger.processInputs(this.getClass().getSimpleName(), inputs);
+        Logger.recordOutput("IntakePose", new Pose3d(new Translation3d(0,0,0), new Rotation3d(0,inputs.currentAngle.in(Units.Degrees),0)));
         intakeLigament.setAngle(inputs.currentAngle.in(Units.Degrees));
     }
 }
