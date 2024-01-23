@@ -10,13 +10,14 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.intake.IntakeConstants.IntakePose;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
     private static Intake INSTANCE = null;
     private final IntakeIO io;
     private final IntakeInputsAutoLogged inputs = IntakeIO.inputs;
-    private final Mechanism2d intakeMechanism = new Mechanism2d(2, 3);
+    @AutoLogOutput private final Mechanism2d intakeMechanism = new Mechanism2d(2, 3);
     private final MechanismRoot2d root = intakeMechanism.getRoot("Intake", 1, 1);
 
     private final MechanismLigament2d intakeLigament =
@@ -35,6 +36,7 @@ public class Intake extends SubsystemBase {
     }
 
     public Command setAngle(MutableMeasure<Angle> angle) {
+        inputs.angleSetPoint = angle;
         return runOnce(() -> io.setAngle(angle));
     }
 
@@ -53,7 +55,7 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs();
-        Logger.processInputs(this.getClass().getName(), inputs);
+        Logger.processInputs(this.getClass().getSimpleName(), inputs);
         intakeLigament.setAngle(inputs.currentAngle.in(Units.Degrees));
     }
 }

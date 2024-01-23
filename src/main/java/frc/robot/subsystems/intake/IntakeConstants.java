@@ -8,8 +8,9 @@ import edu.wpi.first.units.MutableMeasure;
 import lib.webconstants.LoggedTunableNumber;
 
 public class IntakeConstants {
-    public static final double GEAR_RATIO = 0;
-    public static final LoggedTunableNumber ANGLE_KP = new LoggedTunableNumber("IntakeSim/kP", 0);
+    public static final double GEAR_RATIO = 45.62;
+    public static final LoggedTunableNumber ANGLE_KP =
+            new LoggedTunableNumber("IntakeSim/kP", 10.0 / 360.0);
     public static final LoggedTunableNumber ANGLE_KI = new LoggedTunableNumber("IntakeSim/kI", 0);
     public static final LoggedTunableNumber ANGLE_KD = new LoggedTunableNumber("IntakeSim/kD", 0);
     public static PIDController angleController =

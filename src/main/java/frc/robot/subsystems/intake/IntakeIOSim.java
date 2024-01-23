@@ -5,6 +5,7 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.wpilibj.Timer;
 import lib.motors.SparkMaxSim;
 import lib.motors.TalonFXSim;
 
@@ -12,12 +13,12 @@ public class IntakeIOSim implements IntakeIO {
     private final TalonFXSim angleMotor;
     private final SparkMaxSim frontRoller;
     private final SparkMaxSim centerRoller;
-    private final PositionVoltage positionRequest = new PositionVoltage(0);
+    private PositionVoltage positionRequest = new PositionVoltage(0);
 
     public IntakeIOSim() {
         angleMotor =
                 new TalonFXSim(
-                        1, IntakeConstants.GEAR_RATIO, 0.3, 360 * IntakeConstants.GEAR_RATIO);
+                        1, IntakeConstants.GEAR_RATIO, 0.003, 360 * IntakeConstants.GEAR_RATIO);
         frontRoller = new SparkMaxSim(1, 1, 0.5, 1);
         centerRoller = new SparkMaxSim(1, 1, 0.5, 1);
         angleMotor.setController(IntakeConstants.angleController);
@@ -25,7 +26,10 @@ public class IntakeIOSim implements IntakeIO {
 
     @Override
     public void setAngle(MutableMeasure<Angle> angle) {
+        inputs.angleSetPoint = angle;
+        inputs.currentAngle = Units.Degrees.of(75).mutableCopy();
         angleMotor.setControl(positionRequest.withPosition(angle.in(Units.Degrees)));
+        System.out.println(inputs.currentAngle);
     }
 
     @Override
@@ -40,7 +44,10 @@ public class IntakeIOSim implements IntakeIO {
 
     @Override
     public void updateInputs() {
-        inputs.currentAngle.mut_replace((angleMotor.getPosition()), Units.Rotations);
+        angleMotor.update(Timer.getFPGATimestamp());
+        centerRoller.update(Timer.getFPGATimestamp());
+        frontRoller.update(Timer.getFPGATimestamp());
+        inputs.currentAngle.mut_replace((angleMotor.getPosition()), Units.Degrees);
         inputs.rollerSpeed.mut_replace(frontRoller.getVelocity(), Units.RotationsPerSecond);
         inputs.centerRollerSpeed.mut_replace(centerRoller.getVelocity(), Units.RotationsPerSecond);
         inputs.angleMotorVoltage.mut_replace(angleMotor.getAppliedVoltage(), Units.Volts);
