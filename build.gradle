@@ -2,7 +2,7 @@ import edu.wpi.first.gradlerio.deploy.roborio.RoboRIO;
 
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2024.1.1"
+    id "edu.wpi.first.GradleRIO" version "2024.2.1"
     id "com.diffplug.spotless" version "6.23.3"
     id "com.peterabeles.gversion" version "1.10"
 }
@@ -87,7 +87,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     implementation 'junit:junit:4.13.2'
 
-    annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:3.0.0"
+    annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:3.0.2"
 
     implementation 'com.github.galaxia5987:common:2024.1.1'
 }
