@@ -1,13 +1,12 @@
 package frc.robot.subsystems.gripper;
 
 import edu.wpi.first.units.*;
-import org.littletonrobotics.junction.AutoLog;
 
 public interface GripperIO {
 
     GripperInputs inputs = new GripperInputs();
 
-    void setSpeedMotorPower(double power);
+    void setRollerMotorPower(double power);
 
     void setAngleMotorPower(double power);
 

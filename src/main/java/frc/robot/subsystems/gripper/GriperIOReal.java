@@ -5,7 +5,7 @@ import edu.wpi.first.units.MutableMeasure;
 
 public class GriperIOReal implements GripperIO {
     @Override
-    public void setSpeedMotorPower(double power) {}
+    public void setRollerMotorPower(double power) {}
 
     @Override
     public void setAngleMotorPower(double power) {}
