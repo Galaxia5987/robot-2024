@@ -70,18 +70,23 @@ public class Gripper extends SubsystemBase {
         return inputs.angleMotorVoltage;
     }
 
-    public Command setRollerPower(double power){
-       return run(()-> setRollerMotorPower(power));
-    }
-    public Command intake(MutableMeasure<Angle> angle, double power){
-       return run(()-> setWristPosition(angle).alongWith(setRollerPower(power)));
-    }
-    public Command outtake(MutableMeasure<Angle> angle, double power){
-        return run(()-> setWristPosition(angle).alongWith(setRollerPower(power)));
+    public Command setRollerPower(double power) {
+        return run(() -> setRollerMotorPower(power));
     }
 
-    public Command setWristPosition(MutableMeasure<Angle> angle){;
-        return run(()->this.setAngle(angle));
+    public Command intake() {
+        return run(() -> setWristPosition(GripperConstants.INTAKE_ANGLE)
+                .alongWith(setRollerPower(GripperConstants.INTAKE_POWER)));
+    }
+
+    public Command outtake() {
+        return run(() -> setWristPosition(GripperConstants.OUTTAKE_ANGLE)
+                .alongWith(setRollerPower(GripperConstants.OUTTAKE_POWER)));
+    }
+
+    public Command setWristPosition(MutableMeasure<Angle> angle) {
+        ;
+        return run(() -> this.setAngle(angle));
     }
 
     @Override
