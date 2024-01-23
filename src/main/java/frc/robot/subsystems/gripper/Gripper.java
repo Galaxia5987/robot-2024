@@ -37,7 +37,7 @@ public class Gripper extends SubsystemBase {
     }
 
     public void setRollerMotorPower(double power) {
-        io.setSpeedMotorPower(power);
+        io.setRollerMotorPower(power);
         controlMode = GripperIO.ControlMode.PERCENT_OUTPUT;
     }
 
@@ -72,22 +72,20 @@ public class Gripper extends SubsystemBase {
     }
 
     public Command setRollerPower(double power) {
-        return run(() -> setRollerMotorPower(power));
+        return run(() -> io.setRollerMotorPower(power));
     }
 
     public Command intake() {
-        return run(() -> setWristPosition(GripperConstants.INTAKE_ANGLE)
-                .alongWith(setRollerPower(GripperConstants.INTAKE_POWER)));
+        return run(() -> io.setAngle(GripperConstants.INTAKE_ANGLE))
+                .alongWith(run(()->io.setRollerMotorPower(GripperConstants.INTAKE_POWER)));
     }
-
     public Command outtake() {
-        return run(() -> setWristPosition(GripperConstants.OUTTAKE_ANGLE)
-                .alongWith(setRollerPower(GripperConstants.OUTTAKE_POWER)));
+        return run(() -> io.setAngle(GripperConstants.OUTTAKE_ANGLE))
+                .alongWith(run(()->io.setRollerMotorPower(GripperConstants.OUTTAKE_POWER)));
     }
 
     public Command setWristPosition(MutableMeasure<Angle> angle) {
-        ;
-        return run(() -> this.setAngle(angle));
+        return run(() -> io.setAngle(angle));
     }
 
     @Override
