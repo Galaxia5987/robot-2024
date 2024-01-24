@@ -1,6 +1,8 @@
 package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.MotionMagicExpoDutyCycle;
+import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Distance;
@@ -14,7 +16,7 @@ public class ElevatorIOSim implements ElevatorIO {
     private final TalonFXSim motor;
     private final ElevatorInputs inputs;
 
-    private final PositionVoltage positionRequest = new PositionVoltage(0);
+    private final MotionMagicExpoVoltage positionRequest = new MotionMagicExpoVoltage(0);
     private final DutyCycleOut powerRequest = new DutyCycleOut(0);
 
     public ElevatorIOSim(ElevatorInputs inputs) {
