@@ -15,7 +15,6 @@ import org.littletonrobotics.junction.Logger;
 public class Gripper extends SubsystemBase {
     private static Gripper INSTANCE;
     private final GripperIO io;
-    public GripperIO.ControlMode controlMode;
     private final GripperInputsAutoLogged inputs = GripperIO.inputs;
 
     @AutoLogOutput private final Mechanism2d mechanism2d = new Mechanism2d(0, 0);
@@ -34,21 +33,6 @@ public class Gripper extends SubsystemBase {
 
     public static void initialize(GripperIO io) {
         INSTANCE = new Gripper(io);
-    }
-
-    public void setRollerMotorPower(double power) {
-        io.setRollerMotorPower(power);
-        controlMode = GripperIO.ControlMode.PERCENT_OUTPUT;
-    }
-
-    public void setAngleMotorPower(double power) {
-        io.setAngleMotorPower(power);
-        controlMode = GripperIO.ControlMode.PERCENT_OUTPUT;
-    }
-
-    public void setAngle(MutableMeasure<Angle> angle) {
-        io.setAngle(angle);
-        controlMode = GripperIO.ControlMode.POSITION;
     }
 
     public MutableMeasure<Angle> getCurrentAngle() {

@@ -13,9 +13,4 @@ public interface GripperIO {
     void setAngle(MutableMeasure<Angle> angle);
 
     void updateInputs(GripperInputs inputs);
-
-    enum ControlMode {
-        PERCENT_OUTPUT,
-        POSITION
-    }
 }
