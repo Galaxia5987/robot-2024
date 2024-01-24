@@ -1,7 +1,5 @@
 package frc.robot.subsystems.elevator;
 
-import static edu.wpi.first.units.Units.Meters;
-
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import edu.wpi.first.math.controller.PIDController;
@@ -9,6 +7,8 @@ import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.wpilibj.Timer;
 import lib.motors.TalonFXSim;
+
+import static edu.wpi.first.units.Units.Meters;
 
 public class ElevatorIOSim implements ElevatorIO {
     private final TalonFXSim motor;
@@ -23,7 +23,7 @@ public class ElevatorIOSim implements ElevatorIO {
 
         motor.setController(
                 new PIDController(
-                        ElevatorConstants.KP, ElevatorConstants.KI, ElevatorConstants.KD, 0.02));
+                        ElevatorConstants.KP.get(), ElevatorConstants.KI.get(), ElevatorConstants.KD.get(), 0.02));
     }
 
     @Override
