@@ -7,7 +7,7 @@ import org.littletonrobotics.junction.AutoLog;
 public class GripperInputs {
     public MutableMeasure<Angle> currentAngle;
     public MutableMeasure<Angle> angleSetpoint;
-    public double rollerSpeed;
+    public double rollerPowerSetpoint;
     public MutableMeasure<Voltage> angleMotorVoltage;
     public MutableMeasure<Voltage> rollerMotorVoltage;
     public boolean hasNote;
