@@ -25,8 +25,6 @@ public class Hood extends SubsystemBase {
     private final MechanismLigament2d hood =
             root.append(new MechanismLigament2d("Hood", HoodConstants.HoodLength, 45));
 
-    private ControlMode controlMode = ControlMode.POSITION;
-
     /**
      * Constructor for Hood subsystem.
      *
@@ -58,13 +56,17 @@ public class Hood extends SubsystemBase {
     }
 
     public Command setAngle(Supplier<MutableMeasure<Angle>> angle) {
-        controlMode = ControlMode.POSITION;
-        return runOnce(() -> inputs.angleSetpoint.mut_replace(angle.get()));
+        return run(() -> {
+            inputs.angleSetpoint.mut_replace(angle.get());
+            io.setAngle(inputs.angleSetpoint);
+        });
     }
 
     public Command setPower(Supplier<Double> power) {
-        controlMode = ControlMode.POWER;
-        return runOnce(() -> inputs.powerSetpoint = power.get());
+        return run(() -> {
+            inputs.powerSetpoint = power.get();
+            io.setPower(inputs.powerSetpoint);
+        });
     }
 
     public Command resetAbsoluteEncoder() {
@@ -83,16 +85,5 @@ public class Hood extends SubsystemBase {
     public void periodic() {
         io.updateInputs();
         Logger.processInputs("Hood", inputs);
-
-        if (controlMode == ControlMode.POSITION) {
-            io.setAngle(inputs.angleSetpoint);
-        } else {
-            io.setPower(inputs.powerSetpoint);
-        }
-    }
-
-    public enum ControlMode {
-        POSITION,
-        POWER
     }
 }
