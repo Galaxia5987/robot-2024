@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.Supplier;
-
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -56,17 +55,19 @@ public class Hood extends SubsystemBase {
     }
 
     public Command setAngle(Supplier<MutableMeasure<Angle>> angle) {
-        return run(() -> {
-            inputs.angleSetpoint.mut_replace(angle.get());
-            io.setAngle(inputs.angleSetpoint);
-        });
+        return run(
+                () -> {
+                    inputs.angleSetpoint.mut_replace(angle.get());
+                    io.setAngle(inputs.angleSetpoint);
+                });
     }
 
     public Command setPower(Supplier<Double> power) {
-        return run(() -> {
-            inputs.powerSetpoint = power.get();
-            io.setPower(inputs.powerSetpoint);
-        });
+        return run(
+                () -> {
+                    inputs.powerSetpoint = power.get();
+                    io.setPower(inputs.powerSetpoint);
+                });
     }
 
     public Command resetAbsoluteEncoder() {
