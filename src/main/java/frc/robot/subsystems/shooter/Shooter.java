@@ -11,6 +11,8 @@ public class Shooter extends SubsystemBase {
     private final ShooterInputsAutoLogged inputs = ShooterIO.inputs;
     private final ShooterIO io;
 
+    private final String loggerKey = this.getClass().getSimpleName();
+
     /**
      * Constructor for Shooter subsystem.
      *
@@ -58,6 +60,6 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs();
-        Logger.processInputs(this.getClass().getSimpleName(), inputs);
+        Logger.processInputs(loggerKey, inputs);
     }
 }
