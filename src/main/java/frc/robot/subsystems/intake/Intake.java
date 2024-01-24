@@ -21,7 +21,6 @@ public class Intake extends SubsystemBase {
     private final IntakeIO io;
     private final IntakeInputsAutoLogged inputs = IntakeIO.inputs;
     @AutoLogOutput private final Mechanism2d intakeMechanism = new Mechanism2d(2, 3);
-    @AutoLogOutput private final Pose3d RobotPose = new Pose3d(new Translation3d(0,0,0), new Rotation3d(0,0,0));//TODO:make this smarter
     private final MechanismRoot2d root = intakeMechanism.getRoot("Intake", 1, 1);
 
     private final MechanismLigament2d intakeLigament =
@@ -60,7 +59,8 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         io.updateInputs();
         Logger.processInputs(this.getClass().getSimpleName(), inputs);
-        Logger.recordOutput("IntakePose", new Pose3d(new Translation3d(0,0,0), new Rotation3d(0,inputs.currentAngle.in(Units.Degrees),0)));
+        Logger.recordOutput("IntakePose", new Pose3d(new Translation3d(0.327,0,0.165), new Rotation3d(0,-inputs.currentAngle.in(Units.Radians),0)));
+        Logger.recordOutput("RobotPose", new Pose3d(new Translation3d(0,0,0), new Rotation3d(0,0,0)));
         intakeLigament.setAngle(inputs.currentAngle.in(Units.Degrees));
     }
 }
