@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Meters;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.MutableMeasure;
@@ -14,7 +15,7 @@ public class ElevatorIOSim implements ElevatorIO {
     private final TalonFXSim motor;
     private final ElevatorInputs inputs;
 
-    private final MotionMagicExpoVoltage positionRequest = new MotionMagicExpoVoltage(0);
+    private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0);
     private final DutyCycleOut powerRequest = new DutyCycleOut(0);
 
     public ElevatorIOSim(ElevatorInputs inputs) {
