@@ -55,19 +55,11 @@ public class Hood extends SubsystemBase {
     }
 
     public Command setAngle(Supplier<MutableMeasure<Angle>> angle) {
-        return run(
-                () -> {
-                    inputs.angleSetpoint.mut_replace(angle.get());
-                    io.setAngle(inputs.angleSetpoint);
-                });
+        return run(() -> io.setAngle(inputs.angleSetpoint));
     }
 
     public Command setPower(Supplier<Double> power) {
-        return run(
-                () -> {
-                    inputs.powerSetpoint = power.get();
-                    io.setPower(inputs.powerSetpoint);
-                });
+        return run(() -> io.setPower(inputs.powerSetpoint));
     }
 
     public Command resetAbsoluteEncoder() {
