@@ -21,7 +21,8 @@ public class ExampleSubsystemIOSim implements ExampleSubsystemIO {
                 new TalonFXSim(
                         1,
                         ExampleSubsystemConstants.GEAR_RATIO,
-                        ExampleSubsystemConstants.MOMENT_OF_INERTIA);
+                        ExampleSubsystemConstants.MOMENT_OF_INERTIA,
+                        1);
 
         motor.setController(
                 new PIDController(
@@ -44,10 +45,10 @@ public class ExampleSubsystemIOSim implements ExampleSubsystemIO {
     public void updateInputs() {
         motor.update(Timer.getFPGATimestamp());
 
-        inputs.angle = Rotation2d.fromRotations(motor.getRotorPosition());
+        inputs.angle = Rotation2d.fromRotations(motor.getPosition());
         inputs.tipPosition =
                 new Translation2d(inputs.angle.getCos(), inputs.angle.getSin())
                         .times(ExampleSubsystemConstants.LENGTH);
-        inputs.velocity = Rotation2d.fromRotations(Units.rpmToRps(motor.getRotorVelocity()));
+        inputs.velocity = Rotation2d.fromRotations(Units.rpmToRps(motor.getVelocity()));
     }
 }
