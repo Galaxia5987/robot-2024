@@ -41,11 +41,7 @@ public class Shooter extends SubsystemBase {
      * @param velocity The velocity of the Shooter to set.
      */
     public Command setVelocity(Supplier<MutableMeasure<Velocity<Angle>>> velocity) {
-        return run(
-                () -> {
-                    io.setVelocity(velocity.get());
-                    inputs.velocitySetpoint.mut_replace(velocity.get());
-                });
+        return run(() -> io.setVelocity(velocity.get()));
     }
 
     public MutableMeasure<Velocity<Angle>> getVelocity() {
