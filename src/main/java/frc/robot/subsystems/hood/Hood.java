@@ -85,5 +85,7 @@ public class Hood extends SubsystemBase {
     public void periodic() {
         io.updateInputs();
         Logger.processInputs("Hood", inputs);
+
+        hood.setAngle(inputs.angle.in(Units.Degrees));
     }
 }
