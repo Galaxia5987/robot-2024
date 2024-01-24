@@ -1,9 +1,7 @@
 package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.MotionMagicExpoDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.MutableMeasure;
@@ -45,8 +43,8 @@ public class ElevatorIOSim implements ElevatorIO {
         motor.update(Timer.getFPGATimestamp());
         inputs.currentHeight =
                 Meters.of(
-                                lib.units.Units.rpsToMetersPerSecond(
-                                        motor.getPosition(), ElevatorConstants.DRUM_RADIUS))
+                        lib.units.Units.rpsToMetersPerSecond(
+                                motor.getPosition(), ElevatorConstants.DRUM_RADIUS))
                         .mutableCopy();
     }
 }
