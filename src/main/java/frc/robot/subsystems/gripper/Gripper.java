@@ -77,11 +77,12 @@ public class Gripper extends SubsystemBase {
 
     public Command intake() {
         return run(() -> io.setAngle(GripperConstants.INTAKE_ANGLE))
-                .alongWith(run(()->io.setRollerMotorPower(GripperConstants.INTAKE_POWER)));
+                .alongWith(run(() -> io.setRollerMotorPower(GripperConstants.INTAKE_POWER)));
     }
+
     public Command outtake() {
         return run(() -> io.setAngle(GripperConstants.OUTTAKE_ANGLE))
-                .alongWith(run(()->io.setRollerMotorPower(GripperConstants.OUTTAKE_POWER)));
+                .alongWith(run(() -> io.setRollerMotorPower(GripperConstants.OUTTAKE_POWER)));
     }
 
     public Command setWristPosition(MutableMeasure<Angle> angle) {

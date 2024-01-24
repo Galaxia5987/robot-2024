@@ -4,7 +4,7 @@ import edu.wpi.first.units.*;
 
 public interface GripperIO {
 
-    GripperInputs inputs = new GripperInputs();
+    GripperInputsAutoLogged inputs = new GripperInputsAutoLogged();
 
     void setRollerMotorPower(double power);
 

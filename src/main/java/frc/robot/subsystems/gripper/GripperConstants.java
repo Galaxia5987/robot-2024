@@ -2,8 +2,6 @@ package frc.robot.subsystems.gripper;
 
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Unit;
-import edu.wpi.first.units.Units;
 
 public class GripperConstants {
     public static final MutableMeasure<Angle> INTAKE_ANGLE = null;
