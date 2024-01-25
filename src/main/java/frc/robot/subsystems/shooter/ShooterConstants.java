@@ -1,5 +1,5 @@
 package frc.robot.subsystems.shooter;
 
 public class ShooterConstants {
-    public static double atSetpointTolerance = 0.05; // Percentages
+    public static double SETPOINT_TOLERANCE = 0.05; // Percentages
 }

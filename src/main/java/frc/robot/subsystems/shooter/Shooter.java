@@ -11,7 +11,7 @@ public class Shooter extends SubsystemBase {
     private final ShooterInputsAutoLogged inputs = ShooterIO.inputs;
     private final ShooterIO io;
 
-    private final String subsystemName = this.getClass().getSimpleName();
+    private final String SUBSYSTEM_NAME = this.getClass().getSimpleName();
 
     /**
      * Constructor for Shooter subsystem.
@@ -49,14 +49,13 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean atSetpoint() {
-        return inputs.velocity.isNear(
-                inputs.velocitySetpoint, ShooterConstants.atSetpointTolerance);
+        return inputs.velocity.isNear(inputs.velocitySetpoint, ShooterConstants.SETPOINT_TOLERANCE);
     }
 
     /** Updates the state of the shooter. */
     @Override
     public void periodic() {
         io.updateInputs();
-        Logger.processInputs(subsystemName, inputs);
+        Logger.processInputs(SUBSYSTEM_NAME, inputs);
     }
 }
