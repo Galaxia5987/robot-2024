@@ -65,7 +65,7 @@ public class Hood extends SubsystemBase {
     }
 
     public Command updateInternalEncoder() {
-        return runOnce(io::updateInternalEncoder);
+        return runOnce(io::updateInternalEncoder).withName("Update hood internal encoder");
     }
 
     /** Updates the state of the hood. */
