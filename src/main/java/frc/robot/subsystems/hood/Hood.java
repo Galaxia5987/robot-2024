@@ -55,11 +55,13 @@ public class Hood extends SubsystemBase {
     }
 
     public Command setAngle(Supplier<MutableMeasure<Angle>> angle) {
-        return run(() -> io.setAngle(angle.get())).withName("Set hood angle");
+        return runOnce(() -> inputs.controlMode = HoodIO.Mode.ANGLE)
+                .andThen(run(() -> io.setAngle(angle.get())).withName("Set hood angle"));
     }
 
     public Command setPower(Supplier<Double> power) {
-        return run(() -> io.setPower(power.get())).withName("Set hood power");
+        return runOnce(() -> inputs.controlMode = HoodIO.Mode.POWER)
+                .andThen(run(() -> io.setPower(power.get())).withName("Set hood power"));
     }
 
     public Command updateInternalEncoder() {
