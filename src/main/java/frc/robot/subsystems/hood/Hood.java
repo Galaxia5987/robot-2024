@@ -19,10 +19,10 @@ public class Hood extends SubsystemBase {
     private final MechanismRoot2d root =
             mechanism2d.getRoot(
                     "Hood",
-                    HoodConstants.mechanism2dPose.getX(),
-                    HoodConstants.mechanism2dPose.getY());
+                    HoodConstants.MECHANISM_2D_POSE.getX(),
+                    HoodConstants.MECHANISM_2D_POSE.getY());
     private final MechanismLigament2d hood =
-            root.append(new MechanismLigament2d("Hood", HoodConstants.HoodLength, 45));
+            root.append(new MechanismLigament2d("Hood", HoodConstants.HOOD_LENGTH, 45));
 
     /**
      * Constructor for Hood subsystem.
@@ -51,7 +51,7 @@ public class Hood extends SubsystemBase {
     }
 
     public boolean atSetpoint() {
-        return inputs.angle.isNear(inputs.angleSetpoint, HoodConstants.positionTolerance);
+        return inputs.angle.isNear(inputs.angleSetpoint, HoodConstants.POSITION_TOLERANCE);
     }
 
     public Command setAngle(Supplier<MutableMeasure<Angle>> angle) {
@@ -64,7 +64,7 @@ public class Hood extends SubsystemBase {
 
     public Command resetAbsoluteEncoder() {
         return Commands.sequence(
-                setPower(() -> HoodConstants.resetPower),
+                setPower(() -> HoodConstants.RESET_POWER),
                 runOnce(io::resetAbsoluteEncoder),
                 setPower(() -> 0.0));
     }
