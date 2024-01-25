@@ -10,8 +10,6 @@ public interface HoodIO {
 
     void updateInternalEncoder();
 
-    void resetAbsoluteEncoder();
-
     void setAngle(MutableMeasure<Angle> angle);
 
     void setPower(double power);
