@@ -50,7 +50,8 @@ public class Hood extends SubsystemBase {
     }
 
     public boolean atSetpoint() {
-        return inputs.angle.isNear(inputs.angleSetpoint, HoodConstants.POSITION_TOLERANCE);
+        return inputs.angle.isNear(
+                inputs.angleSetpoint, HoodConstants.POSITION_TOLERANCE.in(Units.Value));
     }
 
     public Command setAngle(Supplier<MutableMeasure<Angle>> angle) {
