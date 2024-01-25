@@ -24,5 +24,11 @@ public interface HoodIO {
         public MutableMeasure<Voltage> voltage = MutableMeasure.zero(Volts);
         public double powerSetpoint;
         public MutableMeasure<Angle> absoluteEncoderAngle = MutableMeasure.zero(Radians);
+        public Mode controlMode;
+    }
+
+    enum Mode {
+        POWER,
+        ANGLE
     }
 }
