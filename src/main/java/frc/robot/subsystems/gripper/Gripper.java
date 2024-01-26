@@ -20,7 +20,7 @@ public class Gripper extends SubsystemBase {
     @AutoLogOutput private final Mechanism2d mechanism2d = new Mechanism2d(0, 0);
 
     private final MechanismRoot2d root = mechanism2d.getRoot("Gripper", 0, 0);
-    private final MechanismLigament2d gripper =
+    private final MechanismLigament2d gripperLigament =
             root.append(new MechanismLigament2d("Gripper", 0, 0));
 
     private Gripper(GripperIO io) {
@@ -56,21 +56,21 @@ public class Gripper extends SubsystemBase {
     }
 
     public Command setRollerPower(double power) {
-        return run(() -> io.setRollerMotorPower(power));
+        return run(() -> io.setRollerMotorPower(power)).withName("setRollerPower");
     }
 
     public Command intake() {
         return runOnce(() -> io.setAngle(GripperConstants.INTAKE_ANGLE))
-                .alongWith(runOnce(() -> io.setRollerMotorPower(GripperConstants.INTAKE_POWER)));
+                .alongWith(runOnce(() -> io.setRollerMotorPower(GripperConstants.INTAKE_POWER))).withName("intake");
     }
 
     public Command outtake() {
         return runOnce(() -> io.setAngle(GripperConstants.OUTTAKE_ANGLE))
-                .alongWith(runOnce(() -> io.setRollerMotorPower(GripperConstants.OUTTAKE_POWER)));
+                .alongWith(runOnce(() -> io.setRollerMotorPower(GripperConstants.OUTTAKE_POWER)).withName("outtake"));
     }
 
     public Command setWristPosition(MutableMeasure<Angle> angle) {
-        return runOnce(() -> io.setAngle(angle));
+        return runOnce(() -> io.setAngle(angle)).withName("setWristPosition");
     }
 
     @Override
@@ -78,6 +78,6 @@ public class Gripper extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.processInputs(this.getClass().getSimpleName(), inputs);
 
-        gripper.setLength(getCurrentAngle().in(Units.Radians));
+        gripperLigament.setLength(getCurrentAngle().in(Units.Radians));
     }
 }
