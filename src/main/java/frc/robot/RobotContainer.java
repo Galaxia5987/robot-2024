@@ -4,6 +4,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.example.ExampleSubsystem;
 import frc.robot.subsystems.example.ExampleSubsystemIO;
 import frc.robot.subsystems.example.ExampleSubsystemIOReal;
@@ -21,6 +22,7 @@ public class RobotContainer {
     private static RobotContainer INSTANCE = null;
 
     private final SwerveDrive swerveDrive;
+    private final CommandXboxController xboxController = new CommandXboxController(0);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
@@ -83,7 +85,16 @@ public class RobotContainer {
         return INSTANCE;
     }
 
-    private void configureDefaultCommands() {}
+    private void configureDefaultCommands() {
+        swerveDrive.setDefaultCommand(
+                swerveDrive.driveCommand(
+                        () -> -xboxController.getLeftY(),
+                        () -> -xboxController.getLeftX(),
+                        () -> -xboxController.getRightX(),
+                        0.15,
+                        () -> true
+                ));
+    }
 
     private void configureButtonBindings() {}
 
