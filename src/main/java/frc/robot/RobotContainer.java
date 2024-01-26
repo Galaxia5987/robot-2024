@@ -3,7 +3,6 @@ package frc.robot;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.example.*;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
@@ -52,7 +51,8 @@ public class RobotContainer {
     private void configureDefaultCommands() {}
 
     private void configureButtonBindings() {
-        shooter.setDefaultCommand(shooter.setVelocity(() -> Units.RotationsPerSecond.of(100).mutableCopy()));
+        shooter.setDefaultCommand(
+                shooter.setVelocity(() -> Units.RotationsPerSecond.of(100).mutableCopy()));
     }
 
     /**
