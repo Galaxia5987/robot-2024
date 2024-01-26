@@ -30,14 +30,14 @@ public class ShooterIOSim implements ShooterIO {
 
         topMotor.setController(
                 new PIDController(
-                        ShooterConstants.TOP_P.get(),
-                        ShooterConstants.TOP_I.get(),
-                        ShooterConstants.TOP_D.get()));
+                        ShooterConstants.TOP_kP.get(),
+                        ShooterConstants.TOP_kI.get(),
+                        ShooterConstants.TOP_kD.get()));
         bottomMotor.setController(
                 new PIDController(
-                        ShooterConstants.BOTTOM_P.get(),
-                        ShooterConstants.BOTTOM_I.get(),
-                        ShooterConstants.BOTTOM_D.get()));
+                        ShooterConstants.BOTTOM_kP.get(),
+                        ShooterConstants.BOTTOM_kI.get(),
+                        ShooterConstants.BOTTOM_kD.get()));
 
         topFeedForward =
                 new SimpleMotorFeedforward(
