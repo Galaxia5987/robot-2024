@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.example.ExampleSubsystemConstants;
+import frc.robot.subsystems.shooter.ShooterConstants;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -77,6 +78,7 @@ public class Robot extends LoggedRobot {
         SignalLogger.enableAutoLogging(true);
 
         ExampleSubsystemConstants.initConstants();
+        ShooterConstants.initialize(Constants.CURRENT_MODE);
         robotContainer = RobotContainer.getInstance();
         compressor.enableDigital();
     }
