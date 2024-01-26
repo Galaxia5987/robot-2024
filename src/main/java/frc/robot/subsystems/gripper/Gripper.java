@@ -35,13 +35,6 @@ public class Gripper extends SubsystemBase {
         INSTANCE = new Gripper(io);
     }
 
-    public MutableMeasure<Angle> getCurrentAngle() {
-        return inputs.currentAngle;
-    }
-
-    public MutableMeasure<Angle> getAngleSetpoint() {
-        return inputs.angleSetpoint;
-    }
 
     public boolean hasNote() {
         return inputs.hasNote;
@@ -80,6 +73,6 @@ public class Gripper extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.processInputs(this.getClass().getSimpleName(), inputs);
 
-        gripperLigament.setLength(getCurrentAngle().in(Units.Radians));
+        gripperLigament.setLength(inputs.currentAngle.in(Units.Radians));
     }
 }
