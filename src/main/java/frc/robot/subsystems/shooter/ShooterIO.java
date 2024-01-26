@@ -8,21 +8,24 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ShooterIO {
     ShooterInputsAutoLogged inputs = new ShooterInputsAutoLogged();
 
-    /**
-     * Sets the position of the hood.
-     *
-     * @param velocity The position of the subsystem.
-     */
-    void setVelocity(MutableMeasure<Velocity<Angle>> velocity);
+    void setTopVelocity(MutableMeasure<Velocity<Angle>> velocity);
+
+    void setBottomVelocity(MutableMeasure<Velocity<Angle>> velocity);
 
     /** Update the inputs of the Shooter */
     void updateInputs();
 
     @AutoLog
     class ShooterInputs {
-        public MutableMeasure<Velocity<Angle>> velocity = MutableMeasure.zero(RotationsPerSecond);
-        public MutableMeasure<Velocity<Angle>> velocitySetpoint =
+        public MutableMeasure<Velocity<Angle>> topVelocity =
                 MutableMeasure.zero(RotationsPerSecond);
-        public MutableMeasure<Voltage> voltage = MutableMeasure.zero(Volts);
+        public MutableMeasure<Velocity<Angle>> bottomVelocity =
+                MutableMeasure.zero(RotationsPerSecond);
+        public MutableMeasure<Velocity<Angle>> topVelocitySetpoint =
+                MutableMeasure.zero(RotationsPerSecond);
+        public MutableMeasure<Velocity<Angle>> bottomVelocitySetpoint =
+                MutableMeasure.zero(RotationsPerSecond);
+        public MutableMeasure<Voltage> topVoltage = MutableMeasure.zero(Volts);
+        public MutableMeasure<Voltage> bottomVoltage = MutableMeasure.zero(Volts);
     }
 }
