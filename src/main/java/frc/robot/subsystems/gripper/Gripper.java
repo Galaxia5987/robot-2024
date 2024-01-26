@@ -56,7 +56,7 @@ public class Gripper extends SubsystemBase {
     }
 
     public Command setRollerPower(double power) {
-        return run(() -> io.setRollerMotorPower(power)).withName("set roller power");
+        return runOnce(() -> io.setRollerMotorPower(power)).withName("set roller power");
     }
 
     public Command intake() {
