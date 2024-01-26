@@ -4,6 +4,8 @@ import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
@@ -35,21 +37,38 @@ public class Shooter extends SubsystemBase {
         INSTANCE = new Shooter(io);
     }
 
-    /**
-     * Sets the velocity of the shooter.
-     *
-     * @param velocity The velocity of the Shooter to set.
-     */
+    public Command setVelocity(
+            Supplier<MutableMeasure<Velocity<Angle>>> topVelocity,
+            Supplier<MutableMeasure<Velocity<Angle>>> bottomVelocity) {
+        return run(() -> {
+                    io.setTopVelocity(topVelocity.get());
+                    io.setBottomVelocity(bottomVelocity.get());
+                })
+                .withName("Set Shooter Velocity");
+    }
+
     public Command setVelocity(Supplier<MutableMeasure<Velocity<Angle>>> velocity) {
-        return run(() -> io.setVelocity(velocity.get())).withName("Set Shooter Velocity");
+        return setVelocity(velocity, velocity);
     }
 
-    public MutableMeasure<Velocity<Angle>> getVelocity() {
-        return inputs.velocity;
+    public MutableMeasure<Velocity<Angle>> getTopVelocity() {
+        return inputs.topVelocity;
     }
 
+    public MutableMeasure<Velocity<Angle>> getBottomVelocity() {
+        return inputs.bottomVelocity;
+    }
+
+    public Command stop() {
+        return setVelocity(() -> Units.RotationsPerSecond.zero().mutableCopy());
+    }
+
+    @AutoLogOutput
     public boolean atSetpoint() {
-        return inputs.velocity.isNear(inputs.velocitySetpoint, ShooterConstants.SETPOINT_TOLERANCE);
+        return inputs.topVelocity.isNear(
+                        inputs.topVelocitySetpoint, ShooterConstants.SETPOINT_TOLERANCE)
+                && inputs.bottomVelocity.isNear(
+                        inputs.bottomVelocitySetpoint, ShooterConstants.SETPOINT_TOLERANCE);
     }
 
     /** Updates the state of the shooter. */
