@@ -1,8 +1,20 @@
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.example.*;
+import frc.robot.subsystems.example.ExampleSubsystem;
+import frc.robot.subsystems.example.ExampleSubsystemIO;
+import frc.robot.subsystems.example.ExampleSubsystemIOReal;
+import frc.robot.subsystems.example.ExampleSubsystemIOSim;
 import frc.robot.swerve.*;
+import frc.robot.vision.PhotonVisionIOReal;
+import frc.robot.vision.Vision;
+import frc.robot.vision.VisionModule;
+import frc.robot.vision.VisionSimIO;
+import org.photonvision.PhotonCamera;
+import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotContainer {
 
@@ -15,6 +27,7 @@ public class RobotContainer {
         ExampleSubsystemIO exampleSubsystemIO;
         ModuleIO[] moduleIOs = new ModuleIO[4];
         GyroIO gyroIO;
+        VisionModule frontLeftVisionModule;
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 exampleSubsystemIO = new ExampleSubsystemIOReal();
@@ -28,6 +41,12 @@ public class RobotContainer {
                                     SwerveConstants.ANGLE_MOTOR_CONFIGS);
                 }
                 gyroIO = new GyroIOReal();
+                frontLeftVisionModule =
+                        new VisionModule(
+                                new PhotonVisionIOReal(
+                                        new PhotonCamera("Front left camera"),
+                                        new Transform3d(0.293, 0.293, 0.2, new Rotation3d()),
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()));
                 break;
             case SIM:
             case REPLAY:
@@ -37,10 +56,18 @@ public class RobotContainer {
                     moduleIOs[i] = new ModuleIOSim();
                 }
                 gyroIO = new GyroIOSim();
+                frontLeftVisionModule =
+                        new VisionModule(
+                                new VisionSimIO(
+                                        new PhotonCamera("Front left camera"),
+                                        new Transform3d(0.293, 0.293, 0.2, new Rotation3d()),
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                                        SimCameraProperties.PI4_LIFECAM_640_480()));
                 break;
         }
         ExampleSubsystem.initialize(exampleSubsystemIO);
         SwerveDrive.initialize(gyroIO, moduleIOs);
+        Vision.initialize(frontLeftVisionModule);
 
         swerveDrive = SwerveDrive.getInstance();
 
