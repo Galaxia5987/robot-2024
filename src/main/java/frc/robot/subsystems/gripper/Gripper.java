@@ -60,13 +60,15 @@ public class Gripper extends SubsystemBase {
     }
 
     public Command intake() {
-        return runOnce(() -> io.setAngle(GripperConstants.INTAKE_ANGLE))
-                .alongWith(runOnce(() -> io.setRollerMotorPower(GripperConstants.INTAKE_POWER))).withName("intake");
+        return setWristPosition(GripperConstants.INTAKE_ANGLE)
+                .alongWith(setRollerPower(GripperConstants.INTAKE_POWER))
+                .withName("intake");
     }
 
     public Command outtake() {
-        return runOnce(() -> io.setAngle(GripperConstants.OUTTAKE_ANGLE))
-                .alongWith(runOnce(() -> io.setRollerMotorPower(GripperConstants.OUTTAKE_POWER)).withName("outtake"));
+        return setWristPosition(GripperConstants.OUTTAKE_ANGLE)
+                .alongWith(setRollerPower(GripperConstants.OUTTAKE_POWER))
+                .withName("outtake");
     }
 
     public Command setWristPosition(MutableMeasure<Angle> angle) {
