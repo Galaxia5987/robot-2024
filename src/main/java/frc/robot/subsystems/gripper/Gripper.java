@@ -1,5 +1,7 @@
 package frc.robot.subsystems.gripper;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
@@ -18,6 +20,7 @@ public class Gripper extends SubsystemBase {
     private final GripperInputsAutoLogged inputs = GripperIO.inputs;
 
     @AutoLogOutput private final Mechanism2d mechanism2d = new Mechanism2d(0, 0);
+    @AutoLogOutput private final Pose3d pose3d = new Pose3d(0,0,0, new Rotation3d());
 
     private final MechanismRoot2d root = mechanism2d.getRoot("Gripper", 0, 0);
     private final MechanismLigament2d gripperLigament =
@@ -74,5 +77,6 @@ public class Gripper extends SubsystemBase {
         Logger.processInputs(this.getClass().getSimpleName(), inputs);
 
         gripperLigament.setLength(inputs.currentAngle.in(Units.Radians));
+        
     }
 }
