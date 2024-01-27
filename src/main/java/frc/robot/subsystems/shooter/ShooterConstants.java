@@ -35,6 +35,18 @@ public class ShooterConstants {
     public static void initialize(Constants.Mode mode) {
         switch (mode) {
             case REAL:
+                TOP_kP.initDefault(10.0);
+                TOP_kI.initDefault(0.0);
+                TOP_kD.initDefault(0.0);
+                TOP_kS.initDefault(0.0);
+                TOP_Kv.initDefault(0.112);
+                TOP_Ka.initDefault(0.0);
+                BOTTOM_kP.initDefault(10.0);
+                BOTTOM_kI.initDefault(0.0);
+                BOTTOM_kD.initDefault(0.0);
+                BOTTOM_kS.initDefault(0.0);
+                BOTTOM_Kv.initDefault(0.112);
+                BOTTOM_Ka.initDefault(0.0);
             case SIM:
             case REPLAY:
                 TOP_kP.initDefault(10.0);
@@ -49,20 +61,6 @@ public class ShooterConstants {
                 BOTTOM_kD.initDefault(0.0);
                 BOTTOM_kS.initDefault(0.0);
                 BOTTOM_Kv.initDefault(0.112);
-                BOTTOM_Ka.initDefault(0.0);
-            default:
-                TOP_kP.initDefault(0.0);
-                TOP_kI.initDefault(0.0);
-                TOP_kD.initDefault(0.0);
-                TOP_kS.initDefault(0.0);
-                TOP_Kv.initDefault(0.0);
-                TOP_Ka.initDefault(0.0);
-
-                BOTTOM_kP.initDefault(0.0);
-                BOTTOM_kI.initDefault(0.0);
-                BOTTOM_kD.initDefault(0.0);
-                BOTTOM_kS.initDefault(0.0);
-                BOTTOM_Kv.initDefault(0.0);
                 BOTTOM_Ka.initDefault(0.0);
         }
     }
