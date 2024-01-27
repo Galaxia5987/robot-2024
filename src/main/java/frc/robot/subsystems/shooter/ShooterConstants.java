@@ -30,10 +30,10 @@ public class ShooterConstants {
             new LoggedTunableNumber("Shooter/Bottom kD");
     public static final LoggedTunableNumber BOTTOM_kS =
             new LoggedTunableNumber("Shooter/Bottom kS");
-    public static final LoggedTunableNumber BOTTOM_Kv =
-            new LoggedTunableNumber("Shooter/Bottom Kv");
-    public static final LoggedTunableNumber BOTTOM_Ka =
-            new LoggedTunableNumber("Shooter/Bottom Ka");
+    public static final LoggedTunableNumber BOTTOM_kV =
+            new LoggedTunableNumber("Shooter/Bottom kV");
+    public static final LoggedTunableNumber BOTTOM_kA =
+            new LoggedTunableNumber("Shooter/Bottom kA");
 
     public static void initialize(Constants.Mode mode) {
         switch (mode) {
@@ -48,8 +48,8 @@ public class ShooterConstants {
                 BOTTOM_kI.initDefault(0.0);
                 BOTTOM_kD.initDefault(0.0);
                 BOTTOM_kS.initDefault(0.0);
-                BOTTOM_Kv.initDefault(0.112);
-                BOTTOM_Ka.initDefault(0.0);
+                BOTTOM_kV.initDefault(0.112);
+                BOTTOM_kA.initDefault(0.0);
             case SIM:
             case REPLAY:
                 TOP_kP.initDefault(10.0);
@@ -63,8 +63,8 @@ public class ShooterConstants {
                 BOTTOM_kI.initDefault(0.0);
                 BOTTOM_kD.initDefault(0.0);
                 BOTTOM_kS.initDefault(0.0);
-                BOTTOM_Kv.initDefault(0.112);
-                BOTTOM_Ka.initDefault(0.0);
+                BOTTOM_kV.initDefault(0.112);
+                BOTTOM_kA.initDefault(0.0);
         }
     }
 
