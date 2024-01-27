@@ -50,14 +50,6 @@ public class Shooter extends SubsystemBase {
         return setVelocity(velocity, velocity);
     }
 
-    public MutableMeasure<Velocity<Angle>> getTopVelocity() {
-        return inputs.topVelocity;
-    }
-
-    public MutableMeasure<Velocity<Angle>> getBottomVelocity() {
-        return inputs.bottomVelocity;
-    }
-
     public Command stop() {
         return setVelocity(() -> ShooterConstants.stopPower);
     }
