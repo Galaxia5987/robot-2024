@@ -18,14 +18,10 @@ public class ShooterTest implements AutoCloseable {
     }
 
     @Test
-    public void testSetVelocity() {
+    public void testSetVelocity() throws InterruptedException {
         shooter.setDefaultCommand(
                 shooter.setVelocity(() -> Units.RotationsPerSecond.of(100).mutableCopy()));
-        try {
-            wait(3000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        Thread.sleep(3000);
 
         assertTrue(shooter.atSetpoint());
     }
