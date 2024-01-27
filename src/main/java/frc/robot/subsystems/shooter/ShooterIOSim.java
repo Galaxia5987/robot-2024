@@ -79,9 +79,6 @@ public class ShooterIOSim implements ShooterIO {
     }
 
     @Override
-    public void close() {}
-
-    @Override
     public void updateInputs() {
         topMotor.update(Timer.getFPGATimestamp());
         bottomMotor.update(Timer.getFPGATimestamp());

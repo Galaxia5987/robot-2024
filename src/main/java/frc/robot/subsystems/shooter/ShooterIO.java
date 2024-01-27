@@ -15,8 +15,6 @@ public interface ShooterIO {
     /** Update the inputs of the Shooter */
     void updateInputs();
 
-    void close();
-
     @AutoLog
     class ShooterInputs {
         public MutableMeasure<Velocity<Angle>> topVelocity =

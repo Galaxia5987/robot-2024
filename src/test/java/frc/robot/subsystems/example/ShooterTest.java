@@ -31,7 +31,5 @@ public class ShooterTest implements AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
-        shooter.close();
-    }
+    public void close() {}
 }

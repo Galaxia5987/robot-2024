@@ -62,10 +62,6 @@ public class Shooter extends SubsystemBase {
                         inputs.bottomVelocitySetpoint, ShooterConstants.SETPOINT_TOLERANCE_BOTTOM);
     }
 
-    public void close() {
-        io.close();
-    }
-
     /** Updates the state of the shooter. */
     @Override
     public void periodic() {
