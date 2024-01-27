@@ -19,8 +19,8 @@ public class ShooterConstants {
     public static final LoggedTunableNumber TOP_kI = new LoggedTunableNumber("Shooter/Top kI");
     public static final LoggedTunableNumber TOP_kD = new LoggedTunableNumber("Shooter/Top kD");
     public static final LoggedTunableNumber TOP_kS = new LoggedTunableNumber("Shooter/Top kS");
-    public static final LoggedTunableNumber TOP_Kv = new LoggedTunableNumber("Shooter/Top Kv");
-    public static final LoggedTunableNumber TOP_Ka = new LoggedTunableNumber("Shooter/Top Ka");
+    public static final LoggedTunableNumber TOP_kV = new LoggedTunableNumber("Shooter/Top kV");
+    public static final LoggedTunableNumber TOP_kA = new LoggedTunableNumber("Shooter/Top kA");
 
     public static final LoggedTunableNumber BOTTOM_kP =
             new LoggedTunableNumber("Shooter/Bottom kP");
@@ -42,8 +42,8 @@ public class ShooterConstants {
                 TOP_kI.initDefault(0.0);
                 TOP_kD.initDefault(0.0);
                 TOP_kS.initDefault(0.0);
-                TOP_Kv.initDefault(0.112);
-                TOP_Ka.initDefault(0.0);
+                TOP_kV.initDefault(0.112);
+                TOP_kA.initDefault(0.0);
                 BOTTOM_kP.initDefault(10.0);
                 BOTTOM_kI.initDefault(0.0);
                 BOTTOM_kD.initDefault(0.0);
@@ -56,8 +56,8 @@ public class ShooterConstants {
                 TOP_kI.initDefault(0.0);
                 TOP_kD.initDefault(0.0);
                 TOP_kS.initDefault(0.0);
-                TOP_Kv.initDefault(0.112);
-                TOP_Ka.initDefault(0.0);
+                TOP_kV.initDefault(0.112);
+                TOP_kA.initDefault(0.0);
 
                 BOTTOM_kP.initDefault(10.0);
                 BOTTOM_kI.initDefault(0.0);

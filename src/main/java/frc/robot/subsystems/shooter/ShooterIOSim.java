@@ -48,8 +48,8 @@ public class ShooterIOSim implements ShooterIO {
         topFeedForward =
                 new SimpleMotorFeedforward(
                         ShooterConstants.TOP_kS.get(),
-                        ShooterConstants.TOP_Kv.get(),
-                        ShooterConstants.TOP_Ka.get());
+                        ShooterConstants.TOP_kV.get(),
+                        ShooterConstants.TOP_kA.get());
         bottomFeedForward =
                 new SimpleMotorFeedforward(
                         ShooterConstants.BOTTOM_kS.get(),
