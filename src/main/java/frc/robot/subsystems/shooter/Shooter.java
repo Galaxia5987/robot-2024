@@ -59,7 +59,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command stop() {
-        return setVelocity(() -> Units.RotationsPerSecond.zero().mutableCopy());
+        return setVelocity(() -> ShooterConstants.stopPower);
     }
 
     @AutoLogOutput

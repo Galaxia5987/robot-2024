@@ -1,5 +1,9 @@
 package frc.robot.subsystems.shooter;
 
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Velocity;
 import frc.robot.Constants;
 import lib.webconstants.LoggedTunableNumber;
 
@@ -62,4 +66,7 @@ public class ShooterConstants {
                 BOTTOM_Ka.initDefault(0.0);
         }
     }
+
+    public static MutableMeasure<Velocity<Angle>> stopPower =
+            Units.RotationsPerSecond.zero().mutableCopy();
 }
