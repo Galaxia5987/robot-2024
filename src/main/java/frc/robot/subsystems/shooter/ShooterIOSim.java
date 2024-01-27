@@ -23,10 +23,16 @@ public class ShooterIOSim implements ShooterIO {
     public ShooterIOSim() {
         topMotor =
                 new TalonFXSim(
-                        1, ShooterConstants.GEAR_RATIO, ShooterConstants.MOMENT_OF_INERTIA, 1);
+                        1,
+                        ShooterConstants.GEAR_RATIO_TOP,
+                        ShooterConstants.MOMENT_OF_INERTIA_TOP,
+                        1);
         bottomMotor =
                 new TalonFXSim(
-                        1, ShooterConstants.GEAR_RATIO, ShooterConstants.MOMENT_OF_INERTIA, 1);
+                        1,
+                        ShooterConstants.GEAR_RATIO_BOTTOM,
+                        ShooterConstants.MOMENT_OF_INERTIA_BOTTOM,
+                        1);
 
         topMotor.setController(
                 new PIDController(

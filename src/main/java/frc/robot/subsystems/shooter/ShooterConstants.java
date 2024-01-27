@@ -8,9 +8,12 @@ import frc.robot.Constants;
 import lib.webconstants.LoggedTunableNumber;
 
 public class ShooterConstants {
-    public static final double GEAR_RATIO = 1.0;
-    public static final double SETPOINT_TOLERANCE = 0.05; // Percentages
-    public static final double MOMENT_OF_INERTIA = 0.08;
+    public static final double GEAR_RATIO_TOP = 1.0;
+    public static final double GEAR_RATIO_BOTTOM = 1.0;
+    public static final double SETPOINT_TOLERANCE_TOP = 0.05; // Percentages
+    public static final double SETPOINT_TOLERANCE_BOTTOM = 0.05; // Percentages
+    public static final double MOMENT_OF_INERTIA_TOP = 0.08;
+    public static final double MOMENT_OF_INERTIA_BOTTOM = 0.08;
 
     public static final LoggedTunableNumber TOP_kP = new LoggedTunableNumber("Shooter/Top kP");
     public static final LoggedTunableNumber TOP_kI = new LoggedTunableNumber("Shooter/Top kI");
