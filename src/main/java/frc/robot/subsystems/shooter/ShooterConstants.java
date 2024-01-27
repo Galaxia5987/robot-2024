@@ -68,6 +68,6 @@ public class ShooterConstants {
         }
     }
 
-    public static MutableMeasure<Velocity<Angle>> stopPower =
+    public static MutableMeasure<Velocity<Angle>> STOP_POWER =
             Units.RotationsPerSecond.zero().mutableCopy();
 }
