@@ -3,6 +3,8 @@ package frc.robot.subsystems.example;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.simulation.SimHooks;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOSim;
@@ -21,7 +23,8 @@ public class ShooterTest implements AutoCloseable {
     public void testSetVelocity() throws InterruptedException {
         shooter.setDefaultCommand(
                 shooter.setVelocity(() -> Units.RotationsPerSecond.of(100).mutableCopy()));
-        Thread.sleep(3000);
+        CommandScheduler.getInstance().run();
+        SimHooks.stepTiming(3);
 
         assertTrue(shooter.atSetpoint());
     }
