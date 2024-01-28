@@ -3,11 +3,12 @@ package frc.robot;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.example.ExampleSubsystem;
 import frc.robot.subsystems.example.ExampleSubsystemIO;
 import frc.robot.subsystems.example.ExampleSubsystemIOReal;
 import frc.robot.subsystems.example.ExampleSubsystemIOSim;
+import frc.robot.swerve.*;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOSim;
@@ -21,6 +22,9 @@ public class RobotContainer {
     private JoystickButton b = new JoystickButton(xboxController, XboxController.Button.kB.value);
     private JoystickButton x = new JoystickButton(xboxController, XboxController.Button.kX.value);
     private JoystickButton y = new JoystickButton(xboxController, XboxController.Button.kY.value);
+
+    private final SwerveDrive swerveDrive;
+    private final CommandXboxController xboxController = new CommandXboxController(0);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
@@ -41,6 +45,11 @@ public class RobotContainer {
         ExampleSubsystem.initialize(exampleSubsystemIO);
         Intake.initialize(intakeIO);
         intake = Intake.getInstance();
+        Constants.initSwerve();
+        Constants.initVision();
+
+        swerveDrive = SwerveDrive.getInstance();
+
         // Configure the button bindings and default commands
         configureDefaultCommands();
         configureButtonBindings();
@@ -53,7 +62,15 @@ public class RobotContainer {
         return INSTANCE;
     }
 
-    private void configureDefaultCommands() {}
+    private void configureDefaultCommands() {
+        swerveDrive.setDefaultCommand(
+                swerveDrive.driveCommand(
+                        () -> -xboxController.getLeftY(),
+                        () -> -xboxController.getLeftX(),
+                        () -> -xboxController.getRightX(),
+                        0.15,
+                        () -> true));
+    }
 
     private void configureButtonBindings() {
         a.onTrue(intake.setAngle(Units.Degrees.of(90).mutableCopy()));
