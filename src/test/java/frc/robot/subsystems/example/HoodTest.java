@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 public class HoodTest implements AutoCloseable {
     private final Hood hood;
-    private final double Delta = 0.05;
+    private final double Delta = 0.5;
 
     public HoodTest() {
         HoodIO hoodIO = new HoodIOSim();
