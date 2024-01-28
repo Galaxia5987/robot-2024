@@ -2,6 +2,7 @@ package frc.robot.subsystems.conveyor;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -33,5 +34,11 @@ public class Conveyor extends SubsystemBase {
 
     public Command feed(BooleanSupplier feed) {
         return setPower(() -> feed.getAsBoolean() ? FEED_POWER : 0);
+    }
+
+    @Override
+    public void periodic() {
+        io.updateInputs();
+        Logger.processInputs("Conveyor", inputs);
     }
 }
