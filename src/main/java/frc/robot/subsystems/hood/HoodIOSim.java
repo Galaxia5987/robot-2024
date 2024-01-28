@@ -1,7 +1,7 @@
 package frc.robot.subsystems.hood;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.Angle;
@@ -13,7 +13,7 @@ import lib.motors.TalonFXSim;
 public class HoodIOSim implements HoodIO {
     private final TalonFXSim motor;
 
-    private final PositionVoltage control = new PositionVoltage(0);
+    private final MotionMagicDutyCycle control = new MotionMagicDutyCycle(0);
     private final DutyCycleOut dutyCycleOut = new DutyCycleOut(0);
     private final SimpleMotorFeedforward motorFeedforward;
 
