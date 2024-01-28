@@ -10,6 +10,8 @@ public interface ConveyorIO {
 
     ConveyorInputsAutoLogged inputs = new ConveyorInputsAutoLogged();
 
+    void setPower(double power);
+
     @AutoLog
     class ConveyorInputs {
         public double setpointPower = 0;

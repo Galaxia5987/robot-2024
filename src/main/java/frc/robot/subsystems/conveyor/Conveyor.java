@@ -1,6 +1,14 @@
 package frc.robot.subsystems.conveyor;
 
-public class Conveyor {
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
+import static frc.robot.subsystems.conveyor.ConveyorConstants.FEED_POWER;
+
+public class Conveyor extends SubsystemBase {
 
     private static Conveyor INSTANCE = null;
 
@@ -17,5 +25,13 @@ public class Conveyor {
 
     public static void initialize(ConveyorIO io) {
         INSTANCE = new Conveyor(io);
+    }
+
+    public Command setPower(DoubleSupplier power) {
+        return run(() -> io.setPower(power.getAsDouble()));
+    }
+
+    public Command feed(BooleanSupplier feed) {
+        return setPower(() -> feed.getAsBoolean() ? FEED_POWER : 0);
     }
 }
