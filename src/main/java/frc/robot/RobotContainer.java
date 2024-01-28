@@ -1,11 +1,19 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.example.*;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.example.ExampleSubsystem;
+import frc.robot.subsystems.example.ExampleSubsystemIO;
+import frc.robot.subsystems.example.ExampleSubsystemIOReal;
+import frc.robot.subsystems.example.ExampleSubsystemIOSim;
+import frc.robot.swerve.*;
 
 public class RobotContainer {
 
     private static RobotContainer INSTANCE = null;
+
+    private final SwerveDrive swerveDrive;
+    private final CommandXboxController xboxController = new CommandXboxController(0);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
@@ -21,6 +29,10 @@ public class RobotContainer {
                 break;
         }
         ExampleSubsystem.initialize(exampleSubsystemIO);
+        Constants.initSwerve();
+        Constants.initVision();
+
+        swerveDrive = SwerveDrive.getInstance();
 
         // Configure the button bindings and default commands
         configureDefaultCommands();
@@ -34,7 +46,15 @@ public class RobotContainer {
         return INSTANCE;
     }
 
-    private void configureDefaultCommands() {}
+    private void configureDefaultCommands() {
+        swerveDrive.setDefaultCommand(
+                swerveDrive.driveCommand(
+                        () -> -xboxController.getLeftY(),
+                        () -> -xboxController.getLeftX(),
+                        () -> -xboxController.getRightX(),
+                        0.15,
+                        () -> true));
+    }
 
     private void configureButtonBindings() {}
 
