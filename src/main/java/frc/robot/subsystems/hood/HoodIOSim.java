@@ -34,13 +34,12 @@ public class HoodIOSim implements HoodIO {
 
     @Override
     public void setAngle(MutableMeasure<Angle> angle) {
+        double rotationsPerSecond = angle.in(Units.RotationsPerSecond.getUnit());
         inputs.controlMode = Mode.ANGLE;
         inputs.angleSetpoint = angle.mut_replace(angle);
         motor.setControl(
                 control.withPosition(angle.in(Units.Radians))
-                        .withFeedForward(
-                                motorFeedforward.calculate(
-                                        angle.in(Units.RotationsPerSecond.getUnit()))));
+                        .withFeedForward(motorFeedforward.calculate(rotationsPerSecond)));
     }
 
     @Override
