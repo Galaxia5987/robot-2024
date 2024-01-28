@@ -1,8 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.example.ExampleSubsystem;
@@ -29,7 +27,8 @@ public class RobotContainer {
         ExampleSubsystemIO exampleSubsystemIO;
         ModuleIO[] moduleIOs = new ModuleIO[4];
         GyroIO gyroIO;
-        VisionModule frontLeftVisionModule;
+        VisionModule orangePi1;
+        VisionModule orangePi2;
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 exampleSubsystemIO = new ExampleSubsystemIOReal();
@@ -43,11 +42,25 @@ public class RobotContainer {
                                     SwerveConstants.ANGLE_MOTOR_CONFIGS);
                 }
                 gyroIO = new GyroIOReal();
-                frontLeftVisionModule =
+                orangePi1 =
                         new VisionModule(
                                 new PhotonVisionIOReal(
                                         new PhotonCamera("Front left camera"),
-                                        new Transform3d(0.293, 0.293, 0.2, new Rotation3d()),
+                                        Constants.FRONT_LEFT_CAMERA_POSE,
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()),
+                                new PhotonVisionIOReal(
+                                        new PhotonCamera("Front right camera"),
+                                        Constants.FRONT_RIGHT_CAMERA_POSE,
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()));
+                orangePi2 =
+                        new VisionModule(
+                                new PhotonVisionIOReal(
+                                        new PhotonCamera("Back left camera"),
+                                        Constants.BACK_LEFT_CAMERA_POSE,
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()),
+                                new PhotonVisionIOReal(
+                                        new PhotonCamera("Back right camera"),
+                                        Constants.BACK_RIGHT_CAMERA_POSE,
                                         AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()));
                 break;
             case SIM:
@@ -58,18 +71,35 @@ public class RobotContainer {
                     moduleIOs[i] = new ModuleIOSim();
                 }
                 gyroIO = new GyroIOSim();
-                frontLeftVisionModule =
+                orangePi1 =
                         new VisionModule(
                                 new VisionSimIO(
                                         new PhotonCamera("Front left camera"),
-                                        new Transform3d(0.293, 0.293, 0.2, new Rotation3d()),
+                                        Constants.FRONT_LEFT_CAMERA_POSE,
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                                        SimCameraProperties.PI4_LIFECAM_640_480()),
+                                new VisionSimIO(
+                                        new PhotonCamera("Front right camera"),
+                                        Constants.FRONT_RIGHT_CAMERA_POSE,
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                                        SimCameraProperties.PI4_LIFECAM_640_480()));
+                orangePi2 =
+                        new VisionModule(
+                                new VisionSimIO(
+                                        new PhotonCamera("Back left camera"),
+                                        Constants.BACK_LEFT_CAMERA_POSE,
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                                        SimCameraProperties.PI4_LIFECAM_640_480()),
+                                new VisionSimIO(
+                                        new PhotonCamera("Back right camera"),
+                                        Constants.BACK_RIGHT_CAMERA_POSE,
                                         AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
                                         SimCameraProperties.PI4_LIFECAM_640_480()));
                 break;
         }
         ExampleSubsystem.initialize(exampleSubsystemIO);
         SwerveDrive.initialize(gyroIO, moduleIOs);
-        Vision.initialize(frontLeftVisionModule);
+        Vision.initialize(orangePi1, orangePi2);
 
         swerveDrive = SwerveDrive.getInstance();
 
@@ -92,8 +122,7 @@ public class RobotContainer {
                         () -> -xboxController.getLeftX(),
                         () -> -xboxController.getRightX(),
                         0.15,
-                        () -> true
-                ));
+                        () -> true));
     }
 
     private void configureButtonBindings() {}
