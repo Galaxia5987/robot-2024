@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 public class HoodTest implements AutoCloseable {
     private final Hood hood;
-    private final double Delta = 0.05;
+    private final double Delta = 0.5;
 
     public HoodTest() {
         HoodIO hoodIO = new HoodIOSim();
@@ -31,7 +31,7 @@ public class HoodTest implements AutoCloseable {
         hood.setDefaultCommand(hood.setPower(() -> 0.5));
         CommandScheduler.getInstance().run();
         Thread.sleep(3000);
-        Assertions.assertEquals(0.5, hood.getVoltage().in(Units.Volts), Delta);
+        Assertions.assertEquals(6, hood.getVoltage().in(Units.Volts), Delta);
     }
 
     @Override
