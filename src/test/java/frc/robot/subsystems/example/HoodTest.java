@@ -28,7 +28,7 @@ public class HoodTest implements AutoCloseable {
     public void testSetPower() throws InterruptedException {
         hood.setDefaultCommand(hood.setPower(() -> 0.5));
         Thread.sleep(3000);
-        Assertions.assertEquals(0.5, hood.getPower().in(Units.Volts), Delta);
+        Assertions.assertEquals(0.5, hood.getVoltage().in(Units.Volts), Delta);
     }
 
     @Override

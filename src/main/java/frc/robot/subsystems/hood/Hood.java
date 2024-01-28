@@ -51,7 +51,7 @@ public class Hood extends SubsystemBase {
         return inputs.angle;
     }
 
-    public MutableMeasure<Voltage> getPower() {
+    public MutableMeasure<Voltage> getVoltage() {
         return inputs.voltage;
     }
 
