@@ -1,6 +1,7 @@
 package frc.robot.subsystems.example;
 
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.simulation.SimHooks;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodIO;
@@ -22,7 +23,7 @@ public class HoodTest implements AutoCloseable {
     public void testSetAngle() throws InterruptedException {
         hood.setDefaultCommand(hood.setAngle(() -> Units.Radians.of(0.5).mutableCopy()));
         CommandScheduler.getInstance().run();
-        Thread.sleep(3000);
+        SimHooks.stepTiming(3);
         Assertions.assertTrue(hood.atSetpoint());
     }
 
@@ -30,7 +31,7 @@ public class HoodTest implements AutoCloseable {
     public void testSetPower() throws InterruptedException {
         hood.setDefaultCommand(hood.setPower(() -> 0.5));
         CommandScheduler.getInstance().run();
-        Thread.sleep(3000);
+        SimHooks.stepTiming(3);
         Assertions.assertEquals(6, hood.getVoltage().in(Units.Volts), Delta);
     }
 
