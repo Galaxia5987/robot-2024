@@ -1,13 +1,12 @@
 package frc.robot.subsystems.conveyor;
 
+import static frc.robot.subsystems.conveyor.ConveyorConstants.FEED_POWER;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.littletonrobotics.junction.Logger;
-
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-
-import static frc.robot.subsystems.conveyor.ConveyorConstants.FEED_POWER;
+import org.littletonrobotics.junction.Logger;
 
 public class Conveyor extends SubsystemBase {
 
