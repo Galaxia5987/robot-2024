@@ -21,7 +21,9 @@ public class Hood extends SubsystemBase {
                     HoodConstants.MECHANISM_2D_POSE.getX(),
                     HoodConstants.MECHANISM_2D_POSE.getY());
     private final MechanismLigament2d hood =
-            root.append(new MechanismLigament2d("Hood", HoodConstants.HOOD_LENGTH, 45));
+            root.append(
+                    new MechanismLigament2d(
+                            "Hood", HoodConstants.HOOD_LENGTH.in(Units.Meters), 45));
 
     /**
      * Constructor for Hood subsystem.
