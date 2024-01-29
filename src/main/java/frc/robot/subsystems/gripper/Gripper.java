@@ -44,7 +44,7 @@ public class Gripper extends SubsystemBase {
     }
 
     public boolean atSetpoint() {
-        return inputs.currentAngle == inputs.angleSetpoint;
+        return inputs.currentAngle.isNear(inputs.angleSetpoint, 0.02);
     }
 
     public Command setRollerPower(double power) {
