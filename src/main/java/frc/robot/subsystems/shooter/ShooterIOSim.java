@@ -85,6 +85,13 @@ public class ShooterIOSim implements ShooterIO {
     }
 
     @Override
+    public void stop() {
+        inputs.bottomVelocitySetpoint = ShooterConstants.STOP_POWER;
+        inputs.topVelocitySetpoint = ShooterConstants.STOP_POWER;
+        bottomMotor.setControl(stop);
+    }
+
+    @Override
     public void updateInputs() {
         topMotor.update(Timer.getFPGATimestamp());
         bottomMotor.update(Timer.getFPGATimestamp());
