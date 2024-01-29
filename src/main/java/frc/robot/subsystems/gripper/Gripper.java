@@ -5,12 +5,14 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -20,7 +22,7 @@ public class Gripper extends SubsystemBase {
     private final GripperInputsAutoLogged inputs = GripperIO.inputs;
 
     @AutoLogOutput private final Mechanism2d mechanism2d = new Mechanism2d(0, 0);
-    @AutoLogOutput private final Pose3d pose3d = new Pose3d(0, 0, 0, new Rotation3d());
+    @AutoLogOutput private Pose3d pose3d = new Pose3d(0, 0, 0, new Rotation3d());
 
     private final MechanismRoot2d root = mechanism2d.getRoot("Gripper", 0, 0);
     private final MechanismLigament2d gripperLigament =
@@ -76,6 +78,9 @@ public class Gripper extends SubsystemBase {
 
     @Override
     public void periodic() {
+        pose3d = new Pose3d(
+                GripperConstants.GRIPPER_POSITION, new Rotation3d(0, inputs.currentAngle.in(Units.Radians), 0)
+        );
 
         io.updateInputs(inputs);
         Logger.processInputs(this.getClass().getSimpleName(), inputs);
