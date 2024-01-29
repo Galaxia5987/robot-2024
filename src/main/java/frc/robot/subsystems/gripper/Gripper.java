@@ -20,7 +20,7 @@ public class Gripper extends SubsystemBase {
     private final GripperInputsAutoLogged inputs = GripperIO.inputs;
 
     @AutoLogOutput private final Mechanism2d mechanism2d = new Mechanism2d(0, 0);
-    @AutoLogOutput private Pose3d pose3d = new Pose3d(0, 0, 0, new Rotation3d());
+    @AutoLogOutput private Pose3d gripperPose = new Pose3d(0, 0, 0, new Rotation3d());
 
     private final MechanismRoot2d root = mechanism2d.getRoot("Gripper", 0, 0);
     private final MechanismLigament2d gripperLigament =
@@ -68,7 +68,7 @@ public class Gripper extends SubsystemBase {
 
     @Override
     public void periodic() {
-        pose3d =
+        gripperPose =
                 new Pose3d(
                         GripperConstants.GRIPPER_POSITION,
                         new Rotation3d(0, inputs.currentAngle.in(Units.Radians), 0));
