@@ -12,6 +12,8 @@ public interface ShooterIO {
 
     void setBottomVelocity(MutableMeasure<Velocity<Angle>> velocity);
 
+    void stop();
+
     /** Update the inputs of the Shooter */
     void updateInputs();
 

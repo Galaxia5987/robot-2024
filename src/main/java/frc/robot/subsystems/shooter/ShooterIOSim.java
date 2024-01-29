@@ -1,12 +1,10 @@
 package frc.robot.subsystems.shooter;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.Timer;
 import lib.motors.TalonFXSim;
 
@@ -19,6 +17,14 @@ public class ShooterIOSim implements ShooterIO {
 
     private final VelocityVoltage bottomControl = new VelocityVoltage(0);
     private final SimpleMotorFeedforward bottomFeedForward;
+
+    private final DutyCycleOut stop =
+            new DutyCycleOut(
+                    ShooterConstants.STOP_POWER.in(Units.RotationsPerSecond),
+                    false,
+                    true,
+                    false,
+                    false);
 
     public ShooterIOSim() {
         topMotor =
