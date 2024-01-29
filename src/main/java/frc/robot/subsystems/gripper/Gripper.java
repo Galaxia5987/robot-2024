@@ -44,15 +44,7 @@ public class Gripper extends SubsystemBase {
     }
 
     public boolean atSetpoint() {
-        return inputs.atSetpoint;
-    }
-
-    public MutableMeasure<Voltage> getRollerMotorVoltage() {
-        return inputs.rollerMotorVoltage;
-    }
-
-    public MutableMeasure<Voltage> getAngleMotorVoltage() {
-        return inputs.angleMotorVoltage;
+        return inputs.currentAngle == inputs.angleSetpoint;
     }
 
     public Command setRollerPower(double power) {
