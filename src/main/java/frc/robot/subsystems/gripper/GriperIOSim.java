@@ -14,5 +14,5 @@ public class GriperIOSim implements GripperIO {
     public void setAngle(MutableMeasure<Angle> angle) {}
 
     @Override
-    public void updateInputs(GripperInputs inputs) {}
+    public void updateInputs() {}
 }
