@@ -1,11 +1,16 @@
 package frc.robot.subsystems.conveyor;
 
-import static frc.robot.subsystems.conveyor.ConveyorConstants.FEED_POWER;
+import static frc.robot.subsystems.conveyor.ConveyorConstants.FEED_VELOCITY;
+import static frc.robot.subsystems.conveyor.ConveyorConstants.SETPOINT_TOLERANCE;
 
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class Conveyor extends SubsystemBase {
@@ -27,12 +32,20 @@ public class Conveyor extends SubsystemBase {
         INSTANCE = new Conveyor(io);
     }
 
-    public Command setPower(DoubleSupplier power) {
-        return run(() -> io.setPower(power.getAsDouble()));
+    public Command setVelocity(Supplier<MutableMeasure<Velocity<Angle>>> velocity) {
+        return run(() -> io.setVelocity(velocity.get()));
     }
 
     public Command feed(BooleanSupplier feed) {
-        return setPower(() -> feed.getAsBoolean() ? FEED_POWER : 0);
+        return setVelocity(
+                () ->
+                        feed.getAsBoolean()
+                                ? FEED_VELOCITY
+                                : MutableMeasure.zero(Units.RotationsPerSecond));
+    }
+
+    public boolean readyToFeed() {
+        return inputs.velocitySetpoint.isNear(inputs.velocity, SETPOINT_TOLERANCE.in(Units.Value));
     }
 
     @Override
