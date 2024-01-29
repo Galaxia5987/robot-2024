@@ -16,7 +16,7 @@ public interface ConveyorIO {
 
     @AutoLog
     class ConveyorInputs {
-        public double setpointPower = 0;
+        public double powerSetpoint = 0;
         public MutableMeasure<Voltage> appliedVoltage = MutableMeasure.zero(Units.Volts);
         public MutableMeasure<Current> appliedCurrent = MutableMeasure.zero(Units.Amps);
     }
