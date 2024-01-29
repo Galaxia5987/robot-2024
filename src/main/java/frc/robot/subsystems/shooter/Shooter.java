@@ -51,7 +51,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command stop() {
-        return setVelocity(() -> ShooterConstants.STOP_POWER);
+        return run(io::stop).withName("Stop Shooter");
     }
 
     @AutoLogOutput
