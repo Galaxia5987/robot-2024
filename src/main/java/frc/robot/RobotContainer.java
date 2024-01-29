@@ -1,7 +1,10 @@
 package frc.robot;
 
+import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOReal;
@@ -18,6 +21,7 @@ public class RobotContainer {
     private final Elevator elevator;
     private final SwerveDrive swerveDrive;
     private final CommandXboxController xboxController = new CommandXboxController(0);
+
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
@@ -65,7 +69,10 @@ public class RobotContainer {
                         () -> true));
     }
 
-    private void configureButtonBindings() {}
+    private void configureButtonBindings() {
+        xboxController.a().onTrue(elevator.setHeight(2));
+
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
