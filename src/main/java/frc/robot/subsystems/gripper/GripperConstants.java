@@ -11,6 +11,7 @@ public class GripperConstants {
     public static final MutableMeasure<Angle> OUTTAKE_ANGLE = null;
     public static final double INTAKE_POWER = 0;
     public static final double OUTTAKE_POWER = 0;
-    public static final MutableMeasure<Dimensionless> THRESHOLD = Units.Percent.of(0.02).mutableCopy();
+    public static final MutableMeasure<Dimensionless> THRESHOLD =
+            Units.Percent.of(0.02).mutableCopy();
     public static final Translation3d GRIPPER_POSITION = new Translation3d(0, 0, 0.6461);
 }

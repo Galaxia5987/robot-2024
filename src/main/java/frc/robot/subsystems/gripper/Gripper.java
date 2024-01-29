@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
@@ -43,7 +44,8 @@ public class Gripper extends SubsystemBase {
     }
 
     public boolean atSetpoint() {
-        return inputs.currentAngle.isNear(inputs.angleSetpoint, GripperConstants.THRESHOLD.in(Units.Percent));
+        return inputs.currentAngle.isNear(
+                inputs.angleSetpoint, GripperConstants.THRESHOLD.in(Units.Percent));
     }
 
     public Command setRollerPower(double power) {
