@@ -74,7 +74,7 @@ public class Gripper extends SubsystemBase {
                         GripperConstants.GRIPPER_POSITION,
                         new Rotation3d(0, inputs.currentAngle.in(Units.Radians), 0));
 
-        io.updateInputs(inputs);
+        io.updateInputs();
         Logger.processInputs(this.getClass().getSimpleName(), inputs);
 
         gripperLigament.setAngle(new Rotation2d(inputs.currentAngle));

@@ -12,5 +12,5 @@ public interface GripperIO {
 
     void setAngle(MutableMeasure<Angle> angle);
 
-    void updateInputs(GripperInputs inputs);
+    void updateInputs();
 }
