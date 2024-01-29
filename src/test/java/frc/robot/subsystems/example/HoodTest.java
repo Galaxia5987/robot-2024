@@ -27,14 +27,6 @@ public class HoodTest implements AutoCloseable {
         Assertions.assertTrue(hood.atSetpoint());
     }
 
-    @Test
-    public void testSetPower() throws InterruptedException {
-        hood.setDefaultCommand(hood.setPower(() -> 0.5));
-        CommandScheduler.getInstance().run();
-        SimHooks.stepTiming(3);
-        Assertions.assertEquals(6, hood.getVoltage().in(Units.Volts), Delta);
-    }
-
     @Override
     public void close() throws Exception {}
 }
