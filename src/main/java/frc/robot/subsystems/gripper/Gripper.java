@@ -5,14 +5,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import jdk.jshell.execution.Util;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -22,7 +20,7 @@ public class Gripper extends SubsystemBase {
     private final GripperInputsAutoLogged inputs = GripperIO.inputs;
 
     @AutoLogOutput private final Mechanism2d mechanism2d = new Mechanism2d(0, 0);
-    @AutoLogOutput private final Pose3d pose3d = new Pose3d(0,0,0, new Rotation3d());
+    @AutoLogOutput private final Pose3d pose3d = new Pose3d(0, 0, 0, new Rotation3d());
 
     private final MechanismRoot2d root = mechanism2d.getRoot("Gripper", 0, 0);
     private final MechanismLigament2d gripperLigament =
@@ -40,12 +38,11 @@ public class Gripper extends SubsystemBase {
         INSTANCE = new Gripper(io);
     }
 
-
     public boolean hasNote() {
         return inputs.hasNote;
     }
 
-    public boolean atSetpoint(){
+    public boolean atSetpoint() {
         return inputs.atSetpoint;
     }
 
@@ -73,8 +70,6 @@ public class Gripper extends SubsystemBase {
                 .withName("outtake");
     }
 
-
-
     public Command setWristPosition(MutableMeasure<Angle> angle) {
         return runOnce(() -> io.setAngle(angle)).withName("set wrist position");
     }
@@ -84,10 +79,7 @@ public class Gripper extends SubsystemBase {
 
         io.updateInputs(inputs);
         Logger.processInputs(this.getClass().getSimpleName(), inputs);
-        
+
         gripperLigament.setAngle(new Rotation2d(inputs.currentAngle));
-
-
-
     }
 }
