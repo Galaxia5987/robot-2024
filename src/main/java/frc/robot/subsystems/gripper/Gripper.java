@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -78,9 +77,10 @@ public class Gripper extends SubsystemBase {
 
     @Override
     public void periodic() {
-        pose3d = new Pose3d(
-                GripperConstants.GRIPPER_POSITION, new Rotation3d(0, inputs.currentAngle.in(Units.Radians), 0)
-        );
+        pose3d =
+                new Pose3d(
+                        GripperConstants.GRIPPER_POSITION,
+                        new Rotation3d(0, inputs.currentAngle.in(Units.Radians), 0));
 
         io.updateInputs(inputs);
         Logger.processInputs(this.getClass().getSimpleName(), inputs);
