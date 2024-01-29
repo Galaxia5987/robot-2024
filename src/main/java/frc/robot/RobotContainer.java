@@ -17,11 +17,6 @@ public class RobotContainer {
 
     private static RobotContainer INSTANCE = null;
     private Intake intake;
-    private XboxController xboxController = new XboxController(0);
-    private JoystickButton a = new JoystickButton(xboxController, XboxController.Button.kA.value);
-    private JoystickButton b = new JoystickButton(xboxController, XboxController.Button.kB.value);
-    private JoystickButton x = new JoystickButton(xboxController, XboxController.Button.kX.value);
-    private JoystickButton y = new JoystickButton(xboxController, XboxController.Button.kY.value);
 
     private final SwerveDrive swerveDrive;
     private final CommandXboxController xboxController = new CommandXboxController(0);
@@ -73,10 +68,10 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        a.onTrue(intake.setAngle(Units.Degrees.of(90).mutableCopy()));
-        b.onTrue(intake.setAngle(Units.Degrees.of(180).mutableCopy()));
-        x.onTrue(intake.setAngle(Units.Degrees.of(270).mutableCopy()));
-        y.onTrue(intake.setAngle(Units.Degrees.of(360).mutableCopy()));
+        xboxController.a().onTrue(intake.setAngle(Units.Degrees.of(90).mutableCopy()));
+        xboxController.b().onTrue(intake.setAngle(Units.Degrees.of(180).mutableCopy()));
+        xboxController.x().onTrue(intake.setAngle(Units.Degrees.of(270).mutableCopy()));
+        xboxController.y().onTrue(intake.setAngle(Units.Degrees.of(360).mutableCopy()));
     }
 
     /**
