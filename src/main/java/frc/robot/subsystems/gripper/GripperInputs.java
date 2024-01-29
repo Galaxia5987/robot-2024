@@ -12,4 +12,5 @@ public class GripperInputs {
     public MutableMeasure<Voltage> rollerMotorVoltage;
     public boolean hasNote;
     public MutableMeasure<Velocity<Velocity<Distance>>> acceleration;
+    public boolean atSetpoint;
 }

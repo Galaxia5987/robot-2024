@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import jdk.jshell.execution.Util;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -43,6 +44,10 @@ public class Gripper extends SubsystemBase {
         return inputs.hasNote;
     }
 
+    public boolean atSetpoint(){
+        return inputs.atSetpoint;
+    }
+
     public MutableMeasure<Voltage> getRollerMotorVoltage() {
         return inputs.rollerMotorVoltage;
     }
@@ -66,6 +71,8 @@ public class Gripper extends SubsystemBase {
                 .alongWith(setRollerPower(GripperConstants.OUTTAKE_POWER))
                 .withName("outtake");
     }
+
+
 
     public Command setWristPosition(MutableMeasure<Angle> angle) {
         return runOnce(() -> io.setAngle(angle)).withName("set wrist position");
