@@ -2,8 +2,9 @@ package frc.robot.subsystems.hood;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
@@ -20,9 +21,13 @@ public class HoodIOSim implements HoodIO {
     public HoodIOSim() {
         motor = new TalonFXSim(1, HoodConstants.GEAR_RATIO, HoodConstants.MOMENT_OF_INERTIA, 1);
 
-        motor.setController(
-                new PIDController(
-                        HoodConstants.kP.get(), HoodConstants.kI.get(), HoodConstants.kD.get()));
+        motor.setProfiledController(
+                new ProfiledPIDController(
+                        HoodConstants.kP.get(),
+                        HoodConstants.kI.get(),
+                        HoodConstants.kD.get(),
+                        new TrapezoidProfile.Constraints(
+                                HoodConstants.MAX_VELOCITY, HoodConstants.MAX_ACCELERATION)));
 
         motorFeedforward =
                 new SimpleMotorFeedforward(
