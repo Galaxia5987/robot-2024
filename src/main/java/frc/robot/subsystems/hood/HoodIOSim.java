@@ -19,7 +19,7 @@ public class HoodIOSim implements HoodIO {
     private final SimpleMotorFeedforward motorFeedforward;
 
     public HoodIOSim() {
-        motor = new TalonFXSim(1, HoodConstants.GEAR_RATIO, HoodConstants.MOMENT_OF_INERTIA, 1);
+        motor = new TalonFXSim(1, HoodConstants.GEAR_RATIO, HoodConstants.MOMENT_OF_INERTIA.in(Units.Kilograms.mult(Units.Meters).mult(Units.Meters)), 1);
 
         motor.setProfiledController(
                 new ProfiledPIDController(
