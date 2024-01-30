@@ -26,4 +26,10 @@ public interface ShooterIO {
 
         public RollerInputs() {}
     }
+
+    @AutoLog
+    class TopRollerInputs extends RollerInputs {}
+
+    @AutoLog
+    class BottomRollerInputs extends RollerInputs {}
 }
