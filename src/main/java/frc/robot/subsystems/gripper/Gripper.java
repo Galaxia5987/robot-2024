@@ -48,7 +48,8 @@ public class Gripper extends SubsystemBase {
     }
 
     public boolean atSetpoint() {
-        return inputs.currentAngle.isNear(inputs.angleSetpoint, GripperConstants.THRESHOLD);
+        return inputs.currentAngle.isNear(
+                inputs.angleSetpoint, GripperConstants.THRESHOLD.in(Units.Percent));
     }
 
     public Command setRollerPower(double power) {
@@ -56,15 +57,13 @@ public class Gripper extends SubsystemBase {
     }
 
     public Command intake() {
-        return setWristPosition(
-                        Units.Radians.of(GripperConstants.INTAKE_ANGLE.getRadians()).mutableCopy())
+        return setWristPosition(GripperConstants.INTAKE_ANGLE.mutableCopy())
                 .alongWith(setRollerPower(GripperConstants.INTAKE_POWER))
                 .withName("intake");
     }
 
     public Command outtake() {
-        return setWristPosition(
-                        Units.Radians.of(GripperConstants.OUTTAKE_ANGLE.getRadians()).mutableCopy())
+        return setWristPosition(GripperConstants.OUTTAKE_ANGLE.mutableCopy())
                 .alongWith(setRollerPower(GripperConstants.OUTTAKE_POWER))
                 .withName("outtake");
     }
@@ -75,13 +74,11 @@ public class Gripper extends SubsystemBase {
 
     @Override
     public void periodic() {
-        gripperHeight =
-                elevatorInputs.currentHeight.mut_plus(
-                        Units.Meters.of(GripperConstants.GRIPPER_POSITION_z).mutableCopy());
+        gripperHeight = elevatorInputs.currentHeight.mut_plus(GripperConstants.GRIPPER_POSITION_z);
         gripperPose =
                 new Pose3d(
-                        GripperConstants.GRIPPER_POSITION0_X,
-                        GripperConstants.GRIPPER_POSITION_Y,
+                        GripperConstants.GRIPPER_POSITION_X.in(Units.Meters),
+                        GripperConstants.GRIPPER_POSITION_Y.in(Units.Meters),
                         gripperHeight.in(Units.Meters),
                         new Rotation3d(0, inputs.currentAngle.in(Units.Radians), 0));
 

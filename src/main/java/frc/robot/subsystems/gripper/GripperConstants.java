@@ -1,14 +1,14 @@
 package frc.robot.subsystems.gripper;
 
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.*;
 
 public class GripperConstants {
-    public static final Rotation2d INTAKE_ANGLE = null;
-    public static final Rotation2d OUTTAKE_ANGLE = null;
+    public static final Measure<Angle> INTAKE_ANGLE = null;
+    public static final Measure<Angle> OUTTAKE_ANGLE = null;
     public static final double INTAKE_POWER = 0;
     public static final double OUTTAKE_POWER = 0;
-    public static final double THRESHOLD = 0.02;
-    public static final double GRIPPER_POSITION0_X = 0;
-    public static final double GRIPPER_POSITION_Y = 0;
-    public static final double GRIPPER_POSITION_z = 0.6461;
+    public static final Measure<Dimensionless> THRESHOLD = Units.Percent.of(0.02);
+    public static final Measure<Distance> GRIPPER_POSITION_X = Units.Meters.of(0);
+    public static final Measure<Distance> GRIPPER_POSITION_Y = Units.Meters.of(0);
+    public static final Measure<Distance> GRIPPER_POSITION_z = Units.Meters.of(0.6461);
 }
