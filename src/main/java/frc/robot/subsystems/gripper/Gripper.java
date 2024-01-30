@@ -74,7 +74,11 @@ public class Gripper extends SubsystemBase {
 
     @Override
     public void periodic() {
-        gripperHeight = elevatorInputs.currentHeight.mutableCopy().mut_plus(GripperConstants.GRIPPER_POSITION_z);
+        gripperHeight =
+                elevatorInputs
+                        .currentHeight
+                        .mutableCopy()
+                        .mut_plus(GripperConstants.GRIPPER_POSITION_z);
         gripperPose =
                 new Pose3d(
                         GripperConstants.GRIPPER_POSITION_X.in(Units.Meters),
