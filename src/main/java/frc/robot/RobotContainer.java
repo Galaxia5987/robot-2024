@@ -18,7 +18,7 @@ import frc.robot.swerve.*;
 public class RobotContainer {
 
     private static RobotContainer INSTANCE = null;
-    private Intake intake;
+
     private final SwerveDrive swerveDrive;
     private final CommandXboxController xboxController = new CommandXboxController(0);
 
@@ -68,12 +68,7 @@ public class RobotContainer {
                         () -> true));
     }
 
-    private void configureButtonBindings() {
-        xboxController.a().onTrue(intake.setAngle(Units.Degrees.of(90).mutableCopy()));
-        xboxController.b().onTrue(intake.setAngle(Units.Degrees.of(180).mutableCopy()));
-        xboxController.x().onTrue(intake.setAngle(Units.Degrees.of(270).mutableCopy()));
-        xboxController.y().onTrue(intake.setAngle(Units.Degrees.of(360).mutableCopy()));
-    }
+    private void configureButtonBindings() {}
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
