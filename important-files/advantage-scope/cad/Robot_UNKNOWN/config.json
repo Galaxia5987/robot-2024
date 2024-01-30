@@ -1,0 +1,68 @@
+{
+  "sourceUrl": "",
+  "rotations": [
+    {
+      "axis": "x",
+      "degrees": 90
+    },
+    {
+      "axis": "y",
+      "degrees": 0
+    },
+    {
+      "axis": "z",
+      "degrees": 90
+    }
+  ],
+  "position": [
+    0.05,
+    0.1,
+    0.12
+  ],
+  "cameras": [
+    {
+      "name": "Object detection",
+      "rotations": [
+        {
+          "axis": "x",
+          "degrees": 0
+        },
+        {
+          "axis": "y",
+          "degrees": -32
+        },
+        {
+          "axis": "z",
+          "degrees": 180
+        }
+      ],
+      "position": [-0.293, -0.293, 0.2],
+      "resolution": [1600, 1200],
+      "fov": 75
+    }
+  ],
+  "components": [
+    {
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 110
+        },
+        {
+          "axis": "y",
+          "degrees": 0
+        },
+        {
+          "axis": "z",
+          "degrees": 90
+        }
+      ],
+      "zeroedPosition": [
+        -0.628,
+        0.413,
+        0.777
+      ]
+    }
+  ],
+  "name": "CLASSIFIED"
+}
