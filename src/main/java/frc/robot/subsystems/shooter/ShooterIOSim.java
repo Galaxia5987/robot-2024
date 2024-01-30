@@ -80,8 +80,8 @@ public class ShooterIOSim implements ShooterIO {
                 bottomControl
                         .withVelocity(velocity.in(Units.RotationsPerSecond))
                         .withFeedForward(
-                                bottomFeedForward.calculate(velocity.in(Units.RotationsPerSecond))
-                                        ));
+                                bottomFeedForward.calculate(
+                                        velocity.in(Units.RotationsPerSecond))));
     }
 
     @Override
