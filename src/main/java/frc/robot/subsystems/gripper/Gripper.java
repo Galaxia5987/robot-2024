@@ -45,7 +45,7 @@ public class Gripper extends SubsystemBase {
 
     public boolean atSetpoint() {
         return inputs.currentAngle.isNear(
-                inputs.angleSetpoint, GripperConstants.THRESHOLD.in(Units.Percent));
+                inputs.angleSetpoint, GripperConstants.THRESHOLD);
     }
 
     public Command setRollerPower(double power) {
@@ -53,13 +53,13 @@ public class Gripper extends SubsystemBase {
     }
 
     public Command intake() {
-        return setWristPosition(GripperConstants.INTAKE_ANGLE)
+        return setWristPosition(Units.Radians.of(GripperConstants.INTAKE_ANGLE.getRadians()).mutableCopy())
                 .alongWith(setRollerPower(GripperConstants.INTAKE_POWER))
                 .withName("intake");
     }
 
     public Command outtake() {
-        return setWristPosition(GripperConstants.OUTTAKE_ANGLE)
+        return setWristPosition(Units.Radians.of(GripperConstants.OUTTAKE_ANGLE.getRadians()).mutableCopy())
                 .alongWith(setRollerPower(GripperConstants.OUTTAKE_POWER))
                 .withName("outtake");
     }
