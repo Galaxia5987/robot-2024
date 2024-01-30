@@ -32,8 +32,7 @@ public class Conveyor extends SubsystemBase {
     }
 
     public Command setVelocity(Supplier<MutableMeasure<Velocity<Angle>>> velocity) {
-        inputs.velocitySetpoint = velocity.get();
-        return runOnce(() -> io.setVelocity(velocity.get()));
+        return runOnce(() -> inputs.velocitySetpoint = velocity.get()).andThen(run(() -> io.setVelocity(velocity.get())));
     }
 
     public Command feed() {
