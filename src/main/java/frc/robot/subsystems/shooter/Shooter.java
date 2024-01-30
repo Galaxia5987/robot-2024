@@ -4,11 +4,13 @@ import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
     private static Shooter INSTANCE = null;
-    private final ShooterInputsAutoLogged inputs = ShooterIO.inputs;
+    private final RollerInputsAutoLogged topRollerInputs = ShooterIO.topRollerInputs;
+    private final RollerInputsAutoLogged bottomRollerInputs = ShooterIO.bottomRollerInputs;
     private final ShooterIO io;
 
     private final String SUBSYSTEM_NAME = this.getClass().getSimpleName();
@@ -35,27 +37,38 @@ public class Shooter extends SubsystemBase {
         INSTANCE = new Shooter(io);
     }
 
-    /**
-     * Sets the velocity of the shooter.
-     *
-     * @param velocity The velocity of the Shooter to set.
-     */
+    public Command setVelocity(
+            Supplier<MutableMeasure<Velocity<Angle>>> topVelocity,
+            Supplier<MutableMeasure<Velocity<Angle>>> bottomVelocity) {
+        return run(() -> {
+                    io.setTopVelocity(topVelocity.get());
+                    io.setBottomVelocity(bottomVelocity.get());
+                })
+                .withName("Set Shooter Velocity");
+    }
+
     public Command setVelocity(Supplier<MutableMeasure<Velocity<Angle>>> velocity) {
-        return run(() -> io.setVelocity(velocity.get())).withName("Set Shooter Velocity");
+        return setVelocity(velocity, velocity);
     }
 
-    public MutableMeasure<Velocity<Angle>> getVelocity() {
-        return inputs.velocity;
+    public Command stop() {
+        return run(io::stop).withName("Stop Shooter");
     }
 
+    @AutoLogOutput
     public boolean atSetpoint() {
-        return inputs.velocity.isNear(inputs.velocitySetpoint, ShooterConstants.SETPOINT_TOLERANCE);
+        return topRollerInputs.velocity.isNear(
+                        topRollerInputs.velocitySetpoint, ShooterConstants.SETPOINT_TOLERANCE_TOP)
+                && bottomRollerInputs.velocity.isNear(
+                        bottomRollerInputs.velocitySetpoint,
+                        ShooterConstants.SETPOINT_TOLERANCE_BOTTOM);
     }
 
     /** Updates the state of the shooter. */
     @Override
     public void periodic() {
         io.updateInputs();
-        Logger.processInputs(SUBSYSTEM_NAME, inputs);
+        Logger.processInputs(SUBSYSTEM_NAME + "/TopRoller", topRollerInputs);
+        Logger.processInputs(SUBSYSTEM_NAME + "/BottomRoller", bottomRollerInputs);
     }
 }
