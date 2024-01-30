@@ -1,8 +1,13 @@
 package frc.robot;
 
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.conveyor.Conveyor;
+import frc.robot.subsystems.conveyor.ConveyorConstants;
 import frc.robot.subsystems.conveyor.ConveyorIO;
 import frc.robot.subsystems.conveyor.ConveyorIOSim;
 import frc.robot.subsystems.example.ExampleSubsystem;
@@ -10,6 +15,8 @@ import frc.robot.subsystems.example.ExampleSubsystemIO;
 import frc.robot.subsystems.example.ExampleSubsystemIOReal;
 import frc.robot.subsystems.example.ExampleSubsystemIOSim;
 import frc.robot.swerve.*;
+
+import java.util.function.Supplier;
 
 public class RobotContainer {
 
@@ -21,6 +28,8 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
+        ConveyorConstants.initialize(Constants.CURRENT_MODE
+        );
         ExampleSubsystemIO exampleSubsystemIO;
         ConveyorIO conveyorIO;
         switch (Constants.CURRENT_MODE) {
@@ -39,6 +48,7 @@ public class RobotContainer {
         Conveyor.initialize(conveyorIO);
         Constants.initSwerve();
         Constants.initVision();
+
 
         swerveDrive = SwerveDrive.getInstance();
         conveyor = Conveyor.getInstance();
@@ -65,7 +75,10 @@ public class RobotContainer {
                         () -> true));
     }
 
-    private void configureButtonBindings() {}
+    private void configureButtonBindings() {
+        xboxController.a().onTrue(conveyor.setVelocity(()-> Units.RotationsPerSecond.of(10).mutableCopy()));
+        xboxController.b().onTrue(conveyor.setVelocity(()-> Units.RotationsPerSecond.of(20).mutableCopy()));
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

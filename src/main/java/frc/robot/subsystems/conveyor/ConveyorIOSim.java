@@ -15,20 +15,21 @@ import static frc.robot.subsystems.conveyor.ConveyorConstants.*;
 public class ConveyorIOSim implements ConveyorIO {
     private final SparkMaxSim conveyor;
 
-    public static PIDController controller = new PIDController(KP.get(), KI.get(), KD.get(), Timer.getFPGATimestamp());
+    public static PIDController controller = new PIDController(KP.get(), KI.get(), KD.get(), 0.02);
 
     public static SimpleMotorFeedforward feed = new SimpleMotorFeedforward(KS.get(), KV.get(), KA.get());
 
 
 
     public ConveyorIOSim() {
-        conveyor = new SparkMaxSim(1, GEAR_RATIO, 0.5, GEAR_RATIO);
+        conveyor = new SparkMaxSim(1, GEAR_RATIO, 0.00005, 1);
         conveyor.setController(controller);
     }
 
     @Override
     public void setVelocity(MutableMeasure<Velocity<Angle>> velocity) {
-        conveyor.setReference(feed.calculate(velocity.in(Units.RotationsPerSecond)), CANSparkMax.ControlType.kVelocity);
+        conveyor.setReference(velocity.in(Units.RotationsPerSecond), CANSparkMax.ControlType.kVelocity);
+//        conveyor.set(0.5);
     }
 
     @Override
