@@ -29,6 +29,5 @@ public interface IntakeIO {
         MutableMeasure<Voltage> angleMotorVoltage = MutableMeasure.zero(Volts);
         MutableMeasure<Voltage> spinMotorVoltage = MutableMeasure.zero(Volts);
         MutableMeasure<Voltage> centerMotorVoltage = MutableMeasure.zero(Volts);
-
     }
 }

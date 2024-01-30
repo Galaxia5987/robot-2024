@@ -1,7 +1,5 @@
 package frc.robot.subsystems.intake;
 
-import com.ctre.phoenix6.controls.MotionMagicExpoDutyCycle;
-import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
@@ -29,7 +27,8 @@ public class IntakeIOSim implements IntakeIO {
     @Override
     public void setAngle(MutableMeasure<Angle> angle) {
         inputs.angleSetPoint = angle;
-        angleMotor.setControl(positionRequest.withPosition(Math.IEEEremainder( angle.in(Units.Degrees), 180)));
+        angleMotor.setControl(
+                positionRequest.withPosition(Math.IEEEremainder(angle.in(Units.Degrees), 180)));
     }
 
     @Override
