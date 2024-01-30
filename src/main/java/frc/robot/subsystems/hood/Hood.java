@@ -1,9 +1,12 @@
 package frc.robot.subsystems.hood;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.Supplier;
@@ -76,6 +79,11 @@ public class Hood extends SubsystemBase {
         return runOnce(io::updateInternalEncoder).withName("Update hood internal encoder");
     }
 
+    private Pose3d getPose3d(double angle) {
+        return new Pose3d(
+                HoodConstants.ROOT_POSITION.getX(), 0.0, HoodConstants.ROOT_POSITION.getY(), new Rotation3d(0.0, -angle, 0.0));
+    }
+
     /** Updates the state of the hood. */
     @Override
     public void periodic() {
@@ -83,5 +91,8 @@ public class Hood extends SubsystemBase {
         Logger.processInputs("Hood", inputs);
 
         hood.setAngle(inputs.angle.in(Units.Degrees));
+
+        Logger.recordOutput("HoodPose", getPose3d(inputs.angle.in(Units.Degrees)));
+        SmartDashboard.putData("HoodMech", mechanism2d);
     }
 }

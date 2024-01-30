@@ -13,7 +13,10 @@ public class HoodConstants {
     public static Measure<Distance> HOOD_LENGTH = Units.Meters.of(0.4);
     public static Measure<Dimensionless> POSITION_TOLERANCE = Units.Percent.of(5);
     public static final double GEAR_RATIO = 1.0;
-    public static final double MOMENT_OF_INERTIA = 0.08; // TODO: check what is the correct value
+    public static final double MOMENT_OF_INERTIA = 0.08;
+    public static final double HOOD_X = -0.27;
+    public static final double HOOD_Y = 0.2385;
+    public static final Translation2d ROOT_POSITION = new Translation2d(HOOD_X, HOOD_Y);
 
     public static final LoggedTunableNumber kP = new LoggedTunableNumber("Hood/kP");
     public static final LoggedTunableNumber kI = new LoggedTunableNumber("Hood/kI");
