@@ -9,8 +9,8 @@ import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
     private static Shooter INSTANCE = null;
-    private final TopRollerInputsAutoLogged topRollerInputs = ShooterIO.topRollerInputs;
-    private final BottomRollerInputsAutoLogged bottomRollerInputs = ShooterIO.bottomRollerInputs;
+    private final RollerInputsAutoLogged topRollerInputs = ShooterIO.topRollerInputs;
+    private final RollerInputsAutoLogged bottomRollerInputs = ShooterIO.bottomRollerInputs;
     private final ShooterIO io;
 
     private final String SUBSYSTEM_NAME = this.getClass().getSimpleName();
@@ -68,6 +68,7 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs();
-        Logger.processInputs(SUBSYSTEM_NAME, topRollerInputs);
+        Logger.processInputs(SUBSYSTEM_NAME + "/TopRoller", topRollerInputs);
+        Logger.processInputs(SUBSYSTEM_NAME + "/BottomRoller", bottomRollerInputs);
     }
 }
