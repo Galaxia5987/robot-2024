@@ -80,7 +80,7 @@ public class Hood extends SubsystemBase {
     }
 
     @AutoLogOutput(key = "Pose")
-    private Pose3d getPose3d() {
+    private Pose3d updatePose3d() {
         return new Pose3d(
                 HoodConstants.ROOT_POSITION.getX(),
                 0.0,
@@ -95,7 +95,7 @@ public class Hood extends SubsystemBase {
         Logger.processInputs("Hood", inputs);
 
         hood.setAngle(inputs.angle.in(Units.Degrees));
-
+        updatePose3d();
         SmartDashboard.putData("HoodMech", mechanism2d);
     }
 }
