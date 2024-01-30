@@ -24,7 +24,5 @@ public interface ShooterIO {
         public MutableMeasure<Velocity<Angle>> velocitySetpoint =
                 MutableMeasure.zero(RotationsPerSecond);
         public MutableMeasure<Voltage> voltage = MutableMeasure.zero(Volts);
-
-        public RollerInputs(String name) {}
     }
 }
