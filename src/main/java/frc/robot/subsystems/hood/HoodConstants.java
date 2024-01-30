@@ -9,8 +9,9 @@ public class HoodConstants {
     public static Translation2d MECHANISM_2D_POSE = new Translation2d(1, 1);
     public static Measure<Distance> HOOD_LENGTH = Units.Meters.of(0.4);
     public static Measure<Dimensionless> POSITION_TOLERANCE = Units.Percent.of(5);
-    public static double MAX_VELOCITY = 1; // RPS
-    public static double MAX_ACCELERATION = 4; // RPS squared
+    public static Measure<Velocity<Angle>> MAX_VELOCITY = Units.RotationsPerSecond.of(1);
+    public static Measure<Velocity<Velocity<Angle>>> MAX_ACCELERATION =
+            Units.RotationsPerSecond.per(Units.Second).of(4);
     public static final double GEAR_RATIO = 1.0;
     public static final double MOMENT_OF_INERTIA = 0.0003;
     public static final double HOOD_X = -0.27;
