@@ -17,6 +17,7 @@ public class HoodConstants {
     public static final double HOOD_X = -0.27;
     public static final double HOOD_Y = 0.2385;
     public static final Translation2d ROOT_POSITION = new Translation2d(HOOD_X, HOOD_Y);
+    public static final Translation2d ROOT_POSITION = new Translation2d(-0.27, 0.2385);
 
     public static final LoggedTunableNumber kP = new LoggedTunableNumber("Hood/kP");
     public static final LoggedTunableNumber kI = new LoggedTunableNumber("Hood/kI");
