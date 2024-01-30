@@ -18,13 +18,7 @@ public class ShooterIOSim implements ShooterIO {
     private final VelocityVoltage bottomControl = new VelocityVoltage(0);
     private final SimpleMotorFeedforward bottomFeedForward;
 
-    private final DutyCycleOut stop =
-            new DutyCycleOut(
-                    ShooterConstants.STOP_POWER.in(Units.RotationsPerSecond),
-                    false,
-                    true,
-                    false,
-                    false);
+    private final DutyCycleOut stop = new DutyCycleOut(0);
 
     public ShooterIOSim() {
         topMotor =
@@ -86,8 +80,8 @@ public class ShooterIOSim implements ShooterIO {
 
     @Override
     public void stop() {
-        bottomRollerInputs.velocitySetpoint = ShooterConstants.STOP_POWER;
-        topRollerInputs.velocitySetpoint = ShooterConstants.STOP_POWER;
+        bottomRollerInputs.velocitySetpoint.mut_replace(0, Units.RotationsPerSecond);
+        topRollerInputs.velocitySetpoint.mut_replace(0, Units.RotationsPerSecond);
         bottomMotor.setControl(stop);
     }
 
