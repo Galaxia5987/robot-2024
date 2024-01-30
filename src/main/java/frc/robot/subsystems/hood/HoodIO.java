@@ -22,9 +22,9 @@ public interface HoodIO {
         public MutableMeasure<Angle> angle = MutableMeasure.zero(Radians);
         public MutableMeasure<Angle> angleSetpoint = MutableMeasure.zero(Radians);
         public MutableMeasure<Voltage> voltage = MutableMeasure.zero(Volts);
-        public double powerSetpoint;
+        public double powerSetpoint = 0;
         public MutableMeasure<Angle> absoluteEncoderAngle = MutableMeasure.zero(Radians);
-        public Mode controlMode;
+        public Mode controlMode = Mode.POWER;
     }
 
     enum Mode {
