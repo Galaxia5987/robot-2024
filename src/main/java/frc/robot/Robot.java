@@ -27,7 +27,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  * project.
  */
 public class Robot extends LoggedRobot {
-
     private final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
     private RobotContainer robotContainer;
     private Command autonomousCommand;
