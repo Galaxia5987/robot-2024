@@ -65,7 +65,7 @@ public class ShooterIOSim implements ShooterIO {
 
     @Override
     public void setTopVelocity(MutableMeasure<Velocity<Angle>> velocity) {
-        inputs.topVelocitySetpoint.mut_replace(velocity);
+        topRollerInputs.velocitySetpoint.mut_replace(velocity);
         topMotor.setControl(
                 topControl
                         .withVelocity(velocity.in(Units.RotationsPerSecond))
@@ -75,19 +75,19 @@ public class ShooterIOSim implements ShooterIO {
 
     @Override
     public void setBottomVelocity(MutableMeasure<Velocity<Angle>> velocity) {
-        inputs.bottomVelocitySetpoint.mut_replace(velocity);
+        bottomRollerInputs.velocitySetpoint.mut_replace(velocity);
         bottomMotor.setControl(
                 bottomControl
-                        .withVelocity(velocity.in(Units.RotationsPerSecond))
+                        .withVelocity(velocity.in(Units.RotationsPerSecond) * 0)
                         .withFeedForward(
-                                bottomFeedForward.calculate(
-                                        velocity.in(Units.RotationsPerSecond))));
+                                bottomFeedForward.calculate(velocity.in(Units.RotationsPerSecond))
+                                        * 0));
     }
 
     @Override
     public void stop() {
-        inputs.bottomVelocitySetpoint = ShooterConstants.STOP_POWER;
-        inputs.topVelocitySetpoint = ShooterConstants.STOP_POWER;
+        bottomRollerInputs.velocitySetpoint = ShooterConstants.STOP_POWER;
+        topRollerInputs.velocitySetpoint = ShooterConstants.STOP_POWER;
         bottomMotor.setControl(stop);
     }
 
@@ -96,10 +96,11 @@ public class ShooterIOSim implements ShooterIO {
         topMotor.update(Timer.getFPGATimestamp());
         bottomMotor.update(Timer.getFPGATimestamp());
 
-        inputs.topVelocity.mut_replace(topMotor.getVelocity(), Units.RotationsPerSecond);
-        inputs.topVoltage.mut_replace(topMotor.getAppliedVoltage(), Units.Volts);
+        topRollerInputs.velocity.mut_replace(topMotor.getVelocity(), Units.RotationsPerSecond);
+        topRollerInputs.voltage.mut_replace(topMotor.getAppliedVoltage(), Units.Volts);
 
-        inputs.bottomVelocity.mut_replace(bottomMotor.getVelocity(), Units.RotationsPerSecond);
-        inputs.bottomVoltage.mut_replace(bottomMotor.getAppliedVoltage(), Units.Volts);
+        bottomRollerInputs.velocity.mut_replace(
+                bottomMotor.getVelocity(), Units.RotationsPerSecond);
+        bottomRollerInputs.voltage.mut_replace(bottomMotor.getAppliedVoltage(), Units.Volts);
     }
 }
