@@ -92,6 +92,5 @@ public class Hood extends SubsystemBase {
 
         hood.setAngle(inputs.angle.in(Units.Degrees));
         updatePose3d();
-        SmartDashboard.putData("HoodMech", mechanism2d);
     }
 }
