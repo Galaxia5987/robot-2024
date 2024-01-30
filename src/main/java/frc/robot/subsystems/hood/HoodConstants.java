@@ -9,10 +9,10 @@ public class HoodConstants {
     public static Translation2d MECHANISM_2D_POSE = new Translation2d(1, 1);
     public static Measure<Distance> HOOD_LENGTH = Units.Meters.of(0.4);
     public static Measure<Dimensionless> POSITION_TOLERANCE = Units.Percent.of(5);
-    public static double MAX_VELOCITY = 0; // RPS
-    public static double MAX_ACCELERATION = 0; // RPS squared
+    public static double MAX_VELOCITY = 1; // RPS
+    public static double MAX_ACCELERATION = 4; // RPS squared
     public static final double GEAR_RATIO = 1.0;
-    public static final double MOMENT_OF_INERTIA = 0.08;
+    public static final double MOMENT_OF_INERTIA = 0.0003;
     public static final double HOOD_X = -0.27;
     public static final double HOOD_Y = 0.2385;
     public static final Translation2d ROOT_POSITION = new Translation2d(HOOD_X, HOOD_Y);
@@ -27,7 +27,7 @@ public class HoodConstants {
     public static void initialize(Constants.Mode mode) {
         switch (mode) {
             case REAL:
-                kP.initDefault(5.0);
+                kP.initDefault(1);
                 kI.initDefault(0.0);
                 kD.initDefault(0.0);
                 kS.initDefault(0.0);
@@ -35,7 +35,7 @@ public class HoodConstants {
                 kA.initDefault(0.0);
             case SIM:
             case REPLAY:
-                kP.initDefault(5.0);
+                kP.initDefault(1);
                 kI.initDefault(0.0);
                 kD.initDefault(0.0);
                 kS.initDefault(0.0);
