@@ -8,4 +8,5 @@ public class ConveyorConstants {
             Units.RotationsPerSecond.of(10).mutableCopy();
     public static final MutableMeasure<Dimensionless> SETPOINT_TOLERANCE =
             Units.Value.of(0.05).mutableCopy();
+    public static final double GEAR_RATIO = 0;
 }
