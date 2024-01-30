@@ -13,8 +13,7 @@ public class HoodConstants {
     public static Measure<Velocity<Velocity<Angle>>> MAX_ACCELERATION =
             Units.RotationsPerSecond.per(Units.Second).of(4);
     public static final double GEAR_RATIO = 1.0;
-    public static final Measure<Mult<Distance, Distance>> MOMENT_OF_INERTIA =
-            Units.Kilo(Units.Meters.mult(Units.Meters)).of(0.0003);
+    public static final double MOMENT_OF_INERTIA = 0.0003; //kg*m*m
     public static final Translation2d ROOT_POSITION = new Translation2d(-0.27, 0.2385);
 
     public static final LoggedTunableNumber kP = new LoggedTunableNumber("Hood/kP");
