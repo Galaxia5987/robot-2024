@@ -1,7 +1,8 @@
 package frc.robot.subsystems.conveyor;
 
-import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
@@ -9,18 +10,25 @@ import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.Timer;
 import lib.motors.SparkMaxSim;
 
+import static frc.robot.subsystems.conveyor.ConveyorConstants.*;
+
 public class ConveyorIOSim implements ConveyorIO {
     private final SparkMaxSim conveyor;
 
+    public static PIDController controller = new PIDController(KP.get(), KI.get(), KD.get(), Timer.getFPGATimestamp());
+
+    public static SimpleMotorFeedforward feed = new SimpleMotorFeedforward(KS.get(), KV.get(), KA.get());
+
+
+
     public ConveyorIOSim() {
-        conveyor = new SparkMaxSim(1, ConveyorConstants.GEAR_RATIO, 0.5, ConveyorConstants.GEAR_RATIO);
-        conveyor.setController(ConveyorConstants.CONTROLLER);
-        conveyor.setProfiledController();
+        conveyor = new SparkMaxSim(1, GEAR_RATIO, 0.5, GEAR_RATIO);
+        conveyor.setController(controller);
     }
 
     @Override
     public void setVelocity(MutableMeasure<Velocity<Angle>> velocity) {
-        conveyor.setReference(velocity.in(Units.RotationsPerSecond), CANSparkMax.ControlType.kVelocity);
+        conveyor.setReference(feed.calculate(velocity.in(Units.RotationsPerSecond)), CANSparkMax.ControlType.kVelocity);
     }
 
     @Override

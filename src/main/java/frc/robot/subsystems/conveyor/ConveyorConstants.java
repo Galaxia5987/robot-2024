@@ -1,6 +1,7 @@
 package frc.robot.subsystems.conveyor;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.Timer;
 import lib.webconstants.LoggedTunableNumber;
@@ -16,5 +17,10 @@ public class ConveyorConstants {
     public static LoggedTunableNumber KI = new LoggedTunableNumber("Conveyor/kI", 0);
     public static LoggedTunableNumber KD = new LoggedTunableNumber("Conveyor/kD", 0);
 
-    public static PIDController CONTROLLER = new PIDController(KP.get(), KI.get(), KD.get(), Timer.getFPGATimestamp());
+    public static LoggedTunableNumber KS = new LoggedTunableNumber("Conveyor/kS", 0);
+    public static LoggedTunableNumber KV = new LoggedTunableNumber("Conveyor/kV", 0);
+    public static LoggedTunableNumber KA = new LoggedTunableNumber("Conveyor/kA", 0);
+
+
+
 }
