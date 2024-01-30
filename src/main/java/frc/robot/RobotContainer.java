@@ -2,6 +2,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.conveyor.Conveyor;
+import frc.robot.subsystems.conveyor.ConveyorIO;
+import frc.robot.subsystems.conveyor.ConveyorIOSim;
 import frc.robot.subsystems.example.ExampleSubsystem;
 import frc.robot.subsystems.example.ExampleSubsystemIO;
 import frc.robot.subsystems.example.ExampleSubsystemIOReal;
@@ -13,26 +16,32 @@ public class RobotContainer {
     private static RobotContainer INSTANCE = null;
 
     private final SwerveDrive swerveDrive;
+    private final Conveyor conveyor;
     private final CommandXboxController xboxController = new CommandXboxController(0);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
         ExampleSubsystemIO exampleSubsystemIO;
+        ConveyorIO conveyorIO;
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 exampleSubsystemIO = new ExampleSubsystemIOReal();
+                conveyorIO  = new ConveyorIOSim();
                 break;
             case SIM:
             case REPLAY:
             default:
                 exampleSubsystemIO = new ExampleSubsystemIOSim();
+                conveyorIO = new ConveyorIOSim();
                 break;
         }
         ExampleSubsystem.initialize(exampleSubsystemIO);
+        Conveyor.initialize(conveyorIO);
         Constants.initSwerve();
         Constants.initVision();
 
         swerveDrive = SwerveDrive.getInstance();
+        conveyor = Conveyor.getInstance();
 
         // Configure the button bindings and default commands
         configureDefaultCommands();

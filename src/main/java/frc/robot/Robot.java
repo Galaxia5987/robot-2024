@@ -61,6 +61,7 @@ public class Robot extends LoggedRobot {
                 LoggedPowerDistribution.getInstance(0, PowerDistribution.ModuleType.kRev);
                 Logger.addDataReceiver(new WPILOGWriter());
                 Logger.addDataReceiver(new NT4Publisher());
+
                 break;
             case SIM:
                 Logger.addDataReceiver(new NT4Publisher());
