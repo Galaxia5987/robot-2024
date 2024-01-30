@@ -10,16 +10,12 @@ import frc.robot.subsystems.example.ExampleSubsystem;
 import frc.robot.subsystems.example.ExampleSubsystemIO;
 import frc.robot.subsystems.example.ExampleSubsystemIOReal;
 import frc.robot.subsystems.example.ExampleSubsystemIOSim;
-import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeIO;
-import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.swerve.*;
 
 public class RobotContainer {
 
     private static RobotContainer INSTANCE = null;
     private final Elevator elevator;
-    private final Intake intake;
     private final SwerveDrive swerveDrive;
     private final CommandXboxController xboxController = new CommandXboxController(0);
 
@@ -27,7 +23,7 @@ public class RobotContainer {
     private RobotContainer() {
         ElevatorIO elevatorIO;
         ExampleSubsystemIO exampleSubsystemIO;
-        IntakeIO intakeIO;
+
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 elevatorIO = new ElevatorIOReal();
@@ -38,20 +34,17 @@ public class RobotContainer {
             case REPLAY:
             default:
                 exampleSubsystemIO = new ExampleSubsystemIOSim();
-                intakeIO = new IntakeIOSim();
                 elevatorIO = new ElevatorIOSim();
                 break;
         }
         ExampleSubsystem.initialize(exampleSubsystemIO);
         Elevator.initialize(elevatorIO);
-        Intake.initialize(intakeIO);
         Constants.initSwerve();
         Constants.initVision();
 
         swerveDrive = SwerveDrive.getInstance();
-        intake = Intake.getInstance();
-
         elevator = Elevator.getInstance();
+
         // Configure the button bindings and default commands
         configureDefaultCommands();
         configureButtonBindings();
