@@ -14,20 +14,29 @@ import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.swerve.*;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIOReal;
+import frc.robot.subsystems.elevator.ElevatorIOSim;
 
 public class RobotContainer {
 
     private static RobotContainer INSTANCE = null;
+    private final Elevator elevator;
+    private final SwerveDrive swerveDrive;
+    private final CommandXboxController xboxController = new CommandXboxController(0);
 
     private final SwerveDrive swerveDrive;
     private final CommandXboxController xboxController = new CommandXboxController(0);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
+        ElevatorIO elevatorIO;
         ExampleSubsystemIO exampleSubsystemIO;
         IntakeIO intakeIO;
         switch (Constants.CURRENT_MODE) {
             case REAL:
+                elevatorIO = new ElevatorIOReal();
                 exampleSubsystemIO = new ExampleSubsystemIOReal();
                 intakeIO = new IntakeIOSim();
                 break;
@@ -36,9 +45,11 @@ public class RobotContainer {
             default:
                 exampleSubsystemIO = new ExampleSubsystemIOSim();
                 intakeIO = new IntakeIOSim();
+                elevatorIO = new ElevatorIOSim();
                 break;
         }
         ExampleSubsystem.initialize(exampleSubsystemIO);
+        Elevator.initialize(elevatorIO);
         Intake.initialize(intakeIO);
         Constants.initSwerve();
         Constants.initVision();
@@ -46,6 +57,7 @@ public class RobotContainer {
         swerveDrive = SwerveDrive.getInstance();
         intake = Intake.getInstance();
 
+        elevator = Elevator.getInstance();
         // Configure the button bindings and default commands
         configureDefaultCommands();
         configureButtonBindings();
@@ -68,7 +80,9 @@ public class RobotContainer {
                         () -> true));
     }
 
-    private void configureButtonBindings() {}
+    private void configureButtonBindings() {
+        xboxController.a().onTrue(elevator.setHeight(2));
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
