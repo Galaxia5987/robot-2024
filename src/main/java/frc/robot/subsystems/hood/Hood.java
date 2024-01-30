@@ -79,12 +79,13 @@ public class Hood extends SubsystemBase {
         return runOnce(io::updateInternalEncoder).withName("Update hood internal encoder");
     }
 
-    private Pose3d getPose3d(double angle) {
+    @AutoLogOutput(key = "Pose")
+    private Pose3d getPose3d() {
         return new Pose3d(
                 HoodConstants.ROOT_POSITION.getX(),
                 0.0,
                 HoodConstants.ROOT_POSITION.getY(),
-                new Rotation3d(0.0, -angle, 0.0));
+                new Rotation3d(0.0, -inputs.angle.in(Units.Radians), 0.0));
     }
 
     /** Updates the state of the hood. */
@@ -95,7 +96,6 @@ public class Hood extends SubsystemBase {
 
         hood.setAngle(inputs.angle.in(Units.Degrees));
 
-        Logger.recordOutput("HoodPose", getPose3d(inputs.angle.in(Units.Degrees)));
         SmartDashboard.putData("HoodMech", mechanism2d);
     }
 }
