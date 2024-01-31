@@ -23,7 +23,7 @@ public class HoodIOSim implements HoodIO {
                         HoodConstants.GEAR_RATIO,
                         HoodConstants.MOMENT_OF_INERTIA.in(
                                 Units.Kilograms.mult(Units.Meters).mult(Units.Meters)),
-                        1);
+                        HoodConstants.GEAR_RATIO);
 
         motor.setProfiledController(
                 new ProfiledPIDController(
