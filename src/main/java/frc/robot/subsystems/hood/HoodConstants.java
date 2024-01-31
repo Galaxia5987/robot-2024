@@ -1,6 +1,7 @@
 package frc.robot.subsystems.hood;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.*;
 import frc.robot.Constants;
 import lib.webconstants.LoggedTunableNumber;
@@ -15,7 +16,7 @@ public class HoodConstants {
     public static final double GEAR_RATIO = 1.0;
     public static final Measure<Mult<Mult<Mass, Distance>, Distance>> MOMENT_OF_INERTIA =
             Units.Kilograms.mult(Units.Meters).mult(Units.Meters).of(0.0003);
-    public static final Translation2d ROOT_POSITION = new Translation2d(-0.27, 0.2385);
+    public static final Translation3d ROOT_POSITION = new Translation3d(-0.27, 0.2385, 0.0);
 
     public static final LoggedTunableNumber kP = new LoggedTunableNumber("Hood/kP");
     public static final LoggedTunableNumber kI = new LoggedTunableNumber("Hood/kI");
