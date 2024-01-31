@@ -74,13 +74,9 @@ public class Hood extends SubsystemBase {
         return runOnce(io::updateInternalEncoder).withName("Update hood internal encoder");
     }
 
-    @AutoLogOutput(key = "Pose")
-    private Pose3d updatePose3d() {
-        return new Pose3d(
-                HoodConstants.ROOT_POSITION.getX(),
-                0.0,
-                HoodConstants.ROOT_POSITION.getY(),
-                new Rotation3d(0.0, -inputs.angle.in(Units.Radians), 0.0));
+    @AutoLogOutput(key = "Hood/Pose")
+    private Pose3d getPose3d() {
+        return new Pose3d(0, 0, 0, new Rotation3d(0.0, 0.0, 0.0));
     }
 
     /** Updates the state of the hood. */
@@ -90,6 +86,5 @@ public class Hood extends SubsystemBase {
         Logger.processInputs("Hood", inputs);
 
         hood.setAngle(inputs.angle.in(Units.Degrees));
-        updatePose3d();
     }
 }
