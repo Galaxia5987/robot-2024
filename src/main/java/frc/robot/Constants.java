@@ -1,13 +1,15 @@
 package frc.robot;
 
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.units.*;
 import frc.robot.swerve.*;
 import frc.robot.vision.PhotonVisionIOReal;
 import frc.robot.vision.Vision;
 import frc.robot.vision.VisionModule;
 import frc.robot.vision.VisionSimIO;
+import java.util.List;
 import org.photonvision.PhotonCamera;
 import org.photonvision.simulation.SimCameraProperties;
 
@@ -33,6 +35,31 @@ public class Constants {
             new Transform3d(0, 0.293, 0.55, new Rotation3d(0, Math.toRadians(10.0), 0));
     public static final Transform3d FRONT_RIGHT_CAMERA_POSE =
             new Transform3d(0, -0.293, 0.55, new Rotation3d(0, Math.toRadians(25.0), 0));
+
+    public static final Measure<Distance> robotLength = Units.Meters.of(0.584);
+    public static final Measure<Velocity<Distance>> maxVelocity = Units.MetersPerSecond.of(4.5);
+    public static final Measure<Velocity<Velocity<Distance>>> maxAcceleration =
+            Units.MetersPerSecondPerSecond.of(3);
+    public static final Measure<Velocity<Angle>> maxAngularVelocity =
+            Units.RotationsPerSecond.of(
+                    maxVelocity.in(Units.MetersPerSecond)
+                            / (robotLength.in(Units.Meters) / Math.sqrt(2)));
+    public static final Measure<Velocity<Velocity<Angle>>> maxAngularAcceleration =
+            Units.RotationsPerSecond.per(Units.Second)
+                    .of(
+                            maxAcceleration.in(Units.MetersPerSecondPerSecond)
+                                    / (robotLength.in(Units.Meters) / Math.sqrt(2)));
+
+    public static final PathConstraints autoConstraints =
+            new PathConstraints(
+                    maxVelocity.in(Units.MetersPerSecond),
+                    maxAcceleration.in(Units.MetersPerSecondPerSecond),
+                    maxAngularVelocity.in(Units.RotationsPerSecond),
+                    maxAngularAcceleration.in(Units.RotationsPerSecond.per(Units.Second)));
+
+    public static final List<Pose2d> optimalPointsShoot = null;
+    public static final List<Pose2d> optimalPointsTrap = null;
+    public static final Pose2d ampPose = new Pose2d(0.0, 0.0, new Rotation2d(0, 0));
 
     public enum Mode {
         REAL,
