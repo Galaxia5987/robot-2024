@@ -3,7 +3,6 @@ package frc.robot.subsystems.hood;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
@@ -16,10 +15,15 @@ public class HoodIOSim implements HoodIO {
 
     private final MotionMagicDutyCycle control = new MotionMagicDutyCycle(0);
     private final DutyCycleOut dutyCycleOut = new DutyCycleOut(0);
-    private final SimpleMotorFeedforward motorFeedforward;
 
     public HoodIOSim() {
-        motor = new TalonFXSim(1, HoodConstants.GEAR_RATIO, HoodConstants.MOMENT_OF_INERTIA.in(Units.Kilograms.mult(Units.Meters).mult(Units.Meters)), 1);
+        motor =
+                new TalonFXSim(
+                        1,
+                        HoodConstants.GEAR_RATIO,
+                        HoodConstants.MOMENT_OF_INERTIA.in(
+                                Units.Kilograms.mult(Units.Meters).mult(Units.Meters)),
+                        1);
 
         motor.setProfiledController(
                 new ProfiledPIDController(
@@ -28,10 +32,6 @@ public class HoodIOSim implements HoodIO {
                         HoodConstants.kD.get(),
                         new TrapezoidProfile.Constraints(
                                 HoodConstants.MAX_VELOCITY, HoodConstants.MAX_ACCELERATION)));
-
-        motorFeedforward =
-                new SimpleMotorFeedforward(
-                        HoodConstants.kS.get(), HoodConstants.kV.get(), HoodConstants.kA.get());
     }
 
     @Override
@@ -39,12 +39,9 @@ public class HoodIOSim implements HoodIO {
 
     @Override
     public void setAngle(MutableMeasure<Angle> angle) {
-        double rotationsPerSecond = angle.in(Units.RotationsPerSecond.getUnit());
         inputs.controlMode = Mode.ANGLE;
-        inputs.angleSetpoint = angle.mut_replace(angle);
-        motor.setControl(
-                control.withPosition(angle.in(Units.Radians))
-                        .withFeedForward(motorFeedforward.calculate(rotationsPerSecond)));
+        inputs.angleSetpoint.mut_replace(angle);
+        motor.setControl(control.withPosition(angle.in(Units.Rotations)));
     }
 
     @Override
@@ -58,7 +55,7 @@ public class HoodIOSim implements HoodIO {
     public void updateInputs() {
         motor.update(Timer.getFPGATimestamp());
 
-        inputs.angle.mut_replace(motor.getPosition(), Units.Radians);
+        inputs.angle.mut_replace(motor.getPosition(), Units.Rotations);
         inputs.voltage.mut_replace(motor.getAppliedVoltage(), Units.Volts);
     }
 }
