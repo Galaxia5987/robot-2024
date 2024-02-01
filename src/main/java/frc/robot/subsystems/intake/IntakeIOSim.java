@@ -1,6 +1,7 @@
 package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix6.controls.PositionVoltage;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
@@ -9,11 +10,16 @@ import edu.wpi.first.wpilibj.Timer;
 import lib.motors.SparkMaxSim;
 import lib.motors.TalonFXSim;
 
+import static frc.robot.subsystems.intake.IntakeConstants.*;
+
 public class IntakeIOSim implements IntakeIO {
     private final TalonFXSim angleMotor;
     private final SparkMaxSim frontRoller;
     private final SparkMaxSim centerRoller;
     private final PositionVoltage positionRequest = new PositionVoltage(0);
+    public static PIDController angleController =
+
+            new PIDController(ANGLE_KP.get(), ANGLE_KI.get(), ANGLE_KD.get());
 
     public IntakeIOSim() {
         angleMotor =
@@ -21,7 +27,7 @@ public class IntakeIOSim implements IntakeIO {
                         1, IntakeConstants.GEAR_RATIO, 0.003, 360 * IntakeConstants.GEAR_RATIO);
         frontRoller = new SparkMaxSim(1, 1, 0.5, 1);
         centerRoller = new SparkMaxSim(1, 1, 0.5, 1);
-        angleMotor.setController(IntakeConstants.angleController);
+        angleMotor.setController(angleController);
     }
 
     @Override
@@ -32,13 +38,13 @@ public class IntakeIOSim implements IntakeIO {
     }
 
     @Override
-    public void setRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
-        frontRoller.set(speed.in(Units.RotationsPerSecond));
+    public void setRollerSpeed(double speed) {
+        frontRoller.set(speed);
     }
 
     @Override
-    public void setCenterRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
-        centerRoller.set(speed.in(Units.RotationsPerSecond));
+    public void setCenterRollerSpeed(double speed) {
+        centerRoller.set(speed);
     }
 
     @Override

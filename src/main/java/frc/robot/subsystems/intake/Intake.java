@@ -48,21 +48,19 @@ public class Intake extends SubsystemBase {
         return setAngle(intakePose.intakePose);
     }
 
-    public Command setRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
+    public Command setRollerSpeed(double speed) {
         return runOnce(() -> io.setRollerSpeed(speed));
     }
 
-    public Command setCenterRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
+    public Command setCenterRollerSpeed(double speed) {
         return runOnce(() -> io.setCenterRollerSpeed(speed));
     }
 
-    public Command feed(IntakeConstants.IntakePose intakePose) {
-
-        if (intakePose == IntakePose.UP) {
-            return setAngle(intakePose).andThen(setRollerSpeed(Units.RotationsPerSecond.of(50).mutableCopy()).andThen(setCenterRollerSpeed(Units.RotationsPerSecond.of(50).mutableCopy())).withName("feeding position activated"));
-        } else {
-            return setAngle(intakePose).andThen(setRollerSpeed(Units.RotationsPerSecond.of(0).mutableCopy()).andThen(setCenterRollerSpeed(Units.RotationsPerSecond.of(0).mutableCopy())).withName("retracted"));
-        }
+    public Command intake() {
+        return setAngle(IntakePose.DOWN).alongWith(setRollerSpeed(0.5).andThen(setCenterRollerSpeed(0.5))).withName("feeding position activated"));
+    }
+    public Command stop() {
+        return setAngle(IntakePose.UP).alongWith(setRollerSpeed(0).andThen(setCenterRollerSpeed(0))).withName("stopped");
     }
 
     @Override

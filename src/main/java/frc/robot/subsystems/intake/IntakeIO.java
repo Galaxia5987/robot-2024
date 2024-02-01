@@ -14,9 +14,9 @@ public interface IntakeIO {
 
     void setAngle(MutableMeasure<Angle> angle);
 
-    void setRollerSpeed(MutableMeasure<Velocity<Angle>> speed);
+    void setRollerSpeed(double speed);
 
-    void setCenterRollerSpeed(MutableMeasure<Velocity<Angle>> speed);
+    void setCenterRollerSpeed(double speed);
 
     void updateInputs();
 
