@@ -20,7 +20,8 @@ public class Intake extends SubsystemBase {
     private static Intake INSTANCE = null;
     private final IntakeIO io;
     private final IntakeInputsAutoLogged inputs = IntakeIO.inputs;
-    @AutoLogOutput private final Mechanism2d intakeMechanism = new Mechanism2d(2, 3);
+    @AutoLogOutput
+    private final Mechanism2d intakeMechanism = new Mechanism2d(2, 3);
     private final MechanismRoot2d root = intakeMechanism.getRoot("Intake", 1, 1);
 
     private final MechanismLigament2d intakeLigament =
@@ -53,6 +54,15 @@ public class Intake extends SubsystemBase {
 
     public Command setCenterRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
         return runOnce(() -> io.setCenterRollerSpeed(speed));
+    }
+
+    public Command feed(IntakeConstants.IntakePose intakePose) {
+
+        if (intakePose == IntakePose.UP) {
+            return setAngle(intakePose).andThen(setRollerSpeed(Units.RotationsPerSecond.of(50).mutableCopy()).andThen(setCenterRollerSpeed(Units.RotationsPerSecond.of(50).mutableCopy())).withName("feeding position activated"));
+        } else {
+            return setAngle(intakePose).andThen(setRollerSpeed(Units.RotationsPerSecond.of(0).mutableCopy()).andThen(setCenterRollerSpeed(Units.RotationsPerSecond.of(0).mutableCopy())).withName("retracted"));
+        }
     }
 
     @Override
