@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.gripper.GripperConstants;
 import frc.robot.swerve.SwerveConstants;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -75,7 +76,6 @@ public class Robot extends LoggedRobot {
 
         Logger.start();
         SignalLogger.enableAutoLogging(true);
-
         SwerveConstants.initConstants(true, Robot.isReal());
         robotContainer = RobotContainer.getInstance();
         compressor.enableDigital();
@@ -114,11 +114,16 @@ public class Robot extends LoggedRobot {
         }
     }
 
-    /** This function is called periodically during autonomous. */
+    /**
+     * This function is called periodically during autonomous.
+     */
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+    }
 
-    /** This function is called once when teleop is enabled. */
+    /**
+     * This function is called once when teleop is enabled.
+     */
     @Override
     public void teleopInit() {
         if (autonomousCommand != null) {
@@ -126,25 +131,39 @@ public class Robot extends LoggedRobot {
         }
     }
 
-    /** This function is called periodically during operator control. */
+    /**
+     * This function is called periodically during operator control.
+     */
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+    }
 
-    /** This function is called once when the robot is disabled. */
+    /**
+     * This function is called once when the robot is disabled.
+     */
     @Override
-    public void disabledInit() {}
+    public void disabledInit() {
+    }
 
-    /** This function is called periodically when disabled. */
+    /**
+     * This function is called periodically when disabled.
+     */
     @Override
-    public void disabledPeriodic() {}
+    public void disabledPeriodic() {
+    }
 
-    /** This function is called once when test mode is enabled. */
+    /**
+     * This function is called once when test mode is enabled.
+     */
     @Override
     public void testInit() {
         CommandScheduler.getInstance().cancelAll();
     }
 
-    /** This function is called periodically during test mode. */
+    /**
+     * This function is called periodically during test mode.
+     */
     @Override
-    public void testPeriodic() {}
+    public void testPeriodic() {
+    }
 }

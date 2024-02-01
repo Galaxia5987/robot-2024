@@ -12,12 +12,17 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOReal;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
+import frc.robot.subsystems.gripper.Gripper;
+import frc.robot.subsystems.gripper.GripperIO;
+import frc.robot.subsystems.gripper.GripperIOReal;
+import frc.robot.subsystems.gripper.GripperIOSim;
 import frc.robot.swerve.SwerveDrive;
 
 public class RobotContainer {
 
     private static RobotContainer INSTANCE = null;
     private final Elevator elevator;
+    private final Gripper gripper;
     private final Conveyor conveyor;
     private final SwerveDrive swerveDrive;
     private final CommandXboxController xboxController = new CommandXboxController(0);
@@ -25,6 +30,7 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
+        GripperIO gripperIO;
         ElevatorIO elevatorIO;
         ConveyorIO conveyorIO;
         ConveyorConstants.initialize(Constants.CURRENT_MODE);
@@ -32,19 +38,23 @@ public class RobotContainer {
             case REAL:
                 elevatorIO = new ElevatorIOReal();
                 conveyorIO = new ConveyorIOSim();
+                gripperIO = new GripperIOReal();
                 break;
             case SIM:
             case REPLAY:
             default:
                 conveyorIO = new ConveyorIOSim();
                 elevatorIO = new ElevatorIOSim();
+                gripperIO = new GripperIOSim();
                 break;
         }
         Elevator.initialize(elevatorIO);
         Conveyor.initialize(conveyorIO);
+        Gripper.initialize(gripperIO);
         Constants.initSwerve();
         Constants.initVision();
 
+        gripper = Gripper.getInstance();
         swerveDrive = SwerveDrive.getInstance();
         elevator = Elevator.getInstance();
         conveyor = Conveyor.getInstance();
@@ -71,7 +81,6 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        //        xboxController.a().onTrue(elevator.setHeight(2));
         keyBoardControl
                 .button(1)
                 .onTrue(conveyor.setVelocity(() -> Units.RotationsPerSecond.of(50).mutableCopy()));

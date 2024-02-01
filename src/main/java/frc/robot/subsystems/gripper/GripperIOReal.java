@@ -3,7 +3,7 @@ package frc.robot.subsystems.gripper;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 
-public class GriperIOReal implements GripperIO {
+public class GripperIOReal implements GripperIO {
     @Override
     public void setRollerMotorPower(double power) {}
 
