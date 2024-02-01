@@ -9,9 +9,6 @@ import frc.robot.vision.PhotonVisionIOReal;
 import frc.robot.vision.Vision;
 import frc.robot.vision.VisionModule;
 import frc.robot.vision.VisionSimIO;
-
-import java.util.ArrayList;
-import java.util.List;
 import org.photonvision.PhotonCamera;
 import org.photonvision.simulation.SimCameraProperties;
 
@@ -38,34 +35,34 @@ public class Constants {
     public static final Transform3d FRONT_RIGHT_CAMERA_POSE =
             new Transform3d(0, -0.293, 0.55, new Rotation3d(0, Math.toRadians(25.0), 0));
 
-    public static final Measure<Distance> robotLength = Units.Meters.of(0.584);
-    public static final Measure<Velocity<Distance>> maxVelocity = Units.MetersPerSecond.of(4.5);
-    public static final Measure<Velocity<Velocity<Distance>>> maxAcceleration =
+    public static final Measure<Distance> ROBOT_LENGTH = Units.Meters.of(0.584);
+    public static final Measure<Velocity<Distance>> MAX_VELOCITY = Units.MetersPerSecond.of(4.5);
+    public static final Measure<Velocity<Velocity<Distance>>> MAX_ACCELERATION =
             Units.MetersPerSecondPerSecond.of(3);
-    public static final Measure<Velocity<Angle>> maxAngularVelocity =
+    public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY =
             Units.RotationsPerSecond.of(
-                    maxVelocity.in(Units.MetersPerSecond)
-                            / (robotLength.in(Units.Meters) / Math.sqrt(2)));
-    public static final Measure<Velocity<Velocity<Angle>>> maxAngularAcceleration =
+                    MAX_VELOCITY.in(Units.MetersPerSecond)
+                            / (ROBOT_LENGTH.in(Units.Meters) / Math.sqrt(2)));
+    public static final Measure<Velocity<Velocity<Angle>>> MAX_ANGULAR_ACCELERATION =
             Units.RotationsPerSecond.per(Units.Second)
                     .of(
-                            maxAcceleration.in(Units.MetersPerSecondPerSecond)
-                                    / (robotLength.in(Units.Meters) / Math.sqrt(2)));
+                            MAX_ACCELERATION.in(Units.MetersPerSecondPerSecond)
+                                    / (ROBOT_LENGTH.in(Units.Meters) / Math.sqrt(2)));
 
-    public static final PathConstraints autoConstraints =
+    public static final PathConstraints AUTO_CONSTRAINTS =
             new PathConstraints(
-                    maxVelocity.in(Units.MetersPerSecond),
-                    maxAcceleration.in(Units.MetersPerSecondPerSecond),
-                    maxAngularVelocity.in(Units.RotationsPerSecond),
-                    maxAngularAcceleration.in(Units.RotationsPerSecond.per(Units.Second)));
+                    MAX_VELOCITY.in(Units.MetersPerSecond),
+                    MAX_ACCELERATION.in(Units.MetersPerSecondPerSecond),
+                    MAX_ANGULAR_VELOCITY.in(Units.RotationsPerSecond),
+                    MAX_ANGULAR_ACCELERATION.in(Units.RotationsPerSecond.per(Units.Second)));
 
-    public static final Pose2d[] optimalPointsShoot = {
-            new Pose2d(1.97, 7.16, Rotation2d.fromRadians(-161.57)),
-            new Pose2d(2.54, 3.06, Rotation2d.fromRadians(-157.15)),
-            new Pose2d(4.16, 5.03, Rotation2d.fromRadians(179.94))
+    public static final Pose2d[] OPTIMAL_POINTS_SHOOT = {
+        new Pose2d(1.97, 7.16, Rotation2d.fromDegrees(-161.57)),
+        new Pose2d(2.54, 3.06, Rotation2d.fromDegrees(-157.15)),
+        new Pose2d(4.16, 5.03, Rotation2d.fromDegrees(179.94))
     };
-    public static final Pose2d[] optimalPointsTrap = {};
-    public static final Pose2d ampPose = new Pose2d(0.0, 0.0, new Rotation2d(0, 0));
+    public static final Pose2d[] OPTIMAL_POINTS_TRAP = {};
+    public static final Pose2d AMP_POSE = new Pose2d(0.0, 0.0, new Rotation2d(0, 0));
 
     public enum Mode {
         REAL,
