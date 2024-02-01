@@ -1,4 +1,4 @@
-package frc.robot.subsystems.robotState;
+package frc.robot;
 
 public class RobotState {
     public enum state {
