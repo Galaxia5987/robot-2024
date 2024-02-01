@@ -75,8 +75,6 @@ public class Intake extends SubsystemBase {
                 new Pose3d(
                         new Translation3d(0.327, 0, 0.165),
                         new Rotation3d(0, -inputs.currentAngle.in(Units.Radians), 0)));
-        Logger.recordOutput(
-                "RobotPose", new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0)));
         intakeLigament.setAngle(inputs.currentAngle.in(Units.Degrees));
     }
 }
