@@ -43,11 +43,11 @@ public class CalcOptimalPose {
                         Commands.defer(
                                 () ->
                                         AutoBuilder.pathfindToPose(
-                                                optimalPose, Constants.autoConstraints)),
-                new HashSet<>() {
-                    {
-                        add(SwerveDrive.getInstance());
-                    }
-                });
+                                                optimalPose, Constants.AUTO_CONSTRAINTS),
+                                new HashSet<>() {
+                                    {
+                                        add(SwerveDrive.getInstance());
+                                    }
+                                }));
     }
 }
