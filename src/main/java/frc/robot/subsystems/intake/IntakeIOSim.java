@@ -1,16 +1,15 @@
 package frc.robot.subsystems.intake;
 
+import static frc.robot.subsystems.intake.IntakeConstants.*;
+
 import com.ctre.phoenix6.controls.PositionVoltage;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.Timer;
 import lib.motors.SparkMaxSim;
 import lib.motors.TalonFXSim;
-
-import static frc.robot.subsystems.intake.IntakeConstants.*;
 
 public class IntakeIOSim implements IntakeIO {
     private final TalonFXSim angleMotor;
@@ -18,7 +17,6 @@ public class IntakeIOSim implements IntakeIO {
     private final SparkMaxSim centerRoller;
     private final PositionVoltage positionRequest = new PositionVoltage(0);
     public static PIDController angleController =
-
             new PIDController(ANGLE_KP.get(), ANGLE_KI.get(), ANGLE_KD.get());
 
     public IntakeIOSim() {
