@@ -9,9 +9,9 @@ import lib.webconstants.LoggedTunableNumber;
 
 public class IntakeConstants {
     public static final double GEAR_RATIO = 45.62;
-    public static final LoggedTunableNumber ANGLE_KP = new LoggedTunableNumber("IntakeSim/kP");
-    public static final LoggedTunableNumber ANGLE_KI = new LoggedTunableNumber("IntakeSim/kI");
-    public static final LoggedTunableNumber ANGLE_KD = new LoggedTunableNumber("IntakeSim/kD");
+    public static final LoggedTunableNumber ANGLE_KP = new LoggedTunableNumber("Intake/kP");
+    public static final LoggedTunableNumber ANGLE_KI = new LoggedTunableNumber("Intake/kI");
+    public static final LoggedTunableNumber ANGLE_KD = new LoggedTunableNumber("Intake/kD");
 
     public enum IntakePose {
         UP(MutableMeasure.zero(Degrees)),
