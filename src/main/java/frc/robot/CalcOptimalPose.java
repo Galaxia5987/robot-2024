@@ -13,13 +13,13 @@ import java.util.HashSet;
 import java.util.List;
 
 public class CalcOptimalPose {
-    private Pose2d optimalPose;
+    private static Pose2d optimalPose;
 
-    private double getDistanceFromPoint(Pose2d point, Pose2d robotPose) {
+    private static double getDistanceFromPoint(Pose2d point, Pose2d robotPose) {
         return robotPose.getTranslation().getDistance(point.getTranslation());
     }
 
-    private Pose2d calcOptimalPose(List<Pose2d> points, Pose2d robotPose) {
+    private static Pose2d calcOptimalPose(List<Pose2d> points, Pose2d robotPose) {
         return points.stream()
                 .min(Comparator.comparingDouble(point -> getDistanceFromPoint(point, robotPose)))
                 .orElse(null);
