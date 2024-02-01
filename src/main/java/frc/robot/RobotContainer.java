@@ -1,57 +1,39 @@
 package frc.robot;
 
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.subsystems.conveyor.Conveyor;
-import frc.robot.subsystems.conveyor.ConveyorConstants;
-import frc.robot.subsystems.conveyor.ConveyorIO;
-import frc.robot.subsystems.conveyor.ConveyorIOSim;
-import frc.robot.subsystems.example.ExampleSubsystem;
-import frc.robot.subsystems.example.ExampleSubsystemIO;
-import frc.robot.subsystems.example.ExampleSubsystemIOReal;
-import frc.robot.subsystems.example.ExampleSubsystemIOSim;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIOReal;
+import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.swerve.*;
-
-import java.util.function.Supplier;
 
 public class RobotContainer {
 
     private static RobotContainer INSTANCE = null;
-
+    private final Elevator elevator;
     private final SwerveDrive swerveDrive;
-    private final Conveyor conveyor;
     private final CommandXboxController xboxController = new CommandXboxController(0);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
-        ConveyorConstants.initialize(Constants.CURRENT_MODE
-        );
-        ExampleSubsystemIO exampleSubsystemIO;
-        ConveyorIO conveyorIO;
+        ElevatorIO elevatorIO;
+
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                exampleSubsystemIO = new ExampleSubsystemIOReal();
-                conveyorIO  = new ConveyorIOSim();
+                elevatorIO = new ElevatorIOReal();
                 break;
             case SIM:
             case REPLAY:
             default:
-                exampleSubsystemIO = new ExampleSubsystemIOSim();
-                conveyorIO = new ConveyorIOSim();
+                elevatorIO = new ElevatorIOSim();
                 break;
         }
-        ExampleSubsystem.initialize(exampleSubsystemIO);
-        Conveyor.initialize(conveyorIO);
+        Elevator.initialize(elevatorIO);
         Constants.initSwerve();
         Constants.initVision();
 
-
         swerveDrive = SwerveDrive.getInstance();
-        conveyor = Conveyor.getInstance();
 
         // Configure the button bindings and default commands
         configureDefaultCommands();
@@ -76,8 +58,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        xboxController.a().onTrue(conveyor.setVelocity(()-> Units.RotationsPerSecond.of(10).mutableCopy()));
-        xboxController.b().onTrue(conveyor.setVelocity(()-> Units.RotationsPerSecond.of(20).mutableCopy()));
+        xboxController.a().onTrue(elevator.setHeight(2));
     }
 
     /**

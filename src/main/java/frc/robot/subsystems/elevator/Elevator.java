@@ -32,7 +32,7 @@ public class Elevator extends SubsystemBase {
         this.io = io;
     }
 
-    public Elevator getInstance() {
+    public static Elevator getInstance() {
         return INSTANCE;
     }
 
