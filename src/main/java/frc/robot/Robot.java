@@ -26,7 +26,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  * project.
  */
 public class Robot extends LoggedRobot {
-
     private final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
     private RobotContainer robotContainer;
     private Command autonomousCommand;
@@ -60,6 +59,7 @@ public class Robot extends LoggedRobot {
                 LoggedPowerDistribution.getInstance(0, PowerDistribution.ModuleType.kRev);
                 Logger.addDataReceiver(new WPILOGWriter());
                 Logger.addDataReceiver(new NT4Publisher());
+
                 break;
             case SIM:
                 Logger.addDataReceiver(new NT4Publisher());
