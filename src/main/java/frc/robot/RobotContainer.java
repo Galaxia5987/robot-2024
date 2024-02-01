@@ -11,7 +11,6 @@ import frc.robot.swerve.*;
 public class RobotContainer {
 
     private static RobotContainer INSTANCE = null;
-    private final Elevator elevator;
     private final SwerveDrive swerveDrive;
     private final CommandXboxController xboxController = new CommandXboxController(0);
 
@@ -58,7 +57,6 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        xboxController.a().onTrue(elevator.setHeight(2));
     }
 
     /**
