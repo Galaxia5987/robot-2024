@@ -1,6 +1,8 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.pathfinding.LocalADStar;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -23,22 +25,23 @@ public class CalcOptimalPose {
                 .orElse(null);
     }
 
-    public Command getClosestOptimalPoint(Pose2d robotPose) {
-        return Commands.defer(
-                () ->
-                        Commands.runOnce(
-                                        () ->
-                                                optimalPose =
-                                                        switch (RobotState.currentState) {
-                                                            case SHOOT -> calcOptimalPose(
-                                                                    List.of(Constants.optimalPointsShoot),
-                                                                    robotPose);
-                                                            case TRAP -> calcOptimalPose(
-                                                                    List.of(Constants.optimalPointsTrap),
-                                                                    robotPose);
-                                                            case AMP -> Constants.ampPose;
-                                                        })
-                                .andThen(
+    public Command getClosestOptimalPoint() {
+        Pathfinding.setPathfinder(new LocalADStar());
+        return Commands.runOnce(
+                        () ->
+                                optimalPose =
+                                        switch (RobotState.currentState) {
+                                            case SHOOT -> calcOptimalPose(
+                                                    List.of(Constants.OPTIMAL_POINTS_SHOOT),
+                                                    SwerveDrive.getInstance().getBotPose());
+                                            case TRAP -> calcOptimalPose(
+                                                    List.of(Constants.OPTIMAL_POINTS_TRAP),
+                                                    SwerveDrive.getInstance().getBotPose());
+                                            case AMP -> Constants.AMP_POSE;
+                                        })
+                .andThen(
+                        Commands.defer(
+                                () ->
                                         AutoBuilder.pathfindToPose(
                                                 optimalPose, Constants.autoConstraints)),
                 new HashSet<>() {
