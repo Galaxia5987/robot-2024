@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.example.ExampleSubsystemConstants;
 import frc.robot.swerve.SwerveConstants;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -77,7 +76,6 @@ public class Robot extends LoggedRobot {
         Logger.start();
         SignalLogger.enableAutoLogging(true);
 
-        ExampleSubsystemConstants.initConstants();
         SwerveConstants.initConstants(true, Robot.isReal());
         robotContainer = RobotContainer.getInstance();
         compressor.enableDigital();

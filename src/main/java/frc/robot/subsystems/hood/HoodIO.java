@@ -19,12 +19,12 @@ public interface HoodIO {
 
     @AutoLog
     class HoodInputs {
-        public MutableMeasure<Angle> angle = MutableMeasure.zero(Radians);
-        public MutableMeasure<Angle> angleSetpoint = MutableMeasure.zero(Radians);
+        public MutableMeasure<Angle> angle = MutableMeasure.zero(Rotations);
+        public MutableMeasure<Angle> angleSetpoint = MutableMeasure.zero(Rotations);
         public MutableMeasure<Voltage> voltage = MutableMeasure.zero(Volts);
-        public double powerSetpoint;
-        public MutableMeasure<Angle> absoluteEncoderAngle = MutableMeasure.zero(Radians);
-        public Mode controlMode;
+        public double powerSetpoint = 0;
+        public MutableMeasure<Angle> absoluteEncoderAngle = MutableMeasure.zero(Rotations);
+        public Mode controlMode = Mode.POWER;
     }
 
     enum Mode {

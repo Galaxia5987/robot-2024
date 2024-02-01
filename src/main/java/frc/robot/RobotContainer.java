@@ -6,10 +6,6 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOReal;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
-import frc.robot.subsystems.example.ExampleSubsystem;
-import frc.robot.subsystems.example.ExampleSubsystemIO;
-import frc.robot.subsystems.example.ExampleSubsystemIOReal;
-import frc.robot.subsystems.example.ExampleSubsystemIOSim;
 import frc.robot.swerve.*;
 
 public class RobotContainer {
@@ -22,22 +18,17 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
         ElevatorIO elevatorIO;
-        ExampleSubsystemIO exampleSubsystemIO;
 
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 elevatorIO = new ElevatorIOReal();
-                exampleSubsystemIO = new ExampleSubsystemIOReal();
-                intakeIO = new IntakeIOSim();
                 break;
             case SIM:
             case REPLAY:
             default:
-                exampleSubsystemIO = new ExampleSubsystemIOSim();
                 elevatorIO = new ElevatorIOSim();
                 break;
         }
-        ExampleSubsystem.initialize(exampleSubsystemIO);
         Elevator.initialize(elevatorIO);
         Constants.initSwerve();
         Constants.initVision();
