@@ -28,7 +28,8 @@ public class ConveyorIOSim implements ConveyorIO {
     @Override
     public void setVelocity(MutableMeasure<Velocity<Angle>> velocity) {
         conveyor.setReference(
-                velocity.in(Units.RotationsPerSecond), CANSparkMax.ControlType.kVelocity,
+                velocity.in(Units.RotationsPerSecond),
+                CANSparkMax.ControlType.kVelocity,
                 feed.calculate(velocity.in(Units.RotationsPerSecond)));
     }
 
