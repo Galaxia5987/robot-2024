@@ -77,9 +77,7 @@ public class Hood extends SubsystemBase {
     @AutoLogOutput(key = "Hood/Pose")
     private Pose3d getPose3d() {
         return new Pose3d(
-                HoodConstants.ROOT_POSITION.getX(),
-                0,
-                HoodConstants.ROOT_POSITION.getY(),
+                HoodConstants.ROOT_POSITION,
                 new Rotation3d(0.0, -getAngle().in(Units.Radians), 0.0));
     }
 
