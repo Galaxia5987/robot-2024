@@ -9,6 +9,8 @@ import frc.robot.vision.PhotonVisionIOReal;
 import frc.robot.vision.Vision;
 import frc.robot.vision.VisionModule;
 import frc.robot.vision.VisionSimIO;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.photonvision.PhotonCamera;
 import org.photonvision.simulation.SimCameraProperties;
@@ -57,8 +59,12 @@ public class Constants {
                     maxAngularVelocity.in(Units.RotationsPerSecond),
                     maxAngularAcceleration.in(Units.RotationsPerSecond.per(Units.Second)));
 
-    public static final List<Pose2d> optimalPointsShoot = null;
-    public static final List<Pose2d> optimalPointsTrap = null;
+    public static final Pose2d[] optimalPointsShoot = {
+            new Pose2d(1.97, 7.16, Rotation2d.fromRadians(-161.57)),
+            new Pose2d(2.54, 3.06, Rotation2d.fromRadians(-157.15)),
+            new Pose2d(4.16, 5.03, Rotation2d.fromRadians(179.94))
+    };
+    public static final Pose2d[] optimalPointsTrap = {};
     public static final Pose2d ampPose = new Pose2d(0.0, 0.0, new Rotation2d(0, 0));
 
     public enum Mode {

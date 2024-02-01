@@ -31,10 +31,10 @@ public class CalcOptimalPose {
                                                 optimalPose =
                                                         switch (RobotState.currentState) {
                                                             case SHOOT -> calcOptimalPose(
-                                                                    Constants.optimalPointsShoot,
+                                                                    List.of(Constants.optimalPointsShoot),
                                                                     robotPose);
                                                             case TRAP -> calcOptimalPose(
-                                                                    Constants.optimalPointsTrap,
+                                                                    List.of(Constants.optimalPointsTrap),
                                                                     robotPose);
                                                             case AMP -> Constants.ampPose;
                                                         })
