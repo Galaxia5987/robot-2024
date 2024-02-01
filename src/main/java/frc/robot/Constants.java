@@ -1,8 +1,12 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.units.*;
 import frc.robot.swerve.*;
 import frc.robot.vision.PhotonVisionIOReal;
 import frc.robot.vision.Vision;
@@ -34,6 +38,35 @@ public class Constants {
     public static final Transform3d FRONT_RIGHT_CAMERA_POSE =
             new Transform3d(0, -0.293, 0.55, new Rotation3d(0, Math.toRadians(25.0), 0));
 
+    public static final Measure<Distance> ROBOT_LENGTH = Units.Meters.of(0.584);
+    public static final Measure<Velocity<Distance>> MAX_VELOCITY = Units.MetersPerSecond.of(4.5);
+    public static final Measure<Velocity<Velocity<Distance>>> MAX_ACCELERATION =
+            Units.MetersPerSecondPerSecond.of(3);
+    public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY =
+            Units.RotationsPerSecond.of(
+                    MAX_VELOCITY.in(Units.MetersPerSecond)
+                            / (ROBOT_LENGTH.in(Units.Meters) / Math.sqrt(2)));
+    public static final Measure<Velocity<Velocity<Angle>>> MAX_ANGULAR_ACCELERATION =
+            Units.RotationsPerSecond.per(Units.Second)
+                    .of(
+                            MAX_ACCELERATION.in(Units.MetersPerSecondPerSecond)
+                                    / (ROBOT_LENGTH.in(Units.Meters) / Math.sqrt(2)));
+
+    public static final PathConstraints AUTO_CONSTRAINTS =
+            new PathConstraints(
+                    MAX_VELOCITY.in(Units.MetersPerSecond),
+                    MAX_ACCELERATION.in(Units.MetersPerSecondPerSecond),
+                    MAX_ANGULAR_VELOCITY.in(Units.RotationsPerSecond),
+                    MAX_ANGULAR_ACCELERATION.in(Units.RotationsPerSecond.per(Units.Second)));
+
+    public static final Pose2d[] OPTIMAL_POINTS_SHOOT = {
+        new Pose2d(1.97, 7.16, Rotation2d.fromDegrees(-161.57)),
+        new Pose2d(2.54, 3.06, Rotation2d.fromDegrees(-157.15)),
+        new Pose2d(4.16, 5.03, Rotation2d.fromDegrees(179.94))
+    };
+    public static final Pose2d[] OPTIMAL_POINTS_TRAP = {};
+    public static final Pose2d AMP_POSE = new Pose2d(0.0, 0.0, new Rotation2d(0, 0));
+
     public enum Mode {
         REAL,
         SIM,
@@ -64,6 +97,18 @@ public class Constants {
                     }
                 };
         SwerveDrive.initialize(gyroIO, moduleIOs);
+        SwerveDrive swerveDrive = SwerveDrive.getInstance();
+        AutoBuilder.configureHolonomic(
+                swerveDrive::getBotPose,
+                swerveDrive::resetPose,
+                swerveDrive::getCurrentSpeeds,
+                (speeds) -> swerveDrive.drive(speeds, false),
+                new HolonomicPathFollowerConfig(
+                        SwerveConstants.MAX_X_Y_VELOCITY,
+                        Constants.ROBOT_LENGTH.in(Units.Meters) / 2,
+                        new ReplanningConfig()),
+                () -> false,
+                swerveDrive);
     }
 
     public static void initVision() {
