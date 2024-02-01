@@ -21,36 +21,22 @@ public class IntakeConstants {
         IntakePose(MutableMeasure<Angle> intakePose) {
             this.intakePose = intakePose;
         }
+    }
 
-        public void InitConstants() {
-            switch (Constants.CURRENT_MODE) {
-                case REAL:
-                    ANGLE_KP.initDefault(10.0 / 360.0);
-
-                    ANGLE_KI.initDefault(0);
-
-                    ANGLE_KD.initDefault(0);
-
-                    break;
-
-                case SIM:
-
-                case REPLAY:
-                    ANGLE_KP.initDefault(10.0 / 360.0);
-
-                    ANGLE_KI.initDefault(0);
-
-                    ANGLE_KD.initDefault(0);
-
-                default:
-                    ANGLE_KP.initDefault(10.0 / 360.0);
-
-                    ANGLE_KI.initDefault(0);
-
-                    ANGLE_KD.initDefault(0);
-
-                    break;
-            }
+    public void initConstants() {
+        switch (Constants.CURRENT_MODE) {
+            case REAL:
+                ANGLE_KP.initDefault(10.0 / 360.0);
+                ANGLE_KI.initDefault(0);
+                ANGLE_KD.initDefault(0);
+                break;
+            case SIM:
+            case REPLAY:
+            default:
+                ANGLE_KP.initDefault(10.0 / 360.0);
+                ANGLE_KI.initDefault(0);
+                ANGLE_KD.initDefault(0);
+                break;
         }
     }
 }
