@@ -1,6 +1,9 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.*;
@@ -94,6 +97,18 @@ public class Constants {
                     }
                 };
         SwerveDrive.initialize(gyroIO, moduleIOs);
+        SwerveDrive swerveDrive = SwerveDrive.getInstance();
+        AutoBuilder.configureHolonomic(
+                swerveDrive::getBotPose,
+                swerveDrive::resetPose,
+                swerveDrive::getCurrentSpeeds,
+                (speeds) -> swerveDrive.drive(speeds, false),
+                new HolonomicPathFollowerConfig(
+                        SwerveConstants.MAX_X_Y_VELOCITY,
+                        Constants.ROBOT_LENGTH.in(Units.Meters) / 2,
+                        new ReplanningConfig()),
+                () -> false,
+                swerveDrive);
     }
 
     public static void initVision() {
