@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.elevator.Elevator;
@@ -21,7 +22,6 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
-
         ElevatorIO elevatorIO;
         ExampleSubsystemIO exampleSubsystemIO;
         switch (Constants.CURRENT_MODE) {
@@ -67,7 +67,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        xboxController.a().onTrue(elevator.setHeight(2));
+        xboxController.a().onTrue(elevator.setHeight(Units.Meters.of(0.8).mutableCopy()));
     }
 
     /**

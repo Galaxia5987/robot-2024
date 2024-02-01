@@ -40,16 +40,6 @@ public class Elevator extends SubsystemBase {
         INSTANCE = new Elevator(io);
     }
 
-    public void setPower(double power) {
-        io.setPower(power);
-        inputs.controlMode = ElevatorIO.ControlMode.PERCENT_OUTPUT;
-    }
-
-    public void setHeight(MutableMeasure<Distance> height) {
-        io.setHeight(height);
-        inputs.controlMode = ElevatorIO.ControlMode.POSITION;
-    }
-
     public MutableMeasure<Distance> getCurrentHeight() {
         return inputs.currentHeight;
     }
@@ -58,8 +48,9 @@ public class Elevator extends SubsystemBase {
         return inputs.heightSetpoint;
     }
 
-    public Command setHeight(double height) {
-        return run(() -> this.setHeight(height));
+    public Command setHeight(MutableMeasure<Distance> height) {
+        return runOnce(() -> inputs.heightSetpoint = height)
+                .andThen(run(() -> io.setHeight(height)));
     }
 
     @Override

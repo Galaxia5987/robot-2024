@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.Meters;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.wpilibj.Timer;
@@ -19,12 +20,12 @@ public class ElevatorIOSim implements ElevatorIO {
     public ElevatorIOSim() {
         motor = new TalonFXSim(2, ElevatorConstants.GEAR_RATIO, 0.5, 1);
 
-        motor.setController(
-                new PIDController(
+        motor.setProfiledController(
+                new ProfiledPIDController(
                         ElevatorConstants.KP.get(),
                         ElevatorConstants.KI.get(),
                         ElevatorConstants.KD.get(),
-                        0.02));
+                        ElevatorConstants.));
     }
 
     @Override
@@ -35,6 +36,7 @@ public class ElevatorIOSim implements ElevatorIO {
 
     @Override
     public void setHeight(MutableMeasure<Distance> height) {
+        inputs.heightSetpoint = height;
         positionRequest.withPosition(height.in(Meters));
         motor.setControl(positionRequest);
     }
