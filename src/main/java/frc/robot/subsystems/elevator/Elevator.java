@@ -26,7 +26,7 @@ public class Elevator extends SubsystemBase {
 
     private final MechanismRoot2d root = mechanism2d.getRoot("Elevator", 0, 0);
     private final MechanismLigament2d elevator =
-            root.append(new MechanismLigament2d("Elevator", 0, 0));
+            root.append(new MechanismLigament2d("Elevator", 0, 90));
 
     private Elevator(ElevatorIO io) {
         this.io = io;

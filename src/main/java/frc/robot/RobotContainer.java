@@ -11,7 +11,7 @@ import frc.robot.subsystems.example.ExampleSubsystem;
 import frc.robot.subsystems.example.ExampleSubsystemIO;
 import frc.robot.subsystems.example.ExampleSubsystemIOReal;
 import frc.robot.subsystems.example.ExampleSubsystemIOSim;
-import frc.robot.swerve.*;
+import frc.robot.swerve.SwerveDrive;
 
 public class RobotContainer {
 
@@ -68,6 +68,8 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         xboxController.a().onTrue(elevator.setHeight(Units.Meters.of(0.8).mutableCopy()));
+        xboxController.b().onTrue(elevator.setHeight(Units.Meters.of(1.2).mutableCopy()));
+        xboxController.x().onTrue(elevator.setHeight(Units.Meters.of(0.2).mutableCopy()));
     }
 
     /**
