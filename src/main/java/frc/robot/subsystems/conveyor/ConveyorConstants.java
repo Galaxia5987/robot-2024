@@ -2,8 +2,6 @@ package frc.robot.subsystems.conveyor;
 
 import edu.wpi.first.units.*;
 import frc.robot.Constants;
-import frc.robot.subsystems.example.ExampleSubsystemIOReal;
-import frc.robot.subsystems.example.ExampleSubsystemIOSim;
 import lib.webconstants.LoggedTunableNumber;
 
 public class ConveyorConstants {
@@ -20,54 +18,26 @@ public class ConveyorConstants {
     public static LoggedTunableNumber KV = new LoggedTunableNumber("Conveyor/kV");
     public static LoggedTunableNumber KA = new LoggedTunableNumber("Conveyor/kA");
 
-    public static void initialize(Constants.Mode currentMode){
+    public static void initialize(Constants.Mode currentMode) {
         switch (Constants.CURRENT_MODE) {
-
             case REAL:
-
                 KP.initDefault(0);
-                KI.initDefault(0);
+                KI.initDefault(0.1);
                 KD.initDefault(0);
                 KS.initDefault(0);
                 KV.initDefault(0);
                 KA.initDefault(0);
-
                 break;
-
             case SIM:
-
             case REPLAY:
-                KP.initDefault(1);
-
-                KI.initDefault(0);
-
-                KD.initDefault(0);
-
-                KS.initDefault(0);
-
-                KV.initDefault(0);
-
-                KA.initDefault(0);
-
             default:
-
                 KP.initDefault(0);
-
                 KI.initDefault(0);
-
                 KD.initDefault(0);
-
                 KS.initDefault(0);
-
-                KV.initDefault(0);
-
+                KV.initDefault(1.87);
                 KA.initDefault(0);
-
                 break;
-
         }
-
     }
-
-
 }
