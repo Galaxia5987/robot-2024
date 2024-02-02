@@ -26,7 +26,9 @@ public class AmpState implements ScoreState {
                     {
                         add(SwerveDrive.getInstance());
                     }
-                });
+                    return AutoBuilder.pathfindToPose(ampPose, Constants.AUTO_CONSTRAINTS);
+                },
+                DTOP_REQUIREMENTS);
     }
 
     @Override
