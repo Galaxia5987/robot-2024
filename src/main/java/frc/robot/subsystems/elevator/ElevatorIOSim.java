@@ -21,7 +21,7 @@ public class ElevatorIOSim implements ElevatorIO {
                 new TalonFXSim(
                         2,
                         ElevatorConstants.GEAR_RATIO,
-                        0.000_01,
+                        0.00001,
                         ElevatorConstants.GEAR_RATIO
                                 * (2 * Math.PI * ElevatorConstants.DRUM_RADIUS));
 
