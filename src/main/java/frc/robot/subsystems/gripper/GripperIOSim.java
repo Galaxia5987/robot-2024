@@ -2,6 +2,7 @@ package frc.robot.subsystems.gripper;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
@@ -10,20 +11,24 @@ import frc.robot.subsystems.elevator.ElevatorConstants;
 import lib.motors.TalonFXSim;
 
 import static edu.wpi.first.units.Units.Radians;
+import static frc.robot.subsystems.gripper.GripperConstants.*;
 
 public class GripperIOSim implements GripperIO {
     private final TalonFXSim rollerMotor;
     private final TalonFXSim angleMotor;
 
     private final DutyCycleOut powerRequest = new DutyCycleOut(0);
-    private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0);
+    private final PositionVoltage positionRequest = new PositionVoltage(0);
+
+    public static PIDController angleController =
+            new PIDController(KP.get(), KI.get(), KD.get());
 
     public GripperIOSim() {
         angleMotor = new TalonFXSim(1, GripperConstants.ANGLE_MOTOR_GEAR_RATIO, 0.5, GripperConstants.ANGLE_MOTOR_GEAR_RATIO);
 
-        rollerMotor = new TalonFXSim(1, GripperConstants.ROLLER_MOTOR_GEAR_RATIO, 0.5, GripperConstants.ROLLER_MOTOR_GEAR_RATIO);
+        rollerMotor = new TalonFXSim(1, 1, 0.5, 1);
 
-        angleMotor.setController(new PIDController(ElevatorConstants.KP.get(), ElevatorConstants.KI.get(), ElevatorConstants.KD.get(), 0.02));
+        angleMotor.setController(angleController);
     }
 
     @Override
