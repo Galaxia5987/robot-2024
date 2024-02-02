@@ -16,7 +16,7 @@ public class TrapState implements ScoreState {
         return Commands.defer(
                 () -> {
                     Pose2d optimalPose =
-                            Utils.calcOptimalPose(
+                            Utils.calcOptimalPose( // TODO: flip all the points in the list
                                     Arrays.asList(Constants.OPTIMAL_POINTS_TRAP),
                                     SwerveDrive.getInstance().getBotPose());
                     return AutoBuilder.pathfindToPose(optimalPose, Constants.AUTO_CONSTRAINTS);

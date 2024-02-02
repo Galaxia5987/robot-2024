@@ -15,7 +15,7 @@ public class ShootState implements ScoreState {
     public Command driveToClosestOptimalPoint() {
         return Commands.defer(
                 () -> {
-                    Pose2d optimalPose =
+                    Pose2d optimalPose = // TODO: flip all the points in the list
                             Utils.calcOptimalPose(
                                     Arrays.asList(Constants.OPTIMAL_POINTS_SHOOT),
                                     SwerveDrive.getInstance().getBotPose());
