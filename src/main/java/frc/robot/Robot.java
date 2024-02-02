@@ -74,7 +74,6 @@ public class Robot extends LoggedRobot {
         }
 
         Logger.start();
-        SignalLogger.enableAutoLogging(true);
         SwerveConstants.initConstants(true, Robot.isReal());
         robotContainer = RobotContainer.getInstance();
         compressor.enableDigital();
