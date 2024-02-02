@@ -26,9 +26,8 @@ public class Elevator extends SubsystemBase {
 
     @AutoLogOutput
     private final Mechanism2d mechanism2d = new Mechanism2d(MECHANISM_WIDTH, MECHANISM_HEIGHT);
-    @AutoLogOutput
-    private Pose3d elevatorPose = new Pose3d(0, 0, 0, new Rotation3d());
 
+    @AutoLogOutput private Pose3d elevatorPose = new Pose3d(0, 0, 0, new Rotation3d());
 
     private final MechanismRoot2d root = mechanism2d.getRoot("Elevator", 0, 0);
     private final MechanismLigament2d elevator =
@@ -64,11 +63,7 @@ public class Elevator extends SubsystemBase {
         io.updateInputs(inputs);
         elevator.setLength(getCurrentHeight().in(Units.Meters));
         Logger.processInputs(this.getClass().getSimpleName(), inputs);
-        Logger.recordOutput("elevatorPose",
-                new Pose3d(
-                        new Translation3d(0,0,0),
-                        new Rotation3d(0, 0, 0)
-                ));
-
+        Logger.recordOutput(
+                "elevatorPose", new Pose3d(new Translation3d(0, 0, 0.09845), new Rotation3d(0, 0, 0)));
     }
 }
