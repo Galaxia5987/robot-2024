@@ -1,10 +1,10 @@
 package frc.robot.subsystems.gripper;
 
+import static frc.robot.subsystems.intake.IntakeConstants.*;
+
 import edu.wpi.first.units.*;
 import frc.robot.Constants;
 import lib.webconstants.LoggedTunableNumber;
-
-import static frc.robot.subsystems.intake.IntakeConstants.*;
 
 public class GripperConstants {
     public static final Measure<Angle> INTAKE_ANGLE = null;
