@@ -21,18 +21,18 @@ public class AmpState implements ScoreState {
                 () -> {
                     Pose2d ampPose = Constants.AMP_POSE;
                     Pose2d botPose = SwerveDrive.getInstance().getBotPose();
-                    double distance = Utils.getDistanceFromPoint(ampPose, botPose);
                     double robotRotation = botPose.getRotation().getRadians();
                     boolean isGripperReversed =
                             false; // TODO: replace with actual gripper.isForward
-                    boolean hasTimeToTurnGripper =
-                            distance > Constants.MIN_DISTANCE_TO_TURN_GRIPPER.in(Units.Meters);
-                    var alliance = DriverStation.getAlliance();
+                    var alliance = DriverStation.getAlliance(); // TODO: always red for some reason
                     if (!alliance.isEmpty()) {
                         if (alliance.get() == DriverStation.Alliance.Red) {
                             ampPose = GeometryUtil.flipFieldPose(ampPose);
                         }
                     }
+                    double distance = Utils.getDistanceFromPoint(ampPose, botPose);
+                    boolean hasTimeToTurnGripper =
+                            distance > Constants.MIN_DISTANCE_TO_TURN_GRIPPER.in(Units.Meters);
 
                     if ((isGripperReversed && robotRotation < 0) || hasTimeToTurnGripper) {
                         ampPose =
