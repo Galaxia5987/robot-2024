@@ -7,10 +7,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.swerve.SwerveDrive;
 import java.util.Arrays;
-import java.util.HashSet;
 import lib.Utils;
 
-class TrapState implements ScoreState {
+public class TrapState implements ScoreState {
 
     @Override
     public Command driveToClosestOptimalPoint() {
@@ -22,11 +21,7 @@ class TrapState implements ScoreState {
                                     SwerveDrive.getInstance().getBotPose());
                     return AutoBuilder.pathfindToPose(optimalPose, Constants.AUTO_CONSTRAINTS);
                 },
-                new HashSet<>() {
-                    {
-                        add(SwerveDrive.getInstance());
-                    }
-                });
+                DTOP_REQUIREMENTS);
     }
 
     @Override
