@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.swerve.SwerveDrive;
 import java.util.HashSet;
 
-interface ScoreState {
+public interface ScoreState {
     HashSet<Subsystem> DTOP_REQUIREMENTS =
             new HashSet<>() {
                 {
