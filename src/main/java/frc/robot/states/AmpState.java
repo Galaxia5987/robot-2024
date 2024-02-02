@@ -18,7 +18,6 @@ class AmpState implements ScoreState {
                 () -> {
                     Pose2d optimalPose =
                             Utils.calcOptimalPose( // TODO: make the robot not turn all the way
-                                    // if it is not needed
                                     Arrays.asList(Constants.OPTIMAL_POINTS_TRAP),
                                     SwerveDrive.getInstance().getBotPose());
                     return AutoBuilder.pathfindToPose(optimalPose, Constants.AUTO_CONSTRAINTS);
