@@ -9,7 +9,7 @@ import frc.robot.swerve.SwerveDrive;
 import java.util.Arrays;
 import lib.Utils;
 
-class ShootState implements ScoreState {
+public class ShootState implements ScoreState {
 
     @Override
     public Command driveToClosestOptimalPoint() {
