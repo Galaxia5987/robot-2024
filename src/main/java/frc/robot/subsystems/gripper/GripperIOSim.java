@@ -36,21 +36,17 @@ public class GripperIOSim implements GripperIO {
 
     @Override
     public void setRollerMotorPower(double power) {
-        powerRequest.withOutput(power);
-        rollerMotor.setControl(powerRequest);
+        rollerMotor.setControl(powerRequest.withOutput(power));
     }
 
     @Override
     public void setAngleMotorPower(double power) {
-        powerRequest.withOutput(power);
-        angleMotor.setControl(powerRequest);
+        angleMotor.setControl(powerRequest.withOutput(power));
     }
 
     @Override
     public void setAngle(MutableMeasure<Angle> angle) {
-        positionRequest.withPosition(angle.in(Radians));
-        positionRequest.withPosition(Math.IEEEremainder(angle.in(Units.Degrees), 2 * Math.PI));
-        angleMotor.setControl(positionRequest);
+        angleMotor.setControl(positionRequest.withPosition(Math.IEEEremainder(angle.in(Radians), 2 * Math.PI));
     }
 
     @Override
