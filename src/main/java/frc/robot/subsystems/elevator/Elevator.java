@@ -3,6 +3,9 @@ package frc.robot.subsystems.elevator;
 import static frc.robot.subsystems.elevator.ElevatorConstants.MECHANISM_HEIGHT;
 import static frc.robot.subsystems.elevator.ElevatorConstants.MECHANISM_WIDTH;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
@@ -23,6 +26,9 @@ public class Elevator extends SubsystemBase {
 
     @AutoLogOutput
     private final Mechanism2d mechanism2d = new Mechanism2d(MECHANISM_WIDTH, MECHANISM_HEIGHT);
+    @AutoLogOutput
+    private Pose3d elevatorPose = new Pose3d(0, 0, 0, new Rotation3d());
+
 
     private final MechanismRoot2d root = mechanism2d.getRoot("Elevator", 0, 0);
     private final MechanismLigament2d elevator =
@@ -58,5 +64,11 @@ public class Elevator extends SubsystemBase {
         io.updateInputs(inputs);
         elevator.setLength(getCurrentHeight().in(Units.Meters));
         Logger.processInputs(this.getClass().getSimpleName(), inputs);
+        Logger.recordOutput("elevatorPose",
+                new Pose3d(
+                        new Translation3d(0,0,0),
+                        new Rotation3d(0, 0, 0)
+                ));
+
     }
 }
