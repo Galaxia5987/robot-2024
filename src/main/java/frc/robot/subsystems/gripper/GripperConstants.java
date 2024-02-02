@@ -21,19 +21,19 @@ public class GripperConstants {
     public static final LoggedTunableNumber KI = new LoggedTunableNumber("Gripper/kI");
     public static final LoggedTunableNumber KD = new LoggedTunableNumber("Gripper/kD");
 
-    public void initConstants() {
+    public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                ANGLE_KP.initDefault(0);
-                ANGLE_KI.initDefault(0);
-                ANGLE_KD.initDefault(0);
+                KP.initDefault(0);
+                KI.initDefault(0);
+                KD.initDefault(0);
                 break;
             case SIM:
             case REPLAY:
             default:
-                ANGLE_KP.initDefault(0.2);
-                ANGLE_KI.initDefault(0);
-                ANGLE_KD.initDefault(0);
+                KP.initDefault(0.2);
+                KI.initDefault(0);
+                KD.initDefault(0);
                 break;
         }
     }
