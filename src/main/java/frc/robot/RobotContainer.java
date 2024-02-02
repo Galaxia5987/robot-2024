@@ -27,6 +27,7 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
+        GripperConstants.initConstants();
         GripperIO gripperIO;
         ElevatorIO elevatorIO;
         ConveyorIO conveyorIO;
@@ -50,7 +51,6 @@ public class RobotContainer {
         Gripper.initialize(gripperIO);
         Constants.initSwerve();
         Constants.initVision();
-        GripperConstants.initConstants();
 
         gripper = Gripper.getInstance();
         swerveDrive = SwerveDrive.getInstance();
