@@ -12,10 +12,7 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOReal;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
-import frc.robot.subsystems.gripper.Gripper;
-import frc.robot.subsystems.gripper.GripperIO;
-import frc.robot.subsystems.gripper.GripperIOReal;
-import frc.robot.subsystems.gripper.GripperIOSim;
+import frc.robot.subsystems.gripper.*;
 import frc.robot.swerve.SwerveDrive;
 
 public class RobotContainer {
@@ -53,6 +50,7 @@ public class RobotContainer {
         Gripper.initialize(gripperIO);
         Constants.initSwerve();
         Constants.initVision();
+        GripperConstants.initConstants();
 
         gripper = Gripper.getInstance();
         swerveDrive = SwerveDrive.getInstance();
@@ -81,6 +79,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
+        xboxController.x().onTrue(gripper.setWristPosition(Units.Radians.of(0.5).mutableCopy()));
         keyBoardControl
                 .button(1)
                 .onTrue(conveyor.setVelocity(() -> Units.RotationsPerSecond.of(50).mutableCopy()));
