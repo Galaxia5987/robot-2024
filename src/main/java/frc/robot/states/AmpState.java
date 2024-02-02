@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import lib.Utils;
 
-class AmpState implements ScoreState {
+public class AmpState implements ScoreState {
 
     @Override
     public Command driveToClosestOptimalPoint() {
