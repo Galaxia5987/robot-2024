@@ -26,7 +26,7 @@ public class GripperIOSim implements GripperIO {
                 new TalonFXSim(
                         1,
                         GripperConstants.ANGLE_MOTOR_GEAR_RATIO,
-                        0.5,
+                        0.00001,
                         GripperConstants.ANGLE_MOTOR_GEAR_RATIO);
 
         rollerMotor = new TalonFXSim(1, 1, 0.5, 1);
@@ -46,7 +46,7 @@ public class GripperIOSim implements GripperIO {
 
     @Override
     public void setAngle(MutableMeasure<Angle> angle) {
-        angleMotor.setControl(positionRequest.withPosition(Math.IEEEremainder(angle.in(Radians), 2 * Math.PI));
+        angleMotor.setControl(positionRequest.withPosition(Math.IEEEremainder(angle.in(Radians), 2 * Math.PI)));
     }
 
     @Override
