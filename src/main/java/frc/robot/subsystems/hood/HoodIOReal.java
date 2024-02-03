@@ -7,11 +7,12 @@ import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public class HoodIOReal implements HoodIO {
     private final TalonFX motor;
-    private final TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
-    private final TalonFXConfigurator motorConfigurator;
+    private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(9); // TODO: to be changed
     private final MotionMagicExpoTorqueCurrentFOC positionControl =
             new MotionMagicExpoTorqueCurrentFOC(0);
     private final DutyCycleOut dutyCycleOut = new DutyCycleOut(0);
