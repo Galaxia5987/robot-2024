@@ -24,7 +24,6 @@ public class ShooterConstants {
     public static final LoggedTunableNumber TOP_kS = new LoggedTunableNumber("Shooter/Top kS");
     public static final LoggedTunableNumber TOP_kV = new LoggedTunableNumber("Shooter/Top kV");
     public static final LoggedTunableNumber TOP_kA = new LoggedTunableNumber("Shooter/Top kA");
-    public static final LoggedTunableNumber TOP_kG = new LoggedTunableNumber("Shooter/Top kG");
 
     public static final LoggedTunableNumber BOTTOM_kP =
             new LoggedTunableNumber("Shooter/Bottom kP");
@@ -38,8 +37,6 @@ public class ShooterConstants {
             new LoggedTunableNumber("Shooter/Bottom kV");
     public static final LoggedTunableNumber BOTTOM_kA =
             new LoggedTunableNumber("Shooter/Bottom kA");
-    public static final LoggedTunableNumber BOTTOM_kG =
-            new LoggedTunableNumber("Shooter/Bottom kG");
 
     public static void initialize(Constants.Mode mode) {
         switch (mode) {
@@ -50,14 +47,12 @@ public class ShooterConstants {
                 TOP_kS.initDefault(0.0);
                 TOP_kV.initDefault(0.112);
                 TOP_kA.initDefault(0.0);
-                TOP_kG.initDefault(0.0);
                 BOTTOM_kP.initDefault(10.0);
                 BOTTOM_kI.initDefault(0.0);
                 BOTTOM_kD.initDefault(0.0);
                 BOTTOM_kS.initDefault(0.0);
                 BOTTOM_kV.initDefault(0.112);
                 BOTTOM_kA.initDefault(0.0);
-                BOTTOM_kG.initDefault(0.0);
             case SIM:
             case REPLAY:
                 TOP_kP.initDefault(10.0);
@@ -66,14 +61,12 @@ public class ShooterConstants {
                 TOP_kS.initDefault(0.0);
                 TOP_kV.initDefault(0.112);
                 TOP_kA.initDefault(0.0);
-                TOP_kG.initDefault(0.0);
                 BOTTOM_kP.initDefault(10.0);
                 BOTTOM_kI.initDefault(0.0);
                 BOTTOM_kD.initDefault(0.0);
                 BOTTOM_kS.initDefault(0.0);
                 BOTTOM_kV.initDefault(0.112);
                 BOTTOM_kA.initDefault(0.0);
-                BOTTOM_kG.initDefault(0.0);
         }
         topMotorConfiguration
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(GEAR_RATIO_TOP))
@@ -84,8 +77,7 @@ public class ShooterConstants {
                                 .withKD(TOP_kD.get())
                                 .withKS(TOP_kS.get())
                                 .withKV(TOP_kV.get())
-                                .withKA(TOP_kA.get())
-                                .withKG(TOP_kG.get()));
+                                .withKA(TOP_kA.get()));
         bottomMotorConfiguration
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(GEAR_RATIO_BOTTOM))
                 .withSlot0(
@@ -95,8 +87,7 @@ public class ShooterConstants {
                                 .withKD(BOTTOM_kD.get())
                                 .withKS(BOTTOM_kS.get())
                                 .withKV(BOTTOM_kV.get())
-                                .withKA(BOTTOM_kA.get())
-                                .withKG(BOTTOM_kG.get()));
+                                .withKA(BOTTOM_kA.get()));
     }
 
     public static MutableMeasure<Velocity<Angle>> STOP_POWER =
