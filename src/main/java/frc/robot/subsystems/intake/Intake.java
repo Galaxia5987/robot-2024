@@ -47,10 +47,12 @@ public class Intake extends SubsystemBase {
     }
 
     public Command setRollerSpeed(double speed) {
+        inputs.RollerSpeedSetPoint = Units.RotationsPerSecond.of(speed).mutableCopy();
         return runOnce(() -> io.setRollerSpeed(speed));
     }
 
     public Command setCenterRollerSpeed(double speed) {
+        inputs.CenterRollerSpeedSetPoint = Units.RotationsPerSecond.of(speed).mutableCopy();
         return runOnce(() -> io.setCenterRollerSpeed(speed));
     }
 

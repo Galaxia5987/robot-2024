@@ -66,4 +66,11 @@ public final class Ports {
         public static final int JOYSTICK_TOP_RIGHT_BUTTON = 4;
         public static final int JOYSTICK_RIGHT_BIG_BUTTON = 16;
     }
+
+    public class Intake {
+
+        public static final int INTAKE_FRONT_MOTOR = 0;
+        public static final boolean POWER_INVERTED = true;
+        public static final int INTAKE_CENTER_MOTOR = 0;
+    }
 }

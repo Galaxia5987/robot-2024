@@ -66,6 +66,7 @@ public class Constants {
     };
     public static final Pose2d[] OPTIMAL_POINTS_TRAP = {};
     public static final Pose2d AMP_POSE = new Pose2d(0.0, 0.0, new Rotation2d(0, 0));
+    public static final double NOMINAL_VOLTAGE = 0;
 
     public enum Mode {
         REAL,
