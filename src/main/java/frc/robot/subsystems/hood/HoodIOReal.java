@@ -33,5 +33,11 @@ public class HoodIOReal implements HoodIO {
         motorConfiguration.Slot0.kA = HoodConstants.kA.get();
         motorConfiguration.Slot0.kG = HoodConstants.kG.get();
 
-        motorConfigurator.apply(motorConfiguration);
+    @Override
+    public void updateInputs() {
+        inputs.angle.mut_replace(motor.getPosition().getValue(), Units.Rotations);
+        inputs.absoluteEncoderAngle.mut_replace(
+                absoluteEncoder.getAbsolutePosition(), Units.Rotations);
+        inputs.voltage.mut_replace(motor.getMotorVoltage().getValue(), Units.Volts);
     }
+}
