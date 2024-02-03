@@ -16,7 +16,7 @@ public class TrapState implements ScoreState {
                 () -> {
                     var optimalPoints = Constants.OPTIMAL_POINTS_TRAP_BLUE;
                     if (isRed()) {
-                        optimalPoints = Constants.OPTIMAL_POINTS_SHOOT_RED;
+                        optimalPoints = Constants.OPTIMAL_POINTS_TRAP_RED;
                     }
                     Pose2d optimalPose =
                             Utils.calcOptimalPose(
