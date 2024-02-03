@@ -24,6 +24,7 @@ public class HoodConstants {
     public static final LoggedTunableNumber kS = new LoggedTunableNumber("Hood/kS");
     public static final LoggedTunableNumber kV = new LoggedTunableNumber("Hood/kV");
     public static final LoggedTunableNumber kA = new LoggedTunableNumber("Hood/kA");
+    public static final LoggedTunableNumber kG = new LoggedTunableNumber("Hood/kG");
 
     public static void initialize(Constants.Mode mode) {
         switch (mode) {
@@ -34,6 +35,7 @@ public class HoodConstants {
                 kS.initDefault(0.0);
                 kV.initDefault(0.0);
                 kA.initDefault(0.0);
+                kG.initDefault(0.0);
             case SIM:
             case REPLAY:
                 kP.initDefault(1);
@@ -42,6 +44,7 @@ public class HoodConstants {
                 kS.initDefault(0.0);
                 kV.initDefault(0.0);
                 kA.initDefault(0.0);
+                kG.initDefault(0.0);
         }
     }
 }
