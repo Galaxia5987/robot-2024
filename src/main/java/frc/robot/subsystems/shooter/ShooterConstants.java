@@ -1,9 +1,5 @@
 package frc.robot.subsystems.shooter;
 
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.Velocity;
 import frc.robot.Constants;
 import lib.webconstants.LoggedTunableNumber;
 
@@ -21,6 +17,7 @@ public class ShooterConstants {
     public static final LoggedTunableNumber TOP_kS = new LoggedTunableNumber("Shooter/Top kS");
     public static final LoggedTunableNumber TOP_kV = new LoggedTunableNumber("Shooter/Top kV");
     public static final LoggedTunableNumber TOP_kA = new LoggedTunableNumber("Shooter/Top kA");
+    public static final LoggedTunableNumber TOP_kG = new LoggedTunableNumber("Shooter/Top kG");
 
     public static final LoggedTunableNumber BOTTOM_kP =
             new LoggedTunableNumber("Shooter/Bottom kP");
@@ -34,6 +31,8 @@ public class ShooterConstants {
             new LoggedTunableNumber("Shooter/Bottom kV");
     public static final LoggedTunableNumber BOTTOM_kA =
             new LoggedTunableNumber("Shooter/Bottom kA");
+    public static final LoggedTunableNumber BOTTOM_kG =
+            new LoggedTunableNumber("Shooter/Bottom kG");
 
     public static void initialize(Constants.Mode mode) {
         switch (mode) {
@@ -44,12 +43,14 @@ public class ShooterConstants {
                 TOP_kS.initDefault(0.0);
                 TOP_kV.initDefault(0.112);
                 TOP_kA.initDefault(0.0);
+                TOP_kG.initDefault(0.0);
                 BOTTOM_kP.initDefault(10.0);
                 BOTTOM_kI.initDefault(0.0);
                 BOTTOM_kD.initDefault(0.0);
                 BOTTOM_kS.initDefault(0.0);
                 BOTTOM_kV.initDefault(0.112);
                 BOTTOM_kA.initDefault(0.0);
+                BOTTOM_kG.initDefault(0.0);
             case SIM:
             case REPLAY:
                 TOP_kP.initDefault(10.0);
@@ -58,16 +59,14 @@ public class ShooterConstants {
                 TOP_kS.initDefault(0.0);
                 TOP_kV.initDefault(0.112);
                 TOP_kA.initDefault(0.0);
-
+                TOP_kG.initDefault(0.0);
                 BOTTOM_kP.initDefault(10.0);
                 BOTTOM_kI.initDefault(0.0);
                 BOTTOM_kD.initDefault(0.0);
                 BOTTOM_kS.initDefault(0.0);
                 BOTTOM_kV.initDefault(0.112);
                 BOTTOM_kA.initDefault(0.0);
+                BOTTOM_kG.initDefault(0.0);
         }
     }
-
-    public static MutableMeasure<Velocity<Angle>> STOP_POWER =
-            Units.RotationsPerSecond.zero().mutableCopy();
 }
