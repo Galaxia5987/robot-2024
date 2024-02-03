@@ -18,14 +18,13 @@ public class IntakeIOReal implements IntakeIO {
     private final TalonFX angleMotor = new TalonFX(21);
     private final MotionMagicExpoTorqueCurrentFOC positionRequest =
             new MotionMagicExpoTorqueCurrentFOC(0);
-    private TalonFXConfiguration angleConfiguration = new TalonFXConfiguration();
 
     public IntakeIOReal() {
-        angleConfiguration.Feedback.SensorToMechanismRatio = IntakeConstants.ANGLE_GEAR_RATIO;
+        IntakeConstants.ANGLE_CONFIGURATION.Feedback.SensorToMechanismRatio = IntakeConstants.ANGLE_GEAR_RATIO;
 
-        angleConfiguration.Feedback.RotorToSensorRatio = 1;
+        IntakeConstants.ANGLE_CONFIGURATION.Feedback.RotorToSensorRatio = 1;
 
-        angleMotor.getConfigurator().apply(angleConfiguration.Slot0);
+        angleMotor.getConfigurator().apply(IntakeConstants.ANGLE_CONFIGURATION.Slot0);
 
         spinMotor.restoreFactoryDefaults();
         centerMotor.restoreFactoryDefaults();

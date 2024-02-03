@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake;
 
 import static edu.wpi.first.units.Units.Degrees;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import frc.robot.Constants;
@@ -13,6 +14,7 @@ public class IntakeConstants {
     public static final LoggedTunableNumber ANGLE_KI = new LoggedTunableNumber("Intake/kI");
     public static final LoggedTunableNumber ANGLE_KD = new LoggedTunableNumber("Intake/kD");
     public static final double ANGLE_GEAR_RATIO = 44.44;
+    public static final TalonFXConfiguration ANGLE_CONFIGURATION = new TalonFXConfiguration();
 
     public enum IntakePose {
         UP(MutableMeasure.zero(Degrees)),
