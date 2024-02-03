@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shooter;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import edu.wpi.first.units.*;
 import frc.robot.Constants;
 import lib.webconstants.LoggedTunableNumber;
@@ -11,6 +12,9 @@ public class ShooterConstants {
     public static final double SETPOINT_TOLERANCE_BOTTOM = 0.05; // Percentages
     public static final double MOMENT_OF_INERTIA_TOP = 0.08;
     public static final double MOMENT_OF_INERTIA_BOTTOM = 0.08;
+
+    public static final TalonFXConfiguration topMotorConfiguration = new TalonFXConfiguration();
+    public static final TalonFXConfiguration bottomMotorConfiguration = new TalonFXConfiguration();
 
     public static final LoggedTunableNumber TOP_kP = new LoggedTunableNumber("Shooter/Top kP");
     public static final LoggedTunableNumber TOP_kI = new LoggedTunableNumber("Shooter/Top kI");
@@ -69,6 +73,24 @@ public class ShooterConstants {
                 BOTTOM_kA.initDefault(0.0);
                 BOTTOM_kG.initDefault(0.0);
         }
+        topMotorConfiguration.Feedback.SensorToMechanismRatio = GEAR_RATIO_TOP;
+        bottomMotorConfiguration.Feedback.SensorToMechanismRatio = GEAR_RATIO_BOTTOM;
+
+        topMotorConfiguration.Slot0.kP = ShooterConstants.TOP_kP.get();
+        topMotorConfiguration.Slot0.kI = ShooterConstants.TOP_kI.get();
+        topMotorConfiguration.Slot0.kD = ShooterConstants.TOP_kD.get();
+        topMotorConfiguration.Slot0.kS = ShooterConstants.TOP_kS.get();
+        topMotorConfiguration.Slot0.kV = ShooterConstants.TOP_kV.get();
+        topMotorConfiguration.Slot0.kA = ShooterConstants.TOP_kA.get();
+        topMotorConfiguration.Slot0.kG = ShooterConstants.TOP_kG.get();
+
+        bottomMotorConfiguration.Slot0.kP = ShooterConstants.TOP_kP.get();
+        bottomMotorConfiguration.Slot0.kI = ShooterConstants.TOP_kI.get();
+        bottomMotorConfiguration.Slot0.kD = ShooterConstants.TOP_kD.get();
+        bottomMotorConfiguration.Slot0.kS = ShooterConstants.TOP_kS.get();
+        bottomMotorConfiguration.Slot0.kV = ShooterConstants.TOP_kV.get();
+        bottomMotorConfiguration.Slot0.kA = ShooterConstants.TOP_kA.get();
+        bottomMotorConfiguration.Slot0.kG = ShooterConstants.TOP_kG.get();
     }
 
     public static MutableMeasure<Velocity<Angle>> STOP_POWER =
