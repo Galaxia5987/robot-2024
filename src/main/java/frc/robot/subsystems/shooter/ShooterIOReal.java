@@ -24,11 +24,8 @@ public class ShooterIOReal implements ShooterIO {
         topMotor.setNeutralMode(NeutralModeValue.Coast);
         bottomMotor.setNeutralMode(NeutralModeValue.Coast);
 
-        TalonFXConfigurator topMotorConfigurator = topMotor.getConfigurator();
-        topMotorConfigurator.apply(ShooterConstants.topMotorConfiguration);
-
-        TalonFXConfigurator bottomMotorConfigurator = bottomMotor.getConfigurator();
-        bottomMotorConfigurator.apply(ShooterConstants.bottomMotorConfiguration);
+        topMotor.getConfigurator().apply(ShooterConstants.topMotorConfiguration);
+        bottomMotor.getConfigurator().apply(ShooterConstants.bottomMotorConfiguration);
     }
 
     @Override
