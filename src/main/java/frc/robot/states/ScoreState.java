@@ -6,12 +6,7 @@ import frc.robot.swerve.SwerveDrive;
 import java.util.HashSet;
 
 public interface ScoreState {
-    HashSet<Subsystem> DTOP_REQUIREMENTS =
-            new HashSet<>() {
-                {
-                    add(SwerveDrive.getInstance());
-                }
-            };
+    Set<Subsystem> DTOP_REQUIREMENTS = Set.of(SwerveDrive.getInstance());
 
     Command driveToClosestOptimalPoint();
 
