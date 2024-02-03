@@ -24,7 +24,7 @@ public class ShootState implements ScoreState {
                             optimalPoints.forEach(GeometryUtil::flipFieldPose);
                         }
                     }
-                    Pose2d optimalPose = // TODO: flip all the points in the list
+                    Pose2d optimalPose =
                             Utils.calcOptimalPose(
                                     optimalPoints, SwerveDrive.getInstance().getBotPose());
                     return AutoBuilder.pathfindToPose(optimalPose, Constants.AUTO_CONSTRAINTS);
