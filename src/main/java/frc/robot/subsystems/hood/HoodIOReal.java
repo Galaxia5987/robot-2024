@@ -27,14 +27,19 @@ public class HoodIOReal implements HoodIO {
         motor.setPosition(absoluteEncoder.getAbsolutePosition());
     }
 
-        motorConfiguration.Feedback.SensorToMechanismRatio = HoodConstants.GEAR_RATIO;
-        motorConfiguration.Slot0.kP = HoodConstants.kP.get();
-        motorConfiguration.Slot0.kI = HoodConstants.kI.get();
-        motorConfiguration.Slot0.kD = HoodConstants.kD.get();
-        motorConfiguration.Slot0.kS = HoodConstants.kS.get();
-        motorConfiguration.Slot0.kV = HoodConstants.kV.get();
-        motorConfiguration.Slot0.kA = HoodConstants.kA.get();
-        motorConfiguration.Slot0.kG = HoodConstants.kG.get();
+    @Override
+    public void setAngle(MutableMeasure<Angle> angle) {
+        inputs.controlMode = Mode.ANGLE;
+        inputs.angleSetpoint.mut_replace(angle);
+        motor.setControl(positionControl.withPosition(angle.in(Units.Rotations)));
+    }
+
+    @Override
+    public void setPower(double power) {
+        inputs.controlMode = Mode.POWER;
+        inputs.powerSetpoint = power;
+        motor.setControl(dutyCycleOut.withOutput(power * 12));
+    }
 
     @Override
     public void updateInputs() {
