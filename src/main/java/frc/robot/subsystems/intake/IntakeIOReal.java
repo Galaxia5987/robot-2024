@@ -16,10 +16,10 @@ import frc.robot.Ports;
 public class IntakeIOReal implements IntakeIO {
 
     private final CANSparkMax spinMotor =
-            new CANSparkMax(Ports.Intake.INTAKE_FRONT_MOTOR, CANSparkLowLevel.MotorType.kBrushless);
+            new CANSparkMax(0, CANSparkLowLevel.MotorType.kBrushless);
     private final CANSparkMax centerMotor =
             new CANSparkMax(
-                    Ports.Intake.INTAKE_CENTER_MOTOR, CANSparkLowLevel.MotorType.kBrushless);
+                    0, CANSparkLowLevel.MotorType.kBrushless);
     private final TalonFX angleMotor = new TalonFX(21);
     private final TalonFXConfigurator angleConfigurator;
     private final DutyCycleOut dutyCycleRequest = new DutyCycleOut(0);
@@ -41,8 +41,8 @@ public class IntakeIOReal implements IntakeIO {
         centerMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         spinMotor.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE);
         centerMotor.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE);
-        spinMotor.setInverted(Ports.Intake.POWER_INVERTED);
-        centerMotor.setInverted(Ports.Intake.POWER_INVERTED);
+        spinMotor.setInverted(true);
+        centerMotor.setInverted(true);
 
         for (int i = 1; i <= 6; i++) {
 
