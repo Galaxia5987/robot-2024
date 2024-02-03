@@ -25,10 +25,8 @@ public class AmpState implements ScoreState {
                     boolean isGripperReversed =
                             false; // TODO: replace with actual gripper.isForward
                     var alliance = DriverStation.getAlliance();
-                    if (!alliance.isEmpty()) {
-                        if (alliance.get() == DriverStation.Alliance.Red) {
-                            ampPose = GeometryUtil.flipFieldPose(ampPose);
-                        }
+                    if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+                        ampPose = GeometryUtil.flipFieldPose(ampPose);
                     }
                     double distance = Utils.getDistanceFromPoint(ampPose, botPose);
                     boolean hasTimeToTurnGripper =
