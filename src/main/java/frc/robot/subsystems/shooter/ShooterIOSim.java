@@ -92,10 +92,10 @@ public class ShooterIOSim implements ShooterIO {
         bottomMotor.update(Timer.getFPGATimestamp());
 
         topRollerInputs.velocity.mut_replace(topMotor.getVelocity(), Units.RotationsPerSecond);
-        topRollerInputs.voltage.mut_replace(topMotor.getAppliedVoltage(), Units.Volts);
+        topRollerInputs.appliedVoltage.mut_replace(topMotor.getAppliedVoltage(), Units.Volts);
 
         bottomRollerInputs.velocity.mut_replace(
                 bottomMotor.getVelocity(), Units.RotationsPerSecond);
-        bottomRollerInputs.voltage.mut_replace(bottomMotor.getAppliedVoltage(), Units.Volts);
+        bottomRollerInputs.appliedVoltage.mut_replace(bottomMotor.getAppliedVoltage(), Units.Volts);
     }
 }
