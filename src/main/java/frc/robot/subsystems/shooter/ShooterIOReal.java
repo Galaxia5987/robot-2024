@@ -12,7 +12,10 @@ public class ShooterIOReal implements ShooterIO {
     }
 
     @Override
-    public void setBottomVelocity(MutableMeasure<Velocity<Angle>> velocity) {}
+    public void setBottomVelocity(MutableMeasure<Velocity<Angle>> velocity) {
+        bottomRollerInputs.velocitySetpoint.mut_replace(velocity);
+        bottomMotor.setControl(bottomControl.withVelocity(velocity.in(Units.RotationsPerSecond)));
+    }
 
     @Override
     public void stop() {}
