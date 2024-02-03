@@ -2,9 +2,7 @@ package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
@@ -12,7 +10,6 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import frc.robot.Constants;
-import frc.robot.Ports;
 
 public class IntakeIOReal implements IntakeIO {
 
@@ -22,7 +19,6 @@ public class IntakeIOReal implements IntakeIO {
             new CANSparkMax(
                     0, CANSparkLowLevel.MotorType.kBrushless);
     private final TalonFX angleMotor = new TalonFX(21);
-    private final TalonFXConfigurator angleConfigurator;
     private final MotionMagicExpoTorqueCurrentFOC positionRequest = new MotionMagicExpoTorqueCurrentFOC(0);
     private TalonFXConfiguration angleConfiguration = new TalonFXConfiguration();
 
@@ -31,9 +27,7 @@ public class IntakeIOReal implements IntakeIO {
 
         angleConfiguration.Feedback.RotorToSensorRatio = 1;
 
-        angleConfigurator = angleMotor.getConfigurator();
-
-        angleConfigurator.apply(angleConfiguration.Slot0);
+        angleMotor.getConfigurator().apply(angleConfiguration.Slot0);
 
         spinMotor.restoreFactoryDefaults();
         centerMotor.restoreFactoryDefaults();
