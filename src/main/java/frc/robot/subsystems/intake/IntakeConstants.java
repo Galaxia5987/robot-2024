@@ -14,7 +14,6 @@ public class IntakeConstants {
     public static final LoggedTunableNumber ANGLE_KD = new LoggedTunableNumber("Intake/kD");
     public static final double ANGLE_GEAR_RATIO = 44.44;
 
-
     public enum IntakePose {
         UP(MutableMeasure.zero(Degrees)),
         DOWN(MutableMeasure.zero(Degrees));

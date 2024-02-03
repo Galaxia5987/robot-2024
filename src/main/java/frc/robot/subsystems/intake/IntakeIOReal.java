@@ -1,7 +1,6 @@
 package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel;
@@ -13,13 +12,12 @@ import frc.robot.Constants;
 
 public class IntakeIOReal implements IntakeIO {
 
-    private final CANSparkMax spinMotor =
-            new CANSparkMax(0, CANSparkLowLevel.MotorType.kBrushless);
+    private final CANSparkMax spinMotor = new CANSparkMax(0, CANSparkLowLevel.MotorType.kBrushless);
     private final CANSparkMax centerMotor =
-            new CANSparkMax(
-                    0, CANSparkLowLevel.MotorType.kBrushless);
+            new CANSparkMax(0, CANSparkLowLevel.MotorType.kBrushless);
     private final TalonFX angleMotor = new TalonFX(21);
-    private final MotionMagicExpoTorqueCurrentFOC positionRequest = new MotionMagicExpoTorqueCurrentFOC(0);
+    private final MotionMagicExpoTorqueCurrentFOC positionRequest =
+            new MotionMagicExpoTorqueCurrentFOC(0);
     private TalonFXConfiguration angleConfiguration = new TalonFXConfiguration();
 
     public IntakeIOReal() {
@@ -37,21 +35,17 @@ public class IntakeIOReal implements IntakeIO {
         centerMotor.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE);
         spinMotor.setInverted(true);
         centerMotor.setInverted(true);
-
         for (int i = 1; i <= 6; i++) {
-
             spinMotor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.fromId(i), 50_000);
             centerMotor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.fromId(i), 50_000);
         }
-
         spinMotor.burnFlash();
         centerMotor.burnFlash();
     }
 
     @Override
     public void setAngle(MutableMeasure<Angle> angle) {
-        angleMotor.setControl(
-                positionRequest.withPosition(angle.in(Units.Degrees)));
+        angleMotor.setControl(positionRequest.withPosition(angle.in(Units.Degrees)));
     }
 
     @Override

@@ -66,5 +66,4 @@ public final class Ports {
         public static final int JOYSTICK_TOP_RIGHT_BUTTON = 4;
         public static final int JOYSTICK_RIGHT_BIG_BUTTON = 16;
     }
-
 }
