@@ -22,7 +22,10 @@ public class HoodIOReal implements HoodIO {
         motor.getConfigurator().apply(HoodConstants.motorConfiguration);
     }
 
-        motorConfigurator = motor.getConfigurator();
+    @Override
+    public void updateInternalEncoder() {
+        motor.setPosition(absoluteEncoder.getAbsolutePosition());
+    }
 
         motorConfiguration.Feedback.SensorToMechanismRatio = HoodConstants.GEAR_RATIO;
         motorConfiguration.Slot0.kP = HoodConstants.kP.get();
