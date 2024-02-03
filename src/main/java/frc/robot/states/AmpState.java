@@ -24,7 +24,7 @@ public class AmpState implements ScoreState {
                     double robotRotation = botPose.getRotation().getRadians();
                     boolean isGripperReversed =
                             false; // TODO: replace with actual gripper.isForward
-                    var alliance = DriverStation.getAlliance(); // TODO: always red for some reason
+                    var alliance = DriverStation.getAlliance();
                     if (!alliance.isEmpty()) {
                         if (alliance.get() == DriverStation.Alliance.Red) {
                             ampPose = GeometryUtil.flipFieldPose(ampPose);
