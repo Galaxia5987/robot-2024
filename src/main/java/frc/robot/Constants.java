@@ -65,8 +65,7 @@ public class Constants {
         new Pose2d(4.16, 5.03, Rotation2d.fromDegrees(179.94))
     };
     public static final Pose2d[] OPTIMAL_POINTS_TRAP = {};
-    public static final Pose2d AMP_POSE =
-            new Pose2d(1.85, 7.49, new Rotation2d(Math.toRadians(90.0)));
+    public static final Translation2d AMP_POSE = new Translation2d(1.85, 7.49);
     public static final Measure<Distance> MIN_DISTANCE_TO_TURN_GRIPPER = Units.Meters.of(3);
 
     public enum Mode {
