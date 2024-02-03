@@ -83,6 +83,7 @@ public class ShooterIOSim implements ShooterIO {
         bottomRollerInputs.velocitySetpoint.mut_replace(0, Units.RotationsPerSecond);
         topRollerInputs.velocitySetpoint.mut_replace(0, Units.RotationsPerSecond);
         bottomMotor.setControl(stop);
+        topMotor.setControl(stop);
     }
 
     @Override
