@@ -68,8 +68,8 @@ public class ShooterIOReal implements ShooterIO {
 
     @Override
     public void stop() {
-        bottomRollerInputs.velocitySetpoint = Units.RotationsPerSecond.zero().mutableCopy();
-        topRollerInputs.velocitySetpoint = Units.RotationsPerSecond.zero().mutableCopy();
+        bottomRollerInputs.velocitySetpoint = ShooterConstants.STOP_POWER;
+        topRollerInputs.velocitySetpoint = ShooterConstants.STOP_POWER;
         bottomMotor.stopMotor();
         topMotor.stopMotor();
     }
