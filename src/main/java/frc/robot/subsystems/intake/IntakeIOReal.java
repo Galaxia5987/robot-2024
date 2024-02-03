@@ -3,6 +3,7 @@ package frc.robot.subsystems.intake;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel;
@@ -22,8 +23,7 @@ public class IntakeIOReal implements IntakeIO {
                     0, CANSparkLowLevel.MotorType.kBrushless);
     private final TalonFX angleMotor = new TalonFX(21);
     private final TalonFXConfigurator angleConfigurator;
-    private final DutyCycleOut dutyCycleRequest = new DutyCycleOut(0);
-    private final PositionVoltage positionRequest = new PositionVoltage(0);
+    private final MotionMagicExpoTorqueCurrentFOC positionRequest = new MotionMagicExpoTorqueCurrentFOC(0);
     private TalonFXConfiguration angleConfiguration = new TalonFXConfiguration();
 
     public IntakeIOReal() {
@@ -57,7 +57,7 @@ public class IntakeIOReal implements IntakeIO {
     @Override
     public void setAngle(MutableMeasure<Angle> angle) {
         angleMotor.setControl(
-                positionRequest.withPosition(angle.in(Units.Degrees)).withEnableFOC(true));
+                positionRequest.withPosition(angle.in(Units.Degrees)));
     }
 
     @Override

@@ -12,7 +12,7 @@ public class IntakeConstants {
     public static final LoggedTunableNumber ANGLE_KP = new LoggedTunableNumber("Intake/kP");
     public static final LoggedTunableNumber ANGLE_KI = new LoggedTunableNumber("Intake/kI");
     public static final LoggedTunableNumber ANGLE_KD = new LoggedTunableNumber("Intake/kD");
-    public static final double ANGLE_GEAR_RATIO = 0;
+    public static final double ANGLE_GEAR_RATIO = 44.44;
 
 
     public enum IntakePose {
