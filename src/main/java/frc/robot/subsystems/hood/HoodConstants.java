@@ -1,5 +1,8 @@
 package frc.robot.subsystems.hood;
 
+import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.*;
@@ -17,6 +20,7 @@ public class HoodConstants {
     public static final Measure<Mult<Mult<Mass, Distance>, Distance>> MOMENT_OF_INERTIA =
             Units.Kilograms.mult(Units.Meters).mult(Units.Meters).of(0.0003);
     public static final Translation3d ROOT_POSITION = new Translation3d(-0.27, 0.2385, 0.0);
+    public static final TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
 
     public static final LoggedTunableNumber kP = new LoggedTunableNumber("Hood/kP");
     public static final LoggedTunableNumber kI = new LoggedTunableNumber("Hood/kI");
@@ -46,5 +50,16 @@ public class HoodConstants {
                 kA.initDefault(0.0);
                 kG.initDefault(0.0);
         }
+        motorConfiguration
+                .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(GEAR_RATIO))
+                .withSlot0(
+                        new Slot0Configs()
+                                .withKP(HoodConstants.kP.get())
+                                .withKI(HoodConstants.kI.get())
+                                .withKD(HoodConstants.kD.get())
+                                .withKS(HoodConstants.kS.get())
+                                .withKV(HoodConstants.kV.get())
+                                .withKA(HoodConstants.kA.get())
+                                .withKG(HoodConstants.kG.get()));
     }
 }
