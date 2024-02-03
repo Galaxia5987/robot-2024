@@ -9,9 +9,9 @@ import lib.webconstants.LoggedTunableNumber;
 
 public class IntakeConstants {
     public static final double GEAR_RATIO = 45.62;
-    public static final LoggedTunableNumber ANGLE_KP = new LoggedTunableNumber("IntakeSim/kP");
-    public static final LoggedTunableNumber ANGLE_KI = new LoggedTunableNumber("IntakeSim/kI");
-    public static final LoggedTunableNumber ANGLE_KD = new LoggedTunableNumber("IntakeSim/kD");
+    public static final LoggedTunableNumber ANGLE_KP = new LoggedTunableNumber("Intake/kP");
+    public static final LoggedTunableNumber ANGLE_KI = new LoggedTunableNumber("Intake/kI");
+    public static final LoggedTunableNumber ANGLE_KD = new LoggedTunableNumber("Intake/kD");
 
     public enum IntakePose {
         UP(MutableMeasure.zero(Degrees)),
@@ -21,36 +21,22 @@ public class IntakeConstants {
         IntakePose(MutableMeasure<Angle> intakePose) {
             this.intakePose = intakePose;
         }
+    }
 
-        public void InitConstants() {
-            switch (Constants.CURRENT_MODE) {
-                case REAL:
-                    ANGLE_KP.initDefault(10.0 / 360.0);
-
-                    ANGLE_KI.initDefault(0);
-
-                    ANGLE_KD.initDefault(0);
-
-                    break;
-
-                case SIM:
-
-                case REPLAY:
-                    ANGLE_KP.initDefault(10.0 / 360.0);
-
-                    ANGLE_KI.initDefault(0);
-
-                    ANGLE_KD.initDefault(0);
-
-                default:
-                    ANGLE_KP.initDefault(10.0 / 360.0);
-
-                    ANGLE_KI.initDefault(0);
-
-                    ANGLE_KD.initDefault(0);
-
-                    break;
-            }
+    public void initConstants() {
+        switch (Constants.CURRENT_MODE) {
+            case REAL:
+                ANGLE_KP.initDefault(10.0 / 360.0);
+                ANGLE_KI.initDefault(0);
+                ANGLE_KD.initDefault(0);
+                break;
+            case SIM:
+            case REPLAY:
+            default:
+                ANGLE_KP.initDefault(10.0 / 360.0);
+                ANGLE_KI.initDefault(0);
+                ANGLE_KD.initDefault(0);
+                break;
         }
     }
 }
