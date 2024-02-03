@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooter;
 
+import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import edu.wpi.first.units.*;
 import frc.robot.Constants;
@@ -73,24 +75,28 @@ public class ShooterConstants {
                 BOTTOM_kA.initDefault(0.0);
                 BOTTOM_kG.initDefault(0.0);
         }
-        topMotorConfiguration.Feedback.SensorToMechanismRatio = GEAR_RATIO_TOP;
-        bottomMotorConfiguration.Feedback.SensorToMechanismRatio = GEAR_RATIO_BOTTOM;
-
-        topMotorConfiguration.Slot0.kP = ShooterConstants.TOP_kP.get();
-        topMotorConfiguration.Slot0.kI = ShooterConstants.TOP_kI.get();
-        topMotorConfiguration.Slot0.kD = ShooterConstants.TOP_kD.get();
-        topMotorConfiguration.Slot0.kS = ShooterConstants.TOP_kS.get();
-        topMotorConfiguration.Slot0.kV = ShooterConstants.TOP_kV.get();
-        topMotorConfiguration.Slot0.kA = ShooterConstants.TOP_kA.get();
-        topMotorConfiguration.Slot0.kG = ShooterConstants.TOP_kG.get();
-
-        bottomMotorConfiguration.Slot0.kP = ShooterConstants.TOP_kP.get();
-        bottomMotorConfiguration.Slot0.kI = ShooterConstants.TOP_kI.get();
-        bottomMotorConfiguration.Slot0.kD = ShooterConstants.TOP_kD.get();
-        bottomMotorConfiguration.Slot0.kS = ShooterConstants.TOP_kS.get();
-        bottomMotorConfiguration.Slot0.kV = ShooterConstants.TOP_kV.get();
-        bottomMotorConfiguration.Slot0.kA = ShooterConstants.TOP_kA.get();
-        bottomMotorConfiguration.Slot0.kG = ShooterConstants.TOP_kG.get();
+        topMotorConfiguration
+                .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(GEAR_RATIO_TOP))
+                .withSlot0(
+                        new Slot0Configs()
+                                .withKP(TOP_kP.get())
+                                .withKI(TOP_kI.get())
+                                .withKD(TOP_kD.get())
+                                .withKS(TOP_kS.get())
+                                .withKV(TOP_kV.get())
+                                .withKA(TOP_kA.get())
+                                .withKG(TOP_kG.get()));
+        bottomMotorConfiguration
+                .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(GEAR_RATIO_BOTTOM))
+                .withSlot0(
+                        new Slot0Configs()
+                                .withKP(BOTTOM_kP.get())
+                                .withKI(BOTTOM_kI.get())
+                                .withKD(BOTTOM_kD.get())
+                                .withKS(BOTTOM_kS.get())
+                                .withKV(BOTTOM_kV.get())
+                                .withKA(BOTTOM_kA.get())
+                                .withKG(BOTTOM_kG.get()));
     }
 
     public static MutableMeasure<Velocity<Angle>> STOP_POWER =
