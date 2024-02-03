@@ -1,12 +1,10 @@
 package frc.robot.states;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.GeometryUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
@@ -19,15 +17,14 @@ public class AmpState implements ScoreState {
     public Command driveToClosestOptimalPoint() {
         return Commands.defer(
                 () -> {
-                    Translation2d ampPose = Constants.AMP_POSE;
+                    Translation2d ampPose = Constants.AMP_POSE_BLUE;
                     Rotation2d ampRotation = new Rotation2d(Math.toRadians(90));
                     Pose2d botPose = SwerveDrive.getInstance().getBotPose();
                     double robotRotation = botPose.getRotation().getRadians();
                     boolean isGripperReversed =
                             false; // TODO: replace with actual gripper.isForward
-                    var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
-                        ampPose = GeometryUtil.flipFieldPosition(ampPose);
+                    if (isRed()) {
+                        ampPose = Constants.AMP_POSE_RED;
                     }
                     double distance = Utils.getDistanceFromPoint(ampPose, botPose);
                     boolean hasTimeToTurnGripper =
