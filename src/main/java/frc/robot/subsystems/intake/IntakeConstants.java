@@ -41,16 +41,14 @@ public class IntakeConstants {
                                 .withKI(ANGLE_KI.get())
                                 .withKP(ANGLE_KD.get()))
                 .withMotorOutput(
-                        new MotorOutputConfigs()
-                                .withInverted(InvertedValue.Clockwise_Positive))
+                        new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive))
                 .withCurrentLimits(
                         new CurrentLimitsConfigs()
                                 .withSupplyCurrentLimitEnable(true)
                                 .withStatorCurrentLimitEnable(true)
                                 .withStatorCurrentLimit(ANGLE_CURRENT_LIMIT)
                                 .withSupplyCurrentLimit(ANGLE_CURRENT_LIMIT))
-                .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(ANGLE_GEAR_RATIO)
-                );
+                .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(ANGLE_GEAR_RATIO));
     }
 
     public enum IntakePose {

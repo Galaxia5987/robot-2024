@@ -18,8 +18,7 @@ public class Intake extends SubsystemBase {
     private static Intake INSTANCE = null;
     private final IntakeIO io;
     private final IntakeInputsAutoLogged inputs = IntakeIO.inputs;
-    @AutoLogOutput
-    private final Mechanism2d intakeMechanism = new Mechanism2d(2, 3);
+    @AutoLogOutput private final Mechanism2d intakeMechanism = new Mechanism2d(2, 3);
     private final MechanismRoot2d root = intakeMechanism.getRoot("Intake", 1, 1);
 
     private final MechanismLigament2d intakeLigament =
@@ -40,13 +39,12 @@ public class Intake extends SubsystemBase {
     public Command setAngle(MutableMeasure<Angle> angle) {
 
         return runOnce(
-                () ->{
+                () -> {
                     inputs.angleSetPoint = angle;
                     io.setAngle(
                             Units.Degrees.of(Math.IEEEremainder(angle.in(Units.Degrees), 180))
                                     .mutableCopy());
                 });
-
     }
 
     public Command setAngle(IntakeConstants.IntakePose intakePose) {
@@ -54,17 +52,20 @@ public class Intake extends SubsystemBase {
     }
 
     public Command setRollerSpeed(double speed) {
-        return runOnce(() ->{
-            io.setRollerSpeed(speed);
-            inputs.rollerSpeedSetPoint = Units.RotationsPerSecond.of(speed).mutableCopy();
-        } );
+        return runOnce(
+                () -> {
+                    io.setRollerSpeed(speed);
+                    inputs.rollerSpeedSetPoint = Units.RotationsPerSecond.of(speed).mutableCopy();
+                });
     }
 
     public Command setCenterRollerSpeed(double speed) {
-        return runOnce(() -> {
-            io.setCenterRollerSpeed(speed);
-            inputs.centerRollerSpeedSetPoint = Units.RotationsPerSecond.of(speed).mutableCopy();
-        });
+        return runOnce(
+                () -> {
+                    io.setCenterRollerSpeed(speed);
+                    inputs.centerRollerSpeedSetPoint =
+                            Units.RotationsPerSecond.of(speed).mutableCopy();
+                });
     }
 
     public Command intake() {
