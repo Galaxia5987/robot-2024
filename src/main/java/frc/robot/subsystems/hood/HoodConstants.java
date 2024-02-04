@@ -22,7 +22,7 @@ public class HoodConstants {
     public static final Measure<Mult<Mult<Mass, Distance>, Distance>> MOMENT_OF_INERTIA =
             Units.Kilograms.mult(Units.Meters).mult(Units.Meters).of(0.0003);
     public static final Translation3d ROOT_POSITION = new Translation3d(-0.27, 0.2385, 0.0);
-    public static final TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
+    public static final TalonFXConfiguration MOTOR_CONFIGURATION = new TalonFXConfiguration();
     public static final InvertedValue INVERTED_VALUE = InvertedValue.Clockwise_Positive;
     public static final double CURRENT_LIMIT = 40;
     public static final LoggedTunableNumber ABSOLUTE_ENCODER_OFFSET =
@@ -56,7 +56,7 @@ public class HoodConstants {
                 kV.initDefault(0.0);
                 kA.initDefault(0.0);
         }
-        motorConfiguration
+        MOTOR_CONFIGURATION
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(GEAR_RATIO))
                 .withSlot0(
                         new Slot0Configs()

@@ -17,7 +17,7 @@ public class HoodIOReal implements HoodIO {
 
     public HoodIOReal() {
         motor = new TalonFX(6); // TODO: to be changed
-        motor.getConfigurator().apply(HoodConstants.motorConfiguration);
+        motor.getConfigurator().apply(HoodConstants.MOTOR_CONFIGURATION);
     }
 
     @Override
