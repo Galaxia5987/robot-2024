@@ -1,6 +1,7 @@
 package frc.robot.subsystems.hood;
 
 import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -63,6 +64,7 @@ public class HoodConstants {
                                 .withKV(HoodConstants.kV.get())
                                 .withKA(HoodConstants.kA.get())
                                 .withKG(HoodConstants.kG.get()))
+                .withMotorOutput(new MotorOutputConfigs().withInverted(INVERTED_VALUE))
                 .CurrentLimits
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimitEnable(true)
