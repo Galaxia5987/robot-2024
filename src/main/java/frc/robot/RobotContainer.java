@@ -79,7 +79,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        xboxController.x().onTrue(gripper.setWristPosition(Units.Radians.of(0.5).mutableCopy()));
+        xboxController.x().onTrue(gripper.setWristPosition(Units.Rotations.of(0.5).mutableCopy()));
         keyBoardControl
                 .button(1)
                 .onTrue(conveyor.setVelocity(() -> Units.RotationsPerSecond.of(50).mutableCopy()));
