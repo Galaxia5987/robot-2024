@@ -18,6 +18,9 @@ public class ShooterConstants {
     public static final TalonFXConfiguration topMotorConfiguration = new TalonFXConfiguration();
     public static final TalonFXConfiguration bottomMotorConfiguration = new TalonFXConfiguration();
 
+    public static final double CURRENT_LIMIT_TOP = 40;
+    public static final double CURRENT_LIMIT_BOTTOM = 40;
+
     public static final LoggedTunableNumber TOP_kP = new LoggedTunableNumber("Shooter/Top kP");
     public static final LoggedTunableNumber TOP_kI = new LoggedTunableNumber("Shooter/Top kI");
     public static final LoggedTunableNumber TOP_kD = new LoggedTunableNumber("Shooter/Top kD");
@@ -77,7 +80,12 @@ public class ShooterConstants {
                                 .withKD(TOP_kD.get())
                                 .withKS(TOP_kS.get())
                                 .withKV(TOP_kV.get())
-                                .withKA(TOP_kA.get()));
+                                .withKA(TOP_kA.get()))
+                .CurrentLimits
+                .withStatorCurrentLimitEnable(true)
+                .withSupplyCurrentLimitEnable(true)
+                .withStatorCurrentLimit(CURRENT_LIMIT_TOP)
+                .withSupplyCurrentLimit(CURRENT_LIMIT_TOP);
         bottomMotorConfiguration
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(GEAR_RATIO_BOTTOM))
                 .withSlot0(
@@ -87,7 +95,12 @@ public class ShooterConstants {
                                 .withKD(BOTTOM_kD.get())
                                 .withKS(BOTTOM_kS.get())
                                 .withKV(BOTTOM_kV.get())
-                                .withKA(BOTTOM_kA.get()));
+                                .withKA(BOTTOM_kA.get()))
+                .CurrentLimits
+                .withStatorCurrentLimitEnable(true)
+                .withSupplyCurrentLimitEnable(true)
+                .withStatorCurrentLimit(CURRENT_LIMIT_BOTTOM)
+                .withSupplyCurrentLimit(CURRENT_LIMIT_BOTTOM);
     }
 
     public static MutableMeasure<Velocity<Angle>> STOP_POWER =
