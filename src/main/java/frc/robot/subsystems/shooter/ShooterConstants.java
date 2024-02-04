@@ -1,9 +1,11 @@
 package frc.robot.subsystems.shooter;
 
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.Velocity;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
+import edu.wpi.first.units.*;
 import frc.robot.Constants;
 import lib.webconstants.LoggedTunableNumber;
 
@@ -14,6 +16,15 @@ public class ShooterConstants {
     public static final double SETPOINT_TOLERANCE_BOTTOM = 0.05; // Percentages
     public static final double MOMENT_OF_INERTIA_TOP = 0.08;
     public static final double MOMENT_OF_INERTIA_BOTTOM = 0.08;
+
+    public static final TalonFXConfiguration topMotorConfiguration = new TalonFXConfiguration();
+    public static final TalonFXConfiguration bottomMotorConfiguration = new TalonFXConfiguration();
+
+    public static final double CURRENT_LIMIT_TOP = 40;
+    public static final double CURRENT_LIMIT_BOTTOM = 40;
+
+    public static final InvertedValue TOP_INVERSION = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue BOTTOM_INVERSION = InvertedValue.CounterClockwise_Positive;
 
     public static final LoggedTunableNumber TOP_kP = new LoggedTunableNumber("Shooter/Top kP");
     public static final LoggedTunableNumber TOP_kI = new LoggedTunableNumber("Shooter/Top kI");
@@ -58,7 +69,6 @@ public class ShooterConstants {
                 TOP_kS.initDefault(0.0);
                 TOP_kV.initDefault(0.112);
                 TOP_kA.initDefault(0.0);
-
                 BOTTOM_kP.initDefault(10.0);
                 BOTTOM_kI.initDefault(0.0);
                 BOTTOM_kD.initDefault(0.0);
@@ -66,6 +76,39 @@ public class ShooterConstants {
                 BOTTOM_kV.initDefault(0.112);
                 BOTTOM_kA.initDefault(0.0);
         }
+        topMotorConfiguration
+                .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(GEAR_RATIO_TOP))
+                .withSlot0(
+                        new Slot0Configs()
+                                .withKP(TOP_kP.get())
+                                .withKI(TOP_kI.get())
+                                .withKD(TOP_kD.get())
+                                .withKS(TOP_kS.get())
+                                .withKV(TOP_kV.get())
+                                .withKA(TOP_kA.get()))
+                .withMotorOutput(new MotorOutputConfigs().withInverted(TOP_INVERSION))
+                .CurrentLimits
+                .withStatorCurrentLimitEnable(true)
+                .withSupplyCurrentLimitEnable(true)
+                .withStatorCurrentLimit(CURRENT_LIMIT_TOP)
+                .withSupplyCurrentLimit(CURRENT_LIMIT_TOP);
+
+        bottomMotorConfiguration
+                .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(GEAR_RATIO_BOTTOM))
+                .withSlot0(
+                        new Slot0Configs()
+                                .withKP(BOTTOM_kP.get())
+                                .withKI(BOTTOM_kI.get())
+                                .withKD(BOTTOM_kD.get())
+                                .withKS(BOTTOM_kS.get())
+                                .withKV(BOTTOM_kV.get())
+                                .withKA(BOTTOM_kA.get()))
+                .withMotorOutput(new MotorOutputConfigs().withInverted(TOP_INVERSION))
+                .CurrentLimits
+                .withStatorCurrentLimitEnable(true)
+                .withSupplyCurrentLimitEnable(true)
+                .withStatorCurrentLimit(CURRENT_LIMIT_BOTTOM)
+                .withSupplyCurrentLimit(CURRENT_LIMIT_BOTTOM);
     }
 
     public static MutableMeasure<Velocity<Angle>> STOP_POWER =

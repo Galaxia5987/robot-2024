@@ -23,11 +23,9 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
         ElevatorIO elevatorIO;
-        ExampleSubsystemIO exampleSubsystemIO;
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 elevatorIO = new ElevatorIOReal();
-                exampleSubsystemIO = new ExampleSubsystemIOReal();
                 ConveyorIO conveyorIO;
                 ConveyorConstants.initialize(Constants.CURRENT_MODE);
                 switch (Constants.CURRENT_MODE) {
@@ -38,18 +36,14 @@ public class RobotContainer {
                     case SIM:
                     case REPLAY:
                     default:
-                        exampleSubsystemIO = new ExampleSubsystemIOSim();
                         elevatorIO = new ElevatorIOSim();
                         break;
                 }
-                ExampleSubsystem.initialize(exampleSubsystemIO);
                 Elevator.initialize(elevatorIO);
                 conveyorIO = new ConveyorIOSim();
                 elevatorIO = new ElevatorIOSim();
                 break;
         }
-        Elevator.initialize(elevatorIO);
-        Conveyor.initialize(conveyorIO);
         Constants.initSwerve();
         Constants.initVision();
 
