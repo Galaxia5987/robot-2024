@@ -16,37 +16,16 @@
   ],
   "position": [
     0.05,
-    0.1,
-    0.12
+    0.13,
+    0.125
   ],
-  "cameras": [
-    {
-      "name": "Object detection",
-      "rotations": [
-        {
-          "axis": "x",
-          "degrees": 0
-        },
-        {
-          "axis": "y",
-          "degrees": -32
-        },
-        {
-          "axis": "z",
-          "degrees": 180
-        }
-      ],
-      "position": [-0.293, -0.293, 0.2],
-      "resolution": [1600, 1200],
-      "fov": 75
-    }
-  ],
+  "cameras": [],
   "components": [
     {
       "zeroedRotations": [
         {
           "axis": "x",
-          "degrees": 110
+          "degrees": 113
         },
         {
           "axis": "y",
@@ -58,11 +37,15 @@
         }
       ],
       "zeroedPosition": [
-        -0.628,
-        0.413,
-        0.777
+        -0.42,
+        1.145,
+        -0.12
       ]
-    }
+    },
+    {
+      "zeroedRotations": [
+    0.1,
+    0.12
   ],
-  "name": "CLASSIFIED"
+  "name": "Classified"
 }
