@@ -1,5 +1,5 @@
 {
-  "sourceUrl": "",
+  "sourceUrl": "https://cad.onshape.com/documents/301d1509d49ed7de7df54bc7",
   "rotations": [
     {
       "axis": "x",
@@ -15,33 +15,12 @@
     }
   ],
   "position": [
-    0.05,
-    0.13,
-    0.125
+    0,
+    0,
+    0.1
   ],
   "cameras": [],
   "components": [
-    {
-      "zeroedRotations": [
-        {
-          "axis": "x",
-          "degrees": 90
-        },
-        {
-          "axis": "y",
-          "degrees": 0
-        },
-        {
-          "axis": "z",
-          "degrees": 90
-        }
-      ],
-      "zeroedPosition": [
-        -0.43,
-        0.57,
-        0.60
-      ]
-    },
     {
       "zeroedRotations": [
         {
