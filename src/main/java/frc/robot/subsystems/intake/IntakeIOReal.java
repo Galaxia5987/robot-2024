@@ -26,14 +26,14 @@ public class IntakeIOReal implements IntakeIO {
 
         angleMotor.getConfigurator().apply(IntakeConstants.ANGLE_CONFIGURATION.Slot0);
 
-        spinMotor.restoreFactoryDefaults();
         centerMotor.restoreFactoryDefaults();
-        spinMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         centerMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        spinMotor.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE);
         centerMotor.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE);
-        spinMotor.setInverted(true);
         centerMotor.setInverted(true);
+        spinMotor.restoreFactoryDefaults();
+        spinMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        spinMotor.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE);
+        spinMotor.setInverted(true);
         for (int i = 1; i <= 6; i++) {
             spinMotor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.fromId(i), 50_000);
             centerMotor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.fromId(i), 50_000);
