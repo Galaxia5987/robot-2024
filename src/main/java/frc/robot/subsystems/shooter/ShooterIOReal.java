@@ -1,6 +1,6 @@
 package frc.robot.subsystems.shooter;
 
-import com.ctre.phoenix6.controls.MotionMagicVelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.Angle;
@@ -11,10 +11,10 @@ import edu.wpi.first.units.Velocity;
 public class ShooterIOReal implements ShooterIO {
     private final TalonFX topMotor;
     private final TalonFX bottomMotor;
-    private final MotionMagicVelocityTorqueCurrentFOC topControl =
-            new MotionMagicVelocityTorqueCurrentFOC(0);
-    private final MotionMagicVelocityTorqueCurrentFOC bottomControl =
-            new MotionMagicVelocityTorqueCurrentFOC(0);
+    private final VelocityTorqueCurrentFOC topControl =
+            new VelocityTorqueCurrentFOC(0);
+    private final VelocityTorqueCurrentFOC bottomControl =
+            new VelocityTorqueCurrentFOC(0);
 
     public ShooterIOReal() {
         topMotor = new TalonFX(3); // TODO: to be changed later
