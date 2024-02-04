@@ -24,7 +24,7 @@ public class HoodIOReal implements HoodIO {
     public void updateInternalEncoder() {
         motor.setPosition(
                 absoluteEncoder.getAbsolutePosition()
-                        + HoodConstants.ABSOLUTE_ENCODER_OFFSET.in(Units.Rotations));
+                        + HoodConstants.ABSOLUTE_ENCODER_OFFSET.get());
     }
 
     @Override
