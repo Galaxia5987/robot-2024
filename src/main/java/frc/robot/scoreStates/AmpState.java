@@ -17,15 +17,17 @@ public class AmpState implements ScoreState {
     public Command driveToClosestOptimalPoint() {
         return Commands.defer(
                 () -> {
-                    Translation2d ampPose = ScoreStateConstants.AMP_POSE_BLUE;
+                    Translation2d ampPose;
+                    if (isRed()) {
+                        ampPose = ScoreStateConstants.AMP_POSE_RED;
+                    } else {
+                        ampPose = ScoreStateConstants.AMP_POSE_BLUE;
+                    }
                     Rotation2d ampRotation = ScoreStateConstants.AMP_ROTATION_NORMAL;
                     Pose2d botPose = SwerveDrive.getInstance().getBotPose();
                     double robotRotation = botPose.getRotation().getRadians();
                     boolean isGripperReversed =
                             false; // TODO: replace with actual gripper.isForward
-                    if (isRed()) {
-                        ampPose = ScoreStateConstants.AMP_POSE_RED;
-                    }
                     double distance = Utils.getDistanceFromPoint(ampPose, botPose);
                     boolean hasTimeToTurnGripper =
                             distance

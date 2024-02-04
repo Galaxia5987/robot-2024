@@ -13,10 +13,10 @@ public class TrapState implements ScoreState {
     public Command driveToClosestOptimalPoint() {
         return Commands.defer(
                 () -> {
-                    var optimalPoints = ScoreStateConstants.OPTIMAL_POINTS_TRAP_BLUE;
-                    if (isRed()) {
-                        optimalPoints = ScoreStateConstants.OPTIMAL_POINTS_TRAP_RED;
-                    }
+                    var optimalPoints =
+                            isRed()
+                                    ? ScoreStateConstants.OPTIMAL_POINTS_TRAP_RED
+                                    : ScoreStateConstants.OPTIMAL_POINTS_TRAP_BLUE;
                     Pose2d optimalPose =
                             SwerveDrive.getInstance().getBotPose().nearest(optimalPoints);
                     return AutoBuilder.pathfindToPose(optimalPose, Constants.AUTO_CONSTRAINTS);
