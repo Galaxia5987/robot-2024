@@ -31,6 +31,8 @@ public class ElevatorIOSim implements ElevatorIO {
                         ElevatorConstants.KI.get(),
                         ElevatorConstants.KD.get(),
                         ElevatorConstants.TRAPEZOID_PROFILE));
+      
+        motor = new TalonFXSim(2, ElevatorConstants.GEAR_RATIO, 0.5, 1);
     }
 
     @Override
@@ -46,6 +48,7 @@ public class ElevatorIOSim implements ElevatorIO {
     @Override
     public void updateInputs(ElevatorInputs inputs) {
         motor.update(Timer.getFPGATimestamp());
+
         inputs.carriageHeight = Meters.of(motor.getPosition()).mutableCopy();
         inputs.gripperHeight.mut_replace(
                 inputs.carriageHeight.gt(ElevatorConstants.GRIPPER_HEIGHT)

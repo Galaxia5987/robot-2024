@@ -6,20 +6,20 @@ import edu.wpi.first.units.*;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ShooterIO {
-    ShooterInputsAutoLogged inputs = new ShooterInputsAutoLogged();
+    RollerInputsAutoLogged topRollerInputs = new RollerInputsAutoLogged();
+    RollerInputsAutoLogged bottomRollerInputs = new RollerInputsAutoLogged();
 
-    /**
-     * Sets the position of the hood.
-     *
-     * @param velocity The position of the subsystem.
-     */
-    void setVelocity(MutableMeasure<Velocity<Angle>> velocity);
+    void setTopVelocity(MutableMeasure<Velocity<Angle>> velocity);
+
+    void setBottomVelocity(MutableMeasure<Velocity<Angle>> velocity);
+
+    void stop();
 
     /** Update the inputs of the Shooter */
     void updateInputs();
 
     @AutoLog
-    class ShooterInputs {
+    class RollerInputs {
         public MutableMeasure<Velocity<Angle>> velocity = MutableMeasure.zero(RotationsPerSecond);
         public MutableMeasure<Velocity<Angle>> velocitySetpoint =
                 MutableMeasure.zero(RotationsPerSecond);

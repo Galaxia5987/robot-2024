@@ -1,5 +1,7 @@
 package frc.robot.subsystems.hood;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -21,7 +23,9 @@ public class Hood extends SubsystemBase {
                     HoodConstants.MECHANISM_2D_POSE.getX(),
                     HoodConstants.MECHANISM_2D_POSE.getY());
     private final MechanismLigament2d hood =
-            root.append(new MechanismLigament2d("Hood", HoodConstants.HOOD_LENGTH, 45));
+            root.append(
+                    new MechanismLigament2d(
+                            "Hood", HoodConstants.HOOD_LENGTH.in(Units.Meters), 45));
 
     /**
      * Constructor for Hood subsystem.
@@ -68,6 +72,13 @@ public class Hood extends SubsystemBase {
 
     public Command updateInternalEncoder() {
         return runOnce(io::updateInternalEncoder).withName("Update hood internal encoder");
+    }
+
+    @AutoLogOutput(key = "Hood/Pose")
+    private Pose3d getPose3d() {
+        return new Pose3d(
+                HoodConstants.ROOT_POSITION,
+                new Rotation3d(0.0, -getAngle().in(Units.Radians), 0.0));
     }
 
     /** Updates the state of the hood. */
