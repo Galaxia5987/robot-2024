@@ -25,6 +25,7 @@ public class HoodConstants {
     public static final TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
     public static final InvertedValue INVERTED_VALUE = InvertedValue.Clockwise_Positive;
     public static final double CURRENT_LIMIT = 40;
+    public static final Measure<Angle> ABSOLUTE_ENCODER_OFFSET = Units.Rotations.of(1);
 
     public static final LoggedTunableNumber kP = new LoggedTunableNumber("Hood/kP");
     public static final LoggedTunableNumber kI = new LoggedTunableNumber("Hood/kI");
