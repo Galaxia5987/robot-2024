@@ -16,15 +16,14 @@ public class HoodIOReal implements HoodIO {
     private final DutyCycleOut dutyCycleOut = new DutyCycleOut(0);
 
     public HoodIOReal() {
+        absoluteEncoder.setPositionOffset(HoodConstants.ABSOLUTE_ENCODER_OFFSET.get());
         motor = new TalonFX(6); // TODO: to be changed
         motor.getConfigurator().apply(HoodConstants.MOTOR_CONFIGURATION);
     }
 
     @Override
     public void updateInternalEncoder() {
-        motor.setPosition(
-                absoluteEncoder.getAbsolutePosition()
-                        + HoodConstants.ABSOLUTE_ENCODER_OFFSET.get());
+        motor.setPosition(absoluteEncoder.getAbsolutePosition());
     }
 
     @Override
