@@ -22,7 +22,7 @@ public class ElevatorIOSim implements ElevatorIO {
                 new TalonFXSim(
                         2,
                         ElevatorConstants.GEAR_RATIO,
-                        0.000_01,
+                        0.00001,
                         ElevatorConstants.GEAR_RATIO
                                 * (2 * Math.PI * ElevatorConstants.DRUM_RADIUS));
 
@@ -36,14 +36,12 @@ public class ElevatorIOSim implements ElevatorIO {
 
     @Override
     public void setPower(double power) {
-        powerRequest.withOutput(power);
-        motor.setControl(powerRequest);
+        motor.setControl(powerRequest.withOutput(power));
     }
 
     @Override
     public void setHeight(MutableMeasure<Distance> height) {
-        positionRequest.withPosition(height.in(Meters));
-        motor.setControl(positionRequest);
+        motor.setControl(positionRequest.withPosition(height.in(Meters)));
     }
 
     @Override
