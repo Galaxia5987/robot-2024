@@ -3,6 +3,7 @@ package frc.robot.subsystems.shooter;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.*;
 import frc.robot.Constants;
 import lib.webconstants.LoggedTunableNumber;
@@ -20,6 +21,9 @@ public class ShooterConstants {
 
     public static final double CURRENT_LIMIT_TOP = 40;
     public static final double CURRENT_LIMIT_BOTTOM = 40;
+
+    public static final InvertedValue TOP_INVERSION = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue BOTTOM_INVERSION = InvertedValue.CounterClockwise_Positive;
 
     public static final LoggedTunableNumber TOP_kP = new LoggedTunableNumber("Shooter/Top kP");
     public static final LoggedTunableNumber TOP_kI = new LoggedTunableNumber("Shooter/Top kI");
@@ -86,6 +90,8 @@ public class ShooterConstants {
                 .withSupplyCurrentLimitEnable(true)
                 .withStatorCurrentLimit(CURRENT_LIMIT_TOP)
                 .withSupplyCurrentLimit(CURRENT_LIMIT_TOP);
+        topMotorConfiguration.MotorOutput.Inverted = TOP_INVERSION;
+
         bottomMotorConfiguration
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(GEAR_RATIO_BOTTOM))
                 .withSlot0(
@@ -101,6 +107,7 @@ public class ShooterConstants {
                 .withSupplyCurrentLimitEnable(true)
                 .withStatorCurrentLimit(CURRENT_LIMIT_BOTTOM)
                 .withSupplyCurrentLimit(CURRENT_LIMIT_BOTTOM);
+        bottomMotorConfiguration.MotorOutput.Inverted = BOTTOM_INVERSION;
     }
 
     public static MutableMeasure<Velocity<Angle>> STOP_POWER =
