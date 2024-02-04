@@ -48,7 +48,6 @@ public class HoodConstants {
                 kS.initDefault(0.0);
                 kV.initDefault(0.0);
                 kA.initDefault(0.0);
-                kG.initDefault(0.0);
         }
         motorConfiguration
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(GEAR_RATIO))
