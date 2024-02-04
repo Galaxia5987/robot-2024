@@ -31,9 +31,8 @@ public class ConveyorIOReal implements ConveyorIO {
 
     @Override
     public void updateInputs() {
-        inputs.currentVelocity.mut_replace(Units.RotationsPerSecond.of(roller.getEncoder().getVelocity()).mutableCopy());
-        inputs.appliedCurrent.mut_replace(Units.Amps.of(roller.getOutputCurrent()).mutableCopy());
-        inputs.appliedVoltage.mut_replace(Units.Volts.of(roller.getBusVoltage()).mutableCopy());
-        roller.burnFlash();
+        inputs.currentVelocity.mut_replace((roller.getEncoder().getVelocity()), Units.RotationsPerSecond);
+        inputs.appliedCurrent.mut_replace((roller.getOutputCurrent()), Units.Amps);
+        inputs.appliedVoltage.mut_replace((roller.getBusVoltage()), Units.Volts);
     }
 }
