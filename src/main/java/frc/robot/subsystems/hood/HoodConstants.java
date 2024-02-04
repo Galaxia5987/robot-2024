@@ -3,6 +3,7 @@ package frc.robot.subsystems.hood;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.*;
@@ -21,6 +22,8 @@ public class HoodConstants {
             Units.Kilograms.mult(Units.Meters).mult(Units.Meters).of(0.0003);
     public static final Translation3d ROOT_POSITION = new Translation3d(-0.27, 0.2385, 0.0);
     public static final TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
+    public static final InvertedValue INVERTED_VALUE = InvertedValue.Clockwise_Positive;
+    public static final double CURRENT_LIMIT = 40;
 
     public static final LoggedTunableNumber kP = new LoggedTunableNumber("Hood/kP");
     public static final LoggedTunableNumber kI = new LoggedTunableNumber("Hood/kI");
@@ -59,6 +62,11 @@ public class HoodConstants {
                                 .withKS(HoodConstants.kS.get())
                                 .withKV(HoodConstants.kV.get())
                                 .withKA(HoodConstants.kA.get())
-                                .withKG(HoodConstants.kG.get()));
+                                .withKG(HoodConstants.kG.get()))
+                .CurrentLimits
+                .withStatorCurrentLimitEnable(true)
+                .withSupplyCurrentLimitEnable(true)
+                .withStatorCurrentLimit(CURRENT_LIMIT)
+                .withSupplyCurrentLimit(CURRENT_LIMIT);
     }
 }
