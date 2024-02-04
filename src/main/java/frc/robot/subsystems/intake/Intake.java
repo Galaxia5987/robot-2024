@@ -39,7 +39,7 @@ public class Intake extends SubsystemBase {
 
     public Command setAngle(MutableMeasure<Angle> angle) {
         inputs.angleSetPoint = angle;
-        return runOnce(() -> io.setAngle(angle));
+        return runOnce(() -> io.setAngle(Units.Degrees.of( Math.IEEEremainder(angle.in(Units.Degrees), 180)).mutableCopy()));
     }
 
     public Command setAngle(IntakePose intakePose) {
