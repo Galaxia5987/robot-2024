@@ -3,9 +3,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.conveyor.Conveyor;
-import frc.robot.subsystems.conveyor.ConveyorConstants;
-import frc.robot.subsystems.conveyor.ConveyorIO;
-import frc.robot.subsystems.conveyor.ConveyorIOSim;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOReal;
@@ -23,33 +20,17 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
         ElevatorIO elevatorIO;
-        ExampleSubsystemIO exampleSubsystemIO;
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 elevatorIO = new ElevatorIOReal();
-                exampleSubsystemIO = new ExampleSubsystemIOReal();
-                ConveyorIO conveyorIO;
-                ConveyorConstants.initialize(Constants.CURRENT_MODE);
-                switch (Constants.CURRENT_MODE) {
-                    case REAL:
-                        elevatorIO = new ElevatorIOReal();
-                        conveyorIO = new ConveyorIOSim();
-                        break;
-                    case SIM:
-                    case REPLAY:
-                    default:
-                        exampleSubsystemIO = new ExampleSubsystemIOSim();
-                        elevatorIO = new ElevatorIOSim();
-                        break;
-                }
-                ExampleSubsystem.initialize(exampleSubsystemIO);
-                Elevator.initialize(elevatorIO);
-                conveyorIO = new ConveyorIOSim();
+                break;
+            case SIM:
+            case REPLAY:
+            default:
                 elevatorIO = new ElevatorIOSim();
                 break;
         }
         Elevator.initialize(elevatorIO);
-        Conveyor.initialize(conveyorIO);
         Constants.initSwerve();
         Constants.initVision();
 

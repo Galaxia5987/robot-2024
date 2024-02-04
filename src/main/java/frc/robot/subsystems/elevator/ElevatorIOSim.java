@@ -31,8 +31,6 @@ public class ElevatorIOSim implements ElevatorIO {
                         ElevatorConstants.KI.get(),
                         ElevatorConstants.KD.get(),
                         ElevatorConstants.TRAPEZOID_PROFILE));
-
-        motor = new TalonFXSim(2, ElevatorConstants.GEAR_RATIO, 0.5, 1);
     }
 
     @Override
