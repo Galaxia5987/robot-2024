@@ -1,6 +1,5 @@
 package frc.robot.subsystems.intake;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel;
@@ -20,9 +19,6 @@ public class IntakeIOReal implements IntakeIO {
             new MotionMagicExpoTorqueCurrentFOC(0);
 
     public IntakeIOReal() {
-        IntakeConstants.ANGLE_CONFIGURATION.Feedback.SensorToMechanismRatio = IntakeConstants.ANGLE_GEAR_RATIO*360;
-
-        IntakeConstants.ANGLE_CONFIGURATION.Feedback.RotorToSensorRatio = 1;
 
         angleMotor.getConfigurator().apply(IntakeConstants.ANGLE_CONFIGURATION.Slot0);
 
@@ -59,16 +55,13 @@ public class IntakeIOReal implements IntakeIO {
 
     @Override
     public void updateInputs() {
-        inputs.currentAngle.mut_replace(
-                Units.Degrees.of(angleMotor.getPosition().getDataCopy().value).mutableCopy());
+        inputs.currentAngle.mut_replace((angleMotor.getPosition().getValue()), Units.Degrees);
         inputs.currentCenterRollerSpeed.mut_replace(
-                Units.RotationsPerSecond.of(centerMotor.getEncoder().getVelocity()).mutableCopy());
+                (centerMotor.getEncoder().getVelocity()), Units.RotationsPerSecond);
         inputs.angleMotorVoltage.mut_replace(
-                Units.Volts.of(angleMotor.getMotorVoltage().getValue()).mutableCopy());
-        inputs.spinMotorVoltage.mut_replace(
-                Units.Volts.of(spinMotor.getBusVoltage()).mutableCopy());
-        inputs.centerMotorVoltage.mut_replace(
-                Units.Volts.of(centerMotor.getBusVoltage()).mutableCopy());
+                (angleMotor.getMotorVoltage().getValue()), Units.Volts);
+        inputs.spinMotorVoltage.mut_replace((spinMotor.getBusVoltage()), Units.Volts);
+        inputs.centerMotorVoltage.mut_replace((centerMotor.getBusVoltage()), Units.Volts);
         spinMotor.burnFlash();
         centerMotor.burnFlash();
     }

@@ -2,9 +2,7 @@ package frc.robot.subsystems.intake;
 
 import static edu.wpi.first.units.Units.Degrees;
 
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
@@ -17,17 +15,8 @@ public class IntakeConstants {
     public static final LoggedTunableNumber ANGLE_KI = new LoggedTunableNumber("Intake/kI");
     public static final LoggedTunableNumber ANGLE_KD = new LoggedTunableNumber("Intake/kD");
     public static final double ANGLE_GEAR_RATIO = 44.44;
+    public static final double ANGLE_CURRENT_LIMIT = 40;
     public static final TalonFXConfiguration ANGLE_CONFIGURATION = new TalonFXConfiguration();
-
-    public enum IntakePose {
-        UP(MutableMeasure.zero(Degrees)),
-        DOWN(MutableMeasure.zero(Degrees));
-        final MutableMeasure<Angle> intakePose;
-
-        IntakePose(MutableMeasure<Angle> intakePose) {
-            this.intakePose = intakePose;
-        }
-    }
 
     public void initConstants() {
         switch (Constants.CURRENT_MODE) {
@@ -39,15 +28,38 @@ public class IntakeConstants {
             case SIM:
             case REPLAY:
             default:
-                ANGLE_KP.initDefault(10.0 / 360.0);
+                ANGLE_KP.initDefault(10.1 / 360.0);
                 ANGLE_KI.initDefault(0);
                 ANGLE_KD.initDefault(0);
                 break;
         }
-        ANGLE_CONFIGURATION.Slot0.kP = ANGLE_KP.get();
-        ANGLE_CONFIGURATION.Slot0.kI = ANGLE_KI.get();
-        ANGLE_CONFIGURATION.Slot0.kD = ANGLE_KD.get();
 
-        ANGLE_CONFIGURATION.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        ANGLE_CONFIGURATION
+                .withSlot0(
+                        new Slot0Configs()
+                                .withKP(ANGLE_KP.get())
+                                .withKI(ANGLE_KI.get())
+                                .withKP(ANGLE_KD.get()))
+                .withMotorOutput(
+                        new MotorOutputConfigs()
+                                .withInverted(InvertedValue.Clockwise_Positive))
+                .withCurrentLimits(
+                        new CurrentLimitsConfigs()
+                                .withSupplyCurrentLimitEnable(true)
+                                .withStatorCurrentLimitEnable(true)
+                                .withStatorCurrentLimit(ANGLE_CURRENT_LIMIT)
+                                .withSupplyCurrentLimit(ANGLE_CURRENT_LIMIT))
+                .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(ANGLE_GEAR_RATIO)
+                );
+    }
+
+    public enum IntakePose {
+        UP(MutableMeasure.zero(Degrees)),
+        DOWN(MutableMeasure.zero(Degrees));
+        final MutableMeasure<Angle> intakePose;
+
+        IntakePose(MutableMeasure<Angle> intakePose) {
+            this.intakePose = intakePose;
+        }
     }
 }
