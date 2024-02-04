@@ -31,8 +31,8 @@ public class GripperConstants {
             case SIM:
             case REPLAY:
             default:
-                KP.initDefault(0.2);
-                KI.initDefault(0);
+                KP.initDefault(24);
+                KI.initDefault(0.000001);
                 KD.initDefault(0);
                 break;
         }
