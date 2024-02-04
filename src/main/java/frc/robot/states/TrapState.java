@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.swerve.SwerveDrive;
-import lib.Utils;
 
 public class TrapState implements ScoreState {
 
@@ -19,8 +18,7 @@ public class TrapState implements ScoreState {
                         optimalPoints = Constants.OPTIMAL_POINTS_TRAP_RED;
                     }
                     Pose2d optimalPose =
-                            Utils.calcOptimalPose(
-                                    optimalPoints, SwerveDrive.getInstance().getBotPose());
+                            SwerveDrive.getInstance().getBotPose().nearest(optimalPoints);
                     return AutoBuilder.pathfindToPose(optimalPose, Constants.AUTO_CONSTRAINTS);
                 },
                 DTOP_REQUIREMENTS);
