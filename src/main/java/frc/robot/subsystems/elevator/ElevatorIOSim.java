@@ -42,7 +42,6 @@ public class ElevatorIOSim implements ElevatorIO {
 
     @Override
     public void setHeight(MutableMeasure<Distance> height) {
-        inputs.heightSetpoint = height;
         positionRequest.withPosition(height.in(Meters));
         motor.setControl(positionRequest);
     }
