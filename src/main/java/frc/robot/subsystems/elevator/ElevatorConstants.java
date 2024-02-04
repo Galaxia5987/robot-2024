@@ -20,6 +20,8 @@ public class ElevatorConstants { // TODO: check real values
     public static final double MAX_VELOCITY = 3;
     public static final double MAX_ACCELERATION = 7;
 
+    public static final Measure<Distance> GRIPPER_HEIGHT = Units.Meters.of(0.3); // [m]
+
     public static final TrapezoidProfile.Constraints TRAPEZOID_PROFILE =
             new TrapezoidProfile.Constraints(MAX_VELOCITY, MAX_ACCELERATION);
 
