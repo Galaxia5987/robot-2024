@@ -11,10 +11,8 @@ import edu.wpi.first.units.Velocity;
 public class ShooterIOReal implements ShooterIO {
     private final TalonFX topMotor;
     private final TalonFX bottomMotor;
-    private final VelocityTorqueCurrentFOC topControl =
-            new VelocityTorqueCurrentFOC(0);
-    private final VelocityTorqueCurrentFOC bottomControl =
-            new VelocityTorqueCurrentFOC(0);
+    private final VelocityTorqueCurrentFOC topControl = new VelocityTorqueCurrentFOC(0);
+    private final VelocityTorqueCurrentFOC bottomControl = new VelocityTorqueCurrentFOC(0);
 
     public ShooterIOReal() {
         topMotor = new TalonFX(3); // TODO: to be changed later
