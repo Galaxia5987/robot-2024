@@ -1,4 +1,4 @@
-package frc.robot.states;
+package frc.robot.scoreStates;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -13,9 +13,9 @@ public class ShootState implements ScoreState {
     public Command driveToClosestOptimalPoint() {
         return Commands.defer(
                 () -> {
-                    var optimalPoints = Constants.OPTIMAL_POINTS_SHOOT_BLUE;
+                    var optimalPoints = ScoreStateConstants.OPTIMAL_POINTS_SHOOT_BLUE;
                     if (isRed()) {
-                        optimalPoints = Constants.OPTIMAL_POINTS_SHOOT_RED;
+                        optimalPoints = ScoreStateConstants.OPTIMAL_POINTS_SHOOT_RED;
                     }
                     Pose2d optimalPose =
                             SwerveDrive.getInstance().getBotPose().nearest(optimalPoints);

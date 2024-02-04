@@ -2,7 +2,6 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.util.GeometryUtil;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -13,8 +12,6 @@ import frc.robot.vision.PhotonVisionIOReal;
 import frc.robot.vision.Vision;
 import frc.robot.vision.VisionModule;
 import frc.robot.vision.VisionSimIO;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.photonvision.PhotonCamera;
 import org.photonvision.simulation.SimCameraProperties;
 
@@ -61,28 +58,6 @@ public class Constants {
                     MAX_ACCELERATION.in(Units.MetersPerSecondPerSecond),
                     MAX_ANGULAR_VELOCITY.in(Units.RotationsPerSecond),
                     MAX_ANGULAR_ACCELERATION.in(Units.RotationsPerSecond.per(Units.Second)));
-
-    public static final List<Pose2d> OPTIMAL_POINTS_SHOOT_BLUE =
-            List.of(
-                    new Pose2d(1.97, 7.16, Rotation2d.fromDegrees(-161.57)),
-                    new Pose2d(2.54, 3.06, Rotation2d.fromDegrees(-157.15)),
-                    new Pose2d(4.16, 5.03, Rotation2d.fromDegrees(179.94)));
-    public static final List<Pose2d> OPTIMAL_POINTS_SHOOT_RED =
-            OPTIMAL_POINTS_SHOOT_BLUE.stream()
-                    .map(GeometryUtil::flipFieldPose)
-                    .collect(Collectors.toList());
-
-    public static final List<Pose2d> OPTIMAL_POINTS_TRAP_BLUE =
-            List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
-    public static final List<Pose2d> OPTIMAL_POINTS_TRAP_RED =
-            OPTIMAL_POINTS_TRAP_BLUE.stream()
-                    .map(GeometryUtil::flipFieldPose)
-                    .collect(Collectors.toList());
-    public static final Translation2d AMP_POSE_BLUE = new Translation2d(1.85, 7.49);
-    public static final Translation2d AMP_POSE_RED = GeometryUtil.flipFieldPosition(AMP_POSE_BLUE);
-    public static final Rotation2d AMP_ROTATION_NORMAL = new Rotation2d(Math.toRadians(90));
-    public static final Rotation2d AMP_ROTATION_REVERSE = new Rotation2d(Math.toRadians(-90));
-    public static final Measure<Distance> MIN_DISTANCE_TO_TURN_GRIPPER = Units.Meters.of(3);
 
     public enum Mode {
         REAL,
