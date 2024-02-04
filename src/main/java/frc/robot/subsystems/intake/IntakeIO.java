@@ -26,11 +26,11 @@ public interface IntakeIO {
         MutableMeasure<Angle> angleSetPoint = MutableMeasure.zero(Radians);
         MutableMeasure<Velocity<Angle>> currentRollerSpeed =
                 MutableMeasure.zero(RotationsPerSecond);
-        MutableMeasure<Velocity<Angle>> RollerSpeedSetPoint =
+        MutableMeasure<Velocity<Angle>> rollerSpeedSetPoint =
                 MutableMeasure.zero(RotationsPerSecond);
         MutableMeasure<Velocity<Angle>> currentCenterRollerSpeed =
                 MutableMeasure.zero(RotationsPerSecond);
-        MutableMeasure<Velocity<Angle>> CenterRollerSpeedSetPoint =
+        MutableMeasure<Velocity<Angle>> centerRollerSpeedSetPoint =
                 MutableMeasure.zero(RotationsPerSecond);
         MutableMeasure<Voltage> angleMotorVoltage = MutableMeasure.zero(Volts);
         MutableMeasure<Voltage> spinMotorVoltage = MutableMeasure.zero(Volts);
