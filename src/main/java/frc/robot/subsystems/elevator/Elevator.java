@@ -66,12 +66,14 @@ public class Elevator extends SubsystemBase {
         Logger.processInputs(this.getClass().getSimpleName(), inputs);
 
         Logger.recordOutput(
-                "elevatorPose", new Pose3d(new Translation3d(0, 0,
-                        inputs.gripperHeight.in(Units.Meters)),
+                "elevatorPose",
+                new Pose3d(
+                        new Translation3d(0, 0, inputs.gripperHeight.in(Units.Meters)),
                         new Rotation3d(0, 0, 0)));
         Logger.recordOutput(
-                "carriagePose", new Pose3d(new Translation3d(0,0,
-                        inputs.carriageHeight.in(Units.Meters)),
-                        new Rotation3d(0,0,0)));
+                "carriagePose",
+                new Pose3d(
+                        new Translation3d(0, 0, inputs.carriageHeight.in(Units.Meters)),
+                        new Rotation3d(0, 0, 0)));
     }
 }

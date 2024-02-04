@@ -51,7 +51,8 @@ public class RobotContainer {
 
     public static RobotContainer getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new RobotContainer();        }
+            INSTANCE = new RobotContainer();
+        }
         return INSTANCE;
     }
 

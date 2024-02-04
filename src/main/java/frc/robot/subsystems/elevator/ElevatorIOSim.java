@@ -7,7 +7,6 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Timer;
 import lib.motors.TalonFXSim;
 
@@ -22,7 +21,7 @@ public class ElevatorIOSim implements ElevatorIO {
                 new TalonFXSim(
                         2,
                         ElevatorConstants.GEAR_RATIO,
-                        0.00001,
+                        0.000_01,
                         ElevatorConstants.GEAR_RATIO
                                 * (2 * Math.PI * ElevatorConstants.DRUM_RADIUS));
 
@@ -48,8 +47,11 @@ public class ElevatorIOSim implements ElevatorIO {
     public void updateInputs(ElevatorInputs inputs) {
         motor.update(Timer.getFPGATimestamp());
         inputs.carriageHeight = Meters.of(motor.getPosition()).mutableCopy();
-        inputs.gripperHeight.mut_replace(inputs.carriageHeight.gt(ElevatorConstants.GRIPPER_HEIGHT) ?
-                inputs.carriageHeight.mutableCopy().mut_minus(ElevatorConstants.GRIPPER_HEIGHT):
-                Meters.zero());
+        inputs.gripperHeight.mut_replace(
+                inputs.carriageHeight.gt(ElevatorConstants.GRIPPER_HEIGHT)
+                        ? inputs.carriageHeight
+                                .mutableCopy()
+                                .mut_minus(ElevatorConstants.GRIPPER_HEIGHT)
+                        : Meters.zero());
     }
 }
