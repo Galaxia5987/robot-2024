@@ -25,7 +25,7 @@ public class ConveyorIOReal implements ConveyorIO {
 
     @Override
     public void setVelocity(MutableMeasure<Velocity<Angle>> velocity) {
-
+        roller.set(velocity.in(Units.RotationsPerSecond));
     }
 
     @Override
