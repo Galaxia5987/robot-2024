@@ -2,7 +2,10 @@ package frc.robot.subsystems.intake;
 
 import static edu.wpi.first.units.Units.Degrees;
 
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import frc.robot.Constants;
@@ -41,5 +44,10 @@ public class IntakeConstants {
                 ANGLE_KD.initDefault(0);
                 break;
         }
+        ANGLE_CONFIGURATION.Slot0.kP = ANGLE_KP.get();
+        ANGLE_CONFIGURATION.Slot0.kI = ANGLE_KI.get();
+        ANGLE_CONFIGURATION.Slot0.kD = ANGLE_KD.get();
+
+        ANGLE_CONFIGURATION.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     }
 }

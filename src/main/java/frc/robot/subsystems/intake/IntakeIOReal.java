@@ -20,7 +20,7 @@ public class IntakeIOReal implements IntakeIO {
             new MotionMagicExpoTorqueCurrentFOC(0);
 
     public IntakeIOReal() {
-        IntakeConstants.ANGLE_CONFIGURATION.Feedback.SensorToMechanismRatio = IntakeConstants.ANGLE_GEAR_RATIO;
+        IntakeConstants.ANGLE_CONFIGURATION.Feedback.SensorToMechanismRatio = IntakeConstants.ANGLE_GEAR_RATIO*360;
 
         IntakeConstants.ANGLE_CONFIGURATION.Feedback.RotorToSensorRatio = 1;
 
@@ -35,8 +35,8 @@ public class IntakeIOReal implements IntakeIO {
         spinMotor.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE);
         spinMotor.setInverted(true);
         for (int i = 1; i <= 6; i++) {
-            spinMotor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.fromId(i), 50_000);
-            centerMotor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.fromId(i), 50_000);
+            spinMotor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.fromId(i), 50);
+            centerMotor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.fromId(i), 50);
         }
         spinMotor.burnFlash();
         centerMotor.burnFlash();
