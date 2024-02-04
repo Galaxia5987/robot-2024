@@ -69,5 +69,7 @@ public class IntakeIOReal implements IntakeIO {
                 Units.Volts.of(spinMotor.getBusVoltage()).mutableCopy());
         inputs.centerMotorVoltage.mut_replace(
                 Units.Volts.of(centerMotor.getBusVoltage()).mutableCopy());
+        spinMotor.burnFlash();
+        centerMotor.burnFlash();
     }
 }
