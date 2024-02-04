@@ -71,7 +71,7 @@ public class Hood extends SubsystemBase {
     }
 
     public Command updateInternalEncoder() {
-        return runOnce(io::updateInternalEncoder).withName("Update hood internal encoder");
+        return run(io::updateInternalEncoder).withName("Update hood internal encoder");
     }
 
     @AutoLogOutput(key = "Hood/Pose")

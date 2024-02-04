@@ -1,7 +1,7 @@
 package frc.robot.subsystems.hood;
 
-import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
@@ -13,7 +13,7 @@ public class HoodIOReal implements HoodIO {
     private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(9); // TODO: to be changed
     private final MotionMagicExpoTorqueCurrentFOC positionControl =
             new MotionMagicExpoTorqueCurrentFOC(0);
-    private final DutyCycleOut dutyCycleOut = new DutyCycleOut(0);
+    private final VoltageOut voltageControl = new VoltageOut(0);
 
     public HoodIOReal() {
         motor = new TalonFX(6); // TODO: to be changed
@@ -36,7 +36,7 @@ public class HoodIOReal implements HoodIO {
     public void setPower(double power) {
         inputs.controlMode = Mode.POWER;
         inputs.powerSetpoint = power;
-        motor.setControl(dutyCycleOut.withOutput(power * 12));
+        motor.setControl(voltageControl.withOutput(power * 12));
     }
 
     @Override
