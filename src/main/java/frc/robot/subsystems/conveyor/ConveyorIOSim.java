@@ -36,8 +36,8 @@ public class ConveyorIOSim implements ConveyorIO {
     @Override
     public void updateInputs() {
         conveyor.update(Timer.getFPGATimestamp());
-        inputs.currentVelocity.mut_replace(Units.RotationsPerSecond.of(conveyor.getVelocity()));
-        inputs.appliedVoltage.mut_replace(Units.Volts.of(conveyor.getBusVoltage()));
-        inputs.appliedCurrent.mut_replace(Units.Amps.of(conveyor.getOutputCurrent()));
+        inputs.currentVelocity.mut_replace((conveyor.getVelocity()), Units.RotationsPerSecond);
+        inputs.appliedVoltage.mut_replace((conveyor.getBusVoltage()), Units.Volts);
+        inputs.appliedCurrent.mut_replace((conveyor.getOutputCurrent()), Units.Amps);
     }
 }
