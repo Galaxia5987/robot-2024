@@ -6,11 +6,13 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Ports;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -51,11 +53,11 @@ public class Intake extends SubsystemBase {
         return setAngle(intakePose.intakePose);
     }
 
-    public Command setRollerSpeed(double speed) {
+    public Command setRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
         return runOnce(
                 () -> {
                     io.setRollerSpeed(speed);
-                    inputs.rollerSpeedSetPoint = Units.RotationsPerSecond.of(speed).mutableCopy();
+                    inputs.rollerSpeedSetPoint = speed;
                 });
     }
 
@@ -70,13 +72,13 @@ public class Intake extends SubsystemBase {
 
     public Command intake() {
         return setAngle(IntakeConstants.IntakePose.DOWN.intakePose)
-                .alongWith(setRollerSpeed(0.5).andThen(setCenterRollerSpeed(0.5)))
+                .alongWith(setRollerSpeed(Units.RotationsPerSecond.of(0.5).mutableCopy()).andThen(setCenterRollerSpeed(0.5)))
                 .withName("feeding position activated");
     }
 
     public Command stop() {
         return setAngle(IntakeConstants.IntakePose.UP)
-                .alongWith(setRollerSpeed(0).andThen(setCenterRollerSpeed(0)))
+                .alongWith(setRollerSpeed(Units.RotationsPerSecond.of(0).mutableCopy()).andThen(setCenterRollerSpeed(0)))
                 .withName("stopped");
     }
 
