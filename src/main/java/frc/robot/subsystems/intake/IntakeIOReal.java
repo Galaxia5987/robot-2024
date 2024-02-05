@@ -1,17 +1,16 @@
 package frc.robot.subsystems.intake;
 
+import static frc.robot.subsystems.intake.IntakeConstants.*;
+
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.*;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import frc.robot.Constants;
-
-import static frc.robot.subsystems.intake.IntakeConstants.*;
 
 public class IntakeIOReal implements IntakeIO {
 
@@ -22,6 +21,7 @@ public class IntakeIOReal implements IntakeIO {
     private final MotionMagicExpoTorqueCurrentFOC positionRequest =
             new MotionMagicExpoTorqueCurrentFOC(0);
     private SimpleMotorFeedforward spinMotorFeedforward;
+
     public IntakeIOReal() {
 
         angleMotor.getConfigurator().apply(ANGLE_CONFIGURATION.Slot0);
@@ -37,7 +37,8 @@ public class IntakeIOReal implements IntakeIO {
         spinMotor.getPIDController().setP(SPIN_KP.get());
         spinMotor.getPIDController().setI(SPIN_KI.get());
         spinMotor.getPIDController().setD(SPIN_KD.get());
-        spinMotorFeedforward = new SimpleMotorFeedforward(SPIN_KS.get(), SPIN_KV.get(), SPIN_KA.get());
+        spinMotorFeedforward =
+                new SimpleMotorFeedforward(SPIN_KS.get(), SPIN_KV.get(), SPIN_KA.get());
         for (int i = 1; i <= 6; i++) {
             spinMotor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.fromId(i), 50);
             centerMotor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.fromId(i), 50);
@@ -53,7 +54,13 @@ public class IntakeIOReal implements IntakeIO {
 
     @Override
     public void setRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
-        spinMotor.getPIDController().setReference(speed.in(Units.RotationsPerSecond), CANSparkBase.ControlType.kVelocity, 0, spinMotorFeedforward.calculate(speed.in(Units.RotationsPerSecond)));
+        spinMotor
+                .getPIDController()
+                .setReference(
+                        speed.in(Units.RotationsPerSecond),
+                        CANSparkBase.ControlType.kVelocity,
+                        0,
+                        spinMotorFeedforward.calculate(speed.in(Units.RotationsPerSecond)));
     }
 
     @Override

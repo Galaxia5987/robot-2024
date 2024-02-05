@@ -21,7 +21,8 @@ public class IntakeIOSim implements IntakeIO {
     private final PositionVoltage positionRequest = new PositionVoltage(0);
     public static PIDController angleController =
             new PIDController(ANGLE_KP.get(), ANGLE_KI.get(), ANGLE_KD.get());
-    public SimpleMotorFeedforward spinFeedForward = new SimpleMotorFeedforward(SPIN_KS.get(), SPIN_KV.get(), SPIN_KA.get() );
+    public SimpleMotorFeedforward spinFeedForward =
+            new SimpleMotorFeedforward(SPIN_KS.get(), SPIN_KV.get(), SPIN_KA.get());
 
     public IntakeIOSim() {
         angleMotor =
@@ -41,7 +42,10 @@ public class IntakeIOSim implements IntakeIO {
 
     @Override
     public void setRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
-        frontRoller.setReference(speed.in(Units.RotationsPerSecond), CANSparkBase.ControlType.kVelocity, spinFeedForward.calculate(speed.in(Units.RotationsPerSecond)));
+        frontRoller.setReference(
+                speed.in(Units.RotationsPerSecond),
+                CANSparkBase.ControlType.kVelocity,
+                spinFeedForward.calculate(speed.in(Units.RotationsPerSecond)));
     }
 
     @Override

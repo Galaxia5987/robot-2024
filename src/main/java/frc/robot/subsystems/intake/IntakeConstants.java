@@ -1,16 +1,13 @@
 package frc.robot.subsystems.intake;
 
+import static edu.wpi.first.units.Units.Degrees;
+
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.signals.InvertedValue;
-import com.revrobotics.SparkMaxPIDController;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import frc.robot.Constants;
 import lib.webconstants.LoggedTunableNumber;
-
-import static edu.wpi.first.units.Units.Degrees;
 
 public class IntakeConstants {
     public static final double GEAR_RATIO = 45.62;
@@ -26,11 +23,9 @@ public class IntakeConstants {
     public static final LoggedTunableNumber SPIN_KV = new LoggedTunableNumber("Intake/kV");
     public static final LoggedTunableNumber SPIN_KA = new LoggedTunableNumber("Intake/kA");
 
-
     public static final double ANGLE_GEAR_RATIO = 44.44;
     public static final double ANGLE_CURRENT_LIMIT = 40;
     public static final TalonFXConfiguration ANGLE_CONFIGURATION = new TalonFXConfiguration();
-
 
     public void initConstants() {
         switch (Constants.CURRENT_MODE) {
@@ -55,10 +50,8 @@ public class IntakeConstants {
                 SPIN_KI.initDefault(0);
                 SPIN_KD.initDefault(0);
 
-
                 break;
         }
-
 
         ANGLE_CONFIGURATION
                 .withSlot0(
@@ -75,7 +68,6 @@ public class IntakeConstants {
                                 .withStatorCurrentLimit(ANGLE_CURRENT_LIMIT)
                                 .withSupplyCurrentLimit(ANGLE_CURRENT_LIMIT))
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(ANGLE_GEAR_RATIO));
-
     }
 
     public enum IntakePose {
