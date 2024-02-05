@@ -15,7 +15,7 @@ public class ShootState implements ScoreState {
                 () -> {
                     var optimalPoints =
                             isRed()
-                                    ? ScoreStateConstants.OPTIMAL_POINTS_TRAP_RED
+                                    ? ScoreStateConstants.OPTIMAL_POINTS_SHOOT_RED
                                     : ScoreStateConstants.OPTIMAL_POINTS_SHOOT_BLUE;
                     Pose2d optimalPose =
                             SwerveDrive.getInstance().getBotPose().nearest(optimalPoints);
