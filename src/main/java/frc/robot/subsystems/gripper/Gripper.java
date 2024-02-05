@@ -90,6 +90,5 @@ public class Gripper extends SubsystemBase {
         Logger.processInputs(this.getClass().getSimpleName(), inputs);
 
         gripperLigament.setAngle(new Rotation2d(inputs.currentAngle));
-
     }
 }

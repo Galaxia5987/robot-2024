@@ -32,7 +32,7 @@ public class GripperConstants {
             case REPLAY:
             default:
                 KP.initDefault(24);
-                KI.initDefault(0.000001);
+                KI.initDefault(0.000_001);
                 KD.initDefault(0);
                 break;
         }

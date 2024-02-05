@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.conveyor.Conveyor;
@@ -19,9 +20,7 @@ public class RobotContainer {
     private final SwerveDrive swerveDrive;
     private final CommandXboxController xboxController = new CommandXboxController(0);
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
+    /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
         GripperConstants.initConstants();
         GripperIO gripperIO;
@@ -72,6 +71,9 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
+        xboxController.a().onTrue(elevator.setHeight(Units.Meters.of(0.5).mutableCopy()));
+        xboxController.x().onTrue(gripper.setWristPosition(Units.Rotations.of(Math.PI).mutableCopy()));
+        xboxController.y().onTrue(gripper.setWristPosition(Units.Rotations.of(1).mutableCopy()));
     }
 
     /**
