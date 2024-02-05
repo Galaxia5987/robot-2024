@@ -18,14 +18,12 @@ public class AmpState implements ScoreState {
         return Commands.defer(
                 () -> {
                     Translation2d ampPose;
-                    Rotation2d ampRotation;
                     if (isRed()) {
                         ampPose = ScoreStateConstants.AMP_POSE_RED;
-                        ampRotation = ScoreStateConstants.AMP_ROTATION_NORMAL_RED;
                     } else {
                         ampPose = ScoreStateConstants.AMP_POSE_BLUE;
-                        ampRotation = ScoreStateConstants.AMP_ROTATION_NORMAL_BLUE;
                     }
+                    Rotation2d ampRotation = ScoreStateConstants.AMP_ROTATION_NORMAL;
                     Pose2d botPose = SwerveDrive.getInstance().getBotPose();
                     double robotRotation = botPose.getRotation().getRadians();
                     boolean isGripperReversed =
@@ -37,7 +35,7 @@ public class AmpState implements ScoreState {
                                             Units.Meters);
 
                     if ((isGripperReversed && robotRotation < 0) || hasTimeToTurnGripper) {
-                        ampRotation = ScoreStateConstants.AMP_ROTATION_REVERSE_BLUE;
+                        ampRotation = ScoreStateConstants.AMP_ROTATION_REVERSE;
                     }
                     return AutoBuilder.pathfindToPose(
                             new Pose2d(ampPose, ampRotation), Constants.AUTO_CONSTRAINTS);
