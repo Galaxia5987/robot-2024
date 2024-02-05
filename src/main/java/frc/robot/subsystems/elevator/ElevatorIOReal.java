@@ -85,6 +85,11 @@ public class ElevatorIOReal implements ElevatorIO {
         }
     }
 
+    public void resetEncoder(){
+        if (atTop()){ setHeight(Meters.of(0).mutableCopy()) }
+        else if (atTop()) setHeight(Meters.of(ElevatorConstants.MAX_HEIGHT.in(Meters)).mutableCopy());
+    }
+
     public void stopMotor() {
         mainMotor.setControl(powerControl.withOutput(0));
     }
