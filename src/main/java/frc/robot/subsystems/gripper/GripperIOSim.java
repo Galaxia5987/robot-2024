@@ -16,7 +16,8 @@ public class GripperIOSim implements GripperIO {
     private final TalonFXSim rollerMotor;
     private final TalonFXSim angleMotor;
 
-    private final DutyCycleOut powerRequest = new DutyCycleOut(0);
+    private final DutyCycleOut powerRequestAngle = new DutyCycleOut(0);
+    private final DutyCycleOut powerRequestRoller = new DutyCycleOut(0);
     private final PositionVoltage positionRequest = new PositionVoltage(0);
 
     public static PIDController angleController = new PIDController(KP.get(), KI.get(), KD.get());
@@ -36,12 +37,12 @@ public class GripperIOSim implements GripperIO {
 
     @Override
     public void setRollerMotorPower(double power) {
-        rollerMotor.setControl(powerRequest.withOutput(power));
+        rollerMotor.setControl(powerRequestRoller.withOutput(power));
     }
 
     @Override
     public void setAngleMotorPower(double power) {
-        angleMotor.setControl(powerRequest.withOutput(power));
+        angleMotor.setControl(powerRequestAngle.withOutput(power));
     }
 
     @Override
@@ -59,5 +60,7 @@ public class GripperIOSim implements GripperIO {
         rollerMotor.update(Timer.getFPGATimestamp());
         angleMotor.update(Timer.getFPGATimestamp());
         inputs.currentAngle = Rotations.of(angleMotor.getPosition()).mutableCopy();
+        inputs.rollerMotorVoltage = Volts.of(rollerMotor.getAppliedVoltage()).mutableCopy();
+        inputs.angleMotorVoltage = Volts.of(angleMotor.getAppliedVoltage()).mutableCopy();
     }
 }
