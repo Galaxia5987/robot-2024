@@ -71,9 +71,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        xboxController.a().onTrue(elevator.setHeight(Units.Meters.of(0.5).mutableCopy()));
-        xboxController.x().onTrue(gripper.setWristPosition(Units.Rotations.of(Math.PI).mutableCopy()));
-        xboxController.y().onTrue(gripper.setWristPosition(Units.Rotations.of(1).mutableCopy()));
+
     }
 
     /**
