@@ -29,7 +29,11 @@ public class ScoreStateConstants {
                     .collect(Collectors.toList());
     public static final Translation2d AMP_POSE_BLUE = new Translation2d(1.85, 7.49);
     public static final Translation2d AMP_POSE_RED = GeometryUtil.flipFieldPosition(AMP_POSE_BLUE);
+    public static final Translation2d SPEAKER_POSE_BLUE = new Translation2d(0, 5.547_944_2);
+    public static final Translation2d SPEAKER_POSE_RED =
+            GeometryUtil.flipFieldPosition(SPEAKER_POSE_BLUE);
     public static final Rotation2d AMP_ROTATION_NORMAL = new Rotation2d(Math.toRadians(90));
     public static final Rotation2d AMP_ROTATION_REVERSE = new Rotation2d(Math.toRadians(-90));
+    public static final Measure<Distance> MAX_SHOOTING_DISTANCE = Units.Meters.of(3);
     public static final Measure<Distance> MIN_DISTANCE_TO_TURN_GRIPPER = Units.Meters.of(3);
 }
