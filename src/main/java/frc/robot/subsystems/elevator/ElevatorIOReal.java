@@ -1,19 +1,17 @@
 package frc.robot.subsystems.elevator;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Meters;
+
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.StrictFollower;
 import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
-import frc.robot.subsystems.gripper.GripperConstants;
-
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Meters;
 
 public class ElevatorIOReal implements ElevatorIO {
     private final Servo servo;
@@ -37,7 +35,6 @@ public class ElevatorIOReal implements ElevatorIO {
         auxMotor.getConfigurator().apply(ElevatorConstants.MOTOR_CONFIGURATION);
 
         auxMotor.setControl(new StrictFollower(mainMotor.getDeviceID()));
-
     }
 
     @Override
@@ -60,8 +57,8 @@ public class ElevatorIOReal implements ElevatorIO {
         inputs.gripperHeight.mut_replace(
                 inputs.carriageHeight.gt(ElevatorConstants.GRIPPER_HEIGHT)
                         ? inputs.carriageHeight
-                        .mutableCopy()
-                        .mut_minus(ElevatorConstants.GRIPPER_HEIGHT)
+                                .mutableCopy()
+                                .mut_minus(ElevatorConstants.GRIPPER_HEIGHT)
                         : Meters.zero());
 
         inputs.servoAngle = Units.Degrees.of(servo.getAngle()).mutableCopy();
@@ -75,7 +72,7 @@ public class ElevatorIOReal implements ElevatorIO {
         return bottomSensor.get();
     }
 
-    public void flipServo(){
+    public void flipServo() {
         if (servo.get() == ElevatorConstants.SERVO_OPEN.in(Degrees)) {
             inputs.servoSetpoint = ElevatorConstants.SERVO_CLOSE;
             servo.set(ElevatorConstants.SERVO_CLOSE.in(Degrees));
@@ -85,9 +82,11 @@ public class ElevatorIOReal implements ElevatorIO {
         }
     }
 
-    public void resetEncoder(){
-        if (atTop()){ setHeight(Meters.of(0).mutableCopy()) }
-        else if (atTop()) setHeight(Meters.of(ElevatorConstants.MAX_HEIGHT.in(Meters)).mutableCopy());
+    public void resetEncoder() {
+        if (atTop()) {
+            setHeight(Meters.of(0).mutableCopy());
+        } else if (atTop())
+            setHeight(Meters.of(ElevatorConstants.MAX_HEIGHT.in(Meters)).mutableCopy());
     }
 
     public void stopMotor() {
