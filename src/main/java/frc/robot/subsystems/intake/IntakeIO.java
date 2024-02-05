@@ -30,8 +30,7 @@ public interface IntakeIO {
                 MutableMeasure.zero(RotationsPerSecond);
         MutableMeasure<Velocity<Angle>> currentCenterRollerSpeed =
                 MutableMeasure.zero(RotationsPerSecond);
-        MutableMeasure<Velocity<Angle>> centerRollerSpeedSetPoint =
-                MutableMeasure.zero(RotationsPerSecond);
+        double centerRollerSpeedSetPoint = 0;
         MutableMeasure<Voltage> angleMotorVoltage = MutableMeasure.zero(Volts);
         MutableMeasure<Voltage> spinMotorVoltage = MutableMeasure.zero(Volts);
         MutableMeasure<Voltage> centerMotorVoltage = MutableMeasure.zero(Volts);

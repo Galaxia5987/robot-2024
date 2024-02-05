@@ -28,9 +28,9 @@ public class IntakeIOSim implements IntakeIO {
         angleMotor =
                 new TalonFXSim(
                         1, IntakeConstants.GEAR_RATIO, 0.003, 360 * IntakeConstants.GEAR_RATIO);
-        frontRoller = new SparkMaxSim(1, 1, 0.5, 1);
+        frontRoller = new SparkMaxSim(1, 1, 0.0003, 1);
         frontRoller.setController(new PIDController(SPIN_KP.get(), SPIN_KI.get(), SPIN_KD.get()));
-        centerRoller = new SparkMaxSim(1, 1, 0.5, 1);
+        centerRoller = new SparkMaxSim(1, 1, 0.0003, 1);
         angleMotor.setController(angleController);
     }
 
@@ -43,14 +43,14 @@ public class IntakeIOSim implements IntakeIO {
     @Override
     public void setRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
         frontRoller.setReference(
-                speed.in(Units.RotationsPerSecond),
+                speed.in(Units.RPM),
                 CANSparkBase.ControlType.kVelocity,
-                spinFeedForward.calculate(speed.in(Units.RotationsPerSecond)));
+                spinFeedForward.calculate(speed.in(Units.RPM)));
     }
 
     @Override
     public void setCenterRollerSpeed(double speed) {
-        centerRoller.set(speed);
+        centerRoller.setReference(speed, CANSparkBase.ControlType.kDutyCycle);
     }
 
     @Override
@@ -59,9 +59,9 @@ public class IntakeIOSim implements IntakeIO {
         centerRoller.update(Timer.getFPGATimestamp());
         frontRoller.update(Timer.getFPGATimestamp());
         inputs.currentAngle.mut_replace((angleMotor.getPosition()), Units.Degrees);
-        inputs.currentRollerSpeed.mut_replace(frontRoller.getVelocity(), Units.RotationsPerSecond);
+        inputs.currentRollerSpeed.mut_replace(frontRoller.getVelocity(), Units.RPM);
         inputs.currentCenterRollerSpeed.mut_replace(
-                centerRoller.getVelocity(), Units.RotationsPerSecond);
+                centerRoller.getVelocity(), Units.RPM);
         inputs.angleMotorVoltage.mut_replace(angleMotor.getAppliedVoltage(), Units.Volts);
         inputs.spinMotorVoltage.mut_replace(frontRoller.getBusVoltage(), Units.Volts);
         inputs.centerMotorVoltage.mut_replace(centerRoller.getBusVoltage(), Units.Volts);

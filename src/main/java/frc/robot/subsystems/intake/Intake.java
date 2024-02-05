@@ -20,6 +20,7 @@ public class Intake extends SubsystemBase {
     private final IntakeIO io;
     private final IntakeInputsAutoLogged inputs = IntakeIO.inputs;
     @AutoLogOutput private final Mechanism2d intakeMechanism = new Mechanism2d(2, 3);
+    @AutoLogOutput private final Pose3d robotPose = new Pose3d();
     private final MechanismRoot2d root = intakeMechanism.getRoot("Intake", 1, 1);
 
     private final MechanismLigament2d intakeLigament =
@@ -64,8 +65,7 @@ public class Intake extends SubsystemBase {
         return runOnce(
                 () -> {
                     io.setCenterRollerSpeed(speed);
-                    inputs.centerRollerSpeedSetPoint =
-                            Units.RotationsPerSecond.of(speed).mutableCopy();
+                    inputs.centerRollerSpeedSetPoint = speed;
                 });
     }
 

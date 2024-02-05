@@ -11,23 +11,23 @@ import lib.webconstants.LoggedTunableNumber;
 
 public class IntakeConstants {
     public static final double GEAR_RATIO = 45.62;
-    public static final LoggedTunableNumber ANGLE_KP = new LoggedTunableNumber("Intake/kP");
-    public static final LoggedTunableNumber ANGLE_KI = new LoggedTunableNumber("Intake/kI");
-    public static final LoggedTunableNumber ANGLE_KD = new LoggedTunableNumber("Intake/kD");
+    public static final LoggedTunableNumber ANGLE_KP = new LoggedTunableNumber("Intake/Angle/kP");
+    public static final LoggedTunableNumber ANGLE_KI = new LoggedTunableNumber("Intake/Angle/kI");
+    public static final LoggedTunableNumber ANGLE_KD = new LoggedTunableNumber("Intake/Angle/kD");
 
-    public static final LoggedTunableNumber SPIN_KP = new LoggedTunableNumber("Intake/kP");
-    public static final LoggedTunableNumber SPIN_KI = new LoggedTunableNumber("Intake/kI");
-    public static final LoggedTunableNumber SPIN_KD = new LoggedTunableNumber("Intake/kD");
+    public static final LoggedTunableNumber SPIN_KP = new LoggedTunableNumber("Intake/Spin/kP");
+    public static final LoggedTunableNumber SPIN_KI = new LoggedTunableNumber("Intake/Spin/kI");
+    public static final LoggedTunableNumber SPIN_KD = new LoggedTunableNumber("Intake/Spin/kD");
 
-    public static final LoggedTunableNumber SPIN_KS = new LoggedTunableNumber("Intake/kS");
-    public static final LoggedTunableNumber SPIN_KV = new LoggedTunableNumber("Intake/kV");
-    public static final LoggedTunableNumber SPIN_KA = new LoggedTunableNumber("Intake/kA");
+    public static final LoggedTunableNumber SPIN_KS = new LoggedTunableNumber("Intake/Spin/kS");
+    public static final LoggedTunableNumber SPIN_KV = new LoggedTunableNumber("Intake/Spin/kV");
+    public static final LoggedTunableNumber SPIN_KA = new LoggedTunableNumber("Intake/Spin/kA");
 
     public static final double ANGLE_GEAR_RATIO = 44.44;
     public static final double ANGLE_CURRENT_LIMIT = 40;
     public static final TalonFXConfiguration ANGLE_CONFIGURATION = new TalonFXConfiguration();
 
-    public void initConstants() {
+    public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 ANGLE_KP.initDefault(10.0 / 360.0);
@@ -38,6 +38,9 @@ public class IntakeConstants {
                 SPIN_KI.initDefault(0);
                 SPIN_KD.initDefault(0);
 
+                SPIN_KS.initDefault(0);
+                SPIN_KV.initDefault(0);
+                SPIN_KA.initDefault(0);
                 break;
             case SIM:
             case REPLAY:
@@ -49,6 +52,10 @@ public class IntakeConstants {
                 SPIN_KP.initDefault(0);
                 SPIN_KI.initDefault(0);
                 SPIN_KD.initDefault(0);
+
+                SPIN_KS.initDefault(0);
+                SPIN_KV.initDefault(0.002083333);
+                SPIN_KA.initDefault(0);
 
                 break;
         }
