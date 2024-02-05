@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.conveyor.Conveyor;
@@ -70,9 +69,7 @@ public class RobotContainer {
                         () -> true));
     }
 
-    private void configureButtonBindings() {
-
-    }
+    private void configureButtonBindings() {}
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
