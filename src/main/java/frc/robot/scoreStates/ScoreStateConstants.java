@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ScoreStateConstants {
-    public static final List<Pose2d> OPTIMAL_POINTS_SHOOT_BLUE =
+    public static final List<Translation2d> OPTIMAL_POINTS_SHOOT_BLUE =
             List.of(
-                    new Pose2d(1.97, 7.16, Rotation2d.fromDegrees(-161.57)),
-                    new Pose2d(2.54, 3.06, Rotation2d.fromDegrees(-157.15)),
-                    new Pose2d(4.16, 5.03, Rotation2d.fromDegrees(179.94)));
-    public static final List<Pose2d> OPTIMAL_POINTS_SHOOT_RED =
+                    new Translation2d(1.97, 7.16),
+                    new Translation2d(2.54, 3.06),
+                    new Translation2d(4.16, 5.03));
+    public static final List<Translation2d> OPTIMAL_POINTS_SHOOT_RED =
             OPTIMAL_POINTS_SHOOT_BLUE.stream()
-                    .map(GeometryUtil::flipFieldPose)
+                    .map(GeometryUtil::flipFieldPosition)
                     .collect(Collectors.toList());
 
     public static final List<Pose2d> OPTIMAL_POINTS_TRAP_BLUE =
