@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.swerve.SwerveDrive;
+import java.util.Set;
 import lib.Utils;
 
 public class AmpState implements ScoreState {
@@ -40,7 +41,7 @@ public class AmpState implements ScoreState {
                     return AutoBuilder.pathfindToPose(
                             new Pose2d(ampPose, ampRotation), Constants.AUTO_CONSTRAINTS);
                 },
-                DTOP_REQUIREMENTS);
+                Set.of(SwerveDrive.getInstance()));
     }
 
     @Override
