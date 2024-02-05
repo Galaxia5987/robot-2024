@@ -1,9 +1,6 @@
 package frc.robot.subsystems.elevator;
 
-import edu.wpi.first.units.Distance;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.*;
 import org.littletonrobotics.junction.AutoLog;
 
 @AutoLog
@@ -17,4 +14,6 @@ public class ElevatorInputs {
     public ElevatorIO.ControlMode controlMode = ElevatorIO.ControlMode.POSITION;
     public boolean isBottom = true;
     public boolean isTop = false;
+    public MutableMeasure<Angle> servoAngle = Units.Degrees.of(0).mutableCopy();
+    public MutableMeasure<Angle> servoSetpoint = Units.Degrees.of(0).mutableCopy();
 }
