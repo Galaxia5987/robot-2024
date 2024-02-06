@@ -63,7 +63,7 @@ public class ElevatorConstants { // TODO: check real values
                 KD.initDefault(0.05);
         }
 
-        MAIN_MOTOR_CONFIGURATION.withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(GEAR_RATIO))
+        MAIN_MOTOR_CONFIGURATION.withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(ElevatorConstants.GEAR_RATIO))
                 .withSlot0(
                         new Slot0Configs()
                                 .withKP(ElevatorConstants.KP.get())
@@ -77,18 +77,7 @@ public class ElevatorConstants { // TODO: check real values
                 .withStatorCurrentLimit(CURRENT_LIMIT)
                 .withSupplyCurrentLimit(CURRENT_LIMIT);
 
-        AUX_MOTOR_CONFIGURATION.withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(GEAR_RATIO))
-                .withSlot0(
-                        new Slot0Configs()
-                                .withKP(ElevatorConstants.KP.get())
-                                .withKI(ElevatorConstants.KI.get())
-                                .withKD(ElevatorConstants.KD.get())
-                                .withKG(ElevatorConstants.KG.get()))
-                .withMotorOutput(new MotorOutputConfigs().withInverted(AUX_INVERT))
-                .CurrentLimits
-                .withStatorCurrentLimitEnable(true)
-                .withSupplyCurrentLimitEnable(true)
-                .withStatorCurrentLimit(CURRENT_LIMIT)
-                .withSupplyCurrentLimit(CURRENT_LIMIT);
+        AUX_MOTOR_CONFIGURATION.withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(ElevatorConstants.GEAR_RATIO))
+                .withMotorOutput(new MotorOutputConfigs().withInverted(AUX_INVERT));
     }
 }
