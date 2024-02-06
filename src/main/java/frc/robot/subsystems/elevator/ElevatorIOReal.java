@@ -20,7 +20,6 @@ public class ElevatorIOReal implements ElevatorIO {
     private final TalonFX mainMotor;
     private final TalonFX auxMotor;
 
-    private final DigitalInput sensor;
 
     private final MotionMagicExpoTorqueCurrentFOC positionControl = new MotionMagicExpoTorqueCurrentFOC(0);
     private final DutyCycleOut powerControl = new DutyCycleOut(0);
@@ -29,7 +28,7 @@ public class ElevatorIOReal implements ElevatorIO {
         mainMotor = new TalonFX(0);
         auxMotor = new TalonFX(0);
         servo = new Servo(0);
-        sensor = new DigitalInput(0);
+
 
 
         mainMotor.getConfigurator().apply(ElevatorConstants.MAIN_MOTOR_CONFIGURATION);
@@ -48,10 +47,6 @@ public class ElevatorIOReal implements ElevatorIO {
         mainMotor.setControl(positionControl.withPosition(height.in(Units.Meters)));
     }
 
-    public boolean atBottom() {
-        return sensor.get();
-    }
-
     public void openStopper(){
         inputs.stopperSetpoint = ElevatorConstants.OPEN_POSITION;
         servo.set(ElevatorConstants.OPEN_POSITION.in(Degrees));
@@ -61,19 +56,13 @@ public class ElevatorIOReal implements ElevatorIO {
         servo.set(ElevatorConstants.LOCKED_POSITION.in(Degrees));
     }
 
-    public void resetEncoder() {
-        if (atBottom()) {
-            setHeight((ElevatorConstants.STARTING_HEIGHT).mutableCopy());
-        }
-    }
-
     public void stopMotor() {
         mainMotor.stopMotor();
     }
 
     @Override
     public void updateInputs(ElevatorInputs inputs) {
-        inputs.isBottom = atBottom();
+        inputs.isBottom = mainMotor.getStickyFault_ReverseHardLimit().getValue();
         inputs.carriageHeight.mut_replace(mainMotor.getPosition().getValue(), Meters);
 
         inputs.gripperHeight.mut_replace(

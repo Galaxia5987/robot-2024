@@ -10,7 +10,7 @@ import lib.webconstants.LoggedTunableNumber;
 public class ElevatorConstants { // TODO: check real values
     public static final TalonFXConfiguration MAIN_MOTOR_CONFIGURATION = new TalonFXConfiguration();
     public static final TalonFXConfiguration AUX_MOTOR_CONFIGURATION = new TalonFXConfiguration();
-    public static final SoftwareLimitSwitchConfigs LIMIT_SWITCH_CONFIGS = new SoftwareLimitSwitchConfigs();
+    public static final HardwareLimitSwitchConfigs LIMIT_SWITCH_CONFIGS = new HardwareLimitSwitchConfigs();
 
     public static final double MECHANISM_WIDTH = 0.8; // [m]
     public static final double MECHANISM_HEIGHT = 2; // [m]
@@ -87,5 +87,8 @@ public class ElevatorConstants { // TODO: check real values
                                 .withSensorToMechanismRatio(ElevatorConstants.GEAR_RATIO))
                 .withMotorOutput(new MotorOutputConfigs().withInverted(AUX_INVERT));
 
+
+        LIMIT_SWITCH_CONFIGS
+                .withReverseLimitAutosetPositionValue(0);
     }
 }
