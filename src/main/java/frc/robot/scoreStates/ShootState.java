@@ -2,7 +2,6 @@ package frc.robot.scoreStates;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,18 +28,24 @@ public class ShootState implements ScoreState {
                         speakerPose = ScoreStateConstants.SPEAKER_POSE_BLUE;
                         optimalPoints = ScoreStateConstants.OPTIMAL_POINTS_SHOOT_BLUE;
                     }
-                    var optimalTranslation =
-                            Utils.getDistanceFromPoint(speakerPose, botPose)
-                                            < ScoreStateConstants.MAX_SHOOTING_DISTANCE.in(
-                                                    Units.Meters)
-                                    ? botPose.getTranslation()
-                                    : botPose.getTranslation().nearest(optimalPoints);
-                    Rotation2d optimalRotation =
-                            new Rotation2d(
-                                    speakerPose.getX() - optimalTranslation.getX(),
-                                    speakerPose.getY() - optimalTranslation.getY());
+                    Translation2d optimalTranslation;
+                    if (Utils.getDistanceFromPoint(speakerPose, botPose)
+                            < ScoreStateConstants.MAX_SHOOTING_DISTANCE.in(Units.Meters)) {
+                        optimalTranslation = botPose.getTranslation();
+                        return SwerveDrive.getInstance()
+                                .turnCommand(
+                                        Utils.calculateOptimalRotation(
+                                                        optimalTranslation, speakerPose)
+                                                .getRotations(),
+                                        ScoreStateConstants.TURN_TOLERANCE);
+                    }
+                    optimalTranslation = botPose.getTranslation().nearest(optimalPoints);
+
                     return AutoBuilder.pathfindToPose(
-                            new Pose2d(optimalTranslation, optimalRotation),
+                            new Pose2d(
+                                    optimalTranslation,
+                                    Utils.calculateOptimalRotation(
+                                            optimalTranslation, speakerPose)),
                             Constants.AUTO_CONSTRAINTS);
                 },
                 Set.of(SwerveDrive.getInstance()));
