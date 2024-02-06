@@ -6,10 +6,8 @@ import static frc.robot.subsystems.gripper.GripperConstants.*;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Timer;
 import lib.motors.TalonFXSim;
 

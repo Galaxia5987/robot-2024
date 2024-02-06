@@ -73,17 +73,17 @@ public class Gripper extends SubsystemBase {
 
     @Override
     public void periodic() {
-        MutableMeasure<Distance> gripperHeight = elevatorInputs
-                .gripperHeight
-                .mutableCopy()
-                .mut_plus(GripperConstants.GRIPPER_POSITION_z);
+        MutableMeasure<Distance> gripperHeight =
+                elevatorInputs
+                        .gripperHeight
+                        .mutableCopy()
+                        .mut_plus(GripperConstants.GRIPPER_POSITION_z);
         gripperPose =
                 new Pose3d(
                         GripperConstants.GRIPPER_POSITION_X.in(Units.Meters),
                         GripperConstants.GRIPPER_POSITION_Y.in(Units.Meters),
                         gripperHeight.in(Units.Meters),
                         new Rotation3d(0, -inputs.currentAngle.in(Units.Radians), 0));
-                        new Rotation3d(0, inputs.currentAngle.in(Units.Radians), 0));
 
         io.updateInputs();
         Logger.processInputs(this.getClass().getSimpleName(), inputs);
