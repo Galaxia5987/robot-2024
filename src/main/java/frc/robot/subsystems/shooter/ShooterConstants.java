@@ -46,8 +46,8 @@ public class ShooterConstants {
     public static final LoggedTunableNumber BOTTOM_kA =
             new LoggedTunableNumber("Shooter/Bottom kA");
 
-    public static void initialize(Constants.Mode mode) {
-        switch (mode) {
+    public static void initConstants() {
+        switch (Constants.CURRENT_MODE) {
             case REAL:
                 TOP_kP.initDefault(10.0);
                 TOP_kI.initDefault(0.0);
