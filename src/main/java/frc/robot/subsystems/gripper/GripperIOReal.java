@@ -71,7 +71,8 @@ public class GripperIOReal implements GripperIO {
     public void updateInputs() {
         inputs.angleMotorVoltage.mut_replace(angleMotor.get(), Units.Volts);
         inputs.rollerMotorVoltage.mut_replace(rollerMotor.get(), Units.Volts);
-        inputs.currentAngle.mut_replace(angleMotor.getPosition().getValue(), Units.Degrees);
+        inputs.currentAngle.mut_replace(angleMotor.getPosition().getValue(), Units.Rotations);
         inputs.hasNote = hasNote();
+        inputs.encoderPosition.mut_replace(absoluteEncoder.getAbsolutePosition(), Units.Degrees);
     }
 }

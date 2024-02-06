@@ -13,4 +13,5 @@ public class GripperInputs {
     public boolean hasNote = false;
     public MutableMeasure<Velocity<Velocity<Distance>>> acceleration =
             Units.MetersPerSecondPerSecond.of(0).mutableCopy();
+    public MutableMeasure<Angle> encoderPosition = Units.Degrees.of(0).mutableCopy();
 }
