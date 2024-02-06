@@ -50,14 +50,13 @@ public class GripperIOSim implements GripperIO {
         inputs.angleSetpoint = angle;
 
         angleMotor.setControl(positionRequest.withPosition(Utils.normalize(angle.in(Rotations))));
-        ;
     }
 
     @Override
     public void updateInputs() {
         rollerMotor.update(Timer.getFPGATimestamp());
         angleMotor.update(Timer.getFPGATimestamp());
-        inputs.currentAngle.mut_replace(angleMotor.getPosition(), Degrees);
+        inputs.currentAngle.mut_replace(angleMotor.getPosition(), Radians);
         inputs.rollerMotorVoltage.mut_replace(rollerMotor.getAppliedVoltage(), Volts);
         inputs.angleMotorVoltage.mut_replace(angleMotor.getAppliedVoltage(), Volts);
     }
