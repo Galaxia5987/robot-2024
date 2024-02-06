@@ -13,9 +13,6 @@ import frc.robot.swerve.SwerveDrive;
 public class RobotContainer {
 
     private static RobotContainer INSTANCE = null;
-    private final Elevator elevator;
-    private final Gripper gripper;
-    private final Conveyor conveyor;
     private final SwerveDrive swerveDrive;
     private final CommandXboxController xboxController = new CommandXboxController(0);
 
@@ -26,26 +23,16 @@ public class RobotContainer {
         ElevatorIO elevatorIO;
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                elevatorIO = new ElevatorIOReal();
-                gripperIO = new GripperIOReal();
                 break;
             case SIM:
             case REPLAY:
             default:
-                elevatorIO = new ElevatorIOSim();
-                elevatorIO = new ElevatorIOSim();
-                gripperIO = new GripperIOSim();
                 break;
         }
-        Elevator.initialize(elevatorIO);
-        Gripper.initialize(gripperIO);
         Constants.initSwerve();
         Constants.initVision();
 
-        gripper = Gripper.getInstance();
         swerveDrive = SwerveDrive.getInstance();
-        elevator = Elevator.getInstance();
-        conveyor = Conveyor.getInstance();
 
         // Configure the button bindings and default commands
         configureDefaultCommands();
