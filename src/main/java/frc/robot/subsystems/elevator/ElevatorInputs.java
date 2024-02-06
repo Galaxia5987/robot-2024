@@ -14,6 +14,6 @@ public class ElevatorInputs {
     public ElevatorIO.ControlMode controlMode = ElevatorIO.ControlMode.POSITION;
     public boolean isBottom = true;
     public boolean isTop = false;
-    public MutableMeasure<Angle> servoAngle = Units.Degrees.of(0).mutableCopy();
-    public MutableMeasure<Angle> servoSetpoint = Units.Degrees.of(0).mutableCopy();
+    public MutableMeasure<Angle> stopperAngle = Units.Degrees.of(0).mutableCopy();
+    public MutableMeasure<Angle> stopperSetpoint = Units.Degrees.of(0).mutableCopy();
 }

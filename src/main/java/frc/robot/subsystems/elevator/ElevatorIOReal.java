@@ -51,12 +51,12 @@ public class ElevatorIOReal implements ElevatorIO {
     }
 
     public void flipServo() {
-        if (servo.get() == ElevatorConstants.SERVO_OPEN.in(Degrees)) {
-            inputs.servoSetpoint = ElevatorConstants.SERVO_CLOSE;
-            servo.set(ElevatorConstants.SERVO_CLOSE.in(Degrees));
+        if (servo.get() == ElevatorConstants.STOPPER_OPEN.in(Degrees)) {
+            inputs.stopperSetpoint = ElevatorConstants.STOPPER_CLOSE;
+            servo.set(ElevatorConstants.STOPPER_CLOSE.in(Degrees));
         } else {
-            inputs.servoSetpoint = ElevatorConstants.SERVO_OPEN;
-            servo.set(ElevatorConstants.SERVO_OPEN.in(Degrees));
+            inputs.stopperSetpoint = ElevatorConstants.STOPPER_OPEN;
+            servo.set(ElevatorConstants.STOPPER_OPEN.in(Degrees));
         }
     }
 
@@ -78,10 +78,10 @@ public class ElevatorIOReal implements ElevatorIO {
         inputs.gripperHeight.mut_replace(
                 inputs.carriageHeight.gt(ElevatorConstants.GRIPPER_HEIGHT)
                         ? inputs.carriageHeight
-                        .mutableCopy()
-                        .mut_minus(ElevatorConstants.GRIPPER_HEIGHT)
+                                .mutableCopy()
+                                .mut_minus(ElevatorConstants.GRIPPER_HEIGHT)
                         : Meters.zero());
 
-        inputs.servoAngle.mut_replace(servo.getAngle(), Degrees);
+        inputs.stopperAngle.mut_replace(servo.getAngle(), Degrees);
     }
 }
