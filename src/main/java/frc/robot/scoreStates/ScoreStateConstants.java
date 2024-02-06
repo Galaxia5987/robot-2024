@@ -4,6 +4,7 @@ import com.pathplanner.lib.util.GeometryUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
@@ -36,5 +37,5 @@ public class ScoreStateConstants {
     public static final Rotation2d AMP_ROTATION_REVERSE = new Rotation2d(Math.toRadians(-90));
     public static final Measure<Distance> MAX_SHOOTING_DISTANCE = Units.Meters.of(3);
     public static final Measure<Distance> MIN_DISTANCE_TO_TURN_GRIPPER = Units.Meters.of(3);
-    public static final double TURN_TOLERANCE = 0.01; // Rotations
+    public static final Measure<Angle> TURN_TOLERANCE = Units.Rotations.of(0.01); // Rotations
 }

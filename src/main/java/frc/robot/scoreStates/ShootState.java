@@ -37,7 +37,7 @@ public class ShootState implements ScoreState {
                                         Utils.calculateOptimalRotation(
                                                         optimalTranslation, speakerPose)
                                                 .getRotations(),
-                                        ScoreStateConstants.TURN_TOLERANCE);
+                                        ScoreStateConstants.TURN_TOLERANCE.in(Units.Rotations));
                     }
                     optimalTranslation = botPose.getTranslation().nearest(optimalPoints);
 
