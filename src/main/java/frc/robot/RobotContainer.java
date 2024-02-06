@@ -17,7 +17,9 @@ public class RobotContainer {
     private final SwerveDrive swerveDrive;
     private final CommandXboxController xboxController = new CommandXboxController(0);
 
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
     private RobotContainer() {
         ElevatorIO elevatorIO;
         switch (Constants.CURRENT_MODE) {
@@ -60,7 +62,8 @@ public class RobotContainer {
                         () -> true));
     }
 
-    private void configureButtonBindings() {}
+    private void configureButtonBindings() {
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

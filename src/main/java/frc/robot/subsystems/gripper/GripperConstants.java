@@ -1,6 +1,10 @@
 package frc.robot.subsystems.gripper;
 
+import static frc.robot.subsystems.intake.IntakeConstants.*;
+
 import edu.wpi.first.units.*;
+import frc.robot.Constants;
+import lib.webconstants.LoggedTunableNumber;
 
 public class GripperConstants {
     public static final Measure<Angle> INTAKE_ANGLE = null;
@@ -11,4 +15,26 @@ public class GripperConstants {
     public static final Measure<Distance> GRIPPER_POSITION_X = Units.Meters.of(0);
     public static final Measure<Distance> GRIPPER_POSITION_Y = Units.Meters.of(0);
     public static final Measure<Distance> GRIPPER_POSITION_z = Units.Meters.of(0.6461);
+    public static final double ANGLE_MOTOR_GEAR_RATIO = 58.5;
+
+    public static final LoggedTunableNumber KP = new LoggedTunableNumber("Gripper/kP");
+    public static final LoggedTunableNumber KI = new LoggedTunableNumber("Gripper/kI");
+    public static final LoggedTunableNumber KD = new LoggedTunableNumber("Gripper/kD");
+
+    public static void initConstants() {
+        switch (Constants.CURRENT_MODE) {
+            case REAL:
+                KP.initDefault(0);
+                KI.initDefault(0);
+                KD.initDefault(0);
+                break;
+            case SIM:
+            case REPLAY:
+            default:
+                KP.initDefault(24);
+                KI.initDefault(0.000_001);
+                KD.initDefault(0);
+                break;
+        }
+    }
 }

@@ -23,13 +23,13 @@ public class Gripper extends SubsystemBase {
     private final GripperInputsAutoLogged inputs = GripperIO.inputs;
     private final ElevatorInputsAutoLogged elevatorInputs = ElevatorIO.inputs;
 
-    @AutoLogOutput private final Mechanism2d mechanism2d = new Mechanism2d(0, 0);
+    @AutoLogOutput private final Mechanism2d mechanism2d = new Mechanism2d(1, 1);
     @AutoLogOutput private Pose3d gripperPose = new Pose3d(0, 0, 0, new Rotation3d());
     @AutoLogOutput private MutableMeasure<Distance> gripperHeight = null;
 
-    private final MechanismRoot2d root = mechanism2d.getRoot("Gripper", 0, 0);
+    private final MechanismRoot2d root = mechanism2d.getRoot("Gripper", 0.5, 0.5);
     private final MechanismLigament2d gripperLigament =
-            root.append(new MechanismLigament2d("Gripper", 0, 0));
+            root.append(new MechanismLigament2d("Gripper", 0.3, 0));
 
     private Gripper(GripperIO io) {
         this.io = io;
@@ -84,7 +84,7 @@ public class Gripper extends SubsystemBase {
                         GripperConstants.GRIPPER_POSITION_X.in(Units.Meters),
                         GripperConstants.GRIPPER_POSITION_Y.in(Units.Meters),
                         gripperHeight.in(Units.Meters),
-                        new Rotation3d(0, inputs.currentAngle.in(Units.Radians), 0));
+                        new Rotation3d(0, inputs.currentAngle.in(Units.Degrees), 0));
 
         io.updateInputs();
         Logger.processInputs(this.getClass().getSimpleName(), inputs);
