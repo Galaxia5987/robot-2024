@@ -56,14 +56,16 @@ public class Intake extends SubsystemBase {
     }
 
     public Command intake() {
-        return setAngle(IntakePose.DOWN)
-                .alongWith(setRollerSpeed(0.5).alongWith(setCenterRollerSpeed(0.5)))
+        return Commands.parallel(
+                        setAngle(IntakePose.DOWN),
+                        setRollerSpeed(0.5).alongWith(setCenterRollerSpeed(0.5)))
                 .withName("feeding position activated");
     }
 
     public Command stop() {
-        return setAngle(IntakePose.UP)
-                .alongWith(setRollerSpeed(0).alongWith(setCenterRollerSpeed(0)))
+        return Commands.parallel(
+                        setAngle(IntakePose.UP),
+                        setRollerSpeed(0).alongWith(setCenterRollerSpeed(0)))
                 .withName("stopped");
     }
 
