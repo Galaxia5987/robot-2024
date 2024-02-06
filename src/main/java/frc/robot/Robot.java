@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.ctre.phoenix6.SignalLogger;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -81,6 +82,8 @@ public class Robot extends LoggedRobot {
 
         Logger.start();
         SignalLogger.enableAutoLogging(true);
+
+        Pathfinding.setPathfinder(new LocalADStarAK());
 
         SwerveConstants.initConstants(true, Robot.isReal());
         IntakeConstants.initConstants();
