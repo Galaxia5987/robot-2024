@@ -31,6 +31,7 @@ public class ElevatorIOReal implements ElevatorIO {
         servo = new Servo(0);
         sensor = new DigitalInput(0);
 
+
         mainMotor.getConfigurator().apply(ElevatorConstants.MAIN_MOTOR_CONFIGURATION);
         auxMotor.getConfigurator().apply(ElevatorConstants.AUX_MOTOR_CONFIGURATION);
 
