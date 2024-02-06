@@ -8,7 +8,6 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Timer;
 import lib.Utils;
 import lib.motors.TalonFXSim;
@@ -50,10 +49,8 @@ public class GripperIOSim implements GripperIO {
     public void setAngle(MutableMeasure<Angle> angle) {
         inputs.angleSetpoint = angle;
 
-        angleMotor.setControl(
-                positionRequest.withPosition(
-                        angle.mut_replace(Utils.normalize(angle.in(Radians)), Radians)
-                                .in(Rotations)));
+        angleMotor.setControl(positionRequest.withPosition(Utils.normalize(angle.in(Rotations))));
+        ;
     }
 
     @Override
