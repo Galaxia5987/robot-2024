@@ -67,7 +67,7 @@ public class ElevatorIOReal implements ElevatorIO {
     }
 
     public void stopMotor() {
-        mainMotor.setControl(powerControl.withOutput(0));
+        mainMotor.stopMotor();
     }
 
     @Override
