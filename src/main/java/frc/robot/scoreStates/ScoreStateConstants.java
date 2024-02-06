@@ -36,4 +36,5 @@ public class ScoreStateConstants {
     public static final Rotation2d AMP_ROTATION_REVERSE = new Rotation2d(Math.toRadians(-90));
     public static final Measure<Distance> MAX_SHOOTING_DISTANCE = Units.Meters.of(3);
     public static final Measure<Distance> MIN_DISTANCE_TO_TURN_GRIPPER = Units.Meters.of(3);
+    public static final double TURN_TOLERANCE = 0.01; // Rotations
 }
