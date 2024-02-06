@@ -8,6 +8,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Timer;
 import lib.Utils;
 import lib.motors.TalonFXSim;
@@ -59,8 +60,8 @@ public class GripperIOSim implements GripperIO {
     public void updateInputs() {
         rollerMotor.update(Timer.getFPGATimestamp());
         angleMotor.update(Timer.getFPGATimestamp());
-        inputs.currentAngle = Rotations.of(angleMotor.getPosition()).mutableCopy();
-        inputs.rollerMotorVoltage = Volts.of(rollerMotor.getAppliedVoltage()).mutableCopy();
-        inputs.angleMotorVoltage = Volts.of(angleMotor.getAppliedVoltage()).mutableCopy();
+        inputs.currentAngle.mut_replace(angleMotor.getPosition(), Degrees);
+        inputs.rollerMotorVoltage.mut_replace(rollerMotor.getAppliedVoltage(), Volts);
+        inputs.angleMotorVoltage.mut_replace(angleMotor.getAppliedVoltage(), Volts);
     }
 }
