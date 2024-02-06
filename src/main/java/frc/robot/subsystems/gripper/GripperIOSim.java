@@ -9,7 +9,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.wpilibj.Timer;
-import lib.Utils;
 import lib.motors.TalonFXSim;
 
 public class GripperIOSim implements GripperIO {
@@ -49,14 +48,15 @@ public class GripperIOSim implements GripperIO {
     public void setAngle(MutableMeasure<Angle> angle) {
         inputs.angleSetpoint = angle;
 
-        angleMotor.setControl(positionRequest.withPosition(Utils.normalize(angle.in(Rotations))));
+        angleMotor.setControl(
+                positionRequest.withPosition(Math.IEEEremainder(angle.in(Rotations), 0.5)));
     }
 
     @Override
     public void updateInputs() {
         rollerMotor.update(Timer.getFPGATimestamp());
         angleMotor.update(Timer.getFPGATimestamp());
-        inputs.currentAngle.mut_replace(angleMotor.getPosition(), Degrees);
+        inputs.currentAngle.mut_replace(angleMotor.getPosition(), Rotations);
         inputs.rollerMotorVoltage.mut_replace(rollerMotor.getAppliedVoltage(), Volts);
         inputs.angleMotorVoltage.mut_replace(angleMotor.getAppliedVoltage(), Volts);
     }
