@@ -7,32 +7,38 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOReal;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
-import frc.robot.subsystems.gripper.*;
 import frc.robot.swerve.SwerveDrive;
 
 public class RobotContainer {
 
     private static RobotContainer INSTANCE = null;
+    private final Elevator elevator;
+    private final Conveyor conveyor;
     private final SwerveDrive swerveDrive;
     private final CommandXboxController xboxController = new CommandXboxController(0);
 
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
     private RobotContainer() {
-        GripperConstants.initConstants();
-        GripperIO gripperIO;
         ElevatorIO elevatorIO;
         switch (Constants.CURRENT_MODE) {
             case REAL:
+                elevatorIO = new ElevatorIOReal();
                 break;
             case SIM:
             case REPLAY:
             default:
+                elevatorIO = new ElevatorIOSim();
                 break;
         }
+        Elevator.initialize(elevatorIO);
         Constants.initSwerve();
         Constants.initVision();
 
         swerveDrive = SwerveDrive.getInstance();
+        elevator = Elevator.getInstance();
+        conveyor = Conveyor.getInstance();
 
         // Configure the button bindings and default commands
         configureDefaultCommands();
@@ -56,7 +62,8 @@ public class RobotContainer {
                         () -> true));
     }
 
-    private void configureButtonBindings() {}
+    private void configureButtonBindings() {
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
