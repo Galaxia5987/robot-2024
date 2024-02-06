@@ -73,6 +73,8 @@ public class ElevatorConstants { // TODO: check real values
                                 .withKP(ElevatorConstants.KP.get())
                                 .withKI(ElevatorConstants.KI.get())
                                 .withKD(ElevatorConstants.KD.get())
+                                .withKV(ElevatorConstants.KV.get())
+                                .withKA(ElevatorConstants.KA.get())
                                 .withKG(ElevatorConstants.KG.get()))
                 .withMotorOutput(new MotorOutputConfigs().withInverted(MAIN_INVERT))
                 .CurrentLimits
