@@ -49,7 +49,7 @@ public class ElevatorIOReal implements ElevatorIO {
     @Override
     public void updateInputs(ElevatorInputs inputs) {
         inputs.isBottom = atBottom();
-        inputs.carriageHeight = Meters.of(mainMotor.getPosition().getValue()).mutableCopy();
+        inputs.carriageHeight.mut_replace(mainMotor.getPosition().getValue(), Meters);
 
         inputs.gripperHeight.mut_replace(
                 inputs.carriageHeight.gt(ElevatorConstants.GRIPPER_HEIGHT)
@@ -58,7 +58,7 @@ public class ElevatorIOReal implements ElevatorIO {
                                 .mut_minus(ElevatorConstants.GRIPPER_HEIGHT)
                         : Meters.zero());
 
-        inputs.servoAngle = Units.Degrees.of(servo.getAngle()).mutableCopy();
+        inputs.servoAngle.mut_replace(servo.getAngle(), Degrees);
     }
 
     public boolean atBottom() {
