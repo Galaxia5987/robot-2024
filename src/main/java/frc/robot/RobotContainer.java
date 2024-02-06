@@ -2,23 +2,26 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOReal;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
-import frc.robot.swerve.*;
+import frc.robot.swerve.SwerveDrive;
 
 public class RobotContainer {
 
     private static RobotContainer INSTANCE = null;
     private final Elevator elevator;
+    private final Conveyor conveyor;
     private final SwerveDrive swerveDrive;
     private final CommandXboxController xboxController = new CommandXboxController(0);
 
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
     private RobotContainer() {
         ElevatorIO elevatorIO;
-
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 elevatorIO = new ElevatorIOReal();
@@ -35,6 +38,7 @@ public class RobotContainer {
 
         swerveDrive = SwerveDrive.getInstance();
         elevator = Elevator.getInstance();
+        conveyor = Conveyor.getInstance();
 
         // Configure the button bindings and default commands
         configureDefaultCommands();
@@ -59,7 +63,6 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        xboxController.a().onTrue(elevator.setHeight(2));
     }
 
     /**
