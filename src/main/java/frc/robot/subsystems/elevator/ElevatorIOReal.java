@@ -12,6 +12,7 @@ import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
+import frc.robot.Ports;
 
 public class ElevatorIOReal implements ElevatorIO {
     private final Servo servo;
@@ -25,11 +26,11 @@ public class ElevatorIOReal implements ElevatorIO {
     private final DutyCycleOut powerControl = new DutyCycleOut(0);
 
     public ElevatorIOReal() {
-        mainMotor = new TalonFX(0);
-        auxMotor = new TalonFX(0);
-        servo = new Servo(0);
-        bottomSensor = new DigitalInput(0);
-        topSensor = new DigitalInput(0);
+        mainMotor = new TalonFX(Ports.Elevator.MAIN_MOTOR);
+        auxMotor = new TalonFX(Ports.Elevator.AUX_MOTOR);
+        servo = new Servo(Ports.Elevator.SERVO);
+        bottomSensor = new DigitalInput(Ports.Elevator.BOTTOM_LIMIT_SWITCH);
+        topSensor = new DigitalInput(Ports.Elevator.TOP_LIMIT_SWITCH);
 
         mainMotor.getConfigurator().apply(ElevatorConstants.MOTOR_CONFIGURATION);
         auxMotor.getConfigurator().apply(ElevatorConstants.MOTOR_CONFIGURATION);
