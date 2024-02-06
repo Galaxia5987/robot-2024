@@ -43,7 +43,6 @@ public class ElevatorIOReal implements ElevatorIO {
 
     @Override
     public void setHeight(MutableMeasure<Distance> height) {
-        inputs.heightSetpoint.mut_replace(height);
         mainMotor.setControl(positionControl.withPosition(height.in(Units.Meters)));
     }
 
