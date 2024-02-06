@@ -20,16 +20,16 @@ public class ElevatorConstants { // TODO: check real values
     public static final double DRUM_RADIUS = 0.02; // [m]
 
     public static final MutableMeasure<Distance> STARTING_HEIGHT =
-            Units.Meters.of(0).mutableCopy(); // [m]
+            Units.Meters.of(0).mutableCopy();
     public static final MutableMeasure<Distance> MIN_HEIGHT =
-            Units.Meters.of(0).mutableCopy(); // [m]
+            Units.Meters.of(0).mutableCopy();
     public static final MutableMeasure<Distance> MAX_HEIGHT =
-            Units.Meters.of(0).mutableCopy(); // [m]
+            Units.Meters.of(0).mutableCopy();
 
-    public static final MutableMeasure<Angle> STOPPER_OPEN =
-            Units.Degrees.of(0).mutableCopy(); // [m]
-    public static final MutableMeasure<Angle> STOPPER_CLOSE =
-            Units.Degrees.of(0).mutableCopy(); // [m]
+    public static final MutableMeasure<Angle> OPEN_POSITION =
+            Units.Degrees.of(0).mutableCopy();
+    public static final MutableMeasure<Angle> LOCKED_POSITION =
+            Units.Degrees.of(0).mutableCopy();
 
     public static final InvertedValue MAIN_INVERT = InvertedValue.Clockwise_Positive;
     public static final InvertedValue AUX_INVERT = InvertedValue.Clockwise_Positive;

@@ -51,12 +51,12 @@ public class ElevatorIOReal implements ElevatorIO {
     }
 
     public void openStopper(){
-        inputs.stopperSetpoint = ElevatorConstants.STOPPER_OPEN;
-        servo.set(ElevatorConstants.STOPPER_OPEN.in(Degrees));
+        inputs.stopperSetpoint = ElevatorConstants.OPEN_POSITION;
+        servo.set(ElevatorConstants.OPEN_POSITION.in(Degrees));
     }
     public void closeStopper(){
-        inputs.stopperSetpoint = ElevatorConstants.STOPPER_CLOSE;
-        servo.set(ElevatorConstants.STOPPER_CLOSE.in(Degrees));
+        inputs.stopperSetpoint = ElevatorConstants.LOCKED_POSITION;
+        servo.set(ElevatorConstants.LOCKED_POSITION.in(Degrees));
     }
 
     public void resetEncoder() {
