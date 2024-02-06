@@ -30,8 +30,8 @@ public class ElevatorIOReal implements ElevatorIO {
         servo = new Servo(Ports.Elevator.SERVO);
         sensor = new DigitalInput(Ports.Elevator.LIMIT_SWITCH);
 
-        mainMotor.getConfigurator().apply(ElevatorConstants.MOTOR_CONFIGURATION);
-        auxMotor.getConfigurator().apply(ElevatorConstants.MOTOR_CONFIGURATION);
+        mainMotor.getConfigurator().apply(ElevatorConstants.MAIN_MOTOR_CONFIGURATION);
+        auxMotor.getConfigurator().apply(ElevatorConstants.AUX_MOTOR_CONFIGURATION);
 
         auxMotor.setControl(new StrictFollower(mainMotor.getDeviceID()));
     }
@@ -77,7 +77,7 @@ public class ElevatorIOReal implements ElevatorIO {
 
     public void resetEncoder() {
         if (atBottom()) {
-            setHeight(Meters.of(0).mutableCopy());
+            setHeight((ElevatorConstants.STARTING_HEIGHT).mutableCopy());
         }
     }
 
