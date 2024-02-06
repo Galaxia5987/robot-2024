@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.conveyor.Conveyor;
@@ -106,11 +105,7 @@ public class RobotContainer {
                         () -> true));
     }
 
-    private void configureButtonBindings() {
-        //
-        // xboxController.a().onTrue(elevator.setHeight(Units.Meters.of(0.6).mutableCopy()).alongWith(gripper.setWristPosition(Units.Rotations.of(-0.25).mutableCopy())));
-        xboxController.a().onTrue(hood.setAngle(() -> Units.Rotations.of(0.5).mutableCopy()));
-    }
+    private void configureButtonBindings() {}
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
