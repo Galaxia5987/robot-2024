@@ -47,6 +47,8 @@ public class ElevatorConstants { // TODO: check real values
     public static final LoggedTunableNumber KP = new LoggedTunableNumber("kp");
     public static final LoggedTunableNumber KI = new LoggedTunableNumber("ki");
     public static final LoggedTunableNumber KD = new LoggedTunableNumber("kd");
+    public static final LoggedTunableNumber KV = new LoggedTunableNumber("kd");
+    public static final LoggedTunableNumber KA = new LoggedTunableNumber("kd");
     public static final LoggedTunableNumber KG = new LoggedTunableNumber("kg");
 
     public static void initConstants() {
@@ -55,6 +57,8 @@ public class ElevatorConstants { // TODO: check real values
                 KP.initDefault(0.8);
                 KI.initDefault(0.0);
                 KD.initDefault(0.0);
+                KV.initDefault(0.0);
+                KA.initDefault(0.0);
                 KG.initDefault(0.0);
             case SIM:
             case REPLAY:
