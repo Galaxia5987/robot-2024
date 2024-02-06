@@ -54,12 +54,11 @@ public class Elevator extends SubsystemBase {
     }
 
     public SequentialCommandGroup setHeight(MutableMeasure<Distance> height) {
-      return new SequentialCommandGroup(
-              runOnce(()->inputs.heightSetpoint = height),
-              run(io::openStopper).withTimeout(0.3),
-              run(()->io.setHeight(height)).withTimeout(2),
-              run(io::closeStopper).withTimeout(0.3).withName("set height")
-      );
+        return new SequentialCommandGroup(
+                runOnce(() -> inputs.heightSetpoint = height),
+                run(io::openStopper).withTimeout(0.3),
+                run(() -> io.setHeight(height)).withTimeout(2),
+                run(io::closeStopper).withTimeout(0.3).withName("set height"));
     }
 
     @Override

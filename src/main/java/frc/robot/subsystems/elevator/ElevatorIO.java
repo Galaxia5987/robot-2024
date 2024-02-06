@@ -11,6 +11,7 @@ public interface ElevatorIO {
     void setHeight(MutableMeasure<Distance> height);
 
     void openStopper();
+
     void closeStopper();
 
     void updateInputs(ElevatorInputs inputs);
