@@ -25,10 +25,10 @@ public class ElevatorIOReal implements ElevatorIO {
     private final DutyCycleOut powerControl = new DutyCycleOut(0);
 
     public ElevatorIOReal() {
-        mainMotor = new TalonFX(Ports.Elevator.MAIN_MOTOR);
-        auxMotor = new TalonFX(Ports.Elevator.AUX_MOTOR);
-        servo = new Servo(Ports.Elevator.SERVO);
-        sensor = new DigitalInput(Ports.Elevator.LIMIT_SWITCH);
+        mainMotor = new TalonFX(0);
+        auxMotor = new TalonFX(0);
+        servo = new Servo(0);
+        sensor = new DigitalInput(0);
 
         mainMotor.getConfigurator().apply(ElevatorConstants.MAIN_MOTOR_CONFIGURATION);
         auxMotor.getConfigurator().apply(ElevatorConstants.AUX_MOTOR_CONFIGURATION);

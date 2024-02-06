@@ -59,13 +59,6 @@ public final class Ports {
         };
     }
 
-    public static final class Elevator {
-        public static final int MAIN_MOTOR = 0;
-        public static final int AUX_MOTOR = 0;
-        public static final int LIMIT_SWITCH = 0;
-        public static final int SERVO = 0;
-    }
-
     public static class UI {
         public static final int JOYSTICK_TRIGGER = 1;
         public static final int JOYSTICK_TOP_BOTTOM_BUTTON = 2;
