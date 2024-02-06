@@ -1,6 +1,7 @@
 package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.configs.*;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.*;
@@ -71,7 +72,8 @@ public class ElevatorConstants { // TODO: check real values
                                 .withKD(ElevatorConstants.KD.get())
                                 .withKV(ElevatorConstants.KV.get())
                                 .withKA(ElevatorConstants.KA.get())
-                                .withKG(ElevatorConstants.KG.get()))
+                                .withKG(ElevatorConstants.KG.get()).withGravityType(GravityTypeValue.Elevator_Static))
+
                 .withMotorOutput(new MotorOutputConfigs().withInverted(MAIN_INVERT))
                 .CurrentLimits
                 .withStatorCurrentLimitEnable(true)
