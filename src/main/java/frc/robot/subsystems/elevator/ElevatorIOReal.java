@@ -19,8 +19,7 @@ public class ElevatorIOReal implements ElevatorIO {
     private final TalonFX mainMotor;
     private final TalonFX auxMotor;
 
-    private final DigitalInput bottomSensor;
-    private final DigitalInput topSensor;
+    private final DigitalInput sensor;
 
     private final MotionMagicVoltage positionControl = new MotionMagicVoltage(0);
     private final DutyCycleOut powerControl = new DutyCycleOut(0);
@@ -29,8 +28,7 @@ public class ElevatorIOReal implements ElevatorIO {
         mainMotor = new TalonFX(Ports.Elevator.MAIN_MOTOR);
         auxMotor = new TalonFX(Ports.Elevator.AUX_MOTOR);
         servo = new Servo(Ports.Elevator.SERVO);
-        bottomSensor = new DigitalInput(Ports.Elevator.BOTTOM_LIMIT_SWITCH);
-        topSensor = new DigitalInput(Ports.Elevator.TOP_LIMIT_SWITCH);
+        sensor = new DigitalInput(Ports.Elevator.LIMIT_SWITCH);
 
         mainMotor.getConfigurator().apply(ElevatorConstants.MOTOR_CONFIGURATION);
         auxMotor.getConfigurator().apply(ElevatorConstants.MOTOR_CONFIGURATION);
@@ -52,7 +50,6 @@ public class ElevatorIOReal implements ElevatorIO {
     @Override
     public void updateInputs(ElevatorInputs inputs) {
         inputs.isBottom = atBottom();
-        inputs.isTop = atTop();
         inputs.carriageHeight = Meters.of(mainMotor.getPosition().getValue()).mutableCopy();
 
         inputs.gripperHeight.mut_replace(
@@ -65,12 +62,8 @@ public class ElevatorIOReal implements ElevatorIO {
         inputs.servoAngle = Units.Degrees.of(servo.getAngle()).mutableCopy();
     }
 
-    public boolean atTop() {
-        return topSensor.get();
-    }
-
     public boolean atBottom() {
-        return bottomSensor.get();
+        return sensor.get();
     }
 
     public void flipServo() {
@@ -84,10 +77,9 @@ public class ElevatorIOReal implements ElevatorIO {
     }
 
     public void resetEncoder() {
-        if (atTop()) {
+        if (atBottom()) {
             setHeight(Meters.of(0).mutableCopy());
-        } else if (atTop())
-            setHeight(Meters.of(ElevatorConstants.MAX_HEIGHT.in(Meters)).mutableCopy());
+        }
     }
 
     public void stopMotor() {
