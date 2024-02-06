@@ -5,27 +5,33 @@ import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import frc.robot.subsystems.elevator.ElevatorIO;
+import lib.Utils;
 
 public class GripperIOReal implements GripperIO {
     private final TalonFX angleMotor;
     private final CANSparkMax rollerMotor;
     private final DigitalInput sensor;
     private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(0);
-    private final MotionMagicExpoTorqueCurrentFOC positionRequest = new MotionMagicExpoTorqueCurrentFOC(0);
+    private final MotionMagicExpoTorqueCurrentFOC positionRequest =
+            new MotionMagicExpoTorqueCurrentFOC(0);
     private final DutyCycleOut powerRequest = new DutyCycleOut(0);
 
-    private GripperIOReal(){
+    private GripperIOReal() {
         angleMotor = new TalonFX(0);
         angleMotor.getConfigurator().apply(GripperConstants.MOTOR_CONFIGURATION);
+
         rollerMotor = new CANSparkMax(0, CANSparkLowLevel.MotorType.kBrushless);
+
         sensor = new DigitalInput(0);
+
+        absoluteEncoder.setPositionOffset(GripperConstants.ABSOLUTE_ENCODER_OFFSET.get());
+
         rollerMotor.setSmartCurrentLimit(GripperConstants.CURRENT_LIMIT);
         rollerMotor.setInverted(GripperConstants.ROLLER_INVERTED_VALUE);
         rollerMotor.burnFlash();
@@ -44,17 +50,20 @@ public class GripperIOReal implements GripperIO {
 
     @Override
     public void setAngle(MutableMeasure<Angle> angle) {
+        angleMotor.setControl(
+                positionRequest.withPosition(
+                        Utils.normalize(new Rotation2d(angle)).getRotations()));
     }
 
-    public boolean hasNote(){
-       return sensor.get();
+    public boolean hasNote() {
+        return sensor.get();
     }
 
-    public void stopWrist(){
+    public void stopWrist() {
         angleMotor.stopMotor();
     }
 
-    public void stopRollers(){
+    public void stopRollers() {
         rollerMotor.stopMotor();
     }
 

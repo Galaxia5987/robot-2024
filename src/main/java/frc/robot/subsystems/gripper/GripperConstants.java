@@ -9,7 +9,6 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.*;
 import frc.robot.Constants;
-import frc.robot.subsystems.hood.HoodConstants;
 import lib.webconstants.LoggedTunableNumber;
 
 public class GripperConstants {
@@ -27,7 +26,8 @@ public class GripperConstants {
     public static final InvertedValue ANGLE_INVERTED_VALUE = InvertedValue.Clockwise_Positive;
     public static final boolean ROLLER_INVERTED_VALUE = true;
     public static final int CURRENT_LIMIT = 40;
-
+    public static final LoggedTunableNumber ABSOLUTE_ENCODER_OFFSET =
+            new LoggedTunableNumber("Gripper/EncoderOffset");
 
     public static final LoggedTunableNumber KP = new LoggedTunableNumber("Gripper/kP");
     public static final LoggedTunableNumber KI = new LoggedTunableNumber("Gripper/kI");
@@ -50,7 +50,7 @@ public class GripperConstants {
             case REPLAY:
             default:
                 KP.initDefault(24);
-                KI.initDefault(0.000001);
+                KI.initDefault(0.000_001);
                 KD.initDefault(0);
                 break;
         }
@@ -72,7 +72,4 @@ public class GripperConstants {
                 .withStatorCurrentLimit(CURRENT_LIMIT)
                 .withSupplyCurrentLimit(CURRENT_LIMIT);
     }
-
-
-
 }
