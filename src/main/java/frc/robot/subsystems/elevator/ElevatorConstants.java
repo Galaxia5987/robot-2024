@@ -12,9 +12,6 @@ import lib.webconstants.LoggedTunableNumber;
 public class ElevatorConstants { // TODO: check real values
     public static final TalonFXConfiguration MAIN_MOTOR_CONFIGURATION = new TalonFXConfiguration();
     public static final TalonFXConfiguration AUX_MOTOR_CONFIGURATION = new TalonFXConfiguration();
-    public static final HardwareLimitSwitchConfigs LIMIT_SWITCH_CONFIGS =
-            new HardwareLimitSwitchConfigs();
-    public static final MotionMagicConfigs MOTION_MAGIC = new MotionMagicConfigs();
 
 
     public static final double MECHANISM_WIDTH = 0.8; // [m]
@@ -62,7 +59,9 @@ public class ElevatorConstants { // TODO: check real values
         }
 
         MAIN_MOTOR_CONFIGURATION
-                .withHardwareLimitSwitch(LIMIT_SWITCH_CONFIGS).withMotionMagic(MOTION_MAGIC).withFeedback(
+                .withHardwareLimitSwitch(new HardwareLimitSwitchConfigs()
+                        .withReverseLimitAutosetPositionValue(0))
+                .withMotionMagic(new MotionMagicConfigs()).withFeedback(
                         new FeedbackConfigs()
                                 .withSensorToMechanismRatio(ElevatorConstants.GEAR_RATIO))
                 .withSlot0(
@@ -89,6 +88,5 @@ public class ElevatorConstants { // TODO: check real values
                 .withMotorOutput(
                         new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive));
 
-        LIMIT_SWITCH_CONFIGS.withReverseLimitAutosetPositionValue(0);
     }
 }
