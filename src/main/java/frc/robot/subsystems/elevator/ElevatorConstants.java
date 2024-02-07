@@ -1,6 +1,7 @@
 package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.configs.*;
+import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -13,6 +14,8 @@ public class ElevatorConstants { // TODO: check real values
     public static final TalonFXConfiguration AUX_MOTOR_CONFIGURATION = new TalonFXConfiguration();
     public static final HardwareLimitSwitchConfigs LIMIT_SWITCH_CONFIGS =
             new HardwareLimitSwitchConfigs();
+    public static final MotionMagicConfigs MOTION_MAGIC = new MotionMagicConfigs();
+
 
     public static final double MECHANISM_WIDTH = 0.8; // [m]
     public static final double MECHANISM_HEIGHT = 2; // [m]
@@ -59,8 +62,7 @@ public class ElevatorConstants { // TODO: check real values
         }
 
         MAIN_MOTOR_CONFIGURATION
-                .withHardwareLimitSwitch(LIMIT_SWITCH_CONFIGS)
-                .withFeedback(
+                .withHardwareLimitSwitch(LIMIT_SWITCH_CONFIGS).withMotionMagic(MOTION_MAGIC).withFeedback(
                         new FeedbackConfigs()
                                 .withSensorToMechanismRatio(ElevatorConstants.GEAR_RATIO))
                 .withSlot0(
