@@ -2,7 +2,9 @@ package frc.robot.commandGroups;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.GripperState;
 import frc.robot.scoreStates.ScoreState;
+import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.gripper.Gripper;
@@ -51,8 +53,28 @@ public class CommandGroups {
                                 .andThen(intake.stop(), gripper.setRollerPower(0)));
     }
 
-    public Command scoreInit(Supplier<ScoreState> currentState) {
-        return currentState.get().stateInitialize();
+    public Command gripperOuttake() {
+        return elevator.setHeight(ElevatorConstants.OUTTAKE_HEIGHT)
+                .onlyIf(gripperState::isGripperInsideRobot)
+                .andThen(gripper.outtake());
+    }
+
+    public Command shooterOuttake() {
+        return elevatorGripperMinPosition()
+                .andThen(
+                        Commands.parallel(
+                                gripper.setRollerPower(GripperConstants.OUTTAKE_POWER),
+                                conveyor.feed(),
+                                shooter.setVelocity(
+                                        () -> ShooterConstants.OUTTAKE_POWER.mutableCopy())));
+    }
+
+    public Command scoreCommandInit(Supplier<ScoreState> currentState) {
+        return currentState.get().initializeCommand();
+    }
+
+    public Command scoreSubsystemInit(Supplier<ScoreState> currentState) {
+        return currentState.get().initializeSubsystem();
     }
 
     public Command scoreExecute(Supplier<ScoreState> currentState) {
