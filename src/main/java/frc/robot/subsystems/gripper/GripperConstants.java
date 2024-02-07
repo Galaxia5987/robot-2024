@@ -1,7 +1,5 @@
 package frc.robot.subsystems.gripper;
 
-import static frc.robot.subsystems.intake.IntakeConstants.*;
-
 import edu.wpi.first.units.*;
 import frc.robot.Constants;
 import lib.webconstants.LoggedTunableNumber;
@@ -16,6 +14,9 @@ public class GripperConstants {
     public static final double AMP_POWER_NORMAL = 0;
     public static final double AMP_POWER_REVERSE = 0;
     public static final Measure<Dimensionless> THRESHOLD = Units.Percent.of(0.02);
+    public static final Measure<Distance> GRIPPER_OUTTAKE_MIN_HEIGHT =
+            Units.Meters.of(0); // TODO: replace with actual value
+    public static final Measure<Distance> GRIPPER_LENGTH = Units.Meters.of(0.534_35);
     public static final Measure<Distance> GRIPPER_POSITION_X = Units.Meters.of(0);
     public static final Measure<Distance> GRIPPER_POSITION_Y = Units.Meters.of(0);
     public static final Measure<Distance> GRIPPER_POSITION_z = Units.Meters.of(0.6461);
