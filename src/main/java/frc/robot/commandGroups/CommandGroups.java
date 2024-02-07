@@ -39,4 +39,16 @@ public class CommandGroups {
                                 .until(() -> gripper.hasNote())
                                 .andThen(intake.stop(), gripper.setRollerPower(0)));
     }
+
+    public Command scoreInit(Supplier<ScoreState> currentState) {
+        return currentState.get().stateInitialize();
+    }
+
+    public Command scoreExecute(Supplier<ScoreState> currentState) {
+        return currentState.get().score();
+    }
+
+    public Command climb() {
+        return null;
+    }
 }
