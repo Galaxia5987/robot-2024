@@ -46,7 +46,7 @@ public class Elevator extends SubsystemBase {
     }
 
     public MutableMeasure<Distance> getCurrentHeight() {
-        return inputs.carriageHeight;
+        return inputs.hooksHeight;
     }
 
     public MutableMeasure<Distance> getHeightSetpoint() {
@@ -80,7 +80,7 @@ public class Elevator extends SubsystemBase {
         Logger.recordOutput(
                 "carriagePose",
                 new Pose3d(
-                        new Translation3d(0, 0, inputs.carriageHeight.in(Units.Meters)),
+                        new Translation3d(0, 0, inputs.hooksHeight.in(Units.Meters)),
                         new Rotation3d(0, 0, 0)));
     }
 }
