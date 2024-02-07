@@ -51,6 +51,12 @@ public class Gripper extends SubsystemBase {
                 inputs.angleSetpoint, GripperConstants.THRESHOLD.in(Units.Percent));
     }
 
+    public boolean isReversed() {
+        return inputs.currentAngle.isNear(
+                GripperConstants.WRIST_BACKWARDS_AMP,
+                GripperConstants.WRIST_TOLERANCE.in(Units.Rotations));
+    }
+
     public Command setRollerPower(double power) {
         return runOnce(() -> io.setRollerMotorPower(power)).withName("set roller power");
     }
