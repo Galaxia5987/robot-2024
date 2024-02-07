@@ -28,6 +28,7 @@ public class IntakeConstants {
     public static final TalonFXConfiguration ANGLE_CONFIGURATION = new TalonFXConfiguration();
 
     public static void initConstants() {
+
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 ANGLE_KP.initDefault(10.0 / 360.0);
@@ -54,7 +55,7 @@ public class IntakeConstants {
                 SPIN_KD.initDefault(0);
 
                 SPIN_KS.initDefault(0);
-                SPIN_KV.initDefault(0.002083333);
+                SPIN_KV.initDefault(0.002_083_333);
                 SPIN_KA.initDefault(0);
 
                 break;

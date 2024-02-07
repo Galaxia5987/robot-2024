@@ -18,7 +18,7 @@ public class ConveyorConstants {
     public static LoggedTunableNumber KV = new LoggedTunableNumber("Conveyor/kV");
     public static LoggedTunableNumber KA = new LoggedTunableNumber("Conveyor/kA");
 
-    public static void initialize(Constants.Mode currentMode) {
+    public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 KP.initDefault(0);

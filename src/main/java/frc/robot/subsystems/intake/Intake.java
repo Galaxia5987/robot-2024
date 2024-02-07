@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.intake.IntakeConstants.IntakePose;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -54,34 +56,26 @@ public class Intake extends SubsystemBase {
     }
 
     public Command setRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
-        return runOnce(
-                () -> {
-                    io.setRollerSpeed(speed);
-                    inputs.rollerSpeedSetPoint = speed;
-                });
+        return Commands.runOnce(() -> io.setRollerSpeed(speed));
     }
 
     public Command setCenterRollerSpeed(double speed) {
-        return runOnce(
-                () -> {
-                    io.setCenterRollerSpeed(speed);
-                    inputs.centerRollerSpeedSetPoint = speed;
-                });
+        return Commands.runOnce(() -> io.setCenterRollerSpeed(speed));
     }
 
     public Command intake() {
-        return setAngle(IntakeConstants.IntakePose.DOWN.intakePose)
-                .alongWith(
-                        setRollerSpeed(Units.RotationsPerSecond.of(0.5).mutableCopy())
-                                .andThen(setCenterRollerSpeed(0.5)))
+        return Commands.parallel(
+                        setAngle(IntakePose.DOWN),
+                        setRollerSpeed(Units.RotationsPerSecond.of(50).mutableCopy()),
+                        setCenterRollerSpeed(0.5))
                 .withName("feeding position activated");
     }
 
     public Command stop() {
-        return setAngle(IntakeConstants.IntakePose.UP)
-                .alongWith(
-                        setRollerSpeed(Units.RotationsPerSecond.of(0).mutableCopy())
-                                .andThen(setCenterRollerSpeed(0)))
+        return Commands.parallel(
+                        setAngle(IntakePose.UP),
+                        setRollerSpeed(Units.RotationsPerSecond.zero().mutableCopy()),
+                        setCenterRollerSpeed(0))
                 .withName("stopped");
     }
 

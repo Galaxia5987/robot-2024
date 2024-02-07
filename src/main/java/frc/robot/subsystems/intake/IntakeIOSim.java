@@ -60,8 +60,7 @@ public class IntakeIOSim implements IntakeIO {
         frontRoller.update(Timer.getFPGATimestamp());
         inputs.currentAngle.mut_replace((angleMotor.getPosition()), Units.Degrees);
         inputs.currentRollerSpeed.mut_replace(frontRoller.getVelocity(), Units.RPM);
-        inputs.currentCenterRollerSpeed.mut_replace(
-                centerRoller.getVelocity(), Units.RPM);
+        inputs.currentCenterRollerSpeed.mut_replace(centerRoller.getVelocity(), Units.RPM);
         inputs.angleMotorVoltage.mut_replace(angleMotor.getAppliedVoltage(), Units.Volts);
         inputs.spinMotorVoltage.mut_replace(frontRoller.getBusVoltage(), Units.Volts);
         inputs.centerMotorVoltage.mut_replace(centerRoller.getBusVoltage(), Units.Volts);

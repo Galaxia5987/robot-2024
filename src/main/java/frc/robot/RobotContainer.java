@@ -1,62 +1,90 @@
 package frc.robot;
 
-import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.conveyor.Conveyor;
-import frc.robot.subsystems.conveyor.ConveyorConstants;
 import frc.robot.subsystems.conveyor.ConveyorIO;
 import frc.robot.subsystems.conveyor.ConveyorIOSim;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOReal;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
+import frc.robot.subsystems.gripper.Gripper;
+import frc.robot.subsystems.gripper.GripperIO;
+import frc.robot.subsystems.gripper.GripperIOReal;
+import frc.robot.subsystems.gripper.GripperIOSim;
+import frc.robot.subsystems.hood.Hood;
+import frc.robot.subsystems.hood.HoodIO;
+import frc.robot.subsystems.hood.HoodIOReal;
+import frc.robot.subsystems.hood.HoodIOSim;
 import frc.robot.subsystems.intake.*;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOSim;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterIO;
+import frc.robot.subsystems.shooter.ShooterIOReal;
+import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.swerve.SwerveDrive;
 
 public class RobotContainer {
 
     private static RobotContainer INSTANCE = null;
-    private final Elevator elevator;
+    private final Intake intake;
     private final Conveyor conveyor;
+    private final Elevator elevator;
+    private final Gripper gripper;
+    private final Hood hood;
+    private final Shooter shooter;
     private final SwerveDrive swerveDrive;
     private final Intake intake;
     private final CommandXboxController xboxController = new CommandXboxController(0);
-    private final CommandGenericHID keyBoardControl = new CommandGenericHID(0);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
-        ElevatorIO elevatorIO;
-        ConveyorIO conveyorIO;
         IntakeIO intakeIO;
-        IntakeConstants.initConstants();
-        ConveyorConstants.initialize(Constants.CURRENT_MODE);
+        ConveyorIO conveyorIO;
+        ElevatorIO elevatorIO;
+        GripperIO gripperIO;
+        HoodIO hoodIO;
+        ShooterIO shooterIO;
         switch (Constants.CURRENT_MODE) {
             case REAL:
+                intakeIO = new IntakeIOSim(); // TODO: replace with IOReal
+                conveyorIO = new ConveyorIOSim(); // TODO: replace with IOReal
                 elevatorIO = new ElevatorIOReal();
-                conveyorIO = new ConveyorIOSim();
-                intakeIO = new IntakeIOReal();
+                gripperIO = new GripperIOReal();
+                hoodIO = new HoodIOReal();
+                shooterIO = new ShooterIOReal();
                 break;
             case SIM:
             case REPLAY:
             default:
+                intakeIO = new IntakeIOSim();
                 conveyorIO = new ConveyorIOSim();
                 elevatorIO = new ElevatorIOSim();
-                intakeIO = new IntakeIOSim();
+                gripperIO = new GripperIOSim();
+                hoodIO = new HoodIOSim();
+                shooterIO = new ShooterIOSim();
                 break;
         }
-        Elevator.initialize(elevatorIO);
-        Conveyor.initialize(conveyorIO);
         Intake.initialize(intakeIO);
+        Conveyor.initialize(conveyorIO);
+        Elevator.initialize(elevatorIO);
+        Gripper.initialize(gripperIO);
+        Hood.initialize(hoodIO);
+        Shooter.initialize(shooterIO);
         Constants.initSwerve();
         Constants.initVision();
 
         swerveDrive = SwerveDrive.getInstance();
-        elevator = Elevator.getInstance();
-        conveyor = Conveyor.getInstance();
         intake = Intake.getInstance();
+        conveyor = Conveyor.getInstance();
+        elevator = Elevator.getInstance();
+        gripper = Gripper.getInstance();
+        hood = Hood.getInstance();
+        shooter = Shooter.getInstance();
+
         // Configure the button bindings and default commands
         configureDefaultCommands();
         configureButtonBindings();
@@ -79,22 +107,7 @@ public class RobotContainer {
                         () -> true));
     }
 
-    private void configureButtonBindings() {
-        xboxController.a().onTrue(intake.setAngle(Units.Degrees.of(90).mutableCopy()));
-        xboxController.b().onTrue(intake.setAngle(Units.Degrees.of(180).mutableCopy()));
-        xboxController.x().onTrue(intake.setAngle(Units.Degrees.of(270).mutableCopy()));
-        xboxController.y().onTrue(intake.setAngle(Units.Degrees.of(360).mutableCopy()));
-        xboxController.rightBumper().onTrue(intake.setRollerSpeed(Units.RotationsPerSecond.of(50).mutableCopy()));
-        xboxController.leftBumper().onTrue(intake.setCenterRollerSpeed(0.5));
-        //        xboxController.a().onTrue(elevator.setHeight(2));
-        //  keyBoardControl
-        //          .button(1)
-        //          .onTrue(conveyor.setVelocity(() -> Units.RotationsPerSecond.of(50).mutableCopy()));
-        //  keyBoardControl
-        //          .button(2)
-        //          .onTrue(conveyor.setVelocity(() -> Units.RotationsPerSecond.of(0).mutableCopy()));
-        //
-    }
+    private void configureButtonBindings() {}
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

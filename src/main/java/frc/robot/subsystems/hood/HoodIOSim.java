@@ -48,7 +48,7 @@ public class HoodIOSim implements HoodIO {
     public void setPower(double power) {
         inputs.controlMode = Mode.POWER;
         inputs.powerSetpoint = power;
-        motor.setControl(dutyCycleOut.withOutput(power * 12));
+        motor.setControl(dutyCycleOut.withOutput(power));
     }
 
     @Override
