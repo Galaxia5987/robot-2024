@@ -76,7 +76,7 @@ public class Gripper extends SubsystemBase {
     public void periodic() {
         gripperHeight =
                 elevatorInputs
-                        .carriageToGripperHeight
+                        .carriageHeight
                         .mutableCopy()
                         .mut_plus(GripperConstants.GRIPPER_POSITION_z);
         gripperPose =
