@@ -57,7 +57,7 @@ public class ElevatorConstants { // TODO: check real values
                 KD.initDefault(0.05);
         }
 
-        MAIN_MOTOR_CONFIGURATION
+        MAIN_MOTOR_CONFIGURATION.withHardwareLimitSwitch(LIMIT_SWITCH_CONFIGS)
                 .withFeedback(
                         new FeedbackConfigs()
                                 .withSensorToMechanismRatio(ElevatorConstants.GEAR_RATIO))
