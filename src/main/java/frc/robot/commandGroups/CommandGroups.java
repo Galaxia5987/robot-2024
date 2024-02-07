@@ -28,4 +28,15 @@ public class CommandGroups {
         }
         return INSTANCE;
     }
+
+    public Command intake() {
+        return Commands.parallel(
+                        elevator.setHeight(ElevatorConstants.MIN_HEIGHT),
+                        gripper.setWristPosition(
+                                GripperConstants.WRIST_FOLD_POSITION.mutableCopy()))
+                .andThen(
+                        Commands.parallel(intake.intake(), gripper.intake())
+                                .until(() -> gripper.hasNote())
+                                .andThen(intake.stop(), gripper.setRollerPower(0)));
+    }
 }
