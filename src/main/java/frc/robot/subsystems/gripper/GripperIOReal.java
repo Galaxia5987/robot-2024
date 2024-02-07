@@ -7,6 +7,7 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Angle;
@@ -23,7 +24,8 @@ public class GripperIOReal implements GripperIO {
     private final MotionMagicExpoTorqueCurrentFOC positionRequest =
             new MotionMagicExpoTorqueCurrentFOC(0);
     private final VoltageOut powerRequest = new VoltageOut(0).withEnableFOC(true);
-    private final LinearFilter filter = LinearFilter.singlePoleIIR(0.1, 0.02);
+    private final Debouncer debouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
+
 
 
     private GripperIOReal() {
@@ -60,7 +62,7 @@ public class GripperIOReal implements GripperIO {
     }
 
     public boolean hasNote() {
-        return sensor.get();
+        return debouncer.calculate(sensor.get());
     }
 
     public void stopWrist() {
@@ -77,6 +79,6 @@ public class GripperIOReal implements GripperIO {
         inputs.rollerMotorVoltage.mut_replace(rollerMotor.get(), Units.Volts);
         inputs.currentAngle.mut_replace(angleMotor.getPosition().getValue(), Units.Rotations);
         inputs.hasNote = hasNote();
-        inputs.encoderPosition.mut_replace(absoluteEncoder.getAbsolutePosition(), Units.Degrees);
+        inputs.encoderPosition.mut_replace(absoluteEncoder.getAbsolutePosition(), Units.Rotations);
     }
 }
