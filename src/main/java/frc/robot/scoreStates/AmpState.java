@@ -46,7 +46,12 @@ public class AmpState implements ScoreState {
 
     @Override
     public Command stateInitialize() {
-        return null;
+        return Commands.parallel(
+                elevator.setHeight(ElevatorConstants.MAX_HEIGHT),
+                gripper.setWristPosition(
+                        isAmpingForward
+                                ? GripperConstants.WRIST_FORWARD_AMP_POSE.mutableCopy()
+                                : GripperConstants.WRIST_BACKWARDS_AMP.mutableCopy()));
     }
 
     @Override
