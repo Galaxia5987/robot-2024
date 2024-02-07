@@ -7,6 +7,7 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
@@ -22,6 +23,8 @@ public class GripperIOReal implements GripperIO {
     private final MotionMagicExpoTorqueCurrentFOC positionRequest =
             new MotionMagicExpoTorqueCurrentFOC(0);
     private final VoltageOut powerRequest = new VoltageOut(0).withEnableFOC(true);
+    private final LinearFilter filter = LinearFilter.singlePoleIIR(0.1, 0.02);
+
 
     private GripperIOReal() {
         angleMotor = new TalonFX(0);

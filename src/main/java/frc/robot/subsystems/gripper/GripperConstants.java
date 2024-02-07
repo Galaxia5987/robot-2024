@@ -14,8 +14,6 @@ public class GripperConstants {
 
     public static final Measure<Angle> INTAKE_ANGLE = null;
     public static final Measure<Angle> OUTTAKE_ANGLE = null;
-    public static final Measure<Velocity<Distance>> MAX_VELOCITY = Units.MetersPerSecond.of(3).mutableCopy();
-    public static final Measure <Velocity<Velocity<Distance>>> MAX_ACCELERATION = Units.MetersPerSecondPerSecond.of(4).mutableCopy();
     public static final double INTAKE_POWER = 0;
     public static final double OUTTAKE_POWER = 0;
     public static final Measure<Dimensionless> THRESHOLD = Units.Percent.of(0.02);
@@ -60,8 +58,8 @@ public class GripperConstants {
                         new MotionMagicConfigs()
                                 .withMotionMagicExpo_kV(KV.get())
                                 .withMotionMagicExpo_kA(KA.get())
-                                .withMotionMagicAcceleration(MAX_ACCELERATION.in(Units.MetersPerSecondPerSecond))
-                                .withMotionMagicCruiseVelocity(MAX_VELOCITY.in(Units.MetersPerSecond)))
+                                .withMotionMagicAcceleration(4)
+                                .withMotionMagicCruiseVelocity(3))
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(GEAR_RATIO))
                 .withSlot0(
                         new Slot0Configs()
