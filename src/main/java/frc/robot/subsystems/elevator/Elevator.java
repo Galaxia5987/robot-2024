@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.subsystems.hood.HoodConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -53,11 +54,16 @@ public class Elevator extends SubsystemBase {
         return inputs.heightSetpoint;
     }
 
-    public SequentialCommandGroup setHeight(MutableMeasure<Distance> height) {
-        return new SequentialCommandGroup(
+    public boolean atSetpoint() {
+        return inputs.heightSetpoint.isNear(
+                inputs.gripperHeight, ElevatorConstants.THRESHOLD.in(Units.Value));
+    }
+
+    public Command setHeight(MutableMeasure<Distance> height) {
+        return Commands.sequence(
                 runOnce(() -> inputs.heightSetpoint = height),
                 run(io::openStopper).withTimeout(0.3),
-                run(() -> io.setHeight(height)).withTimeout(2),
+                run(() -> io.setHeight(height)).until(this::atSetpoint),
                 run(io::closeStopper).withTimeout(0.3).withName("set height"));
     }
 
