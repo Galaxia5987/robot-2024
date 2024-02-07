@@ -8,18 +8,26 @@ import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperConstants;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterConstants;
 import java.util.function.Supplier;
 
 public class CommandGroups {
     private static CommandGroups INSTANCE = null;
-    private Intake intake;
-    private Gripper gripper;
-    private Elevator elevator;
+    private final Intake intake;
+    private final Gripper gripper;
+    private final Elevator elevator;
+    private final Shooter shooter;
+    private final Conveyor conveyor;
+    private final GripperState gripperState;
 
     public CommandGroups() {
         intake = Intake.getInstance();
         gripper = Gripper.getInstance();
         elevator = Elevator.getInstance();
+        shooter = Shooter.getInstance();
+        conveyor = Conveyor.getInstance();
+        gripperState = new GripperState();
     }
 
     public static CommandGroups getINSTANCE() {
@@ -29,14 +37,17 @@ public class CommandGroups {
         return INSTANCE;
     }
 
-    public Command intake() {
+    private Command elevatorGripperMinPosition() {
         return Commands.parallel(
-                        elevator.setHeight(ElevatorConstants.MIN_HEIGHT),
-                        gripper.setWristPosition(
-                                GripperConstants.WRIST_FOLD_POSITION.mutableCopy()))
+                elevator.setHeight(ElevatorConstants.MIN_HEIGHT),
+                gripper.setWristPosition(GripperConstants.WRIST_FOLD_POSITION.mutableCopy()));
+    }
+
+    public Command intake() {
+        return elevatorGripperMinPosition()
                 .andThen(
                         Commands.parallel(intake.intake(), gripper.intake())
-                                .until(() -> gripper.hasNote())
+                                .until(gripper::hasNote)
                                 .andThen(intake.stop(), gripper.setRollerPower(0)));
     }
 
