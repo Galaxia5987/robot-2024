@@ -1,7 +1,6 @@
 package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.configs.*;
-import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -12,7 +11,6 @@ import lib.webconstants.LoggedTunableNumber;
 public class ElevatorConstants { // TODO: check real values
     public static final TalonFXConfiguration MAIN_MOTOR_CONFIGURATION = new TalonFXConfiguration();
     public static final TalonFXConfiguration AUX_MOTOR_CONFIGURATION = new TalonFXConfiguration();
-
 
     public static final double MECHANISM_WIDTH = 0.8; // [m]
     public static final double MECHANISM_HEIGHT = 2; // [m]
@@ -25,7 +23,8 @@ public class ElevatorConstants { // TODO: check real values
 
     public static final MutableMeasure<Angle> OPEN_POSITION = Units.Degrees.of(0).mutableCopy();
     public static final MutableMeasure<Angle> LOCKED_POSITION = Units.Degrees.of(0).mutableCopy();
-    public static final MutableMeasure<Dimensionless> THRESHOLD = Units.Percent.of(0.02).mutableCopy();
+    public static final MutableMeasure<Dimensionless> THRESHOLD =
+            Units.Percent.of(0.02).mutableCopy();
 
     public static final double MAX_VELOCITY = 3;
     public static final double MAX_ACCELERATION = 7;
@@ -59,9 +58,10 @@ public class ElevatorConstants { // TODO: check real values
         }
 
         MAIN_MOTOR_CONFIGURATION
-                .withHardwareLimitSwitch(new HardwareLimitSwitchConfigs()
-                        .withReverseLimitAutosetPositionValue(0))
-                .withMotionMagic(new MotionMagicConfigs()).withFeedback(
+                .withHardwareLimitSwitch(
+                        new HardwareLimitSwitchConfigs().withReverseLimitAutosetPositionValue(0))
+                .withMotionMagic(new MotionMagicConfigs())
+                .withFeedback(
                         new FeedbackConfigs()
                                 .withSensorToMechanismRatio(ElevatorConstants.GEAR_RATIO))
                 .withSlot0(
@@ -87,6 +87,5 @@ public class ElevatorConstants { // TODO: check real values
                                 .withSensorToMechanismRatio(ElevatorConstants.GEAR_RATIO))
                 .withMotorOutput(
                         new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive));
-
     }
 }
