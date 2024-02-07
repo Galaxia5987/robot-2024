@@ -26,10 +26,6 @@ public class ElevatorConstants { // TODO: check real values
     public static final MutableMeasure<Angle> OPEN_POSITION = Units.Degrees.of(0).mutableCopy();
     public static final MutableMeasure<Angle> LOCKED_POSITION = Units.Degrees.of(0).mutableCopy();
 
-    public static final InvertedValue MAIN_INVERT = InvertedValue.Clockwise_Positive;
-    public static final InvertedValue AUX_INVERT = InvertedValue.Clockwise_Positive;
-    public static final double CURRENT_LIMIT = 40;
-
     public static final double MAX_VELOCITY = 3;
     public static final double MAX_ACCELERATION = 7;
 
@@ -74,18 +70,18 @@ public class ElevatorConstants { // TODO: check real values
                                 .withKA(ElevatorConstants.KA.get())
                                 .withKG(ElevatorConstants.KG.get()).withGravityType(GravityTypeValue.Elevator_Static))
 
-                .withMotorOutput(new MotorOutputConfigs().withInverted(MAIN_INVERT))
+                .withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive))
                 .CurrentLimits
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimitEnable(true)
-                .withStatorCurrentLimit(CURRENT_LIMIT)
-                .withSupplyCurrentLimit(CURRENT_LIMIT);
+                .withStatorCurrentLimit(40)
+                .withSupplyCurrentLimit(40);
 
         AUX_MOTOR_CONFIGURATION
                 .withFeedback(
                         new FeedbackConfigs()
                                 .withSensorToMechanismRatio(ElevatorConstants.GEAR_RATIO))
-                .withMotorOutput(new MotorOutputConfigs().withInverted(AUX_INVERT));
+                .withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive));
 
         LIMIT_SWITCH_CONFIGS.withReverseLimitAutosetPositionValue(0);
     }
