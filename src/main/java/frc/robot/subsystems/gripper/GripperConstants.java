@@ -40,7 +40,7 @@ public class GripperConstants {
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                KP.initDefault(0.2);
+                KP.initDefault(0);
                 KI.initDefault(0);
                 KD.initDefault(0);
                 KV.initDefault(0);
