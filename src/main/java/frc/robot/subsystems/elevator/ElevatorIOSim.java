@@ -54,7 +54,7 @@ public class ElevatorIOSim implements ElevatorIO {
         motor.update(Timer.getFPGATimestamp());
 
         inputs.hooksHeight = Meters.of(motor.getPosition()).mutableCopy();
-        inputs.gripperHeight.mut_replace(
+        inputs.carriageToGripperHeight.mut_replace(
                 inputs.hooksHeight.gt(ElevatorConstants.GRIPPER_HEIGHT)
                         ? inputs.hooksHeight
                                 .mutableCopy()

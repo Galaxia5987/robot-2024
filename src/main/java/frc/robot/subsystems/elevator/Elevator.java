@@ -55,7 +55,7 @@ public class Elevator extends SubsystemBase {
 
     public boolean atSetpoint() {
         return inputs.heightSetpoint.isNear(
-                inputs.gripperHeight, ElevatorConstants.THRESHOLD.in(Units.Value));
+                inputs.carriageToGripperHeight, ElevatorConstants.THRESHOLD.in(Units.Value));
     }
 
     public Command setHeight(MutableMeasure<Distance> height) {
@@ -76,7 +76,7 @@ public class Elevator extends SubsystemBase {
         Logger.recordOutput(
                 "elevatorPose",
                 new Pose3d(
-                        new Translation3d(0, 0, inputs.gripperHeight.in(Units.Meters)),
+                        new Translation3d(0, 0, inputs.carriageToGripperHeight.in(Units.Meters)),
                         new Rotation3d(0, 0, 0)));
         Logger.recordOutput(
                 "carriagePose",

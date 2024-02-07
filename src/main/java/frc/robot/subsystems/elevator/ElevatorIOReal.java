@@ -61,7 +61,7 @@ public class ElevatorIOReal implements ElevatorIO {
         inputs.isBottom = mainMotor.getFault_ReverseHardLimit().getValue();
         inputs.hooksHeight.mut_replace(mainMotor.getPosition().getValue(), Meters);
 
-        inputs.gripperHeight.mut_replace(
+        inputs.carriageToGripperHeight.mut_replace(
                 inputs.hooksHeight.gt(ElevatorConstants.GRIPPER_HEIGHT)
                         ? inputs.hooksHeight
                                 .mutableCopy()
