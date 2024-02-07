@@ -2,10 +2,7 @@ package frc.robot.subsystems.gripper;
 
 import static frc.robot.subsystems.intake.IntakeConstants.*;
 
-import com.ctre.phoenix6.configs.FeedbackConfigs;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.*;
@@ -17,6 +14,8 @@ public class GripperConstants {
 
     public static final Measure<Angle> INTAKE_ANGLE = null;
     public static final Measure<Angle> OUTTAKE_ANGLE = null;
+    public static final Measure<Velocity<Distance>> MAX_VELOCITY = Units.MetersPerSecond.of(3).mutableCopy();
+    public static final Measure <Velocity<Velocity<Distance>>> MAX_ACCELERATION = Units.MetersPerSecondPerSecond.of(4).mutableCopy();
     public static final double INTAKE_POWER = 0;
     public static final double OUTTAKE_POWER = 0;
     public static final Measure<Dimensionless> THRESHOLD = Units.Percent.of(0.02);
@@ -57,6 +56,12 @@ public class GripperConstants {
         }
 
         MOTOR_CONFIGURATION
+                .withMotionMagic(
+                        new MotionMagicConfigs()
+                                .withMotionMagicExpo_kV(KV.get())
+                                .withMotionMagicExpo_kA(KA.get())
+                                .withMotionMagicAcceleration(MAX_ACCELERATION.in(Units.MetersPerSecondPerSecond))
+                                .withMotionMagicCruiseVelocity(MAX_VELOCITY.in(Units.MetersPerSecond)))
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(GEAR_RATIO))
                 .withSlot0(
                         new Slot0Configs()
