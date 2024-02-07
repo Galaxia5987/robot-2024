@@ -9,9 +9,11 @@ public interface ScoreState {
         return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
     }
 
+    Command initializeCommand();
+
     Command driveToClosestOptimalPoint();
 
-    Command stateInitialize();
+    Command initializeSubsystem();
 
     Command score();
 }
