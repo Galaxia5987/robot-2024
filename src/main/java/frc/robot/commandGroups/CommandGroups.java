@@ -40,6 +40,13 @@ public class CommandGroups {
                                 .andThen(intake.stop(), gripper.setRollerPower(0)));
     }
 
+    public Command trapScore() {
+        return Commands.sequence(
+                gripper.setWristPosition(
+                        GripperConstants.WRIST_TRAP_ANGLE.mutableCopy()),
+                gripper.setRollerPower(GripperConstants.TRAP_POWER));
+    }
+
     public Command scoreInit(Supplier<ScoreState> currentState) {
         return currentState.get().stateInitialize();
     }
