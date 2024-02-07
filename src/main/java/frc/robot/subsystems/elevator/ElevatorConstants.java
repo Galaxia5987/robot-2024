@@ -57,7 +57,8 @@ public class ElevatorConstants { // TODO: check real values
                 KD.initDefault(0.05);
         }
 
-        MAIN_MOTOR_CONFIGURATION.withHardwareLimitSwitch(LIMIT_SWITCH_CONFIGS)
+        MAIN_MOTOR_CONFIGURATION
+                .withHardwareLimitSwitch(LIMIT_SWITCH_CONFIGS)
                 .withFeedback(
                         new FeedbackConfigs()
                                 .withSensorToMechanismRatio(ElevatorConstants.GEAR_RATIO))
@@ -68,9 +69,10 @@ public class ElevatorConstants { // TODO: check real values
                                 .withKD(ElevatorConstants.KD.get())
                                 .withKV(ElevatorConstants.KV.get())
                                 .withKA(ElevatorConstants.KA.get())
-                                .withKG(ElevatorConstants.KG.get()).withGravityType(GravityTypeValue.Elevator_Static))
-
-                .withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive))
+                                .withKG(ElevatorConstants.KG.get())
+                                .withGravityType(GravityTypeValue.Elevator_Static))
+                .withMotorOutput(
+                        new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive))
                 .CurrentLimits
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimitEnable(true)
@@ -81,7 +83,8 @@ public class ElevatorConstants { // TODO: check real values
                 .withFeedback(
                         new FeedbackConfigs()
                                 .withSensorToMechanismRatio(ElevatorConstants.GEAR_RATIO))
-                .withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive));
+                .withMotorOutput(
+                        new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive));
 
         LIMIT_SWITCH_CONFIGS.withReverseLimitAutosetPositionValue(0);
     }
