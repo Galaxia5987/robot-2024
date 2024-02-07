@@ -79,7 +79,7 @@ public class ElevatorConstants { // TODO: check real values
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimitEnable(true)
                 .withStatorCurrentLimit(40)
-                .withSupplyCurrentLimit(40);
+                .withSupplyCurrentLimit(50);
 
         AUX_MOTOR_CONFIGURATION
                 .withFeedback(
