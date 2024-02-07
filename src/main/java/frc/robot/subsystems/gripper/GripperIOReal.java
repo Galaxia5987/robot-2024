@@ -52,7 +52,7 @@ public class GripperIOReal implements GripperIO {
     public void setAngle(MutableMeasure<Angle> angle) {
         angleMotor.setControl(
                 positionRequest.withPosition(
-                        Math.IEEEremainder(new Rotation2d(angle).getRotations(), Math.PI)));
+                        Math.IEEEremainder(new Rotation2d(angle).getRotations(), 180)));
     }
 
     public boolean hasNote() {
