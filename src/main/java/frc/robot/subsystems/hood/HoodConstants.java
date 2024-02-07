@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -66,7 +67,8 @@ public class HoodConstants {
                                 .withKS(HoodConstants.kS.get())
                                 .withKV(HoodConstants.kV.get())
                                 .withKA(HoodConstants.kA.get())
-                                .withKG(HoodConstants.kG.get()))
+                                .withKG(HoodConstants.kG.get())
+                                .withGravityType(GravityTypeValue.Arm_Cosine))
                 .withMotorOutput(new MotorOutputConfigs().withInverted(INVERTED_VALUE))
                 .CurrentLimits
                 .withStatorCurrentLimitEnable(true)
