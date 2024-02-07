@@ -11,7 +11,6 @@ import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import lib.Utils;
 
 public class GripperIOReal implements GripperIO {
     private final TalonFX angleMotor;
