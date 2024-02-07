@@ -17,9 +17,14 @@ import java.util.Set;
 import lib.Utils;
 
 public class AmpState implements ScoreState {
-    private static Elevator elevator;
-    private static Gripper gripper;
-    private static boolean isAmpingForward = true;
+    private Elevator elevator;
+    private Gripper gripper;
+    private boolean isAmpingForward = true;
+    private boolean hasTimeToTurnGripper;
+    private Translation2d ampPose;
+    private double distance;
+    private double robotRotation;
+    private Rotation2d ampRotation;
 
     private AmpState() {
         elevator = Elevator.getInstance();
@@ -27,22 +32,20 @@ public class AmpState implements ScoreState {
     }
 
     @Override
-    public Command driveToClosestOptimalPoint() {
-        return Commands.defer(
+    public Command initializeCommand() {
+        return Commands.runOnce(
                 () -> {
-                    Translation2d ampPose;
                     isAmpingForward = true;
                     if (isRed()) {
                         ampPose = ScoreStateConstants.AMP_POSE_RED;
                     } else {
                         ampPose = ScoreStateConstants.AMP_POSE_BLUE;
                     }
-                    Rotation2d ampRotation;
                     ampRotation = ScoreStateConstants.AMP_ROTATION_NORMAL;
                     Pose2d botPose = SwerveDrive.getInstance().getBotPose();
-                    double robotRotation = botPose.getRotation().getRadians();
-                    double distance = Utils.getDistanceFromPoint(ampPose, botPose);
-                    boolean hasTimeToTurnGripper =
+                    robotRotation = botPose.getRotation().getRadians();
+                    distance = Utils.getDistanceFromPoint(ampPose, botPose);
+                    hasTimeToTurnGripper =
                             distance
                                     > ScoreStateConstants.MIN_DISTANCE_TO_TURN_GRIPPER.in(
                                             Units.Meters);
@@ -50,14 +53,20 @@ public class AmpState implements ScoreState {
                         isAmpingForward = false;
                         ampRotation = ScoreStateConstants.AMP_ROTATION_REVERSE;
                     }
-                    return AutoBuilder.pathfindToPose(
-                            new Pose2d(ampPose, ampRotation), Constants.AUTO_CONSTRAINTS);
-                },
+                });
+    }
+
+    @Override
+    public Command driveToClosestOptimalPoint() {
+        return Commands.defer(
+                () ->
+                        AutoBuilder.pathfindToPose(
+                                new Pose2d(ampPose, ampRotation), Constants.AUTO_CONSTRAINTS),
                 Set.of(SwerveDrive.getInstance()));
     }
 
     @Override
-    public Command stateInitialize() {
+    public Command initializeSubsystem() {
         return Commands.parallel(
                 elevator.setHeight(ElevatorConstants.MAX_HEIGHT),
                 gripper.setWristPosition(
