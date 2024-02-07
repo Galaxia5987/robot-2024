@@ -2,6 +2,7 @@ package frc.robot.subsystems.gripper;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
@@ -17,8 +18,8 @@ public class GripperIOReal implements GripperIO {
     private final CANSparkMax rollerMotor;
     private final DigitalInput sensor;
     private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(0);
-    private final MotionMagicExpoTorqueCurrentFOC positionRequest =
-            new MotionMagicExpoTorqueCurrentFOC(0);
+    private final MotionMagicVoltage positionRequest =
+            new MotionMagicVoltage(0).withEnableFOC(true);
     private final DutyCycleOut powerRequest = new DutyCycleOut(0);
 
     private GripperIOReal() {
