@@ -15,6 +15,11 @@ import lib.Utils;
 public class ShootState implements ScoreState {
 
     @Override
+    public Command initializeCommand() {
+        return null;
+    }
+
+    @Override
     public Command driveToClosestOptimalPoint() {
         return Commands.defer(
                 () -> {
@@ -52,7 +57,7 @@ public class ShootState implements ScoreState {
     }
 
     @Override
-    public Command stateInitialize() {
+    public Command initializeSubsystem() {
         return null;
     }
 

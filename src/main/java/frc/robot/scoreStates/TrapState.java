@@ -26,7 +26,7 @@ public class TrapState implements ScoreState {
     }
 
     @Override
-    public Command stateInitialize() {
+    public Command initializeSubsystem() {
         return null;
     }
 
