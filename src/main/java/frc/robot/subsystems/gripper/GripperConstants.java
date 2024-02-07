@@ -33,9 +33,9 @@ public class GripperConstants {
     public static final LoggedTunableNumber KP = new LoggedTunableNumber("Gripper/kP");
     public static final LoggedTunableNumber KI = new LoggedTunableNumber("Gripper/kI");
     public static final LoggedTunableNumber KD = new LoggedTunableNumber("Gripper/kD");
-    public static final LoggedTunableNumber KV = new LoggedTunableNumber("Gripper/kD");
-    public static final LoggedTunableNumber KA = new LoggedTunableNumber("Gripper/kD");
-    public static final LoggedTunableNumber KG = new LoggedTunableNumber("Gripper/kD");
+    public static final LoggedTunableNumber KV = new LoggedTunableNumber("Gripper/kV");
+    public static final LoggedTunableNumber KA = new LoggedTunableNumber("Gripper/kA");
+    public static final LoggedTunableNumber KG = new LoggedTunableNumber("Gripper/kG");
 
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
