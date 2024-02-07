@@ -55,7 +55,7 @@ public class Elevator extends SubsystemBase {
 
     public boolean atHeightSetpoint() {
         return inputs.heightSetpoint.isNear(
-                inputs.carriageToGripperHeight, ElevatorConstants.THRESHOLD.in(Units.Value));
+                inputs.carriageHeight, ElevatorConstants.THRESHOLD.in(Units.Value));
     }
 
     public boolean stopperAtSetpoint() {
@@ -81,7 +81,7 @@ public class Elevator extends SubsystemBase {
         Logger.recordOutput(
                 "elevatorPose",
                 new Pose3d(
-                        new Translation3d(0, 0, inputs.carriageToGripperHeight.in(Units.Meters)),
+                        new Translation3d(0, 0, inputs.carriageHeight.in(Units.Meters)),
                         new Rotation3d(0, 0, 0)));
         Logger.recordOutput(
                 "carriagePose",
