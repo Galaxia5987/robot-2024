@@ -53,17 +53,22 @@ public class Elevator extends SubsystemBase {
         return inputs.heightSetpoint;
     }
 
-    public boolean atSetpoint() {
+    public boolean atHeightSetpoint() {
         return inputs.heightSetpoint.isNear(
                 inputs.carriageToGripperHeight, ElevatorConstants.THRESHOLD.in(Units.Value));
+    }
+
+    public boolean stopperAtSetpoint() {
+        return inputs.heightSetpoint.isNear(
+                inputs.stopperSetpoint, ElevatorConstants.THRESHOLD.in(Units.Value));
     }
 
     public Command setHeight(MutableMeasure<Distance> height) {
         return Commands.sequence(
                         runOnce(() -> inputs.heightSetpoint = height),
-                        run(io::openStopper).withTimeout(0.3),
-                        run(() -> io.setHeight(height)).until(this::atSetpoint),
-                        run(io::closeStopper).withTimeout(0.3))
+                        run(io::openStopper).until(this::stopperAtSetpoint).withTimeout(0.3),
+                        run(() -> io.setHeight(height)).until(this::atHeightSetpoint),
+                        run(io::closeStopper).until(this::stopperAtSetpoint).withTimeout(0.3))
                 .withName("set height");
     }
 
