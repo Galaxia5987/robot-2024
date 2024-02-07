@@ -7,8 +7,10 @@ import frc.robot.Constants;
 import lib.webconstants.LoggedTunableNumber;
 
 public class GripperConstants {
-    public static final Measure<Angle> INTAKE_ANGLE = null; // TODO: replace with actual value
-    public static final Measure<Angle> OUTTAKE_ANGLE = null; // TODO: replace with actual value
+    public static final Measure<Angle> INTAKE_ANGLE =
+            Units.Rotations.of(0); // TODO: replace with actual value
+    public static final Measure<Angle> OUTTAKE_ANGLE =
+            Units.Rotations.of(0); // TODO: replace with actual value
     public static final double INTAKE_POWER = 0; // TODO; replace with actual value
     public static final double OUTTAKE_POWER = 0; // TODO: replace with actual value
     public static final double AMP_POWER_NORMAL = 0;
