@@ -60,7 +60,10 @@ public class ElevatorConstants { // TODO: check real values
         MAIN_MOTOR_CONFIGURATION
                 .withHardwareLimitSwitch(
                         new HardwareLimitSwitchConfigs().withReverseLimitAutosetPositionValue(0))
-                .withMotionMagic(new MotionMagicConfigs())
+                .withMotionMagic(new MotionMagicConfigs().withMotionMagicExpo_kV(KV.get())
+                        .withMotionMagicExpo_kA(KA.get())
+                        .withMotionMagicAcceleration(MAX_ACCELERATION)
+                        .withMotionMagicCruiseVelocity(MAX_VELOCITY))
                 .withFeedback(
                         new FeedbackConfigs()
                                 .withSensorToMechanismRatio(ElevatorConstants.GEAR_RATIO))
