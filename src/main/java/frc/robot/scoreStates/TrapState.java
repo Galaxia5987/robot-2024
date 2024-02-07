@@ -11,6 +11,11 @@ import java.util.Set;
 public class TrapState implements ScoreState {
 
     @Override
+    public Command initializeCommand() {
+        return null;
+    }
+
+    @Override
     public Command driveToClosestOptimalPoint() {
         return Commands.defer(
                 () -> {
