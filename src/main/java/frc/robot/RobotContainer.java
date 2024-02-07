@@ -17,7 +17,6 @@ import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOReal;
 import frc.robot.subsystems.hood.HoodIOSim;
-import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOSim;
