@@ -63,14 +63,6 @@ public class GripperIOReal implements GripperIO {
         return debouncer.calculate(sensor.get());
     }
 
-    public void stopWrist() {
-        angleMotor.stopMotor();
-    }
-
-    public void stopRollers() {
-        rollerMotor.stopMotor();
-    }
-
     @Override
     public void updateInputs() {
         inputs.angleMotorVoltage.mut_replace(angleMotor.get(), Units.Volts);
