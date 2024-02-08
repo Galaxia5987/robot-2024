@@ -22,10 +22,10 @@ public class ScoreStateConstants {
                     .map(GeometryUtil::flipFieldPosition)
                     .collect(Collectors.toList());
 
-    public static final List<Pose2d> OPTIMAL_POINTS_CLIMB_BLUE =
+    public static final List<Pose2d> OPTIMAL_POINTS_TRAP_BLUE =
             List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
-    public static final List<Pose2d> OPTIMAL_POINTS_CLIMB_RED =
-            OPTIMAL_POINTS_CLIMB_BLUE.stream()
+    public static final List<Pose2d> OPTIMAL_POINTS_TRAP_RED =
+            OPTIMAL_POINTS_TRAP_BLUE.stream()
                     .map(GeometryUtil::flipFieldPose)
                     .collect(Collectors.toList());
     public static final Translation2d AMP_POSE_BLUE = new Translation2d(1.85, 7.49);
