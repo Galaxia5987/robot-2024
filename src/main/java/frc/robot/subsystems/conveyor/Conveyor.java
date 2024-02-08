@@ -41,8 +41,7 @@ public class Conveyor extends SubsystemBase {
     }
 
     public boolean readyToFeed() {
-        return inputs.velocitySetpoint.isNear(
-                inputs.currentVelocity, SETPOINT_TOLERANCE.in(Units.Value));
+        return inputs.velocitySetpoint.isNear(inputs.currentVelocity, SETPOINT_TOLERANCE.in(Units.Value));
     }
 
     @Override

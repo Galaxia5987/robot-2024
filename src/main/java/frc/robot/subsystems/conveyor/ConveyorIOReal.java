@@ -23,6 +23,7 @@ public class ConveyorIOReal implements ConveyorIO {
         roller.burnFlash();
     }
 
+
     @Override
     public void setVelocity(MutableMeasure<Velocity<Angle>> velocity) {
         roller.set(velocity.in(Units.RotationsPerSecond));
@@ -30,8 +31,7 @@ public class ConveyorIOReal implements ConveyorIO {
 
     @Override
     public void updateInputs() {
-        inputs.currentVelocity.mut_replace(
-                (roller.getEncoder().getVelocity()), Units.RotationsPerSecond);
+        inputs.currentVelocity.mut_replace((roller.getEncoder().getVelocity()), Units.RotationsPerSecond);
         inputs.appliedCurrent.mut_replace((roller.getOutputCurrent()), Units.Amps);
         inputs.appliedVoltage.mut_replace((roller.getBusVoltage()), Units.Volts);
     }
