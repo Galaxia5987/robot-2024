@@ -26,7 +26,7 @@ public class AmpState implements ScoreState {
     private double robotRotation;
     private Rotation2d ampRotation;
 
-    private AmpState() {
+    public AmpState() {
         elevator = Elevator.getInstance();
         gripper = Gripper.getInstance();
     }
@@ -67,21 +67,29 @@ public class AmpState implements ScoreState {
 
     @Override
     public Command initializeSubsystem() {
-        return Commands.parallel(
-                elevator.setHeight(ElevatorConstants.MAX_HEIGHT),
-                gripper.setWristPosition(
-                        isAmpingForward
-                                ? GripperConstants.WRIST_FORWARD_AMP_POSE.mutableCopy()
-                                : GripperConstants.WRIST_BACKWARDS_AMP.mutableCopy()));
+        return Commands.defer(
+                () ->
+                        Commands.parallel(
+                                elevator.setHeight(ElevatorConstants.MAX_HEIGHT),
+                                gripper.setWristPosition(
+                                        isAmpingForward
+                                                ? GripperConstants.WRIST_FORWARD_AMP_POSE
+                                                        .mutableCopy()
+                                                : GripperConstants.WRIST_BACKWARDS_AMP
+                                                        .mutableCopy())),
+                Set.of(gripper, elevator));
     }
 
     @Override
     public Command score() {
         return driveToClosestOptimalPoint()
                 .andThen(
-                        gripper.setRollerPower(
-                                isAmpingForward
-                                        ? GripperConstants.AMP_POWER_NORMAL
-                                        : GripperConstants.AMP_POWER_REVERSE));
+                        Commands.defer(
+                                () ->
+                                        gripper.setRollerPower(
+                                                isAmpingForward
+                                                        ? GripperConstants.AMP_POWER_NORMAL
+                                                        : GripperConstants.AMP_POWER_REVERSE),
+                                Set.of(gripper)));
     }
 }
