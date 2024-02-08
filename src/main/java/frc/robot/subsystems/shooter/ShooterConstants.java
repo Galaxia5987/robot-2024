@@ -15,10 +15,11 @@ import lib.webconstants.LoggedTunableNumber;
 public class ShooterConstants {
     public static final double GEAR_RATIO_TOP = 1.0;
     public static final double GEAR_RATIO_BOTTOM = 1.0;
-    public static final double SETPOINT_TOLERANCE_TOP = 0.05; // Percentages
-    public static final double SETPOINT_TOLERANCE_BOTTOM = 0.05; // Percentages
+    public static final double SETPOINT_TOLERANCE_TOP = 0.05; // [%]
+    public static final double SETPOINT_TOLERANCE_BOTTOM = 0.05; // [%]
     public static final double MOMENT_OF_INERTIA_TOP = 0.08;
     public static final double MOMENT_OF_INERTIA_BOTTOM = 0.08;
+    public static final double SHOOTER_HEIGHT = 0.0; // [m] //TODO: add real value
 
     public static final TalonFXConfiguration topMotorConfiguration = new TalonFXConfiguration();
     public static final TalonFXConfiguration bottomMotorConfiguration = new TalonFXConfiguration();

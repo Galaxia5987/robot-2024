@@ -39,7 +39,7 @@ public class CommandGroups {
         return INSTANCE;
     }
 
-    private Command elevatorGripperMinPosition() {
+    public Command elevatorGripperMinPosition() {
         return Commands.parallel(
                 elevator.setHeight(ElevatorConstants.MIN_HEIGHT),
                 gripper.setWristPosition(GripperConstants.WRIST_FOLD_POSITION.mutableCopy()));

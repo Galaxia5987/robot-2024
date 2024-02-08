@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.PoseEstimation;
+import frc.robot.commandGroups.CommandGroups;
+import frc.robot.subsystems.gripper.Gripper;
+import frc.robot.subsystems.gripper.GripperConstants;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
@@ -19,11 +22,13 @@ import lib.Utils;
 public class ShootState implements ScoreState {
     private static Shooter shooter;
     private static Hood hood;
+    private static Gripper gripper;
     private Translation2d speakerPose;
 
     public ShootState() {
         shooter = Shooter.getInstance();
         hood = Hood.getInstance();
+        gripper = Gripper.getInstance();
     }
 
     @Override
@@ -64,25 +69,40 @@ public class ShootState implements ScoreState {
 
     @Override
     public Command initializeCommand() {
-        return shooter.setVelocity(
-                () ->
-                        Units.RotationsPerSecond.of(
-                                        ShooterConstants.interpolationMap.get(
-                                                        Utils.getDistanceFromPoint(
-                                                                speakerPose,
-                                                                PoseEstimation.getInstance()
-                                                                        .getEstimatedPose()))
-                                                .value)
-                                .mutableCopy());
+        return Commands.none();
     }
 
     @Override
     public Command initializeSubsystem() {
-        return null;
+        return Commands.parallel(
+                shooter.setVelocity(
+                        () ->
+                                Units.RotationsPerSecond.of(
+                                                ShooterConstants.interpolationMap.get(
+                                                                Utils.getDistanceFromPoint(
+                                                                        speakerPose,
+                                                                        PoseEstimation.getInstance()
+                                                                                .getEstimatedPose()))
+                                                        .value)
+                                        .mutableCopy()),
+                hood.setAngle(
+                        () ->
+                                Units.Degrees.of(
+                                                Math.atan(
+                                                        (Constants.SPEAKER_TARGET_POSE.getY()
+                                                                        - ShooterConstants
+                                                                                .SHOOTER_HEIGHT)
+                                                                / Utils.getDistanceFromPoint(
+                                                                        speakerPose,
+                                                                        PoseEstimation.getInstance()
+                                                                                .getEstimatedPose())))
+                                        .mutableCopy()),
+                CommandGroups.getINSTANCE().elevatorGripperMinPosition());
     }
 
     @Override
     public Command score() {
-        return null;
+        return Commands.sequence(
+                driveToClosestOptimalPoint(), gripper.setRollerPower(GripperConstants.SHOOT_POWER));
     }
 }

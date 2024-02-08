@@ -11,9 +11,10 @@ public class GripperConstants {
             Units.Rotations.of(0); // TODO: replace with actual value
     public static final double INTAKE_POWER = 0; // TODO; replace with actual value
     public static final double OUTTAKE_POWER = 0; // TODO: replace with actual value
-    public static final double AMP_POWER_NORMAL = 0;
-    public static final double AMP_POWER_REVERSE = 0;
-    public static final double TRAP_POWER = 0;
+    public static final double AMP_POWER_NORMAL = 0; // TODO: replace with actual value
+    public static final double AMP_POWER_REVERSE = 0; // TODO: replace with actual value
+    public static final double TRAP_POWER = 0; // TODO: replace with actual value
+    public static final double SHOOT_POWER = 0; // TODO: replace with actual value
     public static final Measure<Dimensionless> THRESHOLD = Units.Percent.of(0.02);
     public static final Measure<Distance> GRIPPER_OUTTAKE_MIN_HEIGHT =
             Units.Meters.of(0); // TODO: replace with actual value

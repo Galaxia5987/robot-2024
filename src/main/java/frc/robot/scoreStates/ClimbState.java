@@ -33,17 +33,17 @@ public class ClimbState implements ScoreState {
     }
 
     public Command initializeCommand() {
-        return elevator.setHeight(ElevatorConstants.STARTING_CLIMB_HEIGHT);
-    }
-
-    @Override
-    public Command initializeSubsystem() {
         return Commands.none();
     }
 
     @Override
+    public Command initializeSubsystem() {
+        return elevator.setHeight(ElevatorConstants.STARTING_CLIMB_HEIGHT);
+    }
+
+    @Override
     public Command score() {
-        return Commands.parallel(
+        return Commands.sequence(
                 driveToClosestOptimalPoint(),
                 elevator.setHeight(ElevatorConstants.ENDING_CLIMB_HEIGHT));
     }
