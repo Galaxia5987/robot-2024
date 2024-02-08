@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.PoseEstimation;
+import frc.robot.Robot;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperConstants;
@@ -24,6 +25,9 @@ public class ShootState implements ScoreState {
     private static Hood hood;
     private static Gripper gripper;
     private Translation2d speakerPose;
+    private static boolean inBounds;
+    private Translation2d optimalTranslation;
+    private Translation2d optimalRotation;
 
     public ShootState() {
         shooter = Shooter.getInstance();
@@ -44,7 +48,6 @@ public class ShootState implements ScoreState {
                         speakerPose = ScoreStateConstants.SPEAKER_POSE_BLUE;
                         optimalPoints = ScoreStateConstants.OPTIMAL_POINTS_SHOOT_BLUE;
                     }
-                    Translation2d optimalTranslation;
                     if (Utils.getDistanceFromPoint(speakerPose, botPose)
                             < ScoreStateConstants.MAX_SHOOTING_DISTANCE.in(Units.Meters)) {
                         optimalTranslation = botPose.getTranslation();
@@ -69,7 +72,19 @@ public class ShootState implements ScoreState {
 
     @Override
     public Command initializeCommand() {
-        return Commands.none();
+        var poseEstimation = PoseEstimation.getInstance().getEstimatedPose();
+        return Commands.run(()-> {
+            if (isRed()) {
+                if (poseEstimation.getX() < ScoreStateConstants.redBoundsMap.get(poseEstimation.getY()).value) {
+                    inBounds = false;
+                }
+            } else {
+                if (poseEstimation.getX() > ScoreStateConstants.blueBoundsMap.get(poseEstimation.getY()).value) {
+                    inBounds = false;
+                }
+            }
+
+        });
     }
 
     @Override

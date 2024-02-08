@@ -1,13 +1,15 @@
 package frc.robot.scoreStates;
 
 import com.pathplanner.lib.util.GeometryUtil;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
+import lib.math.interpolation.InterpolatingDouble;
+import lib.math.interpolation.InterpolatingDoubleMap;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,4 +40,32 @@ public class ScoreStateConstants {
     public static final Measure<Distance> MAX_SHOOTING_DISTANCE = Units.Meters.of(3);
     public static final Measure<Distance> MIN_DISTANCE_TO_TURN_GRIPPER = Units.Meters.of(3);
     public static final Measure<Angle> TURN_TOLERANCE = Units.Rotations.of(0.01); // Rotations
+
+    public static final Transform3d SPEAKER_TARGET_POSE = // TODO: check real value
+            new Transform3d(0.0, 0.0, 0.0, new Rotation3d());
+
+    public static final InterpolatingDoubleMap blueBoundsMap = new InterpolatingDoubleMap(6);
+    public static final InterpolatingDoubleMap redBoundsMap = new InterpolatingDoubleMap(6);
+
+    static {
+        blueBoundsMap.putAll(
+            new HashMap<>(){{
+                for (int i = 0; i < OPTIMAL_POINTS_SHOOT_BLUE.size(); i++) {
+                    put(
+                            new InterpolatingDouble(OPTIMAL_POINTS_SHOOT_BLUE.get(i).getY()),
+                            new InterpolatingDouble(OPTIMAL_POINTS_SHOOT_BLUE.get(i).getX()));
+                }
+            }}
+        );
+
+        redBoundsMap.putAll(
+                new HashMap<>(){{
+                    for (int i = 0; i < OPTIMAL_POINTS_SHOOT_RED.size(); i++) {
+                        put(
+                                new InterpolatingDouble(OPTIMAL_POINTS_SHOOT_RED.get(i).getY()),
+                                new InterpolatingDouble(OPTIMAL_POINTS_SHOOT_RED.get(i).getX()));
+                    }
+                }}
+        );
+    }
 }
