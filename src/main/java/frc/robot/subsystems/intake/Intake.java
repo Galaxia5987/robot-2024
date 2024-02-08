@@ -6,10 +6,12 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.intake.IntakeConstants.IntakePose;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -20,6 +22,7 @@ public class Intake extends SubsystemBase {
     private final IntakeIO io;
     private final IntakeInputsAutoLogged inputs = IntakeIO.inputs;
     @AutoLogOutput private final Mechanism2d intakeMechanism = new Mechanism2d(2, 3);
+    @AutoLogOutput private final Pose3d robotPose = new Pose3d();
     private final MechanismRoot2d root = intakeMechanism.getRoot("Intake", 1, 1);
 
     private final MechanismLigament2d intakeLigament =
@@ -38,31 +41,41 @@ public class Intake extends SubsystemBase {
     }
 
     public Command setAngle(MutableMeasure<Angle> angle) {
-        inputs.angleSetPoint = angle;
-        return runOnce(() -> io.setAngle(angle));
+
+        return runOnce(
+                () -> {
+                    inputs.angleSetpoint = angle;
+                    io.setAngle(
+                            Units.Degrees.of(Math.IEEEremainder(angle.in(Units.Degrees), 180))
+                                    .mutableCopy());
+                });
     }
 
-    public Command setAngle(IntakePose intakePose) {
+    public Command setAngle(IntakeConstants.IntakePose intakePose) {
         return setAngle(intakePose.intakePose);
     }
 
-    public Command setRollerSpeed(double speed) {
-        return runOnce(() -> io.setRollerSpeed(speed));
+    public Command setRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
+        return Commands.runOnce(() -> io.setRollerSpeed(speed));
     }
 
     public Command setCenterRollerSpeed(double speed) {
-        return runOnce(() -> io.setCenterRollerSpeed(speed));
+        return Commands.runOnce(() -> io.setCenterRollerSpeed(speed));
     }
 
     public Command intake() {
-        return setAngle(IntakePose.DOWN)
-                .alongWith(setRollerSpeed(0.5).andThen(setCenterRollerSpeed(0.5)))
+        return Commands.parallel(
+                        setAngle(IntakePose.DOWN),
+                        setRollerSpeed(Units.RotationsPerSecond.of(50).mutableCopy()),
+                        setCenterRollerSpeed(0.5))
                 .withName("feeding position activated");
     }
 
     public Command stop() {
-        return setAngle(IntakePose.UP)
-                .alongWith(setRollerSpeed(0).andThen(setCenterRollerSpeed(0)))
+        return Commands.parallel(
+                        setAngle(IntakePose.UP),
+                        setRollerSpeed(Units.RotationsPerSecond.zero().mutableCopy()),
+                        setCenterRollerSpeed(0))
                 .withName("stopped");
     }
 

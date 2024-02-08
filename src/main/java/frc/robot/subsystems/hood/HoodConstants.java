@@ -21,7 +21,7 @@ public class HoodConstants {
     public static final double GEAR_RATIO = 1.0;
     public static final Measure<Mult<Mult<Mass, Distance>, Distance>> MOMENT_OF_INERTIA =
             Units.Kilograms.mult(Units.Meters).mult(Units.Meters).of(0.0003);
-    public static final Translation3d ROOT_POSITION = new Translation3d(-0.27, 0.2385, 0.0);
+    public static final Translation3d ROOT_POSITION = new Translation3d(-0.27, 0, 0.225);
     public static final TalonFXConfiguration MOTOR_CONFIGURATION = new TalonFXConfiguration();
     public static final InvertedValue INVERTED_VALUE = InvertedValue.Clockwise_Positive;
     public static final double CURRENT_LIMIT = 40;
@@ -36,8 +36,8 @@ public class HoodConstants {
     public static final LoggedTunableNumber kA = new LoggedTunableNumber("Hood/kA");
     public static final LoggedTunableNumber kG = new LoggedTunableNumber("Hood/kG");
 
-    public static void initialize(Constants.Mode mode) {
-        switch (mode) {
+    public static void initConstants() {
+        switch (Constants.CURRENT_MODE) {
             case REAL:
                 kP.initDefault(1);
                 kI.initDefault(0.0);

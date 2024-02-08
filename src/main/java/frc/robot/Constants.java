@@ -59,14 +59,6 @@ public class Constants {
                     MAX_ANGULAR_VELOCITY.in(Units.RotationsPerSecond),
                     MAX_ANGULAR_ACCELERATION.in(Units.RotationsPerSecond.per(Units.Second)));
 
-    public static final Pose2d[] OPTIMAL_POINTS_SHOOT = {
-        new Pose2d(1.97, 7.16, Rotation2d.fromDegrees(-161.57)),
-        new Pose2d(2.54, 3.06, Rotation2d.fromDegrees(-157.15)),
-        new Pose2d(4.16, 5.03, Rotation2d.fromDegrees(179.94))
-    };
-    public static final Pose2d[] OPTIMAL_POINTS_TRAP = {};
-    public static final Pose2d AMP_POSE = new Pose2d(0.0, 0.0, new Rotation2d(0, 0));
-
     public enum Mode {
         REAL,
         SIM,
