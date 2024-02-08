@@ -55,12 +55,12 @@ public class Elevator extends SubsystemBase {
 
     public boolean atHeightSetpoint() {
         return inputs.heightSetpoint.isNear(
-                inputs.carriageHeight, ElevatorConstants.THRESHOLD.in(Units.Value));
+                inputs.carriageHeight, ElevatorConstants.HEIGHT_THRESHOLD.in(Units.Value));
     }
 
     public boolean stopperAtSetpoint() {
-        return inputs.heightSetpoint.isNear(
-                inputs.stopperSetpoint, ElevatorConstants.THRESHOLD.in(Units.Value));
+        return inputs.stopperAngle.isNear(
+                inputs.stopperSetpoint, ElevatorConstants.STOPPER_THRESHOLD.in(Units.Value));
     }
 
     public Command setHeight(MutableMeasure<Distance> height) {
