@@ -62,10 +62,10 @@ public class ElevatorIOReal implements ElevatorIO {
         inputs.hooksHeight.mut_replace(mainMotor.getPosition().getValue(), Meters);
 
         inputs.carriageHeight.mut_replace(
-                inputs.hooksHeight.gt(ElevatorConstants.GRIPPER_HEIGHT)
+                inputs.hooksHeight.gt(ElevatorConstants.GRIPPER_TO_HOOKS)
                         ? inputs.hooksHeight
                                 .mutableCopy()
-                                .mut_minus(ElevatorConstants.GRIPPER_HEIGHT)
+                                .mut_minus(ElevatorConstants.GRIPPER_TO_HOOKS)
                         : Meters.zero());
 
         inputs.stopperAngle.mut_replace(servo.getAngle(), Degrees);
