@@ -53,7 +53,6 @@ public class CommandGroups {
                                 .andThen(intake.stop(), gripper.setRollerPower(0)));
     }
 
-    }
     public Command trapScore() {
         return Commands.sequence(
                 gripper.setWristPosition(
