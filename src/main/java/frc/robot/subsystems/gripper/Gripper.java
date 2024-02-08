@@ -3,6 +3,7 @@ package frc.robot.subsystems.gripper;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.MutableMeasure;
@@ -75,6 +76,12 @@ public class Gripper extends SubsystemBase {
 
     public Command setWristPosition(MutableMeasure<Angle> angle) {
         return runOnce(() -> io.setAngle(angle)).withName("set wrist position");
+    }
+
+    public Translation2d getGripperPosition() {
+        return new Translation2d(
+                GripperConstants.GRIPPER_LENGTH.in(Units.Meters),
+                new Rotation2d(inputs.currentAngle));
     }
 
     @Override

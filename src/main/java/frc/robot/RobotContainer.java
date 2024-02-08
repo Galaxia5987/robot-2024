@@ -27,7 +27,6 @@ import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.swerve.SwerveDrive;
 
 public class RobotContainer {
-
     private static RobotContainer INSTANCE = null;
     private final Intake intake;
     private final Conveyor conveyor;

@@ -18,6 +18,11 @@ public class ClimbState implements ScoreState {
     }
 
     @Override
+    public Command initializeCommand() {
+        return null;
+    }
+
+    @Override
     public Command driveToClosestOptimalPoint() {
         return Commands.defer(
                 () -> {
