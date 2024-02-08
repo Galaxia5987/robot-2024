@@ -83,6 +83,7 @@ public class ShooterIOSim implements ShooterIO {
         bottomRollerInputs.velocitySetpoint.mut_replace(0, Units.RotationsPerSecond);
         topRollerInputs.velocitySetpoint.mut_replace(0, Units.RotationsPerSecond);
         bottomMotor.setControl(stop);
+        topMotor.setControl(stop);
     }
 
     @Override
@@ -91,10 +92,10 @@ public class ShooterIOSim implements ShooterIO {
         bottomMotor.update(Timer.getFPGATimestamp());
 
         topRollerInputs.velocity.mut_replace(topMotor.getVelocity(), Units.RotationsPerSecond);
-        topRollerInputs.voltage.mut_replace(topMotor.getAppliedVoltage(), Units.Volts);
+        topRollerInputs.appliedVoltage.mut_replace(topMotor.getAppliedVoltage(), Units.Volts);
 
         bottomRollerInputs.velocity.mut_replace(
                 bottomMotor.getVelocity(), Units.RotationsPerSecond);
-        bottomRollerInputs.voltage.mut_replace(bottomMotor.getAppliedVoltage(), Units.Volts);
+        bottomRollerInputs.appliedVoltage.mut_replace(bottomMotor.getAppliedVoltage(), Units.Volts);
     }
 }

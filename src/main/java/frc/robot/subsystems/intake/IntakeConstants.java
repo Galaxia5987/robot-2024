@@ -23,7 +23,7 @@ public class IntakeConstants {
         }
     }
 
-    public void initConstants() {
+    public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 ANGLE_KP.initDefault(10.0 / 360.0);
