@@ -23,14 +23,14 @@ public interface IntakeIO {
     @AutoLog
     class IntakeInputs {
         MutableMeasure<Angle> currentAngle = MutableMeasure.zero(Radians);
-        MutableMeasure<Angle> angleSetPoint = MutableMeasure.zero(Radians);
+        MutableMeasure<Angle> angleSetpoint = MutableMeasure.zero(Radians);
         MutableMeasure<Velocity<Angle>> currentRollerSpeed =
                 MutableMeasure.zero(RotationsPerSecond);
-        MutableMeasure<Velocity<Angle>> rollerSpeedSetPoint =
+        MutableMeasure<Velocity<Angle>> rollerSpeedSetpoint =
                 MutableMeasure.zero(RotationsPerSecond);
         MutableMeasure<Velocity<Angle>> currentCenterRollerSpeed =
                 MutableMeasure.zero(RotationsPerSecond);
-        double centerRollerSpeedSetPoint = 0;
+        double centerRollerSpeedSetpoint = 0;
         MutableMeasure<Voltage> angleMotorVoltage = MutableMeasure.zero(Volts);
         MutableMeasure<Voltage> spinMotorVoltage = MutableMeasure.zero(Volts);
         MutableMeasure<Voltage> centerMotorVoltage = MutableMeasure.zero(Volts);

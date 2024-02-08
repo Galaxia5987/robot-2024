@@ -44,7 +44,7 @@ public class Intake extends SubsystemBase {
 
         return runOnce(
                 () -> {
-                    inputs.angleSetPoint = angle;
+                    inputs.angleSetpoint = angle;
                     io.setAngle(
                             Units.Degrees.of(Math.IEEEremainder(angle.in(Units.Degrees), 180))
                                     .mutableCopy());
