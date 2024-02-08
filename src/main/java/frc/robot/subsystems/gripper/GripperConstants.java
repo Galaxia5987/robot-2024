@@ -77,6 +77,6 @@ public class GripperConstants {
                 .withStatorCurrentLimit(40)
                 .withSupplyCurrentLimit(40)
                 .withSupplyTimeThreshold(1)
-                .withSupplyCurrentThreshold(40);
+                .withSupplyCurrentThreshold(50);
     }
 }
