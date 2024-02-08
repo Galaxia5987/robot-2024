@@ -36,7 +36,6 @@ public class RobotContainer {
     private final Hood hood;
     private final Shooter shooter;
     private final SwerveDrive swerveDrive;
-    private final Intake intake;
     private final CommandXboxController xboxController = new CommandXboxController(0);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
