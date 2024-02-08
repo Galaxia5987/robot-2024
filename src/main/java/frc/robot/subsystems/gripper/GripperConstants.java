@@ -70,7 +70,8 @@ public class GripperConstants {
                                 .withKA(GripperConstants.KA.get())
                                 .withKG(GripperConstants.KG.get())
                                 .withGravityType(GravityTypeValue.Arm_Cosine))
-                .withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive))
+                .withMotorOutput(
+                        new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive))
                 .CurrentLimits
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimitEnable(true)
