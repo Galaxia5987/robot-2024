@@ -36,7 +36,7 @@ public class IntakeIOSim implements IntakeIO {
 
     @Override
     public void setAngle(MutableMeasure<Angle> angle) {
-        inputs.angleSetPoint = angle;
+        inputs.angleSetpoint = angle;
         angleMotor.setControl(positionRequest.withPosition(angle.in(Units.Degrees)));
     }
 

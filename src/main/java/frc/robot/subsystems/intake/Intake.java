@@ -56,11 +56,19 @@ public class Intake extends SubsystemBase {
     }
 
     public Command setRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
-        return Commands.runOnce(() -> io.setRollerSpeed(speed));
+        return Commands.runOnce(
+                () -> {
+                    inputs.rollerSpeedSetpoint.mut_replace(speed);
+                    io.setRollerSpeed(speed);
+                });
     }
 
     public Command setCenterRollerSpeed(double speed) {
-        return Commands.runOnce(() -> io.setCenterRollerSpeed(speed));
+        return Commands.runOnce(
+                () -> {
+                    inputs.centerRollerSpeedSetpoint = speed;
+                    io.setCenterRollerSpeed(speed);
+                });
     }
 
     public Command intake() {
