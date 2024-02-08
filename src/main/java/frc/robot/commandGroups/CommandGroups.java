@@ -15,7 +15,7 @@ import frc.robot.subsystems.shooter.ShooterConstants;
 import java.util.function.Supplier;
 
 public class CommandGroups {
-    private static CommandGroups INSTANCE = null;
+    private static CommandGroups INSTANCE;
     private final Intake intake;
     private final Gripper gripper;
     private final Elevator elevator;
@@ -23,7 +23,7 @@ public class CommandGroups {
     private final Conveyor conveyor;
     private final GripperState gripperState;
 
-    public CommandGroups() {
+    private CommandGroups() {
         intake = Intake.getInstance();
         gripper = Gripper.getInstance();
         elevator = Elevator.getInstance();
@@ -32,7 +32,7 @@ public class CommandGroups {
         gripperState = new GripperState();
     }
 
-    public static CommandGroups getINSTANCE() {
+    public static CommandGroups getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new CommandGroups();
         }
