@@ -13,6 +13,7 @@ public class GripperConstants {
     public static final double OUTTAKE_POWER = 0; // TODO: replace with actual value
     public static final double AMP_POWER_NORMAL = 0;
     public static final double AMP_POWER_REVERSE = 0;
+    public static final double TRAP_POWER = 0;
     public static final Measure<Dimensionless> THRESHOLD = Units.Percent.of(0.02);
     public static final Measure<Distance> GRIPPER_OUTTAKE_MIN_HEIGHT =
             Units.Meters.of(0); // TODO: replace with actual value
@@ -28,6 +29,7 @@ public class GripperConstants {
             Units.Rotations.of(0.3); // TODO: replace with actual value;
     public static final Measure<Angle> WRIST_BACKWARDS_AMP =
             Units.Rotations.of(0.6); // TODO: replace with actual value;
+    public static final Measure<Angle> WRIST_TRAP_ANGLE = Units.Rotations.of(0.0);
     public static final Measure<Angle> WRIST_TOLERANCE = Units.Rotations.of(0.05);
 
     public static final LoggedTunableNumber KP = new LoggedTunableNumber("Gripper/kP");

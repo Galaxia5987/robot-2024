@@ -7,6 +7,9 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.*;
 import frc.robot.Constants;
+import java.util.HashMap;
+import lib.math.interpolation.InterpolatingDouble;
+import lib.math.interpolation.InterpolatingDoubleMap;
 import lib.webconstants.LoggedTunableNumber;
 
 public class ShooterConstants {
@@ -25,6 +28,8 @@ public class ShooterConstants {
 
     public static final InvertedValue TOP_INVERSION = InvertedValue.Clockwise_Positive;
     public static final InvertedValue BOTTOM_INVERSION = InvertedValue.CounterClockwise_Positive;
+
+    public static final InterpolatingDoubleMap interpolationMap = new InterpolatingDoubleMap();
 
     public static final LoggedTunableNumber TOP_kP = new LoggedTunableNumber("Shooter/Top kP");
     public static final LoggedTunableNumber TOP_kI = new LoggedTunableNumber("Shooter/Top kI");
@@ -109,6 +114,41 @@ public class ShooterConstants {
                 .withSupplyCurrentLimitEnable(true)
                 .withStatorCurrentLimit(CURRENT_LIMIT_BOTTOM)
                 .withSupplyCurrentLimit(CURRENT_LIMIT_BOTTOM);
+        interpolationMap.putAll(
+                new HashMap<>() {
+                    {
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                    }
+                });
     }
 
     public static MutableMeasure<Velocity<Angle>> STOP_POWER =

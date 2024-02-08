@@ -7,24 +7,30 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
+import frc.robot.PoseEstimation;
+import frc.robot.subsystems.hood.Hood;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.swerve.SwerveDrive;
 import java.util.List;
 import java.util.Set;
 import lib.Utils;
 
 public class ShootState implements ScoreState {
+    private static Shooter shooter;
+    private static Hood hood;
+    private Translation2d speakerPose;
 
-    @Override
-    public Command initializeCommand() {
-        return null;
+    public ShootState() {
+        shooter = Shooter.getInstance();
+        hood = Hood.getInstance();
     }
 
     @Override
     public Command driveToClosestOptimalPoint() {
         return Commands.defer(
                 () -> {
-                    Translation2d speakerPose;
-                    Pose2d botPose = SwerveDrive.getInstance().getBotPose();
+                    Pose2d botPose = PoseEstimation.getInstance().getEstimatedPose();
                     List<Translation2d> optimalPoints;
                     if (isRed()) {
                         speakerPose = ScoreStateConstants.SPEAKER_POSE_RED;
@@ -54,6 +60,20 @@ public class ShootState implements ScoreState {
                             Constants.AUTO_CONSTRAINTS);
                 },
                 Set.of(SwerveDrive.getInstance()));
+    }
+
+    @Override
+    public Command initializeCommand() {
+        return shooter.setVelocity(
+                () ->
+                        Units.RotationsPerSecond.of(
+                                        ShooterConstants.interpolationMap.get(
+                                                        Utils.getDistanceFromPoint(
+                                                                speakerPose,
+                                                                PoseEstimation.getInstance()
+                                                                        .getEstimatedPose()))
+                                                .value)
+                                .mutableCopy());
     }
 
     @Override
