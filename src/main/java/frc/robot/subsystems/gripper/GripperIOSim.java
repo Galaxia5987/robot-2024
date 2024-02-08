@@ -46,10 +46,10 @@ public class GripperIOSim implements GripperIO {
 
     @Override
     public void setAngle(MutableMeasure<Angle> angle) {
+        angle.mut_replace(Math.IEEEremainder(angle.in(Rotations), 1.0), Rotations);
         inputs.angleSetpoint = angle;
 
-        angleMotor.setControl(
-                positionRequest.withPosition(Math.IEEEremainder(angle.in(Rotations), 0.5)));
+        angleMotor.setControl(positionRequest.withPosition(angle.in(Rotations)));
     }
 
     @Override

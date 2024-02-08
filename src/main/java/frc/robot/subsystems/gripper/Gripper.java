@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorInputsAutoLogged;
@@ -22,7 +23,8 @@ public class Gripper extends SubsystemBase {
     private static Gripper INSTANCE;
     private final GripperIO io;
     private final GripperInputsAutoLogged inputs = GripperIO.inputs;
-    private final ElevatorInputsAutoLogged elevatorInputs = ElevatorIO.inputs;
+    private final ElevatorInputsAutoLogged elevatorInputs =
+            ElevatorIO.inputs; // TODO: change to supplier
 
     @AutoLogOutput private final Mechanism2d mechanism2d = new Mechanism2d(1, 1);
     @AutoLogOutput private Pose3d gripperPose = new Pose3d();
@@ -59,7 +61,7 @@ public class Gripper extends SubsystemBase {
     }
 
     public Command setRollerPower(double power) {
-        return runOnce(() -> io.setRollerMotorPower(power)).withName("set roller power");
+        return Commands.runOnce(() -> io.setRollerMotorPower(power)).withName("set roller power");
     }
 
     public Command intake() {

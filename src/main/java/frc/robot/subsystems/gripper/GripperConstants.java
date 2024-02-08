@@ -26,10 +26,10 @@ public class GripperConstants {
     public static final Measure<Angle> WRIST_FOLD_POSITION =
             Units.Rotations.of(0.5); // TODO: replace with actual value
     public static final Measure<Angle> WRIST_FORWARD_AMP_POSE =
-            Units.Rotations.of(0.3); // TODO: replace with actual value;
+            Units.Rotations.of(0); // TODO: replace with actual value;
     public static final Measure<Angle> WRIST_BACKWARDS_AMP =
-            Units.Rotations.of(0.6); // TODO: replace with actual value;
-    public static final Measure<Angle> WRIST_TRAP_ANGLE = Units.Rotations.of(0.0);
+            Units.Rotations.of(0.4); // TODO: replace with actual value;
+    public static final Measure<Angle> WRIST_TRAP_ANGLE = Units.Rotations.of(0.4);
     public static final Measure<Angle> WRIST_TOLERANCE = Units.Rotations.of(0.05);
 
     public static final LoggedTunableNumber KP = new LoggedTunableNumber("Gripper/kP");
