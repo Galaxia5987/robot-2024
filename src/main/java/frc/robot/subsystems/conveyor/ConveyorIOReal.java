@@ -17,7 +17,7 @@ public class ConveyorIOReal implements ConveyorIO {
         roller.setIdleMode(CANSparkMax.IdleMode.kCoast);
         roller.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE);
         roller.setInverted(true);
-        for (int i = 1; i <= 6; i++) {
+        for (int i = 2; i <= 6; i++) {
             roller.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.fromId(i), 1000);
         }
         roller.burnFlash();
