@@ -104,10 +104,7 @@ public class ShootState implements ScoreState {
                                                         (ScoreStateConstants.SPEAKER_TARGET_HEIGHT
                                                                         - ShooterConstants
                                                                                 .SHOOTER_HEIGHT)
-                                                                / Utils.getDistanceFromPoint(
-                                                                        speakerPose,
-                                                                        PoseEstimation.getInstance()
-                                                                                .getEstimatedPose())))
+                                                                / distanceToSpeaker))
                                         .mutableCopy()),
                 CommandGroups.getInstance().retractGrillevator());
     }
@@ -132,12 +129,7 @@ public class ShootState implements ScoreState {
                                                                                         .SPEAKER_TARGET_HEIGHT
                                                                                 - ShooterConstants
                                                                                         .SHOOTER_HEIGHT)
-                                                                        / Utils
-                                                                                .getDistanceFromPoint(
-                                                                                        speakerPose,
-                                                                                        PoseEstimation
-                                                                                                .getInstance()
-                                                                                                .getEstimatedPose())))
+                                                                        / distanceToSpeaker))
                                                 .mutableCopy())),
                 CommandGroups.getInstance()
                         .feed()
