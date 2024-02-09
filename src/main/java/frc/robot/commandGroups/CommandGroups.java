@@ -58,7 +58,7 @@ public class CommandGroups {
                 Commands.parallel(
                         intake.intake(),
                         gripper.intake(),
-                        Commands.waitUntil(() -> gripper.hasNote())
+                        Commands.waitUntil(gripper::hasNote)
                                 .andThen(null))); // TODO: replace null with leds mode
     }
 
