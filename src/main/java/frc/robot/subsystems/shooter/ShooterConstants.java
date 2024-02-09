@@ -36,7 +36,46 @@ public class ShooterConstants {
     public static final InvertedValue TOP_INVERSION = InvertedValue.Clockwise_Positive;
     public static final InvertedValue BOTTOM_INVERSION = InvertedValue.CounterClockwise_Positive;
 
-    public static final InterpolatingDoubleMap interpolationMap = new InterpolatingDoubleMap();
+    public static final InterpolatingDoubleMap VELOCITY_BY_DISTANCE =
+            new InterpolatingDoubleMap(); // Velocity | Distance
+
+    static {
+        VELOCITY_BY_DISTANCE.putAll(
+                new HashMap<>() {
+                    {
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                    }
+                });
+    }
 
     public static final LoggedTunableNumber TOP_kP = new LoggedTunableNumber("Shooter/Top kP");
     public static final LoggedTunableNumber TOP_kI = new LoggedTunableNumber("Shooter/Top kI");
@@ -121,41 +160,6 @@ public class ShooterConstants {
                 .withSupplyCurrentLimitEnable(true)
                 .withStatorCurrentLimit(CURRENT_LIMIT_BOTTOM)
                 .withSupplyCurrentLimit(CURRENT_LIMIT_BOTTOM);
-        interpolationMap.putAll(
-                new HashMap<>() {
-                    {
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                    }
-                });
     }
 
     public static MutableMeasure<Velocity<Angle>> STOP_POWER =

@@ -93,7 +93,7 @@ public class ShootState implements ScoreState {
                 shooter.setVelocity(
                         () ->
                                 Units.RotationsPerSecond.of(
-                                                ShooterConstants.interpolationMap.get(
+                                                ShooterConstants.VELOCITY_BY_DISTANCE.get(
                                                                 distanceToSpeaker)
                                                         .value)
                                         .mutableCopy()),
@@ -118,7 +118,7 @@ public class ShootState implements ScoreState {
                         shooter.setVelocity(
                                 () ->
                                         Units.RotationsPerSecond.of(
-                                                        ShooterConstants.interpolationMap.get(
+                                                        ShooterConstants.VELOCITY_BY_DISTANCE.get(
                                                                         distanceToSpeaker)
                                                                 .value)
                                                 .mutableCopy()),
