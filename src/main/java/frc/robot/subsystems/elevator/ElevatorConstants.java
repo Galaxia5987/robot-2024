@@ -23,13 +23,21 @@ public class ElevatorConstants { // TODO: check real values
 
     public static final MutableMeasure<Angle> OPEN_POSITION = Units.Degrees.of(0).mutableCopy();
     public static final MutableMeasure<Angle> LOCKED_POSITION = Units.Degrees.of(0).mutableCopy();
-    public static final MutableMeasure<Dimensionless> HEIGHT_THRESHOLD = Units.Percent.of(2).mutableCopy();
-    public static final MutableMeasure<Dimensionless> STOPPER_THRESHOLD = Units.Percent.of(2).mutableCopy();
+    public static final MutableMeasure<Dimensionless> HEIGHT_THRESHOLD =
+            Units.Percent.of(2).mutableCopy();
+    public static final MutableMeasure<Dimensionless> STOPPER_THRESHOLD =
+            Units.Percent.of(2).mutableCopy();
+
+    public static final MutableMeasure<Mass> HOOKS_MASS =
+            Units.Kilograms.of(1).mutableCopy(); // TODO: Calibrate real value
+    public static final MutableMeasure<Mass> ELEVATOR_MASS =
+            Units.Kilograms.of(5).mutableCopy(); // TODO: Calibrate real value
 
     public static final double MAX_VELOCITY = 3;
     public static final double MAX_ACCELERATION = 7;
 
-    public static final Measure<Distance> GRIPPER_TO_HOOKS = Units.Meters.of(0.3); // [m]
+    public static final Measure<Distance> GRIPPER_TO_HOOKS =
+            Units.Meters.of(0.3); // TODO: Calibrate real value
 
     public static final TrapezoidProfile.Constraints TRAPEZOID_PROFILE =
             new TrapezoidProfile.Constraints(MAX_VELOCITY, MAX_ACCELERATION);

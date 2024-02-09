@@ -8,9 +8,11 @@ import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.StrictFollower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Mass;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Servo;
+import lib.Utils;
 
 public class ElevatorIOReal implements ElevatorIO {
     private final Servo servo;
@@ -20,6 +22,12 @@ public class ElevatorIOReal implements ElevatorIO {
     private final MotionMagicExpoTorqueCurrentFOC positionControl =
             new MotionMagicExpoTorqueCurrentFOC(0);
     private final DutyCycleOut powerControl = new DutyCycleOut(0);
+
+    private static final MutableMeasure<Mass> movingWeight =
+            ElevatorConstants.HOOKS_MASS.mutableCopy();
+
+    private double lastKg = 0;
+    private double lastAuxKg = 0;
 
     public ElevatorIOReal() {
         mainMotor = new TalonFX(0);
@@ -69,5 +77,20 @@ public class ElevatorIOReal implements ElevatorIO {
                         : Meters.zero());
 
         inputs.stopperAngle.mut_replace(servo.getAngle(), Degrees);
+
+        movingWeight.mut_replace(ElevatorConstants.HOOKS_MASS);
+        if (inputs.hooksHeight.gt(ElevatorConstants.GRIPPER_TO_HOOKS)) {
+            movingWeight.mut_acc(ElevatorConstants.ELEVATOR_MASS);
+        }
+
+        lastKg = ElevatorConstants.MAIN_MOTOR_CONFIGURATION.Slot0.kG;
+        double newKg = ElevatorConstants.KG.get() * movingWeight.in(Units.Kilograms);
+        if (!Utils.epsilonEquals(lastKg, newKg)) {
+            mainMotor
+                    .getConfigurator()
+                    .apply(ElevatorConstants.MAIN_MOTOR_CONFIGURATION.Slot0.withKG(newKg));
+            auxMotor.getConfigurator()
+                    .apply(ElevatorConstants.AUX_MOTOR_CONFIGURATION.Slot0.withKG(newKg));
+        }
     }
 }
