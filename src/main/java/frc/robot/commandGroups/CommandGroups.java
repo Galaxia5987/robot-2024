@@ -50,9 +50,9 @@ public class CommandGroups {
 
     public Command feed() {
         return conveyor.feed()
-                .andThen(
-                        gripper.setRollerPower(GripperConstants.OUTTAKE_POWER)
-                                .onlyIf(conveyor::readyToFeed));
+                .alongWith(
+                        Commands.waitUntil(conveyor::readyToFeed)
+                                .andThen(gripper.setRollerPower(GripperConstants.OUTTAKE_POWER)));
     }
 
     public Command intake() {
