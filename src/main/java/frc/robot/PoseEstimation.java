@@ -5,6 +5,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.swerve.SwerveDrive;
 import frc.robot.vision.Vision;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class PoseEstimation {
     private static PoseEstimation INSTANCE = null;
@@ -42,6 +43,7 @@ public class PoseEstimation {
         estimator.update(swerveDrive.getYaw(), swerveDrive.getModulePositions());
     }
 
+    @AutoLogOutput
     public Pose2d getEstimatedPose() {
         return estimator.getEstimatedPosition();
     }
