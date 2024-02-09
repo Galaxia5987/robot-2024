@@ -17,12 +17,13 @@ import frc.robot.swerve.SwerveDrive;
 import java.util.List;
 import java.util.Set;
 import lib.Utils;
+import lib.math.interpolation.InterpolatingDouble;
 
 public class ShootState implements ScoreState {
     private static Shooter shooter;
     private static Hood hood;
     private Translation2d speakerPose;
-    private double distanceToSpeaker;
+    private InterpolatingDouble distanceToSpeaker;
     private Pose2d botPose;
     private List<Translation2d> optimalPoints;
     private Translation2d optimalTranslation;
@@ -86,7 +87,7 @@ public class ShootState implements ScoreState {
                     optimalRotation =
                             Utils.calcRotationToTranslation(optimalTranslation, speakerPose)
                                     .getRotations();
-                    distanceToSpeaker = Utils.getDistanceFromPoint(speakerPose, botPose);
+                    distanceToSpeaker.value = Utils.getDistanceFromPoint(speakerPose, botPose);
                 });
     }
 
@@ -107,7 +108,8 @@ public class ShootState implements ScoreState {
                         () ->
                                 Units.Radians.of(
                                                 Math.atan(
-                                                        shooterToSpeakerHeight / distanceToSpeaker))
+                                                        shooterToSpeakerHeight
+                                                                / distanceToSpeaker.value))
                                         .mutableCopy()),
                 CommandGroups.getInstance().retractGrillevator());
     }
@@ -129,7 +131,7 @@ public class ShootState implements ScoreState {
                                         Units.Degrees.of(
                                                         Math.atan(
                                                                 shooterToSpeakerHeight
-                                                                        / distanceToSpeaker))
+                                                                        / distanceToSpeaker.value))
                                                 .mutableCopy())),
                 CommandGroups.getInstance()
                         .feed()
