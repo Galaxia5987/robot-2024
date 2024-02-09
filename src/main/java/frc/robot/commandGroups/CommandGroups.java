@@ -70,7 +70,7 @@ public class CommandGroups {
 
     public Command outtakeGripper() {
         return elevator.setHeight(CommandGroupsConstants.OUTTAKE_HEIGHT)
-                .onlyIf(gripper::isGripperInsideRobot)
+                .onlyIf(gripper::isGripperNearFoldedPosition)
                 .andThen(gripper.outtake());
     }
 

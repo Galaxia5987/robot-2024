@@ -56,7 +56,7 @@ public class Gripper extends SubsystemBase {
                 CommandGroupsConstants.WRIST_TOLERANCE.in(Units.Rotations));
     }
 
-    public boolean isGripperInsideRobot() {
+    public boolean isGripperNearFoldedPosition() {
         return new Translation2d(
                                         GripperConstants.GRIPPER_LENGTH.in(Units.Meters),
                                         new Rotation2d(inputs.currentAngle))

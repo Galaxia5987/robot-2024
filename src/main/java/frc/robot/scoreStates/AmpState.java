@@ -48,7 +48,7 @@ public class AmpState implements ScoreState {
                     hasTimeToTurnGripper =
                             distance
                                     > ScoreStateConstants.MIN_DISTANCE_TO_TURN_GRIPPER.in(
-                                    Units.Meters);
+                                            Units.Meters);
                     if ((gripper.isReversed() && robotRotation < 0) || hasTimeToTurnGripper) {
                         isAmpingForward = false;
                         ampRotation = ScoreStateConstants.AMP_ROTATION_REVERSE;
