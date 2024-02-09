@@ -40,9 +40,6 @@ public class Constants {
 
     public static final Measure<Voltage> NOMINAL_VOLTAGE = Units.Volts.of(12);
 
-    public static final Transform3d SPEAKER_TARGET_POSE = // TODO: check real value
-            new Transform3d(0.0, 0.0, 0.0, new Rotation3d());
-
     public static final Measure<Distance> ROBOT_LENGTH = Units.Meters.of(0.584);
     public static final Measure<Velocity<Distance>> MAX_VELOCITY = Units.MetersPerSecond.of(4.5);
     public static final Measure<Velocity<Velocity<Distance>>> MAX_ACCELERATION =

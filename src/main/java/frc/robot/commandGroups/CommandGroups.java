@@ -23,6 +23,8 @@ public class CommandGroups {
     private final Conveyor conveyor;
     private final GripperState gripperState;
 
+    public static boolean override;
+
     private CommandGroups() {
         intake = Intake.getInstance();
         gripper = Gripper.getInstance();
@@ -30,6 +32,7 @@ public class CommandGroups {
         shooter = Shooter.getInstance();
         conveyor = Conveyor.getInstance();
         gripperState = new GripperState();
+        override = false;
     }
 
     public static CommandGroups getInstance() {
@@ -37,6 +40,10 @@ public class CommandGroups {
             INSTANCE = new CommandGroups();
         }
         return INSTANCE;
+    }
+
+    public void toggleOverride() {
+        override = !override;
     }
 
     public Command elevatorGripperMinPosition() {
