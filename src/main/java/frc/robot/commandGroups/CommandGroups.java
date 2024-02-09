@@ -6,7 +6,6 @@ import frc.robot.GripperState;
 import frc.robot.scoreStates.ScoreState;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperConstants;
 import frc.robot.subsystems.intake.Intake;
@@ -48,7 +47,7 @@ public class CommandGroups {
 
     public Command retractGrillevator() {
         return Commands.parallel(
-                elevator.setHeight(ElevatorConstants.MIN_HEIGHT),
+                elevator.setHeight(CommandGroupsConstants.MIN_HEIGHT),
                 gripper.setWristPosition(GripperConstants.WRIST_BASE_ANGLE));
     }
 
@@ -73,7 +72,7 @@ public class CommandGroups {
     }
 
     public Command outtakeGripper() {
-        return elevator.setHeight(ElevatorConstants.OUTTAKE_HEIGHT)
+        return elevator.setHeight(CommandGroupsConstants.OUTTAKE_HEIGHT)
                 .onlyIf(gripperState::isGripperInsideRobot)
                 .andThen(gripper.outtake());
     }

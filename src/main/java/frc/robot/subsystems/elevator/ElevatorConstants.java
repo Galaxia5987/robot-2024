@@ -17,19 +17,6 @@ public class ElevatorConstants { // TODO: check real values
     public static final double GEAR_RATIO = 12.0;
     public static final double DRUM_RADIUS = 0.02; // [m]
 
-    // TODO: replace with actual values
-    public static final MutableMeasure<Distance> STARTING_HEIGHT =
-            Units.Meters.of(0).mutableCopy(); // [m]
-    public static final MutableMeasure<Distance> MIN_HEIGHT =
-            Units.Meters.of(0).mutableCopy(); // [m]
-    public static final MutableMeasure<Distance> MAX_HEIGHT =
-            Units.Meters.of(0).mutableCopy(); // [m]
-    public static final MutableMeasure<Distance> START_CLIMB_HEIGHT =
-            Units.Meters.of(0).mutableCopy();
-    public static final MutableMeasure<Distance> END_CLIMB_HEIGHT =
-            Units.Meters.of(0).mutableCopy();
-    public static final MutableMeasure<Distance> OUTTAKE_HEIGHT = Units.Meters.of(0).mutableCopy();
-
     public static final MutableMeasure<Angle> OPEN_POSITION = Units.Degrees.of(0).mutableCopy();
     public static final MutableMeasure<Angle> LOCKED_POSITION = Units.Degrees.of(0).mutableCopy();
     public static final MutableMeasure<Dimensionless> HEIGHT_THRESHOLD =

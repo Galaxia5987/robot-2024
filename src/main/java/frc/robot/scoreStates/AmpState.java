@@ -8,8 +8,8 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
+import frc.robot.commandGroups.CommandGroupsConstants;
 import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperConstants;
 import frc.robot.swerve.SwerveDrive;
@@ -70,7 +70,7 @@ public class AmpState implements ScoreState {
         return Commands.defer(
                 () ->
                         Commands.parallel(
-                                elevator.setHeight(ElevatorConstants.MAX_HEIGHT),
+                                elevator.setHeight(CommandGroupsConstants.MAX_HEIGHT),
                                 gripper.setWristPosition(
                                         isAmpingForward
                                                 ? GripperConstants.WRIST_ANGLE_AMP_FORWARD
