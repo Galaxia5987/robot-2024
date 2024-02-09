@@ -57,7 +57,11 @@ public class Gripper extends SubsystemBase {
     }
 
     public boolean isGripperInsideRobot() {
-        return getGripperPosition().getY() + gripperHeight.in(Units.Meters)
+        return new Translation2d(
+                                        GripperConstants.GRIPPER_LENGTH.in(Units.Meters),
+                                        new Rotation2d(inputs.currentAngle))
+                                .getY()
+                        + gripperHeight.in(Units.Meters)
                 < GripperConstants.GRIPPER_OUTTAKE_MIN_HEIGHT.in(Units.Meters);
     }
 
@@ -79,12 +83,6 @@ public class Gripper extends SubsystemBase {
 
     public Command setWristPosition(MutableMeasure<Angle> angle) {
         return runOnce(() -> io.setAngle(angle)).withName("set wrist position");
-    }
-
-    private Translation2d getGripperPosition() {
-        return new Translation2d(
-                GripperConstants.GRIPPER_LENGTH.in(Units.Meters),
-                new Rotation2d(inputs.currentAngle));
     }
 
     @Override
