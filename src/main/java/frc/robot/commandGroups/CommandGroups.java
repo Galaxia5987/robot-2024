@@ -49,7 +49,7 @@ public class CommandGroups {
     public Command retractGrillevator() {
         return Commands.parallel(
                 elevator.setHeight(ElevatorConstants.MIN_HEIGHT),
-                gripper.setWristPosition(GripperConstants.WRIST_BASE_ANGLE.mutableCopy()));
+                gripper.setWristPosition(GripperConstants.WRIST_BASE_ANGLE));
     }
 
     public Command feed() {
@@ -68,7 +68,7 @@ public class CommandGroups {
 
     public Command scoreTrap() {
         return Commands.sequence(
-                gripper.setWristPosition(GripperConstants.WRIST_TRAP_ANGLE.mutableCopy()),
+                gripper.setWristPosition(GripperConstants.WRIST_TRAP_ANGLE),
                 gripper.setRollerPower(GripperConstants.TRAP_POWER));
     }
 
@@ -82,9 +82,7 @@ public class CommandGroups {
         return retractGrillevator()
                 .andThen(
                         Commands.parallel(
-                                feed(),
-                                shooter.setVelocity(
-                                        () -> ShooterConstants.OUTTAKE_POWER.mutableCopy())));
+                                feed(), shooter.setVelocity(() -> ShooterConstants.OUTTAKE_POWER)));
     }
 
     public Command scoreCommandInit(Supplier<ScoreState> currentState) {
