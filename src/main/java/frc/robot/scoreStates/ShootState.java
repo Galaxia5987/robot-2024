@@ -65,14 +65,14 @@ public class ShootState implements ScoreState {
                 () -> {
                     if (isRed()) {
                         if (botPose.getX()
-                                < ScoreStateConstants.redBoundsMap.get(botPose.getY()).value) {
+                                < ScoreStateConstants.RED_BOUNDS_MAP.get(botPose.getY()).value) {
                             inBounds = false;
                         }
                         speakerPose = ScoreStateConstants.SPEAKER_POSE_RED;
                         optimalPoints = ScoreStateConstants.OPTIMAL_POINTS_SHOOT_RED;
                     } else {
                         if (botPose.getX()
-                                > ScoreStateConstants.blueBoundsMap.get(botPose.getY()).value) {
+                                > ScoreStateConstants.BLUE_BOUNDS_MAP.get(botPose.getY()).value) {
                             inBounds = false;
                         }
                         speakerPose = ScoreStateConstants.SPEAKER_POSE_BLUE;
