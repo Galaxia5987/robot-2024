@@ -58,8 +58,8 @@ public class CommandGroups {
                 Commands.parallel(
                         intake.intake(),
                         gripper.intake(),
-                        Commands.waitUntil(() -> gripper.hasNote())
-                                .andThen(Commands.none()))); // TODO: replace null with leds mode
+                        Commands.waitUntil(gripper::hasNote)
+                                .andThen(null))); // TODO: replace null with leds mode
     }
 
     public Command scoreTrap() {
