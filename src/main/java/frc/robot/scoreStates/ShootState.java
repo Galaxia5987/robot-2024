@@ -104,7 +104,7 @@ public class ShootState implements ScoreState {
                                         .mutableCopy()),
                 hood.setAngle(
                         () ->
-                                Units.Degrees.of(
+                                Units.Radians.of(
                                                 Math.atan(
                                                         shooterToSpeakerHeight / distanceToSpeaker))
                                         .mutableCopy()),
