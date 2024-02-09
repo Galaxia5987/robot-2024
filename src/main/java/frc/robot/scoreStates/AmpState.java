@@ -48,7 +48,7 @@ public class AmpState implements ScoreState {
                     hasTimeToTurnGripper =
                             distance
                                     > ScoreStateConstants.MIN_DISTANCE_TO_TURN_GRIPPER.in(
-                                            Units.Meters);
+                                    Units.Meters);
                     if ((gripper.isReversed() && robotRotation < 0) || hasTimeToTurnGripper) {
                         isAmpingForward = false;
                         ampRotation = ScoreStateConstants.AMP_ROTATION_REVERSE;
@@ -71,11 +71,12 @@ public class AmpState implements ScoreState {
                 () ->
                         Commands.parallel(
                                 elevator.setHeight(CommandGroupsConstants.MAX_HEIGHT),
-                                gripper.setWristPosition(
-                                        isAmpingForward
-                                                ? CommandGroupsConstants.WRIST_ANGLE_AMP_FORWARD
-                                                : CommandGroupsConstants
-                                                        .WRIST_ANGLE_AMP_BACKWARDS)),
+                                Commands.either(
+                                        gripper.setWristPosition(
+                                                CommandGroupsConstants.WRIST_ANGLE_AMP_FORWARD),
+                                        gripper.setWristPosition(
+                                                CommandGroupsConstants.WRIST_ANGLE_AMP_BACKWARDS),
+                                        () -> isAmpingForward)),
                 Set.of(gripper, elevator));
     }
 
@@ -85,10 +86,12 @@ public class AmpState implements ScoreState {
                 .andThen(
                         Commands.defer(
                                 () ->
-                                        gripper.setRollerPower(
-                                                isAmpingForward
-                                                        ? GripperConstants.AMP_POWER_NORMAL
-                                                        : GripperConstants.AMP_POWER_REVERSE),
+                                        Commands.either(
+                                                gripper.setRollerPower(
+                                                        GripperConstants.AMP_POWER_NORMAL),
+                                                gripper.setRollerPower(
+                                                        GripperConstants.AMP_POWER_REVERSE),
+                                                () -> isAmpingForward),
                                 Set.of(gripper)));
     }
 }
