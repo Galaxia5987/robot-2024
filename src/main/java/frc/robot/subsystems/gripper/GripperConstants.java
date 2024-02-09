@@ -40,17 +40,6 @@ public class GripperConstants {
     public static final LoggedTunableNumber ABSOLUTE_ENCODER_OFFSET =
             new LoggedTunableNumber("Gripper/EncoderOffset");
 
-    public static final MutableMeasure<Angle> WRIST_BASE_ANGLE =
-            Units.Degrees.of(180).mutableCopy(); // TODO: replace with actual value
-    public static final MutableMeasure<Angle> WRIST_ANGLE_AMP_FORWARD =
-            Units.Degrees.of(0).mutableCopy(); // TODO: replace with actual value;
-    public static final MutableMeasure<Angle> WRIST_ANGLE_AMP_BACKWARDS =
-            Units.Degrees.of(120).mutableCopy(); // TODO: replace with actual value;
-    public static final MutableMeasure<Angle> WRIST_TRAP_ANGLE =
-            Units.Degrees.of(120).mutableCopy(); // TODO: replace with actual value
-    public static final MutableMeasure<Angle> WRIST_TOLERANCE =
-            Units.Degrees.of(4).mutableCopy(); // TODO: replace with actual value
-
     public static final LoggedTunableNumber KP = new LoggedTunableNumber("Gripper/kP");
     public static final LoggedTunableNumber KI = new LoggedTunableNumber("Gripper/kI");
     public static final LoggedTunableNumber KD = new LoggedTunableNumber("Gripper/kD");

@@ -45,7 +45,7 @@ public class CommandGroups {
     public Command retractGrillevator() {
         return Commands.parallel(
                 elevator.setHeight(CommandGroupsConstants.MIN_HEIGHT),
-                gripper.setWristPosition(GripperConstants.WRIST_BASE_ANGLE));
+                gripper.setWristPosition(CommandGroupsConstants.WRIST_BASE_ANGLE));
     }
 
     public Command feed() {
@@ -64,7 +64,7 @@ public class CommandGroups {
 
     public Command scoreTrap() {
         return Commands.sequence(
-                gripper.setWristPosition(GripperConstants.WRIST_TRAP_ANGLE),
+                gripper.setWristPosition(CommandGroupsConstants.WRIST_TRAP_ANGLE),
                 gripper.setRollerPower(GripperConstants.TRAP_POWER));
     }
 
