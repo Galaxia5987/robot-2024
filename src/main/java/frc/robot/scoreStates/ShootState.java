@@ -8,7 +8,6 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
-import frc.robot.PoseEstimation;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.shooter.Shooter;
@@ -16,6 +15,7 @@ import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.swerve.SwerveDrive;
 import java.util.List;
 import java.util.Set;
+import lib.PoseEstimation;
 import lib.Utils;
 import lib.math.interpolation.InterpolatingDouble;
 
