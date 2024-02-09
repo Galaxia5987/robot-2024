@@ -2,7 +2,6 @@ package frc.robot.commandGroups;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.GripperState;
 import frc.robot.scoreStates.ScoreState;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.elevator.Elevator;
@@ -20,7 +19,6 @@ public class CommandGroups {
     private final Elevator elevator;
     private final Shooter shooter;
     private final Conveyor conveyor;
-    private final GripperState gripperState;
 
     public static boolean override;
 
@@ -30,7 +28,6 @@ public class CommandGroups {
         elevator = Elevator.getInstance();
         shooter = Shooter.getInstance();
         conveyor = Conveyor.getInstance();
-        gripperState = new GripperState();
         override = false;
     }
 
@@ -73,7 +70,7 @@ public class CommandGroups {
 
     public Command outtakeGripper() {
         return elevator.setHeight(CommandGroupsConstants.OUTTAKE_HEIGHT)
-                .onlyIf(gripperState::isGripperInsideRobot)
+                .onlyIf(gripper::isGripperInsideRobot)
                 .andThen(gripper.outtake());
     }
 
