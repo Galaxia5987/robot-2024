@@ -8,9 +8,9 @@ import frc.robot.vision.Vision;
 
 public class PoseEstimation {
     private static PoseEstimation INSTANCE = null;
-    private SwerveDrivePoseEstimator estimator;
-    private Vision vision = Vision.getInstance();
-    private SwerveDrive swerveDrive = SwerveDrive.getInstance();
+    private final SwerveDrivePoseEstimator estimator;
+    private final Vision vision = Vision.getInstance();
+    private final SwerveDrive swerveDrive = SwerveDrive.getInstance();
 
     public PoseEstimation() {
         estimator =
