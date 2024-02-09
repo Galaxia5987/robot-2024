@@ -19,6 +19,7 @@ public class Gripper extends SubsystemBase {
     private final GripperInputsAutoLogged inputs = GripperIO.inputs;
     private final ElevatorInputsAutoLogged elevatorInputs =
             ElevatorIO.inputs; // TODO: change to supplier
+    private Measure<Distance> gripperHeight = Units.Meters.zero();
 
     @AutoLogOutput private final Mechanism2d mechanism2d = new Mechanism2d(1, 1);
     @AutoLogOutput private Pose3d gripperPose = new Pose3d();
@@ -54,6 +55,11 @@ public class Gripper extends SubsystemBase {
                 GripperConstants.WRIST_TOLERANCE.in(Units.Rotations));
     }
 
+    public boolean isGripperInsideRobot() {
+        return getGripperPosition().getY() + gripperHeight.in(Units.Meters)
+                < GripperConstants.GRIPPER_OUTTAKE_MIN_HEIGHT.in(Units.Meters);
+    }
+
     public Command setRollerPower(double power) {
         return Commands.runOnce(() -> io.setRollerMotorPower(power)).withName("set roller power");
     }
@@ -74,7 +80,7 @@ public class Gripper extends SubsystemBase {
         return run(() -> io.setAngle(angle)).until(this::atSetpoint).withName("set wrist position");
     }
 
-    public Translation2d getGripperPosition() {
+    private Translation2d getGripperPosition() {
         return new Translation2d(
                 GripperConstants.GRIPPER_LENGTH.in(Units.Meters),
                 new Rotation2d(inputs.currentAngle));
@@ -82,8 +88,7 @@ public class Gripper extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Measure<Distance> gripperHeight =
-                elevatorInputs.carriageHeight.plus(GripperConstants.GRIPPER_POSITION_z);
+        gripperHeight = elevatorInputs.carriageHeight.plus(GripperConstants.GRIPPER_POSITION_z);
         gripperPose =
                 new Pose3d(
                         new Translation3d(
