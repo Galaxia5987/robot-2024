@@ -2,10 +2,7 @@ package frc.robot.scoreStates;
 
 import com.pathplanner.lib.util.GeometryUtil;
 import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Distance;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Units;
+import edu.wpi.first.units.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,9 +33,9 @@ public class ScoreStateConstants {
             GeometryUtil.flipFieldPosition(SPEAKER_POSE_BLUE);
     public static final Rotation2d AMP_ROTATION_NORMAL = new Rotation2d(Math.toRadians(90));
     public static final Rotation2d AMP_ROTATION_REVERSE = new Rotation2d(Math.toRadians(-90));
-    public static final Measure<Distance> MAX_SHOOTING_DISTANCE = Units.Meters.of(3);
-    public static final Measure<Distance> MIN_DISTANCE_TO_TURN_GRIPPER = Units.Meters.of(3);
-    public static final Measure<Angle> TURN_TOLERANCE = Units.Rotations.of(0.01); // Rotations
+    public static final MutableMeasure<Distance> MIN_DISTANCE_TO_TURN_GRIPPER =
+            Units.Meters.of(3).mutableCopy();
+    public static final MutableMeasure<Angle> TURN_TOLERANCE = Units.Degrees.of(5).mutableCopy();
 
     public static final double SPEAKER_TARGET_HEIGHT = 0.0; // TODO: check real value
 
