@@ -5,12 +5,13 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.swerve.SwerveDrive;
 import frc.robot.vision.Vision;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class PoseEstimation {
     private static PoseEstimation INSTANCE = null;
-    private SwerveDrivePoseEstimator estimator;
-    private Vision vision = Vision.getInstance();
-    private SwerveDrive swerveDrive = SwerveDrive.getInstance();
+    private final SwerveDrivePoseEstimator estimator;
+    private final Vision vision = Vision.getInstance();
+    private final SwerveDrive swerveDrive = SwerveDrive.getInstance();
 
     public PoseEstimation() {
         estimator =
@@ -30,10 +31,10 @@ public class PoseEstimation {
 
     public void addVisionMeasurement() {
         var results = vision.getResults();
-        for (int i = 0; i < results.length; i++) {
+        for (org.photonvision.EstimatedRobotPose result : results) {
             estimator.addVisionMeasurement(
-                    results[i].estimatedPose.toPose2d(),
-                    results[i].timestampSeconds,
+                    result.estimatedPose.toPose2d(),
+                    result.timestampSeconds,
                     VecBuilder.fill(0.0, 0.0, 0.0)); // TODO: calibrate
         }
     }
@@ -42,6 +43,7 @@ public class PoseEstimation {
         estimator.update(swerveDrive.getYaw(), swerveDrive.getModulePositions());
     }
 
+    @AutoLogOutput
     public Pose2d getEstimatedPose() {
         return estimator.getEstimatedPosition();
     }

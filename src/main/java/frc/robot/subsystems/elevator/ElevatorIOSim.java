@@ -44,15 +44,21 @@ public class ElevatorIOSim implements ElevatorIO {
     }
 
     @Override
+    public void openStopper() {}
+
+    @Override
+    public void closeStopper() {}
+
+    @Override
     public void updateInputs(ElevatorInputs inputs) {
         motor.update(Timer.getFPGATimestamp());
 
-        inputs.carriageHeight = Meters.of(motor.getPosition()).mutableCopy();
-        inputs.gripperHeight.mut_replace(
-                inputs.carriageHeight.gt(ElevatorConstants.GRIPPER_HEIGHT)
-                        ? inputs.carriageHeight
+        inputs.hooksHeight = Meters.of(motor.getPosition()).mutableCopy();
+        inputs.carriageHeight.mut_replace(
+                inputs.hooksHeight.gt(ElevatorConstants.GRIPPER_TO_HOOKS)
+                        ? inputs.hooksHeight
                                 .mutableCopy()
-                                .mut_minus(ElevatorConstants.GRIPPER_HEIGHT)
+                                .mut_minus(ElevatorConstants.GRIPPER_TO_HOOKS)
                         : Meters.zero());
     }
 }

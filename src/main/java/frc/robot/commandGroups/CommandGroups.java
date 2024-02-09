@@ -53,11 +53,10 @@ public class CommandGroups {
     }
 
     public Command intake() {
-        return elevatorGripperMinPosition()
-                .andThen(
-                        Commands.parallel(intake.intake(), gripper.intake())
-                                .until(gripper::hasNote)
-                                .andThen(intake.stop(), gripper.setRollerPower(0)));
+        return Commands.sequence(
+                elevatorGripperMinPosition(),
+                Commands.parallel(intake.intake(), gripper.intake()).until(gripper::hasNote),
+                Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
     }
 
     public Command trapScore() {
@@ -92,9 +91,5 @@ public class CommandGroups {
 
     public Command scoreExecute(Supplier<ScoreState> currentState) {
         return currentState.get().score();
-    }
-
-    public Command climb() {
-        return null;
     }
 }

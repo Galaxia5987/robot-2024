@@ -38,6 +38,8 @@ public class Constants {
     public static final Transform3d FRONT_RIGHT_CAMERA_POSE =
             new Transform3d(0, -0.293, 0.55, new Rotation3d(0, Math.toRadians(25.0), 0));
 
+    public static final Measure<Voltage> NOMINAL_VOLTAGE = Units.Volts.of(12);
+
     public static final Measure<Distance> ROBOT_LENGTH = Units.Meters.of(0.584);
     public static final Measure<Velocity<Distance>> MAX_VELOCITY = Units.MetersPerSecond.of(4.5);
     public static final Measure<Velocity<Velocity<Distance>>> MAX_ACCELERATION =
