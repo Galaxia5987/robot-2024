@@ -16,7 +16,7 @@ public interface ScoreState {
 
     Command driveToClosestOptimalPoint();
 
-    Command initializeSubsystem();
+    Command initializeSubsystems();
 
     Command score();
 }

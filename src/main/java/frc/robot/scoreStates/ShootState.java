@@ -90,7 +90,7 @@ public class ShootState implements ScoreState {
     }
 
     @Override
-    public Command initializeSubsystem() {
+    public Command initializeSubsystems() {
         shooterToSpeakerHeight =
                 ScoreStateConstants.SPEAKER_TARGET_HEIGHT
                         - ShooterConstants.SHOOTER_HEIGHT.in(Units.Meters);

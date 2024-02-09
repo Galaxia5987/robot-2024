@@ -89,7 +89,7 @@ public class CommandGroups {
     }
 
     public Command scoreSubsystemInit(Supplier<ScoreState> currentState) {
-        return currentState.get().initializeSubsystem();
+        return currentState.get().initializeSubsystems();
     }
 
     public Command scoreExecute(Supplier<ScoreState> currentState) {

@@ -66,7 +66,7 @@ public class AmpState implements ScoreState {
     }
 
     @Override
-    public Command initializeSubsystem() {
+    public Command initializeSubsystems() {
         return Commands.defer(
                 () ->
                         Commands.parallel(
