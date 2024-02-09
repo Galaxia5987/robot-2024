@@ -24,9 +24,9 @@ public class ElevatorConstants { // TODO: check real values
             Units.Meters.of(0).mutableCopy(); // [m]
     public static final MutableMeasure<Distance> MAX_HEIGHT =
             Units.Meters.of(0).mutableCopy(); // [m]
-    public static final MutableMeasure<Distance> STARTING_CLIMB_HEIGHT =
+    public static final MutableMeasure<Distance> START_CLIMB_HEIGHT =
             Units.Meters.of(0).mutableCopy();
-    public static final MutableMeasure<Distance> ENDING_CLIMB_HEIGHT =
+    public static final MutableMeasure<Distance> END_CLIMB_HEIGHT =
             Units.Meters.of(0).mutableCopy();
     public static final MutableMeasure<Distance> OUTTAKE_HEIGHT = Units.Meters.of(0).mutableCopy();
 
