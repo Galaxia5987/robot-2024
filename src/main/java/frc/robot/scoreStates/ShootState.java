@@ -55,8 +55,9 @@ public class ShootState implements ScoreState {
                     optimalTranslation = botPose.getTranslation().nearest(optimalPoints);
 
                     return AutoBuilder.pathfindToPose(
-                            new Pose2d(optimalTranslation, new Rotation2d(optimalRotation)),
-                            Constants.AUTO_CONSTRAINTS);
+                                    new Pose2d(optimalTranslation, new Rotation2d(optimalRotation)),
+                                    Constants.AUTO_CONSTRAINTS)
+                            .andThen(rotate());
                 },
                 Set.of(SwerveDrive.getInstance()));
     }
@@ -115,7 +116,6 @@ public class ShootState implements ScoreState {
     public Command score() {
         return Commands.sequence(
                 driveToClosestOptimalPoint(),
-                rotate(),
                 Commands.parallel(
                         shooter.setVelocity(
                                 () ->
