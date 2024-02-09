@@ -39,11 +39,11 @@ public class ScoreStateConstants {
 
     public static final double SPEAKER_TARGET_HEIGHT = 0.0; // TODO: check real value
 
-    public static final InterpolatingDoubleMap blueBoundsMap = new InterpolatingDoubleMap(6);
-    public static final InterpolatingDoubleMap redBoundsMap = new InterpolatingDoubleMap(6);
+    public static final InterpolatingDoubleMap BLUE_BOUNDS_MAP = new InterpolatingDoubleMap(6);
+    public static final InterpolatingDoubleMap RED_BOUNDS_MAP = new InterpolatingDoubleMap(6);
 
     static {
-        blueBoundsMap.putAll(
+        BLUE_BOUNDS_MAP.putAll(
                 new HashMap<>() {
                     {
                         for (int i = 0; i < OPTIMAL_POINTS_SHOOT_BLUE.size(); i++) {
@@ -56,7 +56,7 @@ public class ScoreStateConstants {
                     }
                 });
 
-        redBoundsMap.putAll(
+        RED_BOUNDS_MAP.putAll(
                 new HashMap<>() {
                     {
                         for (int i = 0; i < OPTIMAL_POINTS_SHOOT_RED.size(); i++) {
