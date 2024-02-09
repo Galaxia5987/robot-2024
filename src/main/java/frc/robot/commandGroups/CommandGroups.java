@@ -59,7 +59,7 @@ public class CommandGroups {
                         intake.intake(),
                         gripper.intake(),
                         Commands.waitUntil(gripper::hasNote)
-                                .andThen(null))); // TODO: replace null with leds mode
+                                .andThen(Commands.none()))); // TODO: replace null with leds mode
     }
 
     public Command scoreTrap() {
