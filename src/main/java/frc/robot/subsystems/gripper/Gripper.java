@@ -53,7 +53,7 @@ public class Gripper extends SubsystemBase {
     public boolean isReversed() {
         return inputs.currentAngle.isNear(
                 CommandGroupsConstants.WRIST_ANGLE_AMP_BACKWARDS,
-                CommandGroupsConstants.WRIST_TOLERANCE.in(Units.Rotations));
+                CommandGroupsConstants.WRIST_TOLERANCE.in(Units.Percent));
     }
 
     public boolean isGripperNearFoldedPosition() {
