@@ -43,7 +43,7 @@ public class PoseEstimation {
         estimator.update(swerveDrive.getYaw(), swerveDrive.getModulePositions());
     }
 
-    @AutoLogOutput
+    @AutoLogOutput(key = "EstimatedRobotPose")
     public Pose2d getEstimatedPose() {
         return estimator.getEstimatedPosition();
     }
