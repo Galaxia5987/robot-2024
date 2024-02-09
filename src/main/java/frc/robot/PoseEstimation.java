@@ -30,10 +30,10 @@ public class PoseEstimation {
 
     public void addVisionMeasurement() {
         var results = vision.getResults();
-        for (int i = 0; i < results.length; i++) {
+        for (org.photonvision.EstimatedRobotPose result : results) {
             estimator.addVisionMeasurement(
-                    results[i].estimatedPose.toPose2d(),
-                    results[i].timestampSeconds,
+                    result.estimatedPose.toPose2d(),
+                    result.timestampSeconds,
                     VecBuilder.fill(0.0, 0.0, 0.0)); // TODO: calibrate
         }
     }
