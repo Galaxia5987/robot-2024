@@ -10,7 +10,7 @@ public interface ScoreState {
         return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
     }
 
-    default Command initializeCommand(){
+    default Command initializeCommand() {
         return Commands.none();
     }
 

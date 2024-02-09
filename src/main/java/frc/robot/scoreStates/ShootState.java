@@ -38,16 +38,19 @@ public class ShootState implements ScoreState {
         hood = Hood.getInstance();
     }
 
+    private Command rotate() {
+        return SwerveDrive.getInstance()
+                .turnCommand(
+                        optimalRotation, ScoreStateConstants.TURN_TOLERANCE.in(Units.Rotations));
+    }
+
     @Override
     public Command driveToClosestOptimalPoint() {
         return Commands.defer(
                 () -> {
                     if (inBounds) {
                         optimalTranslation = botPose.getTranslation();
-                        return SwerveDrive.getInstance()
-                                .turnCommand(
-                                        optimalRotation,
-                                        ScoreStateConstants.TURN_TOLERANCE.in(Units.Rotations));
+                        return rotate();
                     }
                     optimalTranslation = botPose.getTranslation().nearest(optimalPoints);
 
@@ -112,6 +115,7 @@ public class ShootState implements ScoreState {
     public Command score() {
         return Commands.sequence(
                 driveToClosestOptimalPoint(),
+                rotate(),
                 Commands.parallel(
                         shooter.setVelocity(
                                 () ->
