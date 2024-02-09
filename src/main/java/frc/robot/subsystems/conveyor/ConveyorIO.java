@@ -15,7 +15,7 @@ public interface ConveyorIO {
     class ConveyorInputs {
         public MutableMeasure<Velocity<Angle>> velocitySetpoint =
                 MutableMeasure.zero(Units.RotationsPerSecond);
-        public MutableMeasure<Velocity<Angle>> velocity =
+        public MutableMeasure<Velocity<Angle>> currentVelocity =
                 MutableMeasure.zero(Units.RotationsPerSecond);
         public MutableMeasure<Voltage> appliedVoltage = MutableMeasure.zero(Units.Volts);
         public MutableMeasure<Current> appliedCurrent = MutableMeasure.zero(Units.Amps);

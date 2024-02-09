@@ -3,11 +3,8 @@ package frc.robot.subsystems.gripper;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Distance;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -88,16 +85,14 @@ public class Gripper extends SubsystemBase {
 
     @Override
     public void periodic() {
-        MutableMeasure<Distance> gripperHeight =
-                elevatorInputs
-                        .gripperHeight
-                        .mutableCopy()
-                        .mut_plus(GripperConstants.GRIPPER_POSITION_z);
+        Measure<Distance> gripperHeight =
+                elevatorInputs.gripperHeight.plus(GripperConstants.GRIPPER_POSITION_z);
         gripperPose =
                 new Pose3d(
-                        GripperConstants.GRIPPER_POSITION_X.in(Units.Meters),
-                        GripperConstants.GRIPPER_POSITION_Y.in(Units.Meters),
-                        gripperHeight.in(Units.Meters),
+                        new Translation3d(
+                                GripperConstants.GRIPPER_POSITION_X,
+                                GripperConstants.GRIPPER_POSITION_Y,
+                                gripperHeight),
                         new Rotation3d(0, -inputs.currentAngle.in(Units.Radians), 0));
 
         io.updateInputs();
