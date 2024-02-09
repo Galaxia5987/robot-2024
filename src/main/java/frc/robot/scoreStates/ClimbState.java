@@ -32,10 +32,6 @@ public class ClimbState implements ScoreState {
                 Set.of(SwerveDrive.getInstance()));
     }
 
-    public Command initializeCommand() {
-        return Commands.none();
-    }
-
     @Override
     public Command initializeSubsystem() {
         return elevator.setHeight(CommandGroupsConstants.START_CLIMB_HEIGHT);
