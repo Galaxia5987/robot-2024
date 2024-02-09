@@ -46,7 +46,7 @@ public class CommandGroups {
         override = !override;
     }
 
-    public Command elevatorGripperMinPosition() {
+    public Command retractGrillevator() {
         return Commands.parallel(
                 elevator.setHeight(ElevatorConstants.MIN_HEIGHT),
                 gripper.setWristPosition(GripperConstants.WRIST_BASE_ANGLE.mutableCopy()));
@@ -54,7 +54,7 @@ public class CommandGroups {
 
     public Command intake() {
         return Commands.sequence(
-                elevatorGripperMinPosition(),
+                retractGrillevator(),
                 Commands.parallel(intake.intake(), gripper.intake()).until(gripper::hasNote),
                 Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
     }
@@ -72,7 +72,7 @@ public class CommandGroups {
     }
 
     public Command shooterOuttake() {
-        return elevatorGripperMinPosition()
+        return retractGrillevator()
                 .andThen(
                         Commands.parallel(
                                 gripper.setRollerPower(GripperConstants.OUTTAKE_POWER),
