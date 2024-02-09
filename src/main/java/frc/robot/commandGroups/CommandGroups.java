@@ -80,16 +80,4 @@ public class CommandGroups {
                         Commands.parallel(
                                 feed(), shooter.setVelocity(() -> ShooterConstants.OUTTAKE_POWER)));
     }
-
-    public Command scoreCommandInit(Supplier<ScoreState> currentState) {
-        return currentState.get().initializeCommand();
-    }
-
-    public Command scoreSubsystemInit(Supplier<ScoreState> currentState) {
-        return currentState.get().initializeSubsystems();
-    }
-
-    public Command scoreExecute(Supplier<ScoreState> currentState) {
-        return currentState.get().score();
-    }
 }
