@@ -1,9 +1,6 @@
 package frc.robot.commandGroups;
 
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Distance;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
+import edu.wpi.first.units.*;
 
 public class CommandGroupsConstants {
     // TODO: replace with actual values
@@ -27,6 +24,6 @@ public class CommandGroupsConstants {
             Units.Degrees.of(120).mutableCopy(); // TODO: replace with actual value;
     public static final MutableMeasure<Angle> WRIST_TRAP_ANGLE =
             Units.Degrees.of(120).mutableCopy(); // TODO: replace with actual value
-    public static final MutableMeasure<Angle> WRIST_TOLERANCE =
-            Units.Degrees.of(4).mutableCopy(); // TODO: replace with actual value
+    public static final MutableMeasure<Dimensionless> WRIST_TOLERANCE =
+            Units.Percent.of(0.5).mutableCopy(); // TODO: replace with actual value
 }
