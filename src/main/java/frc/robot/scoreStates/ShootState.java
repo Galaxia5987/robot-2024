@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.PoseEstimation;
-import frc.robot.Robot;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperConstants;
@@ -27,7 +26,10 @@ public class ShootState implements ScoreState {
     private Translation2d speakerPose;
     private static boolean inBounds;
     private Translation2d optimalTranslation;
-    private Translation2d optimalRotation;
+    private double optimalRotation;
+    private List<Translation2d> optimalPoints;
+    private double distanceToSpeaker;
+    private Pose2d botPose;
 
     public ShootState() {
         shooter = Shooter.getInstance();
@@ -39,23 +41,11 @@ public class ShootState implements ScoreState {
     public Command driveToClosestOptimalPoint() {
         return Commands.defer(
                 () -> {
-                    Pose2d botPose = PoseEstimation.getInstance().getEstimatedPose();
-                    List<Translation2d> optimalPoints;
-                    if (isRed()) {
-                        speakerPose = ScoreStateConstants.SPEAKER_POSE_RED;
-                        optimalPoints = ScoreStateConstants.OPTIMAL_POINTS_SHOOT_RED;
-                    } else {
-                        speakerPose = ScoreStateConstants.SPEAKER_POSE_BLUE;
-                        optimalPoints = ScoreStateConstants.OPTIMAL_POINTS_SHOOT_BLUE;
-                    }
-                    if (Utils.getDistanceFromPoint(speakerPose, botPose)
-                            < ScoreStateConstants.MAX_SHOOTING_DISTANCE.in(Units.Meters)) {
+                    if (inBounds) {
                         optimalTranslation = botPose.getTranslation();
                         return SwerveDrive.getInstance()
                                 .turnCommand(
-                                        Utils.calcRotationToTranslation(
-                                                        optimalTranslation, speakerPose)
-                                                .getRotations(),
+                                        optimalRotation,
                                         ScoreStateConstants.TURN_TOLERANCE.in(Units.Rotations));
                     }
                     optimalTranslation = botPose.getTranslation().nearest(optimalPoints);
@@ -72,19 +62,30 @@ public class ShootState implements ScoreState {
 
     @Override
     public Command initializeCommand() {
-        var poseEstimation = PoseEstimation.getInstance().getEstimatedPose();
-        return Commands.run(()-> {
-            if (isRed()) {
-                if (poseEstimation.getX() < ScoreStateConstants.redBoundsMap.get(poseEstimation.getY()).value) {
-                    inBounds = false;
-                }
-            } else {
-                if (poseEstimation.getX() > ScoreStateConstants.blueBoundsMap.get(poseEstimation.getY()).value) {
-                    inBounds = false;
-                }
-            }
-
-        });
+        botPose = PoseEstimation.getInstance().getEstimatedPose();
+        return Commands.run(
+                () -> {
+                    if (isRed()) {
+                        if (botPose.getX()
+                                < ScoreStateConstants.redBoundsMap.get(botPose.getY()).value) {
+                            inBounds = false;
+                        }
+                        speakerPose = ScoreStateConstants.SPEAKER_POSE_RED;
+                        optimalPoints = ScoreStateConstants.OPTIMAL_POINTS_SHOOT_RED;
+                    } else {
+                        if (botPose.getX()
+                                > ScoreStateConstants.blueBoundsMap.get(botPose.getY()).value) {
+                            inBounds = false;
+                        }
+                        speakerPose = ScoreStateConstants.SPEAKER_POSE_BLUE;
+                        optimalPoints = ScoreStateConstants.OPTIMAL_POINTS_SHOOT_BLUE;
+                    }
+                    optimalTranslation = botPose.getTranslation().nearest(optimalPoints);
+                    optimalRotation =
+                            Utils.calcRotationToTranslation(optimalTranslation, speakerPose)
+                                    .getRotations();
+                    distanceToSpeaker = Utils.getDistanceFromPoint(speakerPose, botPose);
+                });
     }
 
     @Override
@@ -104,7 +105,7 @@ public class ShootState implements ScoreState {
                         () ->
                                 Units.Degrees.of(
                                                 Math.atan(
-                                                        (Constants.SPEAKER_TARGET_POSE.getY()
+                                                        (ScoreStateConstants.SPEAKER_TARGET_HEIGHT
                                                                         - ShooterConstants
                                                                                 .SHOOTER_HEIGHT)
                                                                 / Utils.getDistanceFromPoint(
@@ -112,12 +113,41 @@ public class ShootState implements ScoreState {
                                                                         PoseEstimation.getInstance()
                                                                                 .getEstimatedPose())))
                                         .mutableCopy()),
-                CommandGroups.getINSTANCE().elevatorGripperMinPosition());
+                CommandGroups.getInstance().elevatorGripperMinPosition());
     }
 
     @Override
     public Command score() {
         return Commands.sequence(
-                driveToClosestOptimalPoint(), gripper.setRollerPower(GripperConstants.SHOOT_POWER));
+                driveToClosestOptimalPoint(),
+                Commands.parallel(
+                        shooter.setVelocity(
+                                () ->
+                                        Units.RotationsPerSecond.of(
+                                                        ShooterConstants.interpolationMap.get(
+                                                                        Utils.getDistanceFromPoint(
+                                                                                speakerPose,
+                                                                                PoseEstimation
+                                                                                        .getInstance()
+                                                                                        .getEstimatedPose()))
+                                                                .value)
+                                                .mutableCopy()),
+                        hood.setAngle(
+                                () ->
+                                        Units.Degrees.of(
+                                                        Math.atan(
+                                                                (ScoreStateConstants
+                                                                                        .SPEAKER_TARGET_HEIGHT
+                                                                                - ShooterConstants
+                                                                                        .SHOOTER_HEIGHT)
+                                                                        / Utils
+                                                                                .getDistanceFromPoint(
+                                                                                        speakerPose,
+                                                                                        PoseEstimation
+                                                                                                .getInstance()
+                                                                                                .getEstimatedPose())))
+                                                .mutableCopy())),
+                gripper.setRollerPower(GripperConstants.SHOOT_POWER)
+                        .onlyIf(() -> shooter.atSetpoint() && hood.atSetpoint()));
     }
 }

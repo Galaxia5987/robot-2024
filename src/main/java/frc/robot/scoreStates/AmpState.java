@@ -61,7 +61,7 @@ public class AmpState implements ScoreState {
         return Commands.defer(
                 () ->
                         AutoBuilder.pathfindToPose(
-                                new Pose2d(ampPose, ampRotation), Constants.AUTO_CONSTRAINTS).,
+                                new Pose2d(ampPose, ampRotation), Constants.AUTO_CONSTRAINTS),
                 Set.of(SwerveDrive.getInstance()));
     }
 

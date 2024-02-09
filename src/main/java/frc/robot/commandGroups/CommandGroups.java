@@ -42,7 +42,7 @@ public class CommandGroups {
         return INSTANCE;
     }
 
-    public void toggleOverride(){
+    public void toggleOverride() {
         override = !override;
     }
 
