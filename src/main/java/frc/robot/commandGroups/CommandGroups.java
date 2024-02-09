@@ -55,8 +55,11 @@ public class CommandGroups {
     public Command intake() {
         return Commands.sequence(
                 retractGrillevator(),
-                Commands.parallel(intake.intake(), gripper.intake()).until(gripper::hasNote),
-                Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
+                Commands.parallel(
+                        intake.intake(),
+                        gripper.intake(),
+                        Commands.waitUntil(() -> gripper.hasNote())
+                                .andThen(null))); // TODO: replace null with leds mode
     }
 
     public Command scoreTrap() {
