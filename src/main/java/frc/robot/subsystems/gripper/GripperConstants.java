@@ -35,14 +35,16 @@ public class GripperConstants {
     public static final LoggedTunableNumber ABSOLUTE_ENCODER_OFFSET =
             new LoggedTunableNumber("Gripper/EncoderOffset");
 
-    public static final Measure<Angle> WRIST_FOLD_POSITION =
-            Units.Rotations.of(0.5); // TODO: replace with actual value
-    public static final Measure<Angle> WRIST_FORWARD_AMP_POSE =
-            Units.Rotations.of(0); // TODO: replace with actual value;
-    public static final Measure<Angle> WRIST_BACKWARDS_AMP =
-            Units.Rotations.of(0.4); // TODO: replace with actual value;
-    public static final Measure<Angle> WRIST_TRAP_ANGLE = Units.Rotations.of(0.4);
-    public static final Measure<Angle> WRIST_TOLERANCE = Units.Rotations.of(0.05);
+    public static final Measure<Angle> WRIST_BASE_ANGLE =
+            Units.Degrees.of(180); // TODO: replace with actual value
+    public static final Measure<Angle> WRIST_ANGLE_AMP_FORWARD =
+            Units.Degrees.of(0); // TODO: replace with actual value;
+    public static final Measure<Angle> WRIST_ANGLE_AMP_BACKWARDS =
+            Units.Degrees.of(120); // TODO: replace with actual value;
+    public static final Measure<Angle> WRIST_TRAP_ANGLE =
+            Units.Degrees.of(120); // TODO: replace with actual value
+    public static final Measure<Angle> WRIST_TOLERANCE =
+            Units.Degrees.of(4); // TODO: replace with actual value
 
     public static final LoggedTunableNumber KP = new LoggedTunableNumber("Gripper/kP");
     public static final LoggedTunableNumber KI = new LoggedTunableNumber("Gripper/kI");

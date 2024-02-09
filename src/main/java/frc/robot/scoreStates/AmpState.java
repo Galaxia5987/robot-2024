@@ -73,9 +73,9 @@ public class AmpState implements ScoreState {
                                 elevator.setHeight(ElevatorConstants.MAX_HEIGHT),
                                 gripper.setWristPosition(
                                         isAmpingForward
-                                                ? GripperConstants.WRIST_FORWARD_AMP_POSE
+                                                ? GripperConstants.WRIST_ANGLE_AMP_FORWARD
                                                         .mutableCopy()
-                                                : GripperConstants.WRIST_BACKWARDS_AMP
+                                                : GripperConstants.WRIST_ANGLE_AMP_BACKWARDS
                                                         .mutableCopy())),
                 Set.of(gripper, elevator));
     }
