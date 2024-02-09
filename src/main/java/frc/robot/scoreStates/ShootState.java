@@ -103,7 +103,8 @@ public class ShootState implements ScoreState {
                                                 Math.atan(
                                                         (ScoreStateConstants.SPEAKER_TARGET_HEIGHT
                                                                         - ShooterConstants
-                                                                                .SHOOTER_HEIGHT)
+                                                                                .SHOOTER_HEIGHT
+                                                                                .in(Units.Meters))
                                                                 / distanceToSpeaker))
                                         .mutableCopy()),
                 CommandGroups.getInstance().retractGrillevator());
@@ -128,7 +129,10 @@ public class ShootState implements ScoreState {
                                                                 (ScoreStateConstants
                                                                                         .SPEAKER_TARGET_HEIGHT
                                                                                 - ShooterConstants
-                                                                                        .SHOOTER_HEIGHT)
+                                                                                        .SHOOTER_HEIGHT
+                                                                                        .in(
+                                                                                                Units
+                                                                                                        .Meters))
                                                                         / distanceToSpeaker))
                                                 .mutableCopy())),
                 CommandGroups.getInstance()

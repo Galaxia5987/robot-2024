@@ -25,13 +25,15 @@ public class ShooterIOSim implements ShooterIO {
                 new TalonFXSim(
                         1,
                         ShooterConstants.GEAR_RATIO_TOP,
-                        ShooterConstants.MOMENT_OF_INERTIA_TOP,
+                        ShooterConstants.MOMENT_OF_INERTIA_TOP.in(
+                                Units.Kilograms.mult(Units.Meters).mult(Units.Meters)),
                         1);
         bottomMotor =
                 new TalonFXSim(
                         1,
                         ShooterConstants.GEAR_RATIO_BOTTOM,
-                        ShooterConstants.MOMENT_OF_INERTIA_BOTTOM,
+                        ShooterConstants.MOMENT_OF_INERTIA_BOTTOM.in(
+                                Units.Kilograms.mult(Units.Meters).mult(Units.Meters)),
                         1);
 
         topMotor.setController(
