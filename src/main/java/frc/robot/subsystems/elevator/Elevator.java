@@ -6,14 +6,11 @@ import static frc.robot.subsystems.elevator.ElevatorConstants.MECHANISM_WIDTH;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.units.Distance;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.*;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -47,16 +44,30 @@ public class Elevator extends SubsystemBase {
     }
 
     public MutableMeasure<Distance> getCurrentHeight() {
-        return inputs.carriageHeight;
+        return inputs.hooksHeight;
     }
 
     public MutableMeasure<Distance> getHeightSetpoint() {
         return inputs.heightSetpoint;
     }
 
+    public boolean atHeightSetpoint() {
+        return inputs.heightSetpoint.isNear(
+                inputs.hooksHeight, ElevatorConstants.HEIGHT_THRESHOLD.in(Units.Value));
+    }
+
+    public boolean stopperAtSetpoint() {
+        return inputs.stopperAngle.isNear(
+                inputs.stopperSetpoint, ElevatorConstants.STOPPER_THRESHOLD.in(Units.Value));
+    }
+
     public Command setHeight(MutableMeasure<Distance> height) {
-        return runOnce(() -> inputs.heightSetpoint = height)
-                .andThen(run(() -> io.setHeight(height)));
+        return Commands.sequence(
+                        runOnce(() -> inputs.heightSetpoint = height),
+                        run(io::openStopper).until(this::stopperAtSetpoint).withTimeout(0.3),
+                        run(() -> io.setHeight(height)).until(this::atHeightSetpoint),
+                        run(io::closeStopper).until(this::stopperAtSetpoint).withTimeout(0.3))
+                .withName("set height");
     }
 
     @Override
@@ -68,12 +79,12 @@ public class Elevator extends SubsystemBase {
         Logger.recordOutput(
                 "elevatorPose",
                 new Pose3d(
-                        new Translation3d(0, 0, inputs.gripperHeight.in(Units.Meters)),
+                        new Translation3d(0, 0, inputs.carriageHeight.in(Units.Meters)),
                         new Rotation3d(0, 0, 0)));
         Logger.recordOutput(
                 "carriagePose",
                 new Pose3d(
-                        new Translation3d(0, 0, inputs.carriageHeight.in(Units.Meters)),
+                        new Translation3d(0, 0, inputs.hooksHeight.in(Units.Meters)),
                         new Rotation3d(0, 0, 0)));
     }
 }
