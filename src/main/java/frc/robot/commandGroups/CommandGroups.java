@@ -85,8 +85,4 @@ public class CommandGroups {
     public Command scoreExecute(Supplier<ScoreState> currentState) {
         return currentState.get().score();
     }
-
-    public Command climb() {
-        return null;
-    }
 }
