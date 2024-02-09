@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commandGroups.CommandGroupsConstants;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorInputsAutoLogged;
+import lib.Utils;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -51,9 +52,8 @@ public class Gripper extends SubsystemBase {
     }
 
     public boolean isReversed() {
-        return inputs.currentAngle.isNear(
-                CommandGroupsConstants.WRIST_ANGLE_AMP_BACKWARDS,
-                CommandGroupsConstants.WRIST_TOLERANCE.in(Units.Percent));
+        return Utils.normalize(inputs.currentAngle.in(Units.Radians))
+                > CommandGroupsConstants.WRIST_MIN_BACKWARDS_ANGLE.in(Units.Radians);
     }
 
     public boolean isGripperNearFoldedPosition() {
