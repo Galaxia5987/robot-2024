@@ -14,9 +14,9 @@ public interface ScoreState {
         return Commands.none();
     }
 
-    Command driveToClosestOptimalPoint();
-
     Command initializeSubsystems();
+
+    Command driveToClosestOptimalPoint();
 
     Command score();
 }
