@@ -118,36 +118,36 @@ public class ShooterConstants {
         interpolationMap.putAll(
                 new HashMap<>() {
                     {
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
-                        put(new InterpolatingDouble(0), new InterpolatingDouble(0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
+                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
                     }
                 });
     }

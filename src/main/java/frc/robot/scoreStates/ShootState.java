@@ -97,7 +97,7 @@ public class ShootState implements ScoreState {
                                                                         PoseEstimation.getInstance()
                                                                                 .getEstimatedPose())))
                                         .mutableCopy()),
-                CommandGroups.getINSTANCE().elevatorGripperMinPosition());
+                CommandGroups.getInstance().elevatorGripperMinPosition());
     }
 
     @Override

@@ -1,9 +1,6 @@
 package frc.robot.subsystems.gripper;
 
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -86,7 +83,7 @@ public class Gripper extends SubsystemBase {
     @Override
     public void periodic() {
         Measure<Distance> gripperHeight =
-                elevatorInputs.gripperHeight.plus(GripperConstants.GRIPPER_POSITION_z);
+                elevatorInputs.carriageHeight.plus(GripperConstants.GRIPPER_POSITION_z);
         gripperPose =
                 new Pose3d(
                         new Translation3d(

@@ -23,7 +23,7 @@ public class GripperIOReal implements GripperIO {
     private final VoltageOut powerRequest = new VoltageOut(0).withEnableFOC(true);
     private final Debouncer debouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
 
-    private GripperIOReal() {
+    public GripperIOReal() {
         angleMotor = new TalonFX(0);
         angleMotor.getConfigurator().apply(GripperConstants.MOTOR_CONFIGURATION);
 
