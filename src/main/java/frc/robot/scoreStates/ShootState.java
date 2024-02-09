@@ -93,7 +93,8 @@ public class ShootState implements ScoreState {
                 shooter.setVelocity(
                         () ->
                                 Units.RotationsPerSecond.of(
-                                                ShooterConstants.interpolationMap.get(distanceToSpeaker)
+                                                ShooterConstants.interpolationMap.get(
+                                                                distanceToSpeaker)
                                                         .value)
                                         .mutableCopy()),
                 hood.setAngle(
@@ -119,7 +120,8 @@ public class ShootState implements ScoreState {
                         shooter.setVelocity(
                                 () ->
                                         Units.RotationsPerSecond.of(
-                                                        ShooterConstants.interpolationMap.get(distanceToSpeaker)
+                                                        ShooterConstants.interpolationMap.get(
+                                                                        distanceToSpeaker)
                                                                 .value)
                                                 .mutableCopy()),
                         hood.setAngle(
