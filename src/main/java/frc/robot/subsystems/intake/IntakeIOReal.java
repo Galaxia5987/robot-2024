@@ -28,11 +28,11 @@ public class IntakeIOReal implements IntakeIO {
 
         centerMotor.restoreFactoryDefaults();
         centerMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        centerMotor.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE);
+        centerMotor.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE.in(Units.Volts));
         centerMotor.setInverted(true);
         spinMotor.restoreFactoryDefaults();
         spinMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        spinMotor.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE);
+        spinMotor.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE.in(Units.Volts));
         spinMotor.setInverted(true);
         spinMotor.getPIDController().setP(SPIN_KP.get());
         spinMotor.getPIDController().setI(SPIN_KI.get());
