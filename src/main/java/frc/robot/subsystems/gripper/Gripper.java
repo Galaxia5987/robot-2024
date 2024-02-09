@@ -77,7 +77,7 @@ public class Gripper extends SubsystemBase {
     }
 
     public Command setWristPosition(MutableMeasure<Angle> angle) {
-        return run(() -> io.setAngle(angle)).until(this::atSetpoint).withName("set wrist position");
+        return runOnce(() -> io.setAngle(angle)).withName("set wrist position");
     }
 
     private Translation2d getGripperPosition() {
