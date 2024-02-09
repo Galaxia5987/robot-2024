@@ -23,7 +23,7 @@ public class ElevatorConstants { // TODO: check real values
     public static final MutableMeasure<Distance> ENDING_CLIMB_HEIGHT =
             Units.Meters.of(0).mutableCopy();
     public static final MutableMeasure<Distance> OUTTAKE_HEIGHT =
-            Units.Meters.of(0).mutableCopy(); // [m]
+            Units.Meters.of(0).mutableCopy();
 
     public static final double MAX_VELOCITY = 3;
     public static final double MAX_ACCELERATION = 7;
