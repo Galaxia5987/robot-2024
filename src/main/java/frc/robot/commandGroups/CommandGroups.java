@@ -52,6 +52,13 @@ public class CommandGroups {
                 gripper.setWristPosition(GripperConstants.WRIST_BASE_ANGLE.mutableCopy()));
     }
 
+    public Command feed() {
+        return conveyor.feed()
+                .andThen(
+                        gripper.setRollerPower(GripperConstants.OUTTAKE_POWER)
+                                .onlyIf(conveyor::readyToFeed));
+    }
+
     public Command intake() {
         return Commands.sequence(
                 retractGrillevator(),
@@ -75,8 +82,7 @@ public class CommandGroups {
         return retractGrillevator()
                 .andThen(
                         Commands.parallel(
-                                gripper.setRollerPower(GripperConstants.OUTTAKE_POWER),
-                                conveyor.feed(),
+                                feed(),
                                 shooter.setVelocity(
                                         () -> ShooterConstants.OUTTAKE_POWER.mutableCopy())));
     }

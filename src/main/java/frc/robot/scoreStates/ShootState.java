@@ -10,7 +10,6 @@ import frc.robot.Constants;
 import frc.robot.PoseEstimation;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.subsystems.gripper.Gripper;
-import frc.robot.subsystems.gripper.GripperConstants;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
@@ -147,7 +146,8 @@ public class ShootState implements ScoreState {
                                                                                                 .getInstance()
                                                                                                 .getEstimatedPose())))
                                                 .mutableCopy())),
-                gripper.setRollerPower(GripperConstants.SHOOT_POWER)
+                CommandGroups.getInstance()
+                        .feed()
                         .onlyIf(() -> shooter.atSetpoint() && hood.atSetpoint()));
     }
 }
