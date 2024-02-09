@@ -17,8 +17,7 @@ public class CommandGroups {
     private final Elevator elevator;
     private final Shooter shooter;
     private final Conveyor conveyor;
-
-    public static boolean override;
+    private boolean override;
 
     private CommandGroups() {
         intake = Intake.getInstance();
