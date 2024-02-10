@@ -90,13 +90,23 @@ public class ShootState implements ScoreState {
                 ScoreStateConstants.SPEAKER_TARGET_HEIGHT
                         - ShooterConstants.SHOOTER_HEIGHT.in(Units.Meters);
         return Commands.parallel(
-                shooter.setVelocity(
+                Commands.either(
+                        shooter.setVelocity(
+                                () ->
+                                        Units.RotationsPerSecond.of(
+                                                        ShooterConstants.VELOCITY_BY_DISTANCE.get(
+                                                                        distanceToSpeaker)
+                                                                .value)
+                                                .mutableCopy()),
+                        Commands.none(),
                         () ->
-                                Units.RotationsPerSecond.of(
-                                                ShooterConstants.VELOCITY_BY_DISTANCE.get(
-                                                                distanceToSpeaker)
-                                                        .value)
-                                        .mutableCopy()),
+                                (isRed()
+                                                && botPose.getX()
+                                                        < ShooterConstants.MAX_RED_WARMUP_DISTANCE)
+                                        || (!isRed()
+                                                && botPose.getX()
+                                                        > ShooterConstants
+                                                                .MAX_BLUE_WARMUP_DISTANCE)),
                 hood.setAngle(
                         () ->
                                 Units.Radians.of(
