@@ -51,6 +51,25 @@ public class ShootState implements ScoreState {
         }
     }
 
+    private Command setShooter() {
+        return shooter.setVelocity(
+                () ->
+                        Units.RotationsPerSecond.of(
+                                        ShooterConstants.VELOCITY_BY_DISTANCE.get(distanceToSpeaker)
+                                                .value)
+                                .mutableCopy());
+    }
+
+    private Command setHood() {
+        return hood.setAngle(
+                () ->
+                        Units.Degrees.of(
+                                        Math.atan(
+                                                ScoreStateConstants.SHOOTER_TO_SPEAKER_HEIGHT
+                                                        / distanceToSpeaker.value))
+                                .mutableCopy());
+    }
+
     @Override
     public Command calculateTargets() {
         return Commands.runOnce(
@@ -76,13 +95,7 @@ public class ShootState implements ScoreState {
     public Command prepareSubsystems() {
         return Commands.parallel(
                 Commands.either(
-                        shooter.setVelocity(
-                                () ->
-                                        Units.RotationsPerSecond.of(
-                                                        ShooterConstants.VELOCITY_BY_DISTANCE.get(
-                                                                        distanceToSpeaker)
-                                                                .value)
-                                                .mutableCopy()),
+                        setShooter(),
                         Commands.none(),
                         () ->
                                 (isRed()
@@ -92,14 +105,7 @@ public class ShootState implements ScoreState {
                                                 && botPose.getX()
                                                         > ShooterConstants
                                                                 .MAX_BLUE_WARMUP_DISTANCE)),
-                hood.setAngle(
-                        () ->
-                                Units.Radians.of(
-                                                Math.atan(
-                                                        ScoreStateConstants
-                                                                        .SHOOTER_TO_SPEAKER_HEIGHT
-                                                                / distanceToSpeaker.value))
-                                        .mutableCopy()),
+                setHood(),
                 CommandGroups.getInstance().retractGrillevator());
     }
 
@@ -126,22 +132,7 @@ public class ShootState implements ScoreState {
     public Command score() {
         return Commands.sequence(
                 driveToClosestOptimalPoint(),
-                Commands.parallel(
-                        shooter.setVelocity(
-                                () ->
-                                        Units.RotationsPerSecond.of(
-                                                        ShooterConstants.VELOCITY_BY_DISTANCE.get(
-                                                                        distanceToSpeaker)
-                                                                .value)
-                                                .mutableCopy()),
-                        hood.setAngle(
-                                () ->
-                                        Units.Degrees.of(
-                                                        Math.atan(
-                                                                ScoreStateConstants
-                                                                                .SHOOTER_TO_SPEAKER_HEIGHT
-                                                                        / distanceToSpeaker.value))
-                                                .mutableCopy())),
+                Commands.parallel(setShooter(), setHood()),
                 CommandGroups.getInstance()
                         .feed()
                         .onlyIf(() -> shooter.atSetpoint() && hood.atSetpoint()));
