@@ -3,7 +3,6 @@ package frc.robot.scoreStates;
 import com.pathplanner.lib.util.GeometryUtil;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.*;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import lib.math.interpolation.InterpolatingDouble;
@@ -42,16 +41,11 @@ public class ScoreStateConstants {
 
     private static InterpolatingDoubleMap createBoundsMap(List<Translation2d> optimalPoints) {
         InterpolatingDoubleMap map = new InterpolatingDoubleMap();
-        map.putAll(
-                new HashMap<>() {
-                    {
-                        for (int i = 0; i < optimalPoints.size(); i++) {
-                            put(
-                                    new InterpolatingDouble(optimalPoints.get(i).getY()),
-                                    new InterpolatingDouble(optimalPoints.get(i).getX()));
-                        }
-                    }
-                });
+        optimalPoints.forEach(
+                point ->
+                        map.put(
+                                new InterpolatingDouble(point.getY()),
+                                new InterpolatingDouble(point.getX())));
         return map;
     }
 
