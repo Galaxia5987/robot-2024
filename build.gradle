@@ -89,7 +89,7 @@ dependencies {
 
     annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:3.0.2"
 
-    implementation 'com.github.galaxia5987:common:74f5d6f7fc'
+    implementation 'com.github.galaxia5987:common:7a4b18250f'
 }
 
 configurations.all {

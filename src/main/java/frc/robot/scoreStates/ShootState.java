@@ -24,6 +24,7 @@ public class ShootState implements ScoreState {
     private static Hood hood;
     private Translation2d speakerPose;
     private InterpolatingDouble distanceToSpeaker;
+    private PoseEstimation poseEstimation;
     private Pose2d botPose;
     private List<Translation2d> optimalPoints;
     private Translation2d optimalTranslation;
@@ -33,6 +34,7 @@ public class ShootState implements ScoreState {
     public ShootState() {
         shooter = Shooter.getInstance();
         hood = Hood.getInstance();
+        poseEstimation = new PoseEstimation(SwerveDrive.getInstance());
     }
 
     private Command rotate() {
@@ -74,7 +76,7 @@ public class ShootState implements ScoreState {
     public Command calculateTargets() {
         return Commands.runOnce(
                 () -> {
-                    botPose = PoseEstimation.getInstance().getEstimatedPose();
+                    botPose = poseEstimation.getEstimatedPose();
                     updateInBounds();
                     if (isRed()) {
                         speakerPose = ScoreStateConstants.SPEAKER_POSE_RED;
@@ -98,13 +100,10 @@ public class ShootState implements ScoreState {
                         setShooter(),
                         Commands.none(),
                         () ->
-                                (isRed()
-                                                && botPose.getX()
-                                                        < ShooterConstants.MAX_RED_WARMUP_LINE)
+                                (isRed() && botPose.getX() < ShooterConstants.MAX_RED_WARMUP_LINE)
                                         || (!isRed()
                                                 && botPose.getX()
-                                                        > ShooterConstants
-                                                                .MAX_BLUE_WARMUP_LINE)),
+                                                        > ShooterConstants.MAX_BLUE_WARMUP_LINE)),
                 setHood(),
                 CommandGroups.getInstance().retractGrillevator());
     }
