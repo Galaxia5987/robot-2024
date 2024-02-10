@@ -40,33 +40,23 @@ public class ScoreStateConstants {
 
     public static final double SPEAKER_TARGET_HEIGHT = 0.0; // TODO: check real value
 
-    public static final InterpolatingDoubleMap BLUE_BOUNDS_MAP = new InterpolatingDoubleMap(6);
-    public static final InterpolatingDoubleMap RED_BOUNDS_MAP = new InterpolatingDoubleMap(6);
-
-    static {
-        BLUE_BOUNDS_MAP.putAll(
+    private static InterpolatingDoubleMap createBoundsMap(List<Translation2d> optimalPoints) {
+        InterpolatingDoubleMap map = new InterpolatingDoubleMap();
+        map.putAll(
                 new HashMap<>() {
                     {
-                        for (int i = 0; i < OPTIMAL_POINTS_SHOOT_BLUE.size(); i++) {
+                        for (int i = 0; i < optimalPoints.size(); i++) {
                             put(
-                                    new InterpolatingDouble(
-                                            OPTIMAL_POINTS_SHOOT_BLUE.get(i).getY()),
-                                    new InterpolatingDouble(
-                                            OPTIMAL_POINTS_SHOOT_BLUE.get(i).getX()));
+                                    new InterpolatingDouble(optimalPoints.get(i).getY()),
+                                    new InterpolatingDouble(optimalPoints.get(i).getX()));
                         }
                     }
                 });
-
-        RED_BOUNDS_MAP.putAll(
-                new HashMap<>() {
-                    {
-                        for (int i = 0; i < OPTIMAL_POINTS_SHOOT_RED.size(); i++) {
-                            put(
-                                    new InterpolatingDouble(OPTIMAL_POINTS_SHOOT_RED.get(i).getY()),
-                                    new InterpolatingDouble(
-                                            OPTIMAL_POINTS_SHOOT_RED.get(i).getX()));
-                        }
-                    }
-                });
+        return map;
     }
+
+    public static final InterpolatingDoubleMap BLUE_BOUNDS_MAP =
+            createBoundsMap(OPTIMAL_POINTS_SHOOT_BLUE);
+    public static final InterpolatingDoubleMap RED_BOUNDS_MAP =
+            createBoundsMap(OPTIMAL_POINTS_SHOOT_RED);
 }
