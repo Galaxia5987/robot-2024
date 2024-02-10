@@ -46,20 +46,12 @@ public class ShootState implements ScoreState {
     }
 
     private void updateInBounds() {
+        double poseX = botPose.getX();
+        InterpolatingDouble poseY = new InterpolatingDouble(botPose.getY());
         if (isRed()) {
-            if (botPose.getX()
-                    < ScoreStateConstants.RED_BOUNDS_MAP.get(
-                                    new InterpolatingDouble(botPose.getY()))
-                            .value) {
-                inBounds = false;
-            } else inBounds = true;
+            inBounds = poseX >= ScoreStateConstants.RED_BOUNDS_MAP.get(poseY).value;
         } else {
-            if (botPose.getX()
-                    > ScoreStateConstants.BLUE_BOUNDS_MAP.get(
-                                    new InterpolatingDouble(botPose.getY()))
-                            .value) {
-                inBounds = false;
-            } else inBounds = true;
+            inBounds = poseX <= ScoreStateConstants.BLUE_BOUNDS_MAP.get(poseY).value;
         }
     }
 
@@ -121,6 +113,7 @@ public class ShootState implements ScoreState {
     public Command driveToClosestOptimalPoint() {
         return Commands.defer(
                 () -> {
+                    updateInBounds();
                     if (inBounds) {
                         optimalTranslation = botPose.getTranslation();
                         return rotate();
