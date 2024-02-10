@@ -9,8 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commandGroups.CommandGroupsConstants;
-import frc.robot.subsystems.elevator.ElevatorIO;
-import frc.robot.subsystems.elevator.ElevatorInputsAutoLogged;
+import java.util.function.Supplier;
 import lib.Utils;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -19,9 +18,8 @@ public class Gripper extends SubsystemBase {
     private static Gripper INSTANCE;
     private final GripperIO io;
     private final GripperInputsAutoLogged inputs = GripperIO.inputs;
-    private final ElevatorInputsAutoLogged elevatorInputs =
-            ElevatorIO.inputs; // TODO: change to supplier
     private Measure<Distance> gripperHeight = Units.Meters.zero();
+    private Measure<Distance> carriageHeight = Units.Meters.zero();
 
     @AutoLogOutput private final Mechanism2d mechanism2d = new Mechanism2d(1, 1);
     @AutoLogOutput private Pose3d gripperPose = new Pose3d();
@@ -30,16 +28,17 @@ public class Gripper extends SubsystemBase {
     private final MechanismLigament2d gripperLigament =
             root.append(new MechanismLigament2d("Gripper", 0.3, 0));
 
-    private Gripper(GripperIO io) {
+    private Gripper(GripperIO io, Supplier<Measure<Distance>> carriageHeight) {
         this.io = io;
+        this.carriageHeight = carriageHeight.get();
     }
 
     public static Gripper getInstance() {
         return INSTANCE;
     }
 
-    public static void initialize(GripperIO io) {
-        INSTANCE = new Gripper(io);
+    public static void initialize(GripperIO io, Supplier<Measure<Distance>> carriageHeight) {
+        INSTANCE = new Gripper(io, carriageHeight);
     }
 
     public boolean hasNote() {
@@ -91,7 +90,7 @@ public class Gripper extends SubsystemBase {
 
     @Override
     public void periodic() {
-        gripperHeight = elevatorInputs.carriageHeight.plus(GripperConstants.GRIPPER_POSITION_z);
+        gripperHeight = carriageHeight.plus(GripperConstants.GRIPPER_POSITION_z);
         gripperPose =
                 new Pose3d(
                         new Translation3d(

@@ -68,7 +68,6 @@ public class RobotContainer {
         Intake.initialize(intakeIO);
         Conveyor.initialize(conveyorIO);
         Elevator.initialize(elevatorIO);
-        Gripper.initialize(gripperIO);
         Hood.initialize(hoodIO);
         Shooter.initialize(shooterIO);
         Constants.initSwerve();
@@ -78,9 +77,11 @@ public class RobotContainer {
         intake = Intake.getInstance();
         conveyor = Conveyor.getInstance();
         elevator = Elevator.getInstance();
-        gripper = Gripper.getInstance();
         hood = Hood.getInstance();
         shooter = Shooter.getInstance();
+
+        Gripper.initialize(gripperIO, () -> elevator.getCarriageHeight());
+        gripper = Gripper.getInstance();
 
         // Configure the button bindings and default commands
         configureDefaultCommands();

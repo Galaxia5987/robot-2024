@@ -47,6 +47,10 @@ public class Elevator extends SubsystemBase {
         return inputs.hooksHeight;
     }
 
+    public MutableMeasure<Distance> getCarriageHeight() {
+        return inputs.carriageHeight;
+    }
+
     public MutableMeasure<Distance> getHeightSetpoint() {
         return inputs.heightSetpoint;
     }
