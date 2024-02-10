@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import frc.robot.Constants;
 import frc.robot.commandGroups.CommandGroupsConstants;
 import frc.robot.subsystems.elevator.Elevator;
@@ -61,7 +60,7 @@ public class AmpState implements ScoreState {
     public Command prepareSubsystems() {
         return Commands.parallel(
                 elevator.setHeight(CommandGroupsConstants.MAX_HEIGHT),
-                new ConditionalCommand(
+                Commands.either(
                         gripper.setWristPosition(CommandGroupsConstants.WRIST_ANGLE_AMP_FORWARD),
                         gripper.setWristPosition(CommandGroupsConstants.WRIST_ANGLE_AMP_BACKWARDS),
                         () -> isAmpingForward));
@@ -80,7 +79,7 @@ public class AmpState implements ScoreState {
     public Command score() {
         return driveToClosestOptimalPoint()
                 .andThen(
-                        new ConditionalCommand(
+                        Commands.either(
                                 gripper.setRollerPower(GripperConstants.AMP_POWER_NORMAL),
                                 gripper.setRollerPower(GripperConstants.AMP_POWER_REVERSE),
                                 () -> isAmpingForward));
