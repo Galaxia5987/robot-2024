@@ -47,7 +47,7 @@ public class Gripper extends SubsystemBase {
 
     public boolean atSetpoint() {
         return inputs.currentAngle.isNear(
-                inputs.angleSetpoint, GripperConstants.THRESHOLD.in(Units.Percent));
+                inputs.angleSetpoint, GripperConstants.TOLERANCE.in(Units.Percent));
     }
 
     public boolean isReversed() {

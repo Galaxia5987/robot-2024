@@ -20,8 +20,7 @@ public class GripperConstants {
     public static final double AMP_POWER_NORMAL = 0; // TODO: replace with actual value
     public static final double AMP_POWER_REVERSE = 0; // TODO: replace with actual value
     public static final double TRAP_POWER = 0; // TODO: replace with actual value
-    public static final double SHOOT_POWER = 0; // TODO: replace with actual value
-    public static final MutableMeasure<Dimensionless> THRESHOLD =
+    public static final MutableMeasure<Dimensionless> TOLERANCE =
             Units.Percent.of(0.02).mutableCopy();
     public static final MutableMeasure<Distance> GRIPPER_OUTTAKE_MIN_HEIGHT =
             Units.Meters.of(0).mutableCopy(); // TODO: replace with actual value
