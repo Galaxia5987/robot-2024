@@ -88,6 +88,12 @@ public class Gripper extends SubsystemBase {
                 .withName("set wrist position");
     }
 
+    public Command scoreTrap() {
+        return Commands.sequence(
+                setWristPosition(GripperConstants.WRIST_TRAP_ANGLE),
+                setRollerPower(GripperConstants.TRAP_POWER));
+    }
+
     @Override
     public void periodic() {
         gripperHeight = carriageHeight.plus(GripperConstants.GRIPPER_POSITION_z);

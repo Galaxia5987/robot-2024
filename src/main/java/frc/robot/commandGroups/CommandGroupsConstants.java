@@ -24,6 +24,4 @@ public class CommandGroupsConstants {
             Units.Degrees.of(90).mutableCopy();
     public static final MutableMeasure<Angle> WRIST_ANGLE_AMP_BACKWARDS =
             Units.Degrees.of(120).mutableCopy(); // TODO: replace with actual value;
-    public static final MutableMeasure<Angle> WRIST_TRAP_ANGLE =
-            Units.Degrees.of(120).mutableCopy(); // TODO: replace with actual value
 }

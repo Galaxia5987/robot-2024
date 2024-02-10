@@ -36,6 +36,8 @@ public class GripperConstants {
     public static final InvertedValue ANGLE_INVERTED_VALUE = InvertedValue.Clockwise_Positive;
     public static final boolean ROLLER_INVERTED_VALUE = true;
     public static final int CURRENT_LIMIT = 40;
+    public static final MutableMeasure<Angle> WRIST_TRAP_ANGLE =
+            Units.Degrees.of(120).mutableCopy(); // TODO: replace with actual value
     public static final LoggedTunableNumber ABSOLUTE_ENCODER_OFFSET =
             new LoggedTunableNumber("Gripper/EncoderOffset");
 
