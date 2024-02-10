@@ -47,9 +47,9 @@ public class ShootState implements ScoreState {
 
     @Override
     public Command calculateTargets() {
-        botPose = PoseEstimation.getInstance().getEstimatedPose();
-        return Commands.run(
+        return Commands.runOnce(
                 () -> {
+                    botPose = PoseEstimation.getInstance().getEstimatedPose();
                     if (isRed()) {
                         if (botPose.getX()
                                 < ScoreStateConstants.RED_BOUNDS_MAP.get(botPose.getY()).value) {
