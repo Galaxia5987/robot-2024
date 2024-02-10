@@ -37,7 +37,8 @@ public class Conveyor extends SubsystemBase {
     }
 
     public Command feed() {
-        return setVelocity(() -> FEED_VELOCITY);
+        return setVelocity(() -> FEED_VELOCITY)
+                .finallyDo(() -> setVelocity(() -> ConveyorConstants.STOP_VELOCITY));
     }
 
     public boolean readyToFeed() {
