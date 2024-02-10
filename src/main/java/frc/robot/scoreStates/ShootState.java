@@ -30,10 +30,6 @@ public class ShootState implements ScoreState {
     private double optimalRotation;
     private static boolean inBounds;
 
-    private double shooterToSpeakerHeight =
-            ScoreStateConstants.SPEAKER_TARGET_HEIGHT
-                    - ShooterConstants.SHOOTER_HEIGHT.in(Units.Meters);
-
     public ShootState() {
         shooter = Shooter.getInstance();
         hood = Hood.getInstance();
@@ -78,9 +74,6 @@ public class ShootState implements ScoreState {
 
     @Override
     public Command prepareSubsystems() {
-        shooterToSpeakerHeight =
-                ScoreStateConstants.SPEAKER_TARGET_HEIGHT
-                        - ShooterConstants.SHOOTER_HEIGHT.in(Units.Meters);
         return Commands.parallel(
                 Commands.either(
                         shooter.setVelocity(
@@ -103,7 +96,8 @@ public class ShootState implements ScoreState {
                         () ->
                                 Units.Radians.of(
                                                 Math.atan(
-                                                        shooterToSpeakerHeight
+                                                        ScoreStateConstants
+                                                                        .SHOOTER_TO_SPEAKER_HEIGHT
                                                                 / distanceToSpeaker.value))
                                         .mutableCopy()),
                 CommandGroups.getInstance().retractGrillevator());
@@ -144,7 +138,8 @@ public class ShootState implements ScoreState {
                                 () ->
                                         Units.Degrees.of(
                                                         Math.atan(
-                                                                shooterToSpeakerHeight
+                                                                ScoreStateConstants
+                                                                                .SHOOTER_TO_SPEAKER_HEIGHT
                                                                         / distanceToSpeaker.value))
                                                 .mutableCopy())),
                 CommandGroups.getInstance()

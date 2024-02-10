@@ -37,7 +37,7 @@ public class ScoreStateConstants {
             Units.Meters.of(3).mutableCopy();
     public static final MutableMeasure<Angle> TURN_TOLERANCE = Units.Degrees.of(5).mutableCopy();
 
-    public static final double SPEAKER_TARGET_HEIGHT = 0.0; // TODO: check real value
+    public static final double SHOOTER_TO_SPEAKER_HEIGHT = 0.0; // TODO: check real value
 
     private static InterpolatingDoubleMap createBoundsMap(List<Translation2d> optimalPoints) {
         InterpolatingDoubleMap map = new InterpolatingDoubleMap();
