@@ -65,9 +65,12 @@ public class Gripper extends SubsystemBase {
     }
 
     public Command setRollerPower(double power) {
-        return Commands.runOnce(() -> io.setRollerMotorPower(power))
-                .withName("set roller power")
-                .finallyDo(() -> setRollerPower(0));
+        var command =
+                Commands.runOnce(() -> io.setRollerMotorPower(power))
+                        .withName("set roller power")
+                        .finallyDo(() -> setRollerPower(0));
+        command.addRequirements(this);
+        return command;
     }
 
     public Command intake() {
