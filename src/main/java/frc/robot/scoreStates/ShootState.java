@@ -100,11 +100,11 @@ public class ShootState implements ScoreState {
                         () ->
                                 (isRed()
                                                 && botPose.getX()
-                                                        < ShooterConstants.MAX_RED_WARMUP_DISTANCE)
+                                                        < ShooterConstants.MAX_RED_WARMUP_LINE)
                                         || (!isRed()
                                                 && botPose.getX()
                                                         > ShooterConstants
-                                                                .MAX_BLUE_WARMUP_DISTANCE)),
+                                                                .MAX_BLUE_WARMUP_LINE)),
                 setHood(),
                 CommandGroups.getInstance().retractGrillevator());
     }
