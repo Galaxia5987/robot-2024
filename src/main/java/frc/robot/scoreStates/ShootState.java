@@ -45,23 +45,34 @@ public class ShootState implements ScoreState {
                         optimalRotation, ScoreStateConstants.TURN_TOLERANCE.in(Units.Rotations));
     }
 
+    private void updateInBounds() {
+        if (isRed()) {
+            if (botPose.getX()
+                    < ScoreStateConstants.RED_BOUNDS_MAP.get(
+                                    new InterpolatingDouble(botPose.getY()))
+                            .value) {
+                inBounds = false;
+            } else inBounds = true;
+        } else {
+            if (botPose.getX()
+                    > ScoreStateConstants.BLUE_BOUNDS_MAP.get(
+                                    new InterpolatingDouble(botPose.getY()))
+                            .value) {
+                inBounds = false;
+            } else inBounds = true;
+        }
+    }
+
     @Override
     public Command calculateTargets() {
         return Commands.runOnce(
                 () -> {
                     botPose = PoseEstimation.getInstance().getEstimatedPose();
+                    updateInBounds();
                     if (isRed()) {
-                        if (botPose.getX()
-                                < ScoreStateConstants.RED_BOUNDS_MAP.get(botPose.getY()).value) {
-                            inBounds = false;
-                        }
                         speakerPose = ScoreStateConstants.SPEAKER_POSE_RED;
                         optimalPoints = ScoreStateConstants.OPTIMAL_POINTS_SHOOT_RED;
                     } else {
-                        if (botPose.getX()
-                                > ScoreStateConstants.BLUE_BOUNDS_MAP.get(botPose.getY()).value) {
-                            inBounds = false;
-                        }
                         speakerPose = ScoreStateConstants.SPEAKER_POSE_BLUE;
                         optimalPoints = ScoreStateConstants.OPTIMAL_POINTS_SHOOT_BLUE;
                     }
