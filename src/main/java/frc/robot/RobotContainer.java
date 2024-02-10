@@ -80,7 +80,7 @@ public class RobotContainer {
         hood = Hood.getInstance();
         shooter = Shooter.getInstance();
 
-        Gripper.initialize(gripperIO, () -> elevator.getCarriageHeight());
+        Gripper.initialize(gripperIO, elevator::getCarriageHeight);
         gripper = Gripper.getInstance();
 
         // Configure the button bindings and default commands
