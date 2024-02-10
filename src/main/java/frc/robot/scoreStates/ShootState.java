@@ -46,7 +46,7 @@ public class ShootState implements ScoreState {
     }
 
     @Override
-    public Command initializeCommand() {
+    public Command calculateTargets() {
         botPose = PoseEstimation.getInstance().getEstimatedPose();
         return Commands.run(
                 () -> {
@@ -74,7 +74,7 @@ public class ShootState implements ScoreState {
     }
 
     @Override
-    public Command initializeSubsystems() {
+    public Command prepareSubsystems() {
         shooterToSpeakerHeight =
                 ScoreStateConstants.SPEAKER_TARGET_HEIGHT
                         - ShooterConstants.SHOOTER_HEIGHT.in(Units.Meters);

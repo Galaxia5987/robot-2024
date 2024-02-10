@@ -18,7 +18,7 @@ public class ClimbState implements ScoreState {
     }
 
     @Override
-    public Command initializeSubsystems() {
+    public Command prepareSubsystems() {
         return elevator.setHeight(CommandGroupsConstants.START_CLIMB_HEIGHT);
     }
 

@@ -32,7 +32,7 @@ public class AmpState implements ScoreState {
     }
 
     @Override
-    public Command initializeCommand() {
+    public Command calculateTargets() {
         return Commands.runOnce(
                 () -> {
                     isAmpingForward = true;
@@ -57,7 +57,7 @@ public class AmpState implements ScoreState {
     }
 
     @Override
-    public Command initializeSubsystems() {
+    public Command prepareSubsystems() {
         return Commands.defer(
                 () ->
                         Commands.parallel(
