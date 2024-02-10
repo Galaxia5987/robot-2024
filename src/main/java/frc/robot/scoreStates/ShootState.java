@@ -46,24 +46,6 @@ public class ShootState implements ScoreState {
     }
 
     @Override
-    public Command driveToClosestOptimalPoint() {
-        return Commands.defer(
-                () -> {
-                    if (inBounds) {
-                        optimalTranslation = botPose.getTranslation();
-                        return rotate();
-                    }
-                    optimalTranslation = botPose.getTranslation().nearest(optimalPoints);
-
-                    return AutoBuilder.pathfindToPose(
-                                    new Pose2d(optimalTranslation, new Rotation2d(optimalRotation)),
-                                    Constants.AUTO_CONSTRAINTS)
-                            .andThen(rotate());
-                },
-                Set.of(SwerveDrive.getInstance()));
-    }
-
-    @Override
     public Command initializeCommand() {
         botPose = PoseEstimation.getInstance().getEstimatedPose();
         return Commands.run(
@@ -112,6 +94,24 @@ public class ShootState implements ScoreState {
                                                                 / distanceToSpeaker.value))
                                         .mutableCopy()),
                 CommandGroups.getInstance().retractGrillevator());
+    }
+
+    @Override
+    public Command driveToClosestOptimalPoint() {
+        return Commands.defer(
+                () -> {
+                    if (inBounds) {
+                        optimalTranslation = botPose.getTranslation();
+                        return rotate();
+                    }
+                    optimalTranslation = botPose.getTranslation().nearest(optimalPoints);
+
+                    return AutoBuilder.pathfindToPose(
+                                    new Pose2d(optimalTranslation, new Rotation2d(optimalRotation)),
+                                    Constants.AUTO_CONSTRAINTS)
+                            .andThen(rotate());
+                },
+                Set.of(SwerveDrive.getInstance()));
     }
 
     @Override

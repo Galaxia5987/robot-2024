@@ -57,15 +57,6 @@ public class AmpState implements ScoreState {
     }
 
     @Override
-    public Command driveToClosestOptimalPoint() {
-        return Commands.defer(
-                () ->
-                        AutoBuilder.pathfindToPose(
-                                new Pose2d(ampPose, ampRotation), Constants.AUTO_CONSTRAINTS),
-                Set.of(SwerveDrive.getInstance()));
-    }
-
-    @Override
     public Command initializeSubsystems() {
         return Commands.defer(
                 () ->
@@ -78,6 +69,15 @@ public class AmpState implements ScoreState {
                                                 CommandGroupsConstants.WRIST_ANGLE_AMP_BACKWARDS),
                                         () -> isAmpingForward)),
                 Set.of(gripper, elevator));
+    }
+
+    @Override
+    public Command driveToClosestOptimalPoint() {
+        return Commands.defer(
+                () ->
+                        AutoBuilder.pathfindToPose(
+                                new Pose2d(ampPose, ampRotation), Constants.AUTO_CONSTRAINTS),
+                Set.of(SwerveDrive.getInstance()));
     }
 
     @Override

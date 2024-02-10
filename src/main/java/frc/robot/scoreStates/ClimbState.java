@@ -18,6 +18,11 @@ public class ClimbState implements ScoreState {
     }
 
     @Override
+    public Command initializeSubsystems() {
+        return elevator.setHeight(CommandGroupsConstants.START_CLIMB_HEIGHT);
+    }
+
+    @Override
     public Command driveToClosestOptimalPoint() {
         return Commands.defer(
                 () -> {
@@ -30,11 +35,6 @@ public class ClimbState implements ScoreState {
                     return AutoBuilder.pathfindToPose(optimalPose, Constants.AUTO_CONSTRAINTS);
                 },
                 Set.of(SwerveDrive.getInstance()));
-    }
-
-    @Override
-    public Command initializeSubsystems() {
-        return elevator.setHeight(CommandGroupsConstants.START_CLIMB_HEIGHT);
     }
 
     @Override
