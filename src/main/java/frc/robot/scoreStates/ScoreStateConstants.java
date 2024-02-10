@@ -25,9 +25,9 @@ public class ScoreStateConstants {
             OPTIMAL_POINTS_CLIMB_BLUE.stream()
                     .map(GeometryUtil::flipFieldPose)
                     .collect(Collectors.toList());
-    public static final Translation2d AMP_POSE_BLUE = new Translation2d(1.85, 7.49);
+    public static final Translation2d AMP_POSE_BLUE = new Translation2d(1.87, 7.64);
     public static final Translation2d AMP_POSE_RED =
-            new Translation2d(0.0, 0.0); // TODO: add real value
+            new Translation2d(14.67, 7.64);
     public static final Translation2d SPEAKER_POSE_BLUE = new Translation2d(0, 5.547_944_2);
     public static final Translation2d SPEAKER_POSE_RED =
             GeometryUtil.flipFieldPosition(SPEAKER_POSE_BLUE);
