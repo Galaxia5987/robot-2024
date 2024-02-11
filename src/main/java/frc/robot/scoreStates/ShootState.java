@@ -96,14 +96,17 @@ public class ShootState implements ScoreState {
     @Override
     public Command prepareSubsystems() {
         return Commands.parallel(
-                Commands.either(
-                        setShooter(),
-                        Commands.none(),
-                        () ->
-                                (isRed() && botPose.getX() < ShooterConstants.MAX_RED_WARMUP_LINE)
-                                        || (!isRed()
-                                                && botPose.getX()
-                                                        > ShooterConstants.MAX_BLUE_WARMUP_LINE)),
+                setShooter()
+                        .onlyIf(
+                                () ->
+                                        (isRed()
+                                                        && botPose.getX()
+                                                                < ShooterConstants
+                                                                        .MAX_RED_WARMUP_LINE)
+                                                || ((!isRed()
+                                                        && botPose.getX()
+                                                                > ShooterConstants
+                                                                        .MAX_BLUE_WARMUP_LINE))),
                 setHood(),
                 CommandGroups.getInstance().retractGrillevator());
     }
