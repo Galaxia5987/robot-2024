@@ -41,6 +41,7 @@ public class ClimbState implements ScoreState {
     public Command score() {
         return Commands.sequence(
                 driveToClosestOptimalPoint(),
+                Commands.run(() -> SwerveDrive.getInstance().lock()),
                 elevator.setHeight(CommandGroupsConstants.END_CLIMB_HEIGHT));
     }
 }

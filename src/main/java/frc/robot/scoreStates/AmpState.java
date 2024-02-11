@@ -77,11 +77,12 @@ public class AmpState implements ScoreState {
 
     @Override
     public Command score() {
-        return driveToClosestOptimalPoint()
-                .andThen(
-                        Commands.either(
-                                gripper.setRollerPower(GripperConstants.AMP_POWER_NORMAL),
-                                gripper.setRollerPower(GripperConstants.AMP_POWER_REVERSE),
-                                () -> isAmpingForward));
+        return Commands.sequence(
+                driveToClosestOptimalPoint(),
+                Commands.run(() -> SwerveDrive.getInstance().lock()),
+                Commands.either(
+                        gripper.setRollerPower(GripperConstants.AMP_POWER_NORMAL),
+                        gripper.setRollerPower(GripperConstants.AMP_POWER_REVERSE),
+                        () -> isAmpingForward));
     }
 }
