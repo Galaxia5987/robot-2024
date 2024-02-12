@@ -1,7 +1,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.scoreStates.AmpState;
+import frc.robot.scoreStates.ClimbState;
+import frc.robot.scoreStates.ScoreState;
+import frc.robot.scoreStates.ShootState;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.conveyor.ConveyorIO;
 import frc.robot.subsystems.conveyor.ConveyorIOSim;
@@ -36,6 +42,11 @@ public class RobotContainer {
     private final Shooter shooter;
     private final SwerveDrive swerveDrive;
     private final CommandXboxController xboxController = new CommandXboxController(0);
+
+    private ScoreState currentState = new ShootState();
+    private final ShootState shootState = new ShootState();
+    private final AmpState ampState = new AmpState();
+    private final ClimbState climbState = new ClimbState();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
@@ -105,7 +116,30 @@ public class RobotContainer {
                         () -> true));
     }
 
-    private void configureButtonBindings() {}
+    private Command updateScoreState() {
+        return (currentState.calculateTargets().andThen(currentState.prepareSubsystems()))
+                .repeatedly();
+    }
+
+    private void configureButtonBindings() {
+        xboxController
+                .a()
+                .onTrue(
+                        Commands.runOnce(() -> currentState = shootState)
+                                .andThen(updateScoreState()));
+        xboxController
+                .b()
+                .onTrue(
+                        Commands.runOnce(() -> currentState = ampState)
+                                .andThen(updateScoreState()));
+        xboxController
+                .x()
+                .onTrue(
+                        Commands.runOnce(() -> currentState = climbState)
+                                .andThen(updateScoreState()));
+
+        xboxController.rightTrigger(0.1).onTrue(new ProxyCommand(() -> currentState.score()));
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
