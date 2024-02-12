@@ -13,23 +13,14 @@ public class ShootingCSV {
 
     public static InterpolatingDoubleMap parse(String file) {
         InterpolatingDoubleMap map = new InterpolatingDoubleMap(100);
-        List<Pair<String, String>> records = new ArrayList<>();
         try (CSVReader reader = new CSVReader(new FileReader(file))) {
             String[] values;
             while ((values = reader.readNext()) != null) {
-                records.add(new Pair<>(values[0], values[1]));
+                map.put(Double.parseDouble(values[0]), Double.parseDouble(values[1]));
             }
         } catch (CsvValidationException | IOException e) {
             throw new RuntimeException(e);
         }
-
-        records.stream()
-                .map(
-                        (pair) ->
-                                new Pair<>(
-                                        Double.parseDouble(pair.getFirst()),
-                                        Double.parseDouble(pair.getSecond())))
-                .forEach((pair) -> map.put(pair.getFirst(), pair.getSecond()));
         return map;
     }
 }
