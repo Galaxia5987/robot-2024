@@ -53,7 +53,8 @@ public class CommandGroups {
         return conveyor.feed()
                 .alongWith(
                         Commands.waitUntil(conveyor::readyToFeed)
-                                .andThen(gripper.setRollerPower(GripperConstants.OUTTAKE_POWER)));
+                                .andThen(gripper.setRollerPower(GripperConstants.OUTTAKE_POWER)))
+                .until(()-> !gripper.hasNote());
     }
 
     public Command feedWithWait(BooleanSupplier otherReady) {
@@ -61,7 +62,8 @@ public class CommandGroups {
                 .alongWith(
                         Commands.waitUntil(
                                         () -> conveyor.readyToFeed() && otherReady.getAsBoolean())
-                                .andThen(gripper.setRollerPower(GripperConstants.OUTTAKE_POWER)));
+                                .andThen(gripper.setRollerPower(GripperConstants.OUTTAKE_POWER)))
+                .until(()-> !gripper.hasNote());
     }
 
     public Command feedShooter() {
