@@ -6,6 +6,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.Constants;
 import frc.robot.utils.ShootingCSV;
 import lib.math.interpolation.InterpolatingDoubleMap;
@@ -37,10 +38,13 @@ public class ShooterConstants {
     public static final InvertedValue BOTTOM_INVERSION = InvertedValue.CounterClockwise_Positive;
 
     public static final InterpolatingDoubleMap VELOCITY_BY_DISTANCE =
-            ShootingCSV.parse("deploy\\shootdata\\distance-to-velocity.csv"); // Velocity | Distance
+            ShootingCSV.parse(
+                    Filesystem.getDeployDirectory()
+                            + "\\distance-to-velocity.csv"); // Velocity | Distance
     public static final InterpolatingDoubleMap FLIGHT_TIME_BY_DISTANCE =
             ShootingCSV.parse(
-                    "deploy\\shootdata\\distance-to-flight-time.csv"); // Flight Time | Distance
+                    Filesystem.getDeployDirectory()
+                            + "\\distance-to-flight-time.csv"); // Flight Time | Distance
 
     public static final LoggedTunableNumber TOP_kP = new LoggedTunableNumber("Shooter/Top kP");
     public static final LoggedTunableNumber TOP_kI = new LoggedTunableNumber("Shooter/Top kI");
