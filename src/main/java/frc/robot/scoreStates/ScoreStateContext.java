@@ -15,12 +15,10 @@ public class ScoreStateContext {
     }
 
     public Command setCurrentState(ScoreState state) {
-        return Commands.runOnce(
-                () -> {
-                    currentState = state;
-                    currentState.calculateTargets();
-                    currentState.prepareSubsystems();
-                });
+        return Commands.sequence(
+                Commands.runOnce(() -> currentState = state),
+                currentState.calculateTargets(),
+                currentState.prepareSubsystems());
     }
 
     public Command updateSubsystems() {
