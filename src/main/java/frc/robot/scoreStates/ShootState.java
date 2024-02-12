@@ -99,12 +99,8 @@ public class ShootState implements ScoreState {
                 .alongWith(setHood())
                 .onlyIf(
                         () ->
-                                (isRed()
-                                                && distanceToSpeaker.value
-                                                        < ShooterConstants.MAX_WARMUP_RADIUS)
-                                        || ((!isRed()
-                                                && botPose.getX()
-                                                        > ShooterConstants.MAX_WARMUP_RADIUS)))
+                                Math.abs(botPose.getX() - speakerPose.getX())
+                                        <= ShooterConstants.MAX_WARMUP_DISTANCE)
                 .alongWith(CommandGroups.getInstance().retractGrillevator());
     }
 
