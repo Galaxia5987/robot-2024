@@ -26,8 +26,7 @@ public class ShooterConstants {
                     Units.Kilograms.mult(Units.Meters).mult(Units.Meters).of(0.0008).mutableCopy();
     public static final MutableMeasure<Distance> SHOOTER_HEIGHT =
             Units.Meters.of(0.4).mutableCopy(); // TODO: add real value
-    public static final double MAX_BLUE_WARMUP_LINE = 14; // [m]
-    public static final double MAX_RED_WARMUP_LINE = 12; // [m]
+    public static final double MAX_WARMUP_RADIUS = 12; // [m] //TODO: add real value
 
     public static final TalonFXConfiguration topMotorConfiguration = new TalonFXConfiguration();
     public static final TalonFXConfiguration bottomMotorConfiguration = new TalonFXConfiguration();
