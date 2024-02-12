@@ -48,7 +48,8 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command setVelocity(Supplier<MutableMeasure<Velocity<Angle>>> velocity) {
-        return setVelocity(velocity, velocity);
+        return setVelocity(velocity, velocity)
+                .finallyDo(() -> setVelocity(() -> ShooterConstants.STOP_POWER));
     }
 
     public Command stop() {

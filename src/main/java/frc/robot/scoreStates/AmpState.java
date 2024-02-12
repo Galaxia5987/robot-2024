@@ -32,7 +32,7 @@ public class AmpState implements ScoreState {
     }
 
     @Override
-    public Command initializeCommand() {
+    public Command calculateTargets() {
         return Commands.runOnce(
                 () -> {
                     isAmpingForward = true;
@@ -57,6 +57,16 @@ public class AmpState implements ScoreState {
     }
 
     @Override
+    public Command prepareSubsystems() {
+        return Commands.parallel(
+                elevator.setHeight(CommandGroupsConstants.MAX_HEIGHT),
+                Commands.either(
+                        gripper.setWristPosition(CommandGroupsConstants.WRIST_ANGLE_AMP_FORWARD),
+                        gripper.setWristPosition(CommandGroupsConstants.WRIST_ANGLE_AMP_BACKWARDS),
+                        () -> isAmpingForward));
+    }
+
+    @Override
     public Command driveToClosestOptimalPoint() {
         return Commands.defer(
                 () ->
@@ -66,32 +76,14 @@ public class AmpState implements ScoreState {
     }
 
     @Override
-    public Command initializeSubsystems() {
-        return Commands.defer(
-                () ->
-                        Commands.parallel(
-                                elevator.setHeight(CommandGroupsConstants.MAX_HEIGHT),
-                                Commands.either(
-                                        gripper.setWristPosition(
-                                                CommandGroupsConstants.WRIST_ANGLE_AMP_FORWARD),
-                                        gripper.setWristPosition(
-                                                CommandGroupsConstants.WRIST_ANGLE_AMP_BACKWARDS),
-                                        () -> isAmpingForward)),
-                Set.of(gripper, elevator));
-    }
-
-    @Override
     public Command score() {
-        return driveToClosestOptimalPoint()
-                .andThen(
-                        Commands.defer(
-                                () ->
-                                        Commands.either(
-                                                gripper.setRollerPower(
-                                                        GripperConstants.AMP_POWER_NORMAL),
-                                                gripper.setRollerPower(
-                                                        GripperConstants.AMP_POWER_REVERSE),
-                                                () -> isAmpingForward),
-                                Set.of(gripper)));
+        return Commands.sequence(
+                calculateTargets(),
+                driveToClosestOptimalPoint(),
+                Commands.run(() -> SwerveDrive.getInstance().lock()),
+                Commands.either(
+                        gripper.setRollerPower(GripperConstants.AMP_POWER_NORMAL),
+                        gripper.setRollerPower(GripperConstants.AMP_POWER_REVERSE),
+                        () -> isAmpingForward));
     }
 }

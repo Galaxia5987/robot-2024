@@ -20,8 +20,7 @@ public class GripperConstants {
     public static final double AMP_POWER_NORMAL = 0; // TODO: replace with actual value
     public static final double AMP_POWER_REVERSE = 0; // TODO: replace with actual value
     public static final double TRAP_POWER = 0; // TODO: replace with actual value
-    public static final double SHOOT_POWER = 0; // TODO: replace with actual value
-    public static final MutableMeasure<Dimensionless> THRESHOLD =
+    public static final MutableMeasure<Dimensionless> TOLERANCE =
             Units.Percent.of(0.02).mutableCopy();
     public static final MutableMeasure<Distance> GRIPPER_OUTTAKE_MIN_HEIGHT =
             Units.Meters.of(0).mutableCopy(); // TODO: replace with actual value
@@ -37,6 +36,8 @@ public class GripperConstants {
     public static final InvertedValue ANGLE_INVERTED_VALUE = InvertedValue.Clockwise_Positive;
     public static final boolean ROLLER_INVERTED_VALUE = true;
     public static final int CURRENT_LIMIT = 40;
+    public static final MutableMeasure<Angle> WRIST_TRAP_ANGLE =
+            Units.Degrees.of(120).mutableCopy(); // TODO: replace with actual value
     public static final LoggedTunableNumber ABSOLUTE_ENCODER_OFFSET =
             new LoggedTunableNumber("Gripper/EncoderOffset");
 

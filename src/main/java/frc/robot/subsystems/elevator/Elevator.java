@@ -47,18 +47,22 @@ public class Elevator extends SubsystemBase {
         return inputs.hooksHeight;
     }
 
+    public MutableMeasure<Distance> getCarriageHeight() {
+        return inputs.carriageHeight;
+    }
+
     public MutableMeasure<Distance> getHeightSetpoint() {
         return inputs.heightSetpoint;
     }
 
     public boolean atHeightSetpoint() {
         return inputs.heightSetpoint.isNear(
-                inputs.hooksHeight, ElevatorConstants.HEIGHT_THRESHOLD.in(Units.Value));
+                inputs.hooksHeight, ElevatorConstants.HEIGHT_TOLERANCE.in(Units.Value));
     }
 
     public boolean stopperAtSetpoint() {
         return inputs.stopperAngle.isNear(
-                inputs.stopperSetpoint, ElevatorConstants.STOPPER_THRESHOLD.in(Units.Value));
+                inputs.stopperSetpoint, ElevatorConstants.STOPPER_TOLERANCE.in(Units.Value));
     }
 
     public Command setHeight(MutableMeasure<Distance> height) {

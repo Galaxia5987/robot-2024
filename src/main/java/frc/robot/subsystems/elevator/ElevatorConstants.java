@@ -19,9 +19,9 @@ public class ElevatorConstants { // TODO: check real values
 
     public static final MutableMeasure<Angle> OPEN_POSITION = Units.Degrees.of(0).mutableCopy();
     public static final MutableMeasure<Angle> LOCKED_POSITION = Units.Degrees.of(0).mutableCopy();
-    public static final MutableMeasure<Dimensionless> HEIGHT_THRESHOLD =
+    public static final MutableMeasure<Dimensionless> HEIGHT_TOLERANCE =
             Units.Percent.of(2).mutableCopy();
-    public static final MutableMeasure<Dimensionless> STOPPER_THRESHOLD =
+    public static final MutableMeasure<Dimensionless> STOPPER_TOLERANCE =
             Units.Percent.of(2).mutableCopy();
 
     public static final MutableMeasure<Mass> HOOKS_MASS =

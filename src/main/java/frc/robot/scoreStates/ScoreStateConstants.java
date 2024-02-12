@@ -3,7 +3,6 @@ package frc.robot.scoreStates;
 import com.pathplanner.lib.util.GeometryUtil;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.*;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import lib.math.interpolation.InterpolatingDouble;
@@ -26,9 +25,8 @@ public class ScoreStateConstants {
             OPTIMAL_POINTS_CLIMB_BLUE.stream()
                     .map(GeometryUtil::flipFieldPose)
                     .collect(Collectors.toList());
-    public static final Translation2d AMP_POSE_BLUE = new Translation2d(1.85, 7.49);
-    public static final Translation2d AMP_POSE_RED =
-            new Translation2d(0.0, 0.0); // TODO: add real value
+    public static final Translation2d AMP_POSE_BLUE = new Translation2d(1.87, 7.64);
+    public static final Translation2d AMP_POSE_RED = new Translation2d(14.67, 7.64);
     public static final Translation2d SPEAKER_POSE_BLUE = new Translation2d(0, 5.547_944_2);
     public static final Translation2d SPEAKER_POSE_RED =
             GeometryUtil.flipFieldPosition(SPEAKER_POSE_BLUE);
@@ -38,35 +36,20 @@ public class ScoreStateConstants {
             Units.Meters.of(3).mutableCopy();
     public static final MutableMeasure<Angle> TURN_TOLERANCE = Units.Degrees.of(5).mutableCopy();
 
-    public static final double SPEAKER_TARGET_HEIGHT = 0.0; // TODO: check real value
+    public static final double SHOOTER_TO_SPEAKER_HEIGHT = 0.0; // TODO: check real value
 
-    public static final InterpolatingDoubleMap BLUE_BOUNDS_MAP = new InterpolatingDoubleMap(6);
-    public static final InterpolatingDoubleMap RED_BOUNDS_MAP = new InterpolatingDoubleMap(6);
-
-    static {
-        BLUE_BOUNDS_MAP.putAll(
-                new HashMap<>() {
-                    {
-                        for (int i = 0; i < OPTIMAL_POINTS_SHOOT_BLUE.size(); i++) {
-                            put(
-                                    new InterpolatingDouble(
-                                            OPTIMAL_POINTS_SHOOT_BLUE.get(i).getY()),
-                                    new InterpolatingDouble(
-                                            OPTIMAL_POINTS_SHOOT_BLUE.get(i).getX()));
-                        }
-                    }
-                });
-
-        RED_BOUNDS_MAP.putAll(
-                new HashMap<>() {
-                    {
-                        for (int i = 0; i < OPTIMAL_POINTS_SHOOT_RED.size(); i++) {
-                            put(
-                                    new InterpolatingDouble(OPTIMAL_POINTS_SHOOT_RED.get(i).getY()),
-                                    new InterpolatingDouble(
-                                            OPTIMAL_POINTS_SHOOT_RED.get(i).getX()));
-                        }
-                    }
-                });
+    private static InterpolatingDoubleMap createBoundsMap(List<Translation2d> optimalPoints) {
+        InterpolatingDoubleMap map = new InterpolatingDoubleMap();
+        optimalPoints.forEach(
+                point ->
+                        map.put(
+                                new InterpolatingDouble(point.getY()),
+                                new InterpolatingDouble(point.getX())));
+        return map;
     }
+
+    public static final InterpolatingDoubleMap BLUE_BOUNDS_MAP =
+            createBoundsMap(OPTIMAL_POINTS_SHOOT_BLUE);
+    public static final InterpolatingDoubleMap RED_BOUNDS_MAP =
+            createBoundsMap(OPTIMAL_POINTS_SHOOT_RED);
 }

@@ -10,13 +10,13 @@ public interface ScoreState {
         return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
     }
 
-    default Command initializeCommand() {
+    default Command calculateTargets() {
         return Commands.none();
     }
 
-    Command driveToClosestOptimalPoint();
+    Command prepareSubsystems();
 
-    Command initializeSubsystems();
+    Command driveToClosestOptimalPoint();
 
     Command score();
 }

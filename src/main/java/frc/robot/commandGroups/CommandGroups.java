@@ -59,13 +59,7 @@ public class CommandGroups {
                         intake.intake(),
                         gripper.intake(),
                         Commands.waitUntil(gripper::hasNote)
-                                .andThen(null))); // TODO: replace null with leds mode
-    }
-
-    public Command scoreTrap() {
-        return Commands.sequence(
-                gripper.setWristPosition(CommandGroupsConstants.WRIST_TRAP_ANGLE),
-                gripper.setRollerPower(GripperConstants.TRAP_POWER));
+                                .andThen(Commands.none()))); // TODO: replace null with leds mode
     }
 
     public Command outtakeGripper() {
