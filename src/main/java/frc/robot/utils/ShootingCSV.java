@@ -2,11 +2,8 @@ package frc.robot.utils;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
-import edu.wpi.first.math.Pair;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lib.math.interpolation.InterpolatingDoubleMap;
 
 public class ShootingCSV {
