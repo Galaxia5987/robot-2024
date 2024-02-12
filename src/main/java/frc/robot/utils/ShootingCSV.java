@@ -11,7 +11,8 @@ import lib.math.interpolation.InterpolatingDoubleMap;
 
 public class ShootingCSV {
 
-    public static void parse(String file, InterpolatingDoubleMap map) {
+    public static InterpolatingDoubleMap parse(String file) {
+        InterpolatingDoubleMap map = new InterpolatingDoubleMap(100);
         List<Pair<String, String>> records = new ArrayList<>();
         try (CSVReader reader = new CSVReader(new FileReader(file))) {
             String[] values;
@@ -29,5 +30,6 @@ public class ShootingCSV {
                                         Double.parseDouble(pair.getFirst()),
                                         Double.parseDouble(pair.getSecond())))
                 .forEach((pair) -> map.put(pair.getFirst(), pair.getSecond()));
+        return map;
     }
 }

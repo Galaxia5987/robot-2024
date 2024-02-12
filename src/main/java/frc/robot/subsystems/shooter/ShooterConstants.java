@@ -36,15 +36,8 @@ public class ShooterConstants {
     public static final InvertedValue TOP_INVERSION = InvertedValue.Clockwise_Positive;
     public static final InvertedValue BOTTOM_INVERSION = InvertedValue.CounterClockwise_Positive;
 
-    public static final InterpolatingDoubleMap VELOCITY_BY_DISTANCE =
-            new InterpolatingDoubleMap(100); // Velocity | Distance
-    public static final InterpolatingDoubleMap FLIGHT_TIME_BY_DISTANCE =
-            new InterpolatingDoubleMap(100); // Flight Time | Distance
-
-    static {
-        ShootingCSV.parse("distance-to-velocity.csv", VELOCITY_BY_DISTANCE);
-        ShootingCSV.parse("distance-to-flight-time.csv", FLIGHT_TIME_BY_DISTANCE);
-    }
+    public static final InterpolatingDoubleMap VELOCITY_BY_DISTANCE = ShootingCSV.parse("distance-to-velocity.csv"); // Velocity | Distance
+    public static final InterpolatingDoubleMap FLIGHT_TIME_BY_DISTANCE = ShootingCSV.parse("distance-to-flight-time.csv"); // Flight Time | Distance
 
     public static final LoggedTunableNumber TOP_kP = new LoggedTunableNumber("Shooter/Top kP");
     public static final LoggedTunableNumber TOP_kI = new LoggedTunableNumber("Shooter/Top kI");
