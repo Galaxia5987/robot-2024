@@ -128,9 +128,8 @@ public class ShootState implements ScoreState {
     @Override
     public Command score() {
         return Commands.sequence(
-                driveToClosestOptimalPoint(),
+                Commands.parallel(setShooter(), setHood(), driveToClosestOptimalPoint()),
                 Commands.run(() -> SwerveDrive.getInstance().lock()),
-                Commands.parallel(setShooter(), setHood()),
                 CommandGroups.getInstance()
                         .feed()
                         .onlyIf(() -> shooter.atSetpoint() && hood.atSetpoint()));
