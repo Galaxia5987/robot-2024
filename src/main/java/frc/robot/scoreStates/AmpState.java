@@ -78,6 +78,7 @@ public class AmpState implements ScoreState {
     @Override
     public Command score() {
         return Commands.sequence(
+                calculateTargets(),
                 driveToClosestOptimalPoint(),
                 Commands.run(() -> SwerveDrive.getInstance().lock()),
                 Commands.either(
