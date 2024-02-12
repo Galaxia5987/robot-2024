@@ -87,9 +87,4 @@ public class AmpState implements ScoreState {
                         gripper.setRollerPower(GripperConstants.AMP_POWER_REVERSE),
                         () -> isAmpingForward));
     }
-
-    @Override
-    public Command cleanUp() {
-        return CommandGroups.getInstance().retractGrillevator();
-    }
 }
