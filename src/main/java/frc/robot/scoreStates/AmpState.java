@@ -8,6 +8,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
+import frc.robot.commandGroups.CommandGroups;
 import frc.robot.commandGroups.CommandGroupsConstants;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.gripper.Gripper;
@@ -85,5 +86,10 @@ public class AmpState implements ScoreState {
                         gripper.setRollerPower(GripperConstants.AMP_POWER_NORMAL),
                         gripper.setRollerPower(GripperConstants.AMP_POWER_REVERSE),
                         () -> isAmpingForward));
+    }
+
+    @Override
+    public Command cleanUp() {
+        return CommandGroups.getInstance().retractGrillevator();
     }
 }

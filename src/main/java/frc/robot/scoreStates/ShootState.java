@@ -135,4 +135,9 @@ public class ShootState implements ScoreState {
                 Commands.runOnce(() -> SwerveDrive.getInstance().lock()),
                 CommandGroups.getInstance().feedShooter());
     }
+
+    @Override
+    public Command cleanUp() {
+        return shooter.setVelocity(() -> Units.RotationsPerSecond.of(0).mutableCopy());
+    }
 }
