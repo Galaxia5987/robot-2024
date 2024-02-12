@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.subsystems.hood.Hood;
+import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.swerve.SwerveDrive;
@@ -130,10 +131,5 @@ public class ShootState implements ScoreState {
                 Commands.parallel(setShooter(), setHood(), driveToClosestOptimalPoint()),
                 Commands.runOnce(() -> SwerveDrive.getInstance().lock()),
                 CommandGroups.getInstance().feedShooter());
-    }
-
-    @Override
-    public Command cleanUp() {
-        return shooter.setVelocity(() -> Units.RotationsPerSecond.of(0).mutableCopy());
     }
 }

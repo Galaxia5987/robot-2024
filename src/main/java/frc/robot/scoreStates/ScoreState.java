@@ -19,8 +19,4 @@ public interface ScoreState {
     Command driveToClosestOptimalPoint();
 
     Command score();
-
-    default Command cleanUp() {
-        return Commands.none();
-    }
 }
