@@ -1,28 +1,33 @@
 package frc.robot.scoreStates;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+
 public class ScoreStateContext {
     private static ScoreState currentState;
     private static ScoreStateContext INSTANCE;
 
-    public ScoreStateContext getInstance() {
+    public static ScoreStateContext getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new ScoreStateContext();
         }
         return INSTANCE;
     }
 
-    public void setCurrentState(ScoreState state) {
-        currentState = state;
-        currentState.calculateTargets();
-        currentState.prepareSubsystems();
+    public Command setCurrentState(ScoreState state) {
+        return Commands.runOnce(
+                () -> {
+                    currentState = state;
+                    currentState.calculateTargets();
+                    currentState.prepareSubsystems();
+                });
     }
 
-    public void updateSubsystems() {
-        currentState.calculateTargets();
-        currentState.prepareSubsystems();
+    public Command updateSubsystems() {
+        return currentState.calculateTargets().andThen(currentState.prepareSubsystems());
     }
 
-    public void score() {
-        currentState.score();
+    public Command score() {
+        return currentState.score();
     }
 }
