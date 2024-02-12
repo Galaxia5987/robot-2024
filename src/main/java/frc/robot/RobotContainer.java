@@ -2,8 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.scoreStates.ScoreStateContext;
-import frc.robot.scoreStates.ShootState;
+import frc.robot.scoreStates.*;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.conveyor.ConveyorIO;
 import frc.robot.subsystems.conveyor.ConveyorIOSim;
@@ -39,6 +38,9 @@ public class RobotContainer {
     private final SwerveDrive swerveDrive;
     private final CommandXboxController xboxController = new CommandXboxController(0);
     private final ScoreStateContext scoreStateContext;
+    private final ScoreState shootState = new ShootState();
+    private final ScoreState ampState = new AmpState();
+    private final ScoreState climbState = new ClimbState();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
@@ -87,7 +89,7 @@ public class RobotContainer {
         gripper = Gripper.getInstance();
 
         scoreStateContext = ScoreStateContext.getInstance();
-        scoreStateContext.setCurrentState(new ShootState());
+        scoreStateContext.setCurrentState(shootState);
 
         // Configure the button bindings and default commands
         configureDefaultCommands();
