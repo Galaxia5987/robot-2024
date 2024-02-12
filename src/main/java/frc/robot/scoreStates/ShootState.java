@@ -132,9 +132,7 @@ public class ShootState implements ScoreState {
         return Commands.sequence(
                 calculateTargets(),
                 Commands.parallel(setShooter(), setHood(), driveToClosestOptimalPoint()),
-                Commands.run(() -> SwerveDrive.getInstance().lock()),
-                CommandGroups.getInstance()
-                        .feed()
-                        .onlyIf(() -> shooter.atSetpoint() && hood.atSetpoint()));
+                Commands.runOnce(() -> SwerveDrive.getInstance().lock()),
+                CommandGroups.getInstance().feedShooter());
     }
 }
