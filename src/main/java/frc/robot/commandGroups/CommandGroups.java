@@ -45,8 +45,9 @@ public class CommandGroups {
 
     public Command retractGrillevator() {
         return Commands.parallel(
-                elevator.setHeight(CommandGroupsConstants.MIN_HEIGHT),
-                gripper.setWristPosition(CommandGroupsConstants.WRIST_BASE_ANGLE));
+                        elevator.setHeight(CommandGroupsConstants.MIN_HEIGHT),
+                        gripper.setWristPosition(CommandGroupsConstants.WRIST_BASE_ANGLE))
+                .withName("retractGrillevator");
     }
 
     public Command feed() {
@@ -54,7 +55,8 @@ public class CommandGroups {
                 .alongWith(
                         Commands.waitUntil(conveyor::readyToFeed)
                                 .andThen(gripper.setRollerPower(GripperConstants.OUTTAKE_POWER)))
-                .until(() -> !gripper.hasNote());
+                .until(() -> !gripper.hasNote())
+                .withName("feed");
     }
 
     public Command feedWithWait(BooleanSupplier otherReady) {
@@ -63,33 +65,39 @@ public class CommandGroups {
                         Commands.waitUntil(
                                         () -> conveyor.readyToFeed() && otherReady.getAsBoolean())
                                 .andThen(gripper.setRollerPower(GripperConstants.OUTTAKE_POWER)))
-                .until(() -> !gripper.hasNote());
+                .until(() -> !gripper.hasNote())
+                .withName("feedWithWait");
     }
 
     public Command feedShooter() {
-        return feedWithWait(() -> shooter.atSetpoint() && hood.atSetpoint());
+        return feedWithWait(() -> shooter.atSetpoint() && hood.atSetpoint())
+                .withName("feedShooter");
     }
 
     public Command intake() {
         return Commands.sequence(
-                retractGrillevator(),
-                Commands.parallel(
-                        intake.intake(),
-                        gripper.intake(),
-                        Commands.waitUntil(gripper::hasNote)
-                                .andThen(Commands.none()))); // TODO: replace null with leds mode
+                        retractGrillevator(),
+                        Commands.parallel(
+                                intake.intake(),
+                                gripper.intake(),
+                                Commands.waitUntil(gripper::hasNote)
+                                        .andThen(Commands.none()))) // TODO: replace null with leds
+                // mode
+                .withName("intake");
     }
 
     public Command outtakeGripper() {
         return elevator.setHeight(CommandGroupsConstants.OUTTAKE_HEIGHT)
                 .onlyIf(gripper::isGripperNearFoldedPosition)
-                .andThen(gripper.outtake());
+                .andThen(gripper.outtake())
+                .withName("outtakeGripper");
     }
 
     public Command outtakeShooter() {
         return retractGrillevator()
                 .andThen(
                         Commands.parallel(
-                                feed(), shooter.setVelocity(() -> ShooterConstants.OUTTAKE_POWER)));
+                                feed(), shooter.setVelocity(() -> ShooterConstants.OUTTAKE_POWER)))
+                .withName("outtakeShooter");
     }
 }
