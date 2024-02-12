@@ -10,4 +10,19 @@ public class ScoreStateContext {
         }
         return INSTANCE;
     }
+
+    public void setCurrentState(ScoreState state) {
+        currentState = state;
+        currentState.calculateTargets();
+        currentState.prepareSubsystems();
+    }
+
+    public void updateSubsystems() {
+        currentState.calculateTargets();
+        currentState.prepareSubsystems();
+    }
+
+    public void score() {
+        currentState.score();
+    }
 }
