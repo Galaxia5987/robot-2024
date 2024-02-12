@@ -7,8 +7,8 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.*;
 import frc.robot.Constants;
-import java.util.HashMap;
-import lib.math.interpolation.InterpolatingDouble;
+
+import frc.robot.utils.ShootingCSV;
 import lib.math.interpolation.InterpolatingDoubleMap;
 import lib.webconstants.LoggedTunableNumber;
 
@@ -37,44 +37,13 @@ public class ShooterConstants {
     public static final InvertedValue BOTTOM_INVERSION = InvertedValue.CounterClockwise_Positive;
 
     public static final InterpolatingDoubleMap VELOCITY_BY_DISTANCE =
-            new InterpolatingDoubleMap(); // Velocity | Distance
+            new InterpolatingDoubleMap(100); // Velocity | Distance
+    public static final InterpolatingDoubleMap FLIGHT_TIME_BY_DISTANCE =
+            new InterpolatingDoubleMap(100); // Flight Time | Distance
 
     static {
-        VELOCITY_BY_DISTANCE.putAll(
-                new HashMap<>() {
-                    {
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                        put(new InterpolatingDouble(0.0), new InterpolatingDouble(0.0));
-                    }
-                });
+        ShootingCSV.parse("distance-to-velocity.csv", VELOCITY_BY_DISTANCE);
+        ShootingCSV.parse("distance-to-flight-time.csv", FLIGHT_TIME_BY_DISTANCE);
     }
 
     public static final LoggedTunableNumber TOP_kP = new LoggedTunableNumber("Shooter/Top kP");
