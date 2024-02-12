@@ -46,7 +46,11 @@ public class ShotCalculator {
         if (shotSpeed <= 0.0) shotSpeed = 0.0;
         // Rotate back into field frame then add take opposite
         Rotation2d goalHeading =
-                robot.toPose2d().inverse().transformBy(speaker.toTransform2d()).getTranslation().getAngle();
+                robot.toPose2d()
+                        .inverse()
+                        .transformBy(speaker.toTransform2d())
+                        .getTranslation()
+                        .getAngle();
         // Aim opposite of tangentialComponent (negative lead when tangentialComponent is positive)
         goalHeading = goalHeading.plus(new Rotation2d(shotSpeed, tangentialComponent));
         double effectiveDist = shotTime * Math.hypot(tangentialComponent, shotSpeed);

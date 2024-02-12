@@ -3,12 +3,11 @@ package frc.robot.utils;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import edu.wpi.first.math.Pair;
-import lib.math.interpolation.InterpolatingDoubleMap;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import lib.math.interpolation.InterpolatingDoubleMap;
 
 public class ShootingCSV {
 
@@ -24,7 +23,11 @@ public class ShootingCSV {
         }
 
         records.stream()
-                .map((pair) -> new Pair<>(Double.parseDouble(pair.getFirst()), Double.parseDouble(pair.getSecond())))
+                .map(
+                        (pair) ->
+                                new Pair<>(
+                                        Double.parseDouble(pair.getFirst()),
+                                        Double.parseDouble(pair.getSecond())))
                 .forEach((pair) -> map.put(pair.getFirst(), pair.getSecond()));
     }
 }

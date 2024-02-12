@@ -6,9 +6,11 @@ import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperConstants;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
+import java.util.function.BooleanSupplier;
 
 public class CommandGroups {
     private static CommandGroups INSTANCE;
@@ -16,6 +18,7 @@ public class CommandGroups {
     private final Gripper gripper;
     private final Elevator elevator;
     private final Shooter shooter;
+    private final Hood hood;
     private final Conveyor conveyor;
     private boolean override;
 
@@ -24,6 +27,7 @@ public class CommandGroups {
         gripper = Gripper.getInstance();
         elevator = Elevator.getInstance();
         shooter = Shooter.getInstance();
+        hood = Hood.getInstance();
         conveyor = Conveyor.getInstance();
         override = false;
     }
@@ -50,6 +54,18 @@ public class CommandGroups {
                 .alongWith(
                         Commands.waitUntil(conveyor::readyToFeed)
                                 .andThen(gripper.setRollerPower(GripperConstants.OUTTAKE_POWER)));
+    }
+
+    public Command feedWithWait(BooleanSupplier otherReady) {
+        return conveyor.feed()
+                .alongWith(
+                        Commands.waitUntil(
+                                        () -> conveyor.readyToFeed() && otherReady.getAsBoolean())
+                                .andThen(gripper.setRollerPower(GripperConstants.OUTTAKE_POWER)));
+    }
+
+    public Command feedShooter() {
+        return feedWithWait(() -> shooter.atSetpoint() && hood.atSetpoint());
     }
 
     public Command intake() {
