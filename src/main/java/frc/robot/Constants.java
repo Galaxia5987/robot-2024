@@ -19,7 +19,7 @@ public class Constants {
 
     public static final int CONFIG_TIMEOUT = 100; // [ms]
 
-    public static final Mode CURRENT_MODE = Mode.SIM;
+    public static final Mode CURRENT_MODE = Mode.REAL;
 
     public static final Transform3d BACK_LEFT_CAMERA_POSE =
             new Transform3d(
@@ -67,6 +67,10 @@ public class Constants {
         REPLAY
     }
 
+    public static final double[] SWERVE_OFFSETS = {
+        0, 0, 0, 0
+    };
+
     public static void initSwerve() {
         ModuleIO[] moduleIOs = new ModuleIO[4];
         GyroIO gyroIO =
@@ -90,7 +94,7 @@ public class Constants {
                         yield new GyroIOSim();
                     }
                 };
-        SwerveDrive.initialize(gyroIO, moduleIOs);
+        SwerveDrive.initialize(gyroIO, SWERVE_OFFSETS, moduleIOs);
         SwerveDrive swerveDrive = SwerveDrive.getInstance();
         AutoBuilder.configureHolonomic(
                 swerveDrive::getBotPose,

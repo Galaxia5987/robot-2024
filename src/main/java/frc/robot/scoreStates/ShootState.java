@@ -34,7 +34,7 @@ public class ShootState implements ScoreState {
                         optimalTranslation = botPose.getTranslation();
                         return SwerveDrive.getInstance()
                                 .turnCommand(
-                                        Utils.calculateOptimalRotation(
+                                        Utils.calcRotationToTranslation(
                                                         optimalTranslation, speakerPose)
                                                 .getRotations(),
                                         ScoreStateConstants.TURN_TOLERANCE.in(Units.Rotations));
@@ -44,7 +44,7 @@ public class ShootState implements ScoreState {
                     return AutoBuilder.pathfindToPose(
                             new Pose2d(
                                     optimalTranslation,
-                                    Utils.calculateOptimalRotation(
+                                    Utils.calcRotationToTranslation(
                                             optimalTranslation, speakerPose)),
                             Constants.AUTO_CONSTRAINTS);
                 },

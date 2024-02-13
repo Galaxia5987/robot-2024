@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.conveyor.Conveyor;
@@ -40,38 +41,18 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
-        IntakeIO intakeIO;
-        ConveyorIO conveyorIO;
-        ElevatorIO elevatorIO;
-        GripperIO gripperIO;
         HoodIO hoodIO;
-        ShooterIO shooterIO;
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                intakeIO = new IntakeIOSim(); // TODO: replace with IOReal
-                conveyorIO = new ConveyorIOSim(); // TODO: replace with IOReal
-                elevatorIO = new ElevatorIOReal();
-                gripperIO = new GripperIOReal();
                 hoodIO = new HoodIOReal();
-                shooterIO = new ShooterIOReal();
                 break;
             case SIM:
             case REPLAY:
             default:
-                intakeIO = new IntakeIOSim();
-                conveyorIO = new ConveyorIOSim();
-                elevatorIO = new ElevatorIOSim();
-                gripperIO = new GripperIOSim();
                 hoodIO = new HoodIOSim();
-                shooterIO = new ShooterIOSim();
                 break;
         }
-        Intake.initialize(intakeIO);
-        Conveyor.initialize(conveyorIO);
-        Elevator.initialize(elevatorIO);
-        Gripper.initialize(gripperIO);
         Hood.initialize(hoodIO);
-        Shooter.initialize(shooterIO);
         Constants.initSwerve();
         Constants.initVision();
 
@@ -103,9 +84,15 @@ public class RobotContainer {
                         () -> -xboxController.getRightX(),
                         0.15,
                         () -> true));
+
+        hood.updateInternalEncoder().schedule();
     }
 
-    private void configureButtonBindings() {}
+    private void configureButtonBindings() {
+        xboxController.a().whileTrue(hood.setAngle(
+                () -> Units.Rotations.of(0.25).mutableCopy()
+        ));
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

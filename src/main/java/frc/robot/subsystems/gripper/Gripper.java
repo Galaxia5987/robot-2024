@@ -72,7 +72,7 @@ public class Gripper extends SubsystemBase {
     @Override
     public void periodic() {
         Measure<Distance> gripperHeight =
-                elevatorInputs.gripperHeight.plus(GripperConstants.GRIPPER_POSITION_z);
+                elevatorInputs.carriageHeight.plus(GripperConstants.GRIPPER_POSITION_z);
         gripperPose =
                 new Pose3d(
                         new Translation3d(
