@@ -53,12 +53,6 @@ public class ShootState implements ScoreState {
         }
     }
 
-    @Override
-    public Command updateScoreState() {
-        return Commands.repeatingSequence(
-                Commands.runOnce(() -> updateInBounds()), calculateTargets(), prepareSubsystems());
-    }
-
     private Command setShooter() {
         return shooter.setVelocity(
                 () ->
@@ -114,6 +108,7 @@ public class ShootState implements ScoreState {
     public Command driveToClosestOptimalPoint() {
         return Commands.defer(
                 () -> {
+                    updateInBounds();
                     if (inBounds) {
                         optimalTranslation = botPose.getTranslation();
                         return rotate();
@@ -131,6 +126,7 @@ public class ShootState implements ScoreState {
     @Override
     public Command score() {
         return Commands.sequence(
+                calculateTargets(),
                 Commands.parallel(setShooter(), setHood(), driveToClosestOptimalPoint()),
                 Commands.runOnce(() -> SwerveDrive.getInstance().lock()),
                 CommandGroups.getInstance().feedShooter());

@@ -14,10 +14,6 @@ public interface ScoreState {
         return Commands.none();
     }
 
-    default Command updateScoreState() {
-        return Commands.repeatingSequence(calculateTargets(), prepareSubsystems());
-    }
-
     Command prepareSubsystems();
 
     Command driveToClosestOptimalPoint();
