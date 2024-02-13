@@ -40,11 +40,11 @@ public class ShooterConstants {
     public static final InterpolatingDoubleMap VELOCITY_BY_DISTANCE =
             ShootingCSV.parse(
                     Filesystem.getDeployDirectory()
-                            + "\\distance-to-velocity.csv"); // Velocity | Distance
+                            + "\\shootdata\\distance-to-velocity.csv"); // Velocity | Distance
     public static final InterpolatingDoubleMap FLIGHT_TIME_BY_DISTANCE =
             ShootingCSV.parse(
                     Filesystem.getDeployDirectory()
-                            + "\\distance-to-flight-time.csv"); // Flight Time | Distance
+                            + "\\shootdata\\distance-to-flight-time.csv"); // Flight Time | Distance
 
     public static final LoggedTunableNumber TOP_kP = new LoggedTunableNumber("Shooter/Top kP");
     public static final LoggedTunableNumber TOP_kI = new LoggedTunableNumber("Shooter/Top kI");
