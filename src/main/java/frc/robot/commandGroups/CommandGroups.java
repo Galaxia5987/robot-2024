@@ -46,7 +46,7 @@ public class CommandGroups {
     public Command retractGrillevator() {
         return Commands.parallel(
                         elevator.setHeight(CommandGroupsConstants.MIN_HEIGHT),
-                        gripper.setWristPosition(CommandGroupsConstants.WRIST_BASE_ANGLE))
+                        gripper.setRollerAndWrist(CommandGroupsConstants.WRIST_BASE_ANGLE, 0))
                 .withName("retractGrillevator");
     }
 
@@ -54,7 +54,10 @@ public class CommandGroups {
         return conveyor.feed()
                 .alongWith(
                         Commands.waitUntil(conveyor::readyToFeed)
-                                .andThen(gripper.setRollerPower(GripperConstants.OUTTAKE_POWER)))
+                                .andThen(
+                                        gripper.setRollerAndWrist(
+                                                GripperConstants.INTAKE_ANGLE,
+                                                GripperConstants.OUTTAKE_POWER)))
                 .until(() -> !gripper.hasNote())
                 .withName("feed");
     }
@@ -64,7 +67,10 @@ public class CommandGroups {
                 .alongWith(
                         Commands.waitUntil(
                                         () -> conveyor.readyToFeed() && otherReady.getAsBoolean())
-                                .andThen(gripper.setRollerPower(GripperConstants.OUTTAKE_POWER)))
+                                .andThen(
+                                        gripper.setRollerAndWrist(
+                                                GripperConstants.INTAKE_ANGLE,
+                                                GripperConstants.OUTTAKE_POWER)))
                 .until(() -> !gripper.hasNote())
                 .withName("feedWithWait");
     }

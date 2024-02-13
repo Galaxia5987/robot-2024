@@ -17,7 +17,7 @@ public class CommandGroupsConstants {
     public static final MutableMeasure<Distance> OUTTAKE_HEIGHT = Units.Meters.of(0).mutableCopy();
 
     public static final MutableMeasure<Angle> WRIST_BASE_ANGLE =
-            Units.Degrees.of(180).mutableCopy(); // TODO: replace with actual value
+            Units.Degrees.of(-80).mutableCopy(); // TODO: replace with actual value
     public static final MutableMeasure<Angle> WRIST_ANGLE_AMP_FORWARD =
             Units.Degrees.of(0).mutableCopy(); // TODO: replace with actual value;
     public static final MutableMeasure<Angle> WRIST_MIN_BACKWARDS_ANGLE =
