@@ -2,7 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.scoreStates.AmpState;
 import frc.robot.scoreStates.ClimbState;
@@ -116,27 +115,22 @@ public class RobotContainer {
                         () -> true));
     }
 
-    private Command updateScoreState() {
-        return Commands.repeatingSequence(
-                currentState.calculateTargets(), currentState.prepareSubsystems());
-    }
-
     private void configureButtonBindings() {
         xboxController
                 .a()
                 .onTrue(
                         Commands.runOnce(() -> currentState = shootState)
-                                .andThen(updateScoreState()));
+                                .andThen(currentState.updateScoreState()));
         xboxController
                 .b()
                 .onTrue(
                         Commands.runOnce(() -> currentState = ampState)
-                                .andThen(updateScoreState()));
+                                .andThen(currentState.updateScoreState()));
         xboxController
                 .x()
                 .onTrue(
                         Commands.runOnce(() -> currentState = climbState)
-                                .andThen(updateScoreState()));
+                                .andThen(currentState.updateScoreState()));
 
         xboxController.rightTrigger(0.1).onTrue(Commands.deferredProxy(() -> currentState.score()));
     }
