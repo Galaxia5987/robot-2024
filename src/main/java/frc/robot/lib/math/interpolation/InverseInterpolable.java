@@ -1,4 +1,4 @@
-package lib.math.interpolation;
+package frc.robot.lib.math.interpolation;
 
 /**
  * InverseInterpolable is an interface used by an Interpolating Tree as the Key type. Given two

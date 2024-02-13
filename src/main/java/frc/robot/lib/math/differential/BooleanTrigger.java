@@ -1,4 +1,4 @@
-package lib.math.differential;
+package frc.robot.lib.math.differential;
 
 /*
 This class contains a boolean trigger.

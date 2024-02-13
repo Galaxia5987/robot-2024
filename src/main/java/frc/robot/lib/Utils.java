@@ -1,4 +1,4 @@
-package lib;
+package frc.robot.lib;
 
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
