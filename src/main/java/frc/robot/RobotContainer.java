@@ -117,7 +117,8 @@ public class RobotContainer {
     }
 
     private Command updateScoreState() {
-        return Commands.repeatingSequence(currentState.calculateTargets(), currentState.prepareSubsystems());
+        return Commands.repeatingSequence(
+                currentState.calculateTargets(), currentState.prepareSubsystems());
     }
 
     private void configureButtonBindings() {
