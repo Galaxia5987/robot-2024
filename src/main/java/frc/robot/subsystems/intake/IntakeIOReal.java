@@ -14,10 +14,10 @@ import frc.robot.Constants;
 
 public class IntakeIOReal implements IntakeIO {
 
-    public final CANSparkMax spinMotor = new CANSparkMax(0, CANSparkLowLevel.MotorType.kBrushless);
+    public final CANSparkMax spinMotor = new CANSparkMax(2, CANSparkLowLevel.MotorType.kBrushless);
     private final CANSparkMax centerMotor =
-            new CANSparkMax(0, CANSparkLowLevel.MotorType.kBrushless);
-    private final TalonFX angleMotor = new TalonFX(21);
+            new CANSparkMax(3, CANSparkLowLevel.MotorType.kBrushless);
+    private final TalonFX angleMotor = new TalonFX(1);
     private final MotionMagicExpoTorqueCurrentFOC positionRequest =
             new MotionMagicExpoTorqueCurrentFOC(0);
     private SimpleMotorFeedforward spinMotorFeedforward;
@@ -77,5 +77,6 @@ public class IntakeIOReal implements IntakeIO {
                 (angleMotor.getMotorVoltage().getValue()), Units.Volts);
         inputs.spinMotorVoltage.mut_replace((spinMotor.getBusVoltage()), Units.Volts);
         inputs.centerMotorVoltage.mut_replace((centerMotor.getBusVoltage()), Units.Volts);
+        inputs.currentRollerSpeed.mut_replace(spinMotor.getEncoder().getVelocity(), Units.RPM);
     }
 }

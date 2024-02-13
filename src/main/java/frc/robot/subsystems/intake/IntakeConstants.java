@@ -39,9 +39,9 @@ public class IntakeConstants {
                 SPIN_KI.initDefault(0);
                 SPIN_KD.initDefault(0);
 
-                SPIN_KS.initDefault(0);
-                SPIN_KV.initDefault(0);
-                SPIN_KA.initDefault(0);
+                SPIN_KS.initDefault(0.15809);
+                SPIN_KV.initDefault(0.12806);
+                SPIN_KA.initDefault(0.039754);
                 break;
             case SIM:
             case REPLAY:
