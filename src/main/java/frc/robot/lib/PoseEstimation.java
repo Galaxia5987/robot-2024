@@ -36,7 +36,8 @@ public class PoseEstimation {
     }
 
     public void updatePose() {
-        for (int i = 0; i < swerveDrive.getHighFreqModulePositions().size(); i++) {
+        var timestamps = swerveDrive.getHighFreqTimeStamps();
+        for (int i = 0; i < Math.min(swerveDrive.getHighFreqModulePositions().size(), timestamps.length); i++) {
             estimator.updateWithTime(
                     swerveDrive.getHighFreqTimeStamps()[i],
                     swerveDrive.getYaw(),

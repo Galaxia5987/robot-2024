@@ -69,12 +69,14 @@ public class ModuleIOTalonFX implements ModuleIO {
 
         var drivePositionSignal = driveMotor.getPosition();
         var driveVelocitySignal = driveMotor.getVelocity();
+
         distanceQueue =
                 PhoenixOdometryThread.getInstance()
                         .registerSignal(driveMotor, drivePositionSignal, driveVelocitySignal);
 
         var anglePositionSignal = angleMotor.getPosition();
         var angleVelocitySignal = angleMotor.getVelocity();
+
         angleQueue =
                 PhoenixOdometryThread.getInstance()
                         .registerSignal(angleMotor, anglePositionSignal, angleVelocitySignal);

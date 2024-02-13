@@ -13,6 +13,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.lib.PhoenixOdometryThread;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.lib.controllers.DieterController;
 import frc.robot.lib.math.differential.Derivative;
@@ -62,6 +63,8 @@ public class SwerveDrive extends SubsystemBase {
         updateModulePositions();
 
         poseEstimator = new PoseEstimation(this);
+
+        PhoenixOdometryThread.getInstance().start();
     }
 
     public static SwerveDrive getInstance() {

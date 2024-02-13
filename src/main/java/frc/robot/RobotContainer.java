@@ -53,7 +53,7 @@ public class RobotContainer {
                 break;
         }
         Hood.initialize(hoodIO);
-//        Constants.initSwerve();
+        Constants.initSwerve();
 //        Constants.initVision();
 
         swerveDrive = SwerveDrive.getInstance();
@@ -77,13 +77,13 @@ public class RobotContainer {
     }
 
     private void configureDefaultCommands() {
-//        swerveDrive.setDefaultCommand(
-//                swerveDrive.driveCommand(
-//                        () -> -xboxController.getLeftY(),
-//                        () -> -xboxController.getLeftX(),
-//                        () -> -xboxController.getRightX(),
-//                        0.15,
-//                        () -> true));
+        swerveDrive.setDefaultCommand(
+                swerveDrive.driveCommand(
+                        () -> -xboxController.getLeftY(),
+                        () -> -xboxController.getLeftX(),
+                        () -> -xboxController.getRightX(),
+                        0.15,
+                        () -> true));
     }
 
     private void configureButtonBindings() {
