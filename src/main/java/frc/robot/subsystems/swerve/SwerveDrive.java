@@ -1,7 +1,6 @@
 package frc.robot.subsystems.swerve;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,7 +13,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.lib.PoseEstimation;
 import frc.robot.lib.controllers.DieterController;
 import frc.robot.lib.math.differential.Derivative;
 import java.util.Arrays;
@@ -43,7 +41,7 @@ public class SwerveDrive extends SubsystemBase {
                     SwerveConstants.WHEEL_POSITIONS[3]);
     private final Derivative acceleration = new Derivative();
     private final LinearFilter accelFilter = LinearFilter.movingAverage(15);
-    private final PoseEstimation poseEstimator;
+    private final SwerveDrivePoseEstimator estimator;
     private final SwerveDriveInputsAutoLogged loggerInputs = new SwerveDriveInputsAutoLogged();
     @AutoLogOutput private Pose2d botPose = new Pose2d();
 
@@ -56,7 +54,9 @@ public class SwerveDrive extends SubsystemBase {
 
         updateModulePositions();
 
-        poseEstimator = new PoseEstimation(this);
+        estimator =
+                new SwerveDrivePoseEstimator(
+                        getKinematics(), getYaw(), getModulePositions(), getBotPose());
     }
 
     public static SwerveDrive getInstance() {
@@ -138,7 +138,7 @@ public class SwerveDrive extends SubsystemBase {
         return modules[0].getHighFreqTimestamps();
     }
 
-    public void updateHighFreqPose(SwerveDrivePoseEstimator estimator) {
+    public void updateHighFreqPose() {
         double[] sampleTimestamps =
                 modules[0].getHighFreqTimestamps(); // All signals are sampled together
         int sampleCount = sampleTimestamps.length;
@@ -151,7 +151,11 @@ public class SwerveDrive extends SubsystemBase {
 
             estimator.updateWithTime(sampleTimestamps[i], getRawYaw(), modulePositions);
         }
-        botPose = poseEstimator.getEstimatedPose();
+        botPose = estimator.getEstimatedPosition();
+    }
+
+    public SwerveDrivePoseEstimator getEstimator() {
+        return estimator;
     }
 
     public Pose2d getBotPose() {
@@ -160,7 +164,7 @@ public class SwerveDrive extends SubsystemBase {
 
     public void resetPose(Pose2d pose) {
         botPose = pose;
-        poseEstimator.resetPose(pose);
+        estimator.resetPosition(getRawYaw(), modulePositions, pose);
     }
 
     public void resetPose() {
@@ -256,7 +260,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public Command turnCommand(double rotation, double turnTolerance) {
-        PIDController turnController =
+        DieterController turnController =
                 new DieterController(
                         SwerveConstants.ROTATION_KP.get(),
                         SwerveConstants.ROTATION_KI.get(),
@@ -316,6 +320,7 @@ public class SwerveDrive extends SubsystemBase {
         updateGyroInputs();
         updateSwerveInputs();
         updateModulePositions();
+        updateHighFreqPose();
         odometryLock.unlock();
 
         SwerveDriveKinematics.desaturateWheelSpeeds(

@@ -18,7 +18,8 @@ public class SwerveModule extends SubsystemBase {
     private final int number;
     private final Timer timer = new Timer();
     private final double offset;
-    private SwerveModulePosition[] highFreqModulePositions = new SwerveModulePosition[0];
+    private SwerveModulePosition[] highFreqModulePositions =
+            new SwerveModulePosition[] {new SwerveModulePosition()};
     private double lastDistance = 0;
     private double[] deltas = new double[0];
 
