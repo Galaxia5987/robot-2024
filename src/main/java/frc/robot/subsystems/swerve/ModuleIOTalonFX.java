@@ -84,9 +84,7 @@ public class ModuleIOTalonFX implements ModuleIO {
         BaseStatusSignal.setUpdateFrequencyForAll(
                 SwerveConstants.ODOMETRY_FREQUENCY,
                 drivePositionSignal,
-                anglePositionSignal,
-                driveVelocitySignal,
-                angleVelocitySignal);
+                anglePositionSignal);
     }
 
     @Override

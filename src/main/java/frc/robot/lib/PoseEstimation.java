@@ -36,20 +36,13 @@ public class PoseEstimation {
     }
 
     public void updatePose() {
-        for (int i = 0; i < swerveDrive.getHighFreqModulePositions().size(); i++) {
-            estimator.updateWithTime(
-                    swerveDrive.getHighFreqTimeStamps()[i],
-                    swerveDrive.getYaw(),
-                    swerveDrive.getHighFreqModulePositions().get(i));
-        }
+        swerveDrive.updateHighFreqPose(estimator);
     }
 
     public void resetPose(Pose2d pose) {
         estimator.resetPosition(
                 swerveDrive.getRawYaw(),
-                swerveDrive
-                        .getHighFreqModulePositions()
-                        .get(swerveDrive.getHighFreqModulePositions().size() - 1),
+                swerveDrive.getModulePositions(),
                 pose);
     }
 
