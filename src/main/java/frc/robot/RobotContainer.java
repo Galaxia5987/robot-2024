@@ -136,8 +136,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        xboxController.y().whileTrue(commandGroups.intake());
-        xboxController.y().onFalse(intake.stop());
+        xboxController.y().whileTrue(commandGroups.intake()).onFalse(intake.stop());
         xboxController.a().onTrue(updateScoreState(shootState, Set.of(conveyor, hood, shooter)));
 
         Set<Subsystem> ampClimbRequirements = Set.of(elevator, gripper);
