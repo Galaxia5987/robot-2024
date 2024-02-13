@@ -12,10 +12,10 @@ public class Vision extends SubsystemBase {
 
     private static Vision INSTANCE = null;
 
-    private final VisionModule[] modules;
+    private final frc.robot.subsystems.vision.VisionModule[] modules;
     private final EstimatedRobotPose[] results;
 
-    private Vision(VisionModule... modules) {
+    private Vision(frc.robot.subsystems.vision.VisionModule... modules) {
         this.modules = modules;
         results = new EstimatedRobotPose[modules.length];
     }
@@ -24,7 +24,7 @@ public class Vision extends SubsystemBase {
         return INSTANCE;
     }
 
-    public static void initialize(VisionModule... modules) {
+    public static void initialize(frc.robot.subsystems.vision.VisionModule... modules) {
         INSTANCE = new Vision(modules);
     }
 
@@ -34,7 +34,9 @@ public class Vision extends SubsystemBase {
 
     public double getAverageAmbiguity() {
         List<Double> ambiguityList =
-                Arrays.stream(modules).map(VisionModule::getAverageAmbiguity).toList();
+                Arrays.stream(modules)
+                        .map(frc.robot.subsystems.vision.VisionModule::getAverageAmbiguity)
+                        .toList();
         return Utils.averageAmbiguity(ambiguityList);
     }
 

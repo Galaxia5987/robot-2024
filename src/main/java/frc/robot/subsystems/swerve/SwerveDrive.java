@@ -241,7 +241,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     /**
-     * Sets the desired percentage of x, y and omega speeds for the frc.robot.swerve
+     * Sets the desired percentage of x, y and omega speeds for the frc.robot.subsystems.swerve
      *
      * @param xOutput percentage of the max possible x speed
      * @param yOutput percentage of the max possible the y speed

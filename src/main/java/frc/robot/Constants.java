@@ -67,7 +67,7 @@ public class Constants {
         REPLAY
     }
 
-    public static double[] SWERVE_OFFSETS = {0, 0, 0, 0};
+    public static final double[] SWERVE_OFFSETS = {0, 0, 0, 0};
 
     public static void initSwerve() {
         ModuleIO[] moduleIOs = new ModuleIO[4];

@@ -16,7 +16,6 @@ import frc.robot.subsystems.elevator.ElevatorIOReal;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperIO;
-import frc.robot.subsystems.gripper.GripperIOReal;
 import frc.robot.subsystems.gripper.GripperIOSim;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodIO;
@@ -60,7 +59,7 @@ public class RobotContainer {
                 intakeIO = new IntakeIOSim(); // TODO: replace with IOReal
                 conveyorIO = new ConveyorIOSim(); // TODO: replace with IOReal
                 elevatorIO = new ElevatorIOReal();
-                gripperIO = new GripperIOReal();
+                //                gripperIO = new GripperIOReal();
                 hoodIO = new HoodIOReal();
                 shooterIO = new ShooterIOReal();
                 break;
@@ -78,6 +77,7 @@ public class RobotContainer {
         Intake.initialize(intakeIO);
         Conveyor.initialize(conveyorIO);
         Elevator.initialize(elevatorIO);
+        //        Gripper.initialize(gripperIO);
         Hood.initialize(hoodIO);
         Shooter.initialize(shooterIO);
         Constants.initSwerve();

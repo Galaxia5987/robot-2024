@@ -50,12 +50,16 @@ public class ModuleIOSparkMax implements ModuleIO {
         drivePIDController = driveMotor.getPIDController();
         driveEncoder = driveMotor.getEncoder();
 
-        driveMotor.enableVoltageCompensation(SwerveConstants.VOLT_COMP_SATURATION);
+        driveMotor.enableVoltageCompensation(
+                frc.robot.subsystems.swerve.SwerveConstants.VOLT_COMP_SATURATION);
         driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        driveMotor.setSmartCurrentLimit((int) SwerveConstants.NEO_CURRENT_LIMIT);
+        driveMotor.setSmartCurrentLimit(
+                (int) frc.robot.subsystems.swerve.SwerveConstants.NEO_CURRENT_LIMIT);
         driveMotor.setInverted(driveInverted);
-        driveEncoder.setPositionConversionFactor(SwerveConstants.DRIVE_REDUCTION);
-        driveEncoder.setVelocityConversionFactor(SwerveConstants.DRIVE_REDUCTION);
+        driveEncoder.setPositionConversionFactor(
+                frc.robot.subsystems.swerve.SwerveConstants.DRIVE_REDUCTION);
+        driveEncoder.setVelocityConversionFactor(
+                frc.robot.subsystems.swerve.SwerveConstants.DRIVE_REDUCTION);
         driveMotor.burnFlash();
 
         angleMotor.restoreFactoryDefaults();
@@ -63,12 +67,16 @@ public class ModuleIOSparkMax implements ModuleIO {
         updatePID();
         angleEncoder = angleMotor.getEncoder();
 
-        angleMotor.enableVoltageCompensation(SwerveConstants.VOLT_COMP_SATURATION);
+        angleMotor.enableVoltageCompensation(
+                frc.robot.subsystems.swerve.SwerveConstants.VOLT_COMP_SATURATION);
         angleMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        angleMotor.setSmartCurrentLimit((int) SwerveConstants.NEO_550_CURRENT_LIMIT);
+        angleMotor.setSmartCurrentLimit(
+                (int) frc.robot.subsystems.swerve.SwerveConstants.NEO_550_CURRENT_LIMIT);
         angleMotor.setInverted(angleInverted);
-        angleEncoder.setPositionConversionFactor(SwerveConstants.ANGLE_REDUCTION);
-        angleEncoder.setVelocityConversionFactor(SwerveConstants.ANGLE_REDUCTION);
+        angleEncoder.setPositionConversionFactor(
+                frc.robot.subsystems.swerve.SwerveConstants.ANGLE_REDUCTION);
+        angleEncoder.setVelocityConversionFactor(
+                frc.robot.subsystems.swerve.SwerveConstants.ANGLE_REDUCTION);
         angleMotor.burnFlash();
     }
 
@@ -95,23 +103,25 @@ public class ModuleIOSparkMax implements ModuleIO {
         inputs.angleSetpoint = angleSetpoint;
 
         inputs.moduleDistance =
-                inputs.driveMotorPosition * SwerveConstants.WHEEL_DIAMETER * Math.PI;
+                inputs.driveMotorPosition
+                        * frc.robot.subsystems.swerve.SwerveConstants.WHEEL_DIAMETER
+                        * Math.PI;
         moduleDistance = inputs.moduleDistance;
 
-        if (hasPIDChanged(SwerveConstants.PID_VALUES)) updatePID();
+        if (hasPIDChanged(frc.robot.subsystems.swerve.SwerveConstants.PID_VALUES)) updatePID();
     }
 
     @Override
     public void updatePID() {
         feedforward =
                 new SimpleMotorFeedforward(
-                        SwerveConstants.DRIVE_KS.get(),
-                        SwerveConstants.DRIVE_KV.get(),
-                        SwerveConstants.DRIVE_KA.get());
-        anglePIDController.setP(SwerveConstants.ANGLE_KP.get());
-        anglePIDController.setI(SwerveConstants.ANGLE_KI.get());
-        anglePIDController.setD(SwerveConstants.ANGLE_KD.get());
-        anglePIDController.setFF(SwerveConstants.ANGLE_KS.get());
+                        frc.robot.subsystems.swerve.SwerveConstants.DRIVE_KS.get(),
+                        frc.robot.subsystems.swerve.SwerveConstants.DRIVE_KV.get(),
+                        frc.robot.subsystems.swerve.SwerveConstants.DRIVE_KA.get());
+        anglePIDController.setP(frc.robot.subsystems.swerve.SwerveConstants.ANGLE_KP.get());
+        anglePIDController.setI(frc.robot.subsystems.swerve.SwerveConstants.ANGLE_KI.get());
+        anglePIDController.setD(frc.robot.subsystems.swerve.SwerveConstants.ANGLE_KD.get());
+        anglePIDController.setFF(frc.robot.subsystems.swerve.SwerveConstants.ANGLE_KS.get());
     }
 
     @Override
