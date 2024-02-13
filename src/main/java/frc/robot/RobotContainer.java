@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.scoreStates.AmpState;
 import frc.robot.scoreStates.ClimbState;
@@ -30,6 +31,7 @@ import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOReal;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.swerve.SwerveDrive;
+import java.util.Set;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
@@ -42,10 +44,10 @@ public class RobotContainer {
     private final SwerveDrive swerveDrive;
     private final CommandXboxController xboxController = new CommandXboxController(0);
 
-    private ScoreState currentState = new ShootState();
-    private final ShootState shootState = new ShootState();
-    private final AmpState ampState = new AmpState();
-    private final ClimbState climbState = new ClimbState();
+    private ScoreState currentState;
+    private final ShootState shootState;
+    private final AmpState ampState;
+    private final ClimbState climbState;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
@@ -93,6 +95,11 @@ public class RobotContainer {
         Gripper.initialize(gripperIO, elevator::getCarriageHeight);
         gripper = Gripper.getInstance();
 
+        currentState = new ShootState();
+        shootState = new ShootState();
+        ampState = new AmpState();
+        climbState = new ClimbState();
+
         // Configure the button bindings and default commands
         configureDefaultCommands();
         configureButtonBindings();
@@ -115,29 +122,32 @@ public class RobotContainer {
                         () -> true));
     }
 
-    private Command updateScoreState() {
-        return Commands.repeatingSequence(
-                currentState.calculateTargets(), currentState.prepareSubsystems());
+    private Command updateScoreState(ScoreState newState, Set<Subsystem> scoringRequirements) {
+        return Commands.defer(
+                () ->
+                        Commands.runOnce(() -> currentState = newState)
+                                .andThen(
+                                        Commands.repeatingSequence(
+                                                currentState.calculateTargets(),
+                                                currentState.prepareSubsystems())),
+                scoringRequirements);
     }
 
     private void configureButtonBindings() {
         xboxController
                 .a()
-                .onTrue(
-                        Commands.runOnce(() -> currentState = shootState)
-                                .andThen(updateScoreState()));
+                .onTrue(updateScoreState(shootState, Set.of(swerveDrive, conveyor, hood, shooter)));
+
+        Set<Subsystem> ampClimbRequirements = Set.of(swerveDrive, elevator, gripper);
+        xboxController.b().onTrue(updateScoreState(ampState, ampClimbRequirements));
+        xboxController.x().onTrue(updateScoreState(climbState, ampClimbRequirements));
+
         xboxController
                 .b()
                 .onTrue(
-                        Commands.runOnce(() -> currentState = ampState)
-                                .andThen(updateScoreState()));
-        xboxController
-                .x()
-                .onTrue(
-                        Commands.runOnce(() -> currentState = climbState)
-                                .andThen(updateScoreState()));
-
-        xboxController.rightTrigger(0.1).onTrue(Commands.deferredProxy(() -> currentState.score()));
+                        Commands.defer(
+                                () -> currentState.score(),
+                                Set.of(swerveDrive, conveyor, hood, shooter, elevator, gripper)));
     }
 
     /**
