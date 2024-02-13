@@ -9,8 +9,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import lib.motors.TalonFXSim;
-import lib.units.Units;
+import frc.robot.lib.motors.TalonFXSim;
+import frc.robot.lib.units.Units;
 
 public class ModuleIOSim implements ModuleIO {
     private final TalonFXSim driveMotor;

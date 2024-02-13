@@ -8,7 +8,7 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Timer;
-import lib.motors.TalonFXSim;
+import frc.robot.lib.motors.TalonFXSim;
 
 public class HoodIOSim implements HoodIO {
     private final TalonFXSim motor;

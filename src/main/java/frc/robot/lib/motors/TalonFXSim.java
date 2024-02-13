@@ -5,9 +5,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
-import lib.math.differential.Derivative;
-import lib.motors.SimMotor;
-import lib.units.Units;
+import frc.robot.lib.math.differential.Derivative;
+import frc.robot.lib.units.Units;
 
 public class TalonFXSim extends SimMotor {
 

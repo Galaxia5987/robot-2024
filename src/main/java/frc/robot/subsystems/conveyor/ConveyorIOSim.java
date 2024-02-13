@@ -10,7 +10,7 @@ import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.Timer;
-import lib.motors.SparkMaxSim;
+import frc.robot.lib.motors.SparkMaxSim;
 
 public class ConveyorIOSim implements ConveyorIO {
     private final SparkMaxSim conveyor;

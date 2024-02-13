@@ -13,10 +13,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import lib.PhoenixOdometryThread;
-import lib.Utils;
-import lib.units.Units;
-
+import frc.robot.lib.PhoenixOdometryThread;
+import frc.robot.lib.Utils;
+import frc.robot.lib.units.Units;
 import java.util.Queue;
 
 public class ModuleIOTalonFX implements ModuleIO {

@@ -6,7 +6,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.*;
 import frc.robot.Constants;
-import lib.webconstants.LoggedTunableNumber;
+import frc.robot.lib.webconstants.LoggedTunableNumber;
 
 public class ElevatorConstants { // TODO: check real values
     public static final TalonFXConfiguration MAIN_MOTOR_CONFIGURATION = new TalonFXConfiguration();

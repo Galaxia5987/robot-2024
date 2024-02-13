@@ -1,7 +1,7 @@
 package frc.robot.subsystems.swerve;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import lib.math.differential.Integral;
+import frc.robot.lib.math.differential.Integral;
 
 public class GyroIOSim implements GyroIO {
     private final Integral yaw = new Integral();

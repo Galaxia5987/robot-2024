@@ -13,12 +13,9 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import lib.PoseEstimation;
-import lib.controllers.DieterController;
-import lib.math.differential.Derivative;
-import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
-
+import frc.robot.lib.PoseEstimation;
+import frc.robot.lib.controllers.DieterController;
+import frc.robot.lib.math.differential.Derivative;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,6 +25,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.stream.Stream;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 public class SwerveDrive extends SubsystemBase {
     public static final Lock odometryLock = new ReentrantLock();
@@ -37,7 +36,8 @@ public class SwerveDrive extends SubsystemBase {
     @AutoLogOutput
     private final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
 
-    private final List<SwerveModulePosition[]> highFreqModulePositions = new ArrayList<>(Collections.singleton(modulePositions));
+    private final List<SwerveModulePosition[]> highFreqModulePositions =
+            new ArrayList<>(Collections.singleton(modulePositions));
 
     private final GyroIO gyro;
     private final SwerveDriveKinematics kinematics =
@@ -69,7 +69,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public static void initialize(GyroIO gyroIO, double[] offsets, ModuleIO... moduleIOs) {
-        INSTANCE = new SwerveDrive(gyroIO, offsets,  moduleIOs);
+        INSTANCE = new SwerveDrive(gyroIO, offsets, moduleIOs);
     }
 
     /**

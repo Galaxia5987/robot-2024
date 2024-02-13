@@ -7,12 +7,12 @@
 
 package frc.robot.lib.webconstants;
 
+import frc.robot.lib.GeneralRobotLoop;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.DoubleConsumer;
-import lib.GeneralRobotLoop;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 /**

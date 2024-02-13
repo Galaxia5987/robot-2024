@@ -1,8 +1,5 @@
 package frc.robot.lib.math.interpolation;
 
-import lib.math.interpolation.Interpolable;
-import lib.math.interpolation.InverseInterpolable;
-
 import java.util.Map;
 import java.util.TreeMap;
 

@@ -9,8 +9,8 @@ import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.Constants;
 import frc.robot.lib.ShootingCSV;
-import lib.math.interpolation.InterpolatingDoubleMap;
-import lib.webconstants.LoggedTunableNumber;
+import frc.robot.lib.math.interpolation.InterpolatingDoubleMap;
+import frc.robot.lib.webconstants.LoggedTunableNumber;
 
 public class ShooterConstants {
     public static final double GEAR_RATIO_TOP = 1.0;

@@ -1,7 +1,5 @@
 package frc.robot.lib.math.interpolation;
 
-import lib.math.interpolation.Interpolable;
-
 /**
  * A Double that can be interpolated using the InterpolatingTreeMap.
  *

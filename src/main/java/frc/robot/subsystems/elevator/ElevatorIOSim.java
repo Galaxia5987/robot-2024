@@ -8,7 +8,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.wpilibj.Timer;
-import lib.motors.TalonFXSim;
+import frc.robot.lib.motors.TalonFXSim;
 
 public class ElevatorIOSim implements ElevatorIO {
     private final TalonFXSim motor;

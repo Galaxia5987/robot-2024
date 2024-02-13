@@ -7,11 +7,11 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.*;
-import frc.robot.swerve.*;
-import frc.robot.vision.PhotonVisionIOReal;
-import frc.robot.vision.Vision;
-import frc.robot.vision.VisionModule;
-import frc.robot.vision.VisionSimIO;
+import frc.robot.subsystems.swerve.*;
+import frc.robot.subsystems.vision.PhotonVisionIOReal;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionModule;
+import frc.robot.subsystems.vision.VisionSimIO;
 import org.photonvision.PhotonCamera;
 import org.photonvision.simulation.SimCameraProperties;
 
@@ -67,6 +67,8 @@ public class Constants {
         REPLAY
     }
 
+    public static double[] SWERVE_OFFSETS = {0, 0, 0, 0};
+
     public static void initSwerve() {
         ModuleIO[] moduleIOs = new ModuleIO[4];
         GyroIO gyroIO =
@@ -90,7 +92,7 @@ public class Constants {
                         yield new GyroIOSim();
                     }
                 };
-        SwerveDrive.initialize(gyroIO, moduleIOs);
+        SwerveDrive.initialize(gyroIO, SWERVE_OFFSETS, moduleIOs);
         SwerveDrive swerveDrive = SwerveDrive.getInstance();
         AutoBuilder.configureHolonomic(
                 swerveDrive::getBotPose,

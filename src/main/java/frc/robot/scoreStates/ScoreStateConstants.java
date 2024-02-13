@@ -3,10 +3,10 @@ package frc.robot.scoreStates;
 import com.pathplanner.lib.util.GeometryUtil;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.*;
+import frc.robot.lib.math.interpolation.InterpolatingDouble;
+import frc.robot.lib.math.interpolation.InterpolatingDoubleMap;
 import java.util.List;
 import java.util.stream.Collectors;
-import lib.math.interpolation.InterpolatingDouble;
-import lib.math.interpolation.InterpolatingDoubleMap;
 
 public class ScoreStateConstants {
     public static final List<Translation2d> OPTIMAL_POINTS_SHOOT_BLUE =

@@ -9,7 +9,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.wpilibj.Timer;
-import lib.motors.TalonFXSim;
+import frc.robot.lib.motors.TalonFXSim;
 
 public class GripperIOSim implements GripperIO {
     private final TalonFXSim rollerMotor;

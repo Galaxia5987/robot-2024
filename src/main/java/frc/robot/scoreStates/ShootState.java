@@ -9,15 +9,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.commandGroups.CommandGroups;
+import frc.robot.lib.PoseEstimation;
+import frc.robot.lib.Utils;
+import frc.robot.lib.math.interpolation.InterpolatingDouble;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
-import frc.robot.swerve.SwerveDrive;
+import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.List;
 import java.util.Set;
-import lib.PoseEstimation;
-import lib.Utils;
-import lib.math.interpolation.InterpolatingDouble;
 
 public class ShootState implements ScoreState {
     private static Shooter shooter;

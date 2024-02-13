@@ -3,8 +3,10 @@ package frc.robot.subsystems.vision;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import frc.robot.swerve.SwerveDrive;
-import lib.Utils;
+import frc.robot.lib.Utils;
+import frc.robot.subsystems.swerve.SwerveDrive;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -14,9 +16,6 @@ import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.simulation.VisionTargetSim;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class VisionSimIO implements VisionIO {
     private final PhotonCamera photonCamera;

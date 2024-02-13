@@ -18,7 +18,7 @@ import frc.robot.subsystems.gripper.GripperConstants;
 import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.shooter.ShooterConstants;
-import frc.robot.swerve.SwerveConstants;
+import frc.robot.subsystems.swerve.SwerveConstants;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;

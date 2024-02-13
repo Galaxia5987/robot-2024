@@ -140,8 +140,7 @@ public class SwerveModule extends SubsystemBase {
         }
 
         if (timer.advanceIfElapsed(1)) {
-            io.updateOffset(
-                    new Rotation2d(Units.rotationsToRadians(offset)));
+            io.updateOffset(new Rotation2d(Units.rotationsToRadians(offset)));
         }
     }
 }
