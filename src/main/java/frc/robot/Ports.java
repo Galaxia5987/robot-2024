@@ -39,8 +39,8 @@ public final class Ports {
             REAR_RIGHT_ANGLE_MOTOR_ID
         };
 
-        public static final int FRONT_LEFT_ENCODER_ID = 9;
-        public static final int FRONT_RIGHT_ENCODER_ID = 0;
+        public static final int FRONT_LEFT_ENCODER_ID = 0;
+        public static final int FRONT_RIGHT_ENCODER_ID = 9; // 0
         public static final int REAR_LEFT_ENCODER_ID = 8;
         public static final int REAR_RIGHT_ENCODER_ID = 1;
 

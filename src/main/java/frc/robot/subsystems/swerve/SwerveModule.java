@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SwerveModule extends SubsystemBase {
 
     private final SwerveModuleInputsAutoLogged loggerInputs = new SwerveModuleInputsAutoLogged();
@@ -17,10 +20,10 @@ public class SwerveModule extends SubsystemBase {
 
     private final int number;
     private final Timer timer = new Timer();
-
+    private final double offset;
+    private SwerveModulePosition[] highFreqModulePositions = new SwerveModulePosition[0];
     private double lastDistance = 0;
     private double[] deltas = new double[0];
-    private final double offset;
 
     public SwerveModule(ModuleIO io, int number, double offset) {
         this.io = io;
@@ -131,6 +134,10 @@ public class SwerveModule extends SubsystemBase {
         Logger.processInputs("module_" + number, loggerInputs);
     }
 
+    public SwerveModulePosition[] getHighFreqModulePositions() {
+        return highFreqModulePositions;
+    }
+
     @Override
     public void periodic() {
         deltas = new double[loggerInputs.highFreqDistances.length];
@@ -141,6 +148,15 @@ public class SwerveModule extends SubsystemBase {
 
         if (timer.advanceIfElapsed(1)) {
             io.updateOffset(new Rotation2d(Units.rotationsToRadians(offset)));
+        }
+
+        int sampleCount = loggerInputs.highFreqTimestamps.length; // All signals are sampled together
+        highFreqModulePositions = new SwerveModulePosition[sampleCount];
+        for (int i = 0; i < sampleCount; i++) {
+            highFreqModulePositions[i] = new SwerveModulePosition(
+                    getHighFreqDriveDistances()[i],
+                    Rotation2d.fromRadians(
+                            getHighFreqAngles()[i]));
         }
     }
 }
