@@ -71,11 +71,6 @@ public class Hood extends SubsystemBase {
                 .withName("Set hood power");
     }
 
-    public Command updateInternalEncoder() {
-        return Commands.run(io::updateInternalEncoder).withName("Update hood internal encoder")
-                .ignoringDisable(true);
-    }
-
     @AutoLogOutput(key = "Hood/Pose")
     private Pose3d getPose3d() {
         return new Pose3d(
@@ -86,6 +81,7 @@ public class Hood extends SubsystemBase {
     /** Updates the state of the hood. */
     @Override
     public void periodic() {
+        io.updateInternalEncoder();
         io.updateInputs();
         Logger.processInputs("Hood", inputs);
 

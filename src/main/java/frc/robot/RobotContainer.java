@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.conveyor.ConveyorIO;
@@ -52,8 +53,8 @@ public class RobotContainer {
                 break;
         }
         Hood.initialize(hoodIO);
-        Constants.initSwerve();
-        Constants.initVision();
+//        Constants.initSwerve();
+//        Constants.initVision();
 
         swerveDrive = SwerveDrive.getInstance();
         intake = Intake.getInstance();
@@ -76,15 +77,13 @@ public class RobotContainer {
     }
 
     private void configureDefaultCommands() {
-        swerveDrive.setDefaultCommand(
-                swerveDrive.driveCommand(
-                        () -> -xboxController.getLeftY(),
-                        () -> -xboxController.getLeftX(),
-                        () -> -xboxController.getRightX(),
-                        0.15,
-                        () -> true));
-
-        hood.updateInternalEncoder().schedule();
+//        swerveDrive.setDefaultCommand(
+//                swerveDrive.driveCommand(
+//                        () -> -xboxController.getLeftY(),
+//                        () -> -xboxController.getLeftX(),
+//                        () -> -xboxController.getRightX(),
+//                        0.15,
+//                        () -> true));
     }
 
     private void configureButtonBindings() {

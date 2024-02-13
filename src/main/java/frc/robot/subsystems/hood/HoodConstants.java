@@ -15,15 +15,15 @@ public class HoodConstants {
     public static Translation2d MECHANISM_2D_POSE = new Translation2d(1, 1);
     public static Measure<Distance> HOOD_LENGTH = Units.Meters.of(0.4);
     public static Measure<Dimensionless> POSITION_TOLERANCE = Units.Percent.of(5);
-    public static Measure<Velocity<Angle>> MAX_VELOCITY = Units.RotationsPerSecond.of(1);
+    public static Measure<Velocity<Angle>> MAX_VELOCITY = Units.RotationsPerSecond.of(10);
     public static Measure<Velocity<Velocity<Angle>>> MAX_ACCELERATION =
-            Units.RotationsPerSecond.per(Units.Second).of(4);
-    public static final double GEAR_RATIO = 1.0;
+            Units.RotationsPerSecond.per(Units.Second).of(400);
+    public static final double GEAR_RATIO = 26.33;
     public static final Measure<Mult<Mult<Mass, Distance>, Distance>> MOMENT_OF_INERTIA =
             Units.Kilograms.mult(Units.Meters).mult(Units.Meters).of(0.0003);
     public static final Translation3d ROOT_POSITION = new Translation3d(-0.27, 0, 0.225);
     public static final TalonFXConfiguration MOTOR_CONFIGURATION = new TalonFXConfiguration();
-    public static final InvertedValue INVERTED_VALUE = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     public static final double CURRENT_LIMIT = 40;
     public static final LoggedTunableNumber ABSOLUTE_ENCODER_OFFSET =
             new LoggedTunableNumber("Hood/EncoderOffset");
@@ -39,14 +39,14 @@ public class HoodConstants {
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                kP.initDefault(1);
+                kP.initDefault(10.0);
                 kI.initDefault(0.0);
                 kD.initDefault(0.0);
                 kS.initDefault(0.0);
                 kV.initDefault(0.0);
                 kA.initDefault(0.0);
-                kG.initDefault(0.0);
-                ABSOLUTE_ENCODER_OFFSET.initDefault(0.79);
+                kG.initDefault(0.48);
+                ABSOLUTE_ENCODER_OFFSET.initDefault(0.79 + 0.022 - 44.65 / 360.0);
             case SIM:
             case REPLAY:
                 kP.initDefault(1);
