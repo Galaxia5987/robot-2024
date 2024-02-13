@@ -8,7 +8,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.Constants;
-import frc.robot.utils.ShootingCSV;
+import frc.robot.lib.ShootingCSV;
 import lib.math.interpolation.InterpolatingDoubleMap;
 import lib.webconstants.LoggedTunableNumber;
 
