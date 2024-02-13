@@ -11,9 +11,12 @@ import java.util.stream.Collectors;
 public class ScoreStateConstants {
     public static final List<Translation2d> OPTIMAL_POINTS_SHOOT_BLUE =
             List.of(
+                    new Translation2d(0, 1000),
                     new Translation2d(1.97, 7.16),
                     new Translation2d(2.54, 3.06),
-                    new Translation2d(4.16, 5.03));
+                    new Translation2d(4.16, 5.03),
+                    new Translation2d(20, -1000));
+
     public static final List<Translation2d> OPTIMAL_POINTS_SHOOT_RED =
             OPTIMAL_POINTS_SHOOT_BLUE.stream()
                     .map(GeometryUtil::flipFieldPosition)

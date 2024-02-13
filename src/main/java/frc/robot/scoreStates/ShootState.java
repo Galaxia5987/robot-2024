@@ -23,7 +23,7 @@ public class ShootState implements ScoreState {
     private static Shooter shooter;
     private static Hood hood;
     private Translation2d speakerPose;
-    private InterpolatingDouble distanceToSpeaker;
+    private InterpolatingDouble distanceToSpeaker = new InterpolatingDouble(0.0);
     private PoseEstimation poseEstimation;
     private Pose2d botPose;
     private List<Translation2d> optimalPoints;
@@ -47,9 +47,9 @@ public class ShootState implements ScoreState {
         double poseX = botPose.getX();
         InterpolatingDouble poseY = new InterpolatingDouble(botPose.getY());
         if (isRed()) {
-            inBounds = poseX >= ScoreStateConstants.RED_BOUNDS_MAP.get(poseY).value;
+            inBounds = poseX >= ScoreStateConstants.RED_BOUNDS_MAP.getInterpolated(poseY).value;
         } else {
-            inBounds = poseX <= ScoreStateConstants.BLUE_BOUNDS_MAP.get(poseY).value;
+            inBounds = poseX <= ScoreStateConstants.BLUE_BOUNDS_MAP.getInterpolated(poseY).value;
         }
     }
 
@@ -57,7 +57,8 @@ public class ShootState implements ScoreState {
         return shooter.setVelocity(
                 () ->
                         Units.RotationsPerSecond.of(
-                                        ShooterConstants.VELOCITY_BY_DISTANCE.get(distanceToSpeaker)
+                                        ShooterConstants.VELOCITY_BY_DISTANCE.getInterpolated(
+                                                        distanceToSpeaker)
                                                 .value)
                                 .mutableCopy());
     }

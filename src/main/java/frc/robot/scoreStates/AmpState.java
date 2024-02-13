@@ -61,8 +61,10 @@ public class AmpState implements ScoreState {
         return Commands.parallel(
                 elevator.setHeight(CommandGroupsConstants.MAX_HEIGHT),
                 Commands.either(
-                        gripper.setWristPosition(CommandGroupsConstants.WRIST_ANGLE_AMP_FORWARD),
-                        gripper.setWristPosition(CommandGroupsConstants.WRIST_ANGLE_AMP_BACKWARDS),
+                        gripper.setRollerAndWrist(
+                                CommandGroupsConstants.WRIST_ANGLE_AMP_FORWARD, 0),
+                        gripper.setRollerAndWrist(
+                                CommandGroupsConstants.WRIST_ANGLE_AMP_BACKWARDS, 0),
                         () -> isAmpingForward));
     }
 
@@ -81,8 +83,12 @@ public class AmpState implements ScoreState {
                 driveToClosestOptimalPoint(),
                 Commands.run(() -> SwerveDrive.getInstance().lock()),
                 Commands.either(
-                        gripper.setRollerPower(GripperConstants.AMP_POWER_NORMAL),
-                        gripper.setRollerPower(GripperConstants.AMP_POWER_REVERSE),
+                        gripper.setRollerAndWrist(
+                                CommandGroupsConstants.WRIST_ANGLE_AMP_FORWARD,
+                                GripperConstants.AMP_POWER_NORMAL),
+                        gripper.setRollerAndWrist(
+                                CommandGroupsConstants.WRIST_ANGLE_AMP_BACKWARDS,
+                                GripperConstants.AMP_POWER_REVERSE),
                         () -> isAmpingForward));
     }
 }
