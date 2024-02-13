@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -15,7 +16,7 @@ public class HoodConstants {
     public static Translation2d MECHANISM_2D_POSE = new Translation2d(1, 1);
     public static Measure<Distance> HOOD_LENGTH = Units.Meters.of(0.4);
     public static Measure<Dimensionless> POSITION_TOLERANCE = Units.Percent.of(5);
-    public static Measure<Velocity<Angle>> MAX_VELOCITY = Units.RotationsPerSecond.of(10);
+    public static Measure<Velocity<Angle>> MAX_VELOCITY = Units.RotationsPerSecond.of(100);
     public static Measure<Velocity<Velocity<Angle>>> MAX_ACCELERATION =
             Units.RotationsPerSecond.per(Units.Second).of(400);
     public static final double GEAR_RATIO = 26.33;
@@ -39,13 +40,13 @@ public class HoodConstants {
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                kP.initDefault(10.0);
-                kI.initDefault(0.0);
+                kP.initDefault(18.0);
+                kI.initDefault(15.0);
                 kD.initDefault(0.0);
                 kS.initDefault(0.0);
                 kV.initDefault(0.0);
                 kA.initDefault(0.0);
-                kG.initDefault(0.48);
+                kG.initDefault(0.8);
                 ABSOLUTE_ENCODER_OFFSET.initDefault(0.79 + 0.022 - 44.65 / 360.0);
             case SIM:
             case REPLAY:
@@ -66,7 +67,8 @@ public class HoodConstants {
                                 .withKS(HoodConstants.kS.get())
                                 .withKV(HoodConstants.kV.get())
                                 .withKA(HoodConstants.kA.get())
-                                .withKG(HoodConstants.kG.get()))
+                                .withKG(HoodConstants.kG.get())
+                                .withGravityType(GravityTypeValue.Arm_Cosine))
                 .withMotorOutput(new MotorOutputConfigs().withInverted(INVERTED_VALUE))
                 .CurrentLimits
                 .withStatorCurrentLimitEnable(true)
