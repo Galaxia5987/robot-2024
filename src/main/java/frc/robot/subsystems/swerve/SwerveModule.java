@@ -9,9 +9,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SwerveModule extends SubsystemBase {
 
     private final SwerveModuleInputsAutoLogged loggerInputs = new SwerveModuleInputsAutoLogged();
@@ -150,13 +147,14 @@ public class SwerveModule extends SubsystemBase {
             io.updateOffset(new Rotation2d(Units.rotationsToRadians(offset)));
         }
 
-        int sampleCount = loggerInputs.highFreqTimestamps.length; // All signals are sampled together
+        int sampleCount =
+                loggerInputs.highFreqTimestamps.length; // All signals are sampled together
         highFreqModulePositions = new SwerveModulePosition[sampleCount];
         for (int i = 0; i < sampleCount; i++) {
-            highFreqModulePositions[i] = new SwerveModulePosition(
-                    getHighFreqDriveDistances()[i],
-                    Rotation2d.fromRadians(
-                            getHighFreqAngles()[i]));
+            highFreqModulePositions[i] =
+                    new SwerveModulePosition(
+                            getHighFreqDriveDistances()[i],
+                            Rotation2d.fromRadians(getHighFreqAngles()[i]));
         }
     }
 }

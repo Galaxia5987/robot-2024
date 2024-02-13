@@ -18,17 +18,14 @@ import frc.robot.lib.PhoenixOdometryThread;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.lib.controllers.DieterController;
 import frc.robot.lib.math.differential.Derivative;
-import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
-
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.stream.Stream;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 public class SwerveDrive extends SubsystemBase {
     public static final Lock odometryLock = new ReentrantLock();
@@ -49,8 +46,7 @@ public class SwerveDrive extends SubsystemBase {
     private final LinearFilter accelFilter = LinearFilter.movingAverage(15);
     private final PoseEstimation poseEstimator;
     private final SwerveDriveInputsAutoLogged loggerInputs = new SwerveDriveInputsAutoLogged();
-    @AutoLogOutput
-    private Pose2d botPose = new Pose2d();
+    @AutoLogOutput private Pose2d botPose = new Pose2d();
 
     private SwerveDrive(GyroIO gyroIO, double[] wheelOffsets, ModuleIO... moduleIOs) {
         this.gyro = gyroIO;
@@ -233,8 +229,8 @@ public class SwerveDrive extends SubsystemBase {
     /**
      * Sets the desired percentage of x, y and omega speeds for the frc.robot.subsystems.swerve
      *
-     * @param xOutput     percentage of the max possible x speed
-     * @param yOutput     percentage of the max possible the y speed
+     * @param xOutput percentage of the max possible x speed
+     * @param yOutput percentage of the max possible the y speed
      * @param omegaOutput percentage of the max possible rotation speed
      */
     public void drive(double xOutput, double yOutput, double omegaOutput, boolean fieldOriented) {
@@ -271,11 +267,11 @@ public class SwerveDrive extends SubsystemBase {
                         SwerveConstants.ROTATION_KDIETER.get());
         turnController.setTolerance(turnTolerance);
         return run(() ->
-                drive(
-                        0,
-                        0,
-                        turnController.calculate(getYaw().getRotations(), rotation),
-                        false))
+                        drive(
+                                0,
+                                0,
+                                turnController.calculate(getYaw().getRotations(), rotation),
+                                false))
                 .until(turnController::atSetpoint);
     }
 

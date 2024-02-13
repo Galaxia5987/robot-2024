@@ -40,10 +40,7 @@ public class PoseEstimation {
     }
 
     public void resetPose(Pose2d pose) {
-        estimator.resetPosition(
-                swerveDrive.getRawYaw(),
-                swerveDrive.getModulePositions(),
-                pose);
+        estimator.resetPosition(swerveDrive.getRawYaw(), swerveDrive.getModulePositions(), pose);
     }
 
     @AutoLogOutput(key = "EstimatedRobotPose")
