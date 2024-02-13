@@ -138,7 +138,7 @@ public class RobotContainer {
                         Commands.runOnce(() -> currentState = climbState)
                                 .andThen(updateScoreState()));
 
-        xboxController.rightTrigger(0.1).onTrue(new ProxyCommand(() -> currentState.score()));
+        xboxController.rightTrigger(0.1).onTrue(Commands.deferredProxy(() -> currentState.score()));
     }
 
     /**
