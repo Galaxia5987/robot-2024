@@ -1,8 +1,8 @@
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.geometry.Transform3d;
+import frc.robot.lib.Utils;
 import java.util.Arrays;
-import lib.Utils;
 
 public class VisionModule {
     public final VisionIO[] ios;

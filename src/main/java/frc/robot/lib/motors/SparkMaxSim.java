@@ -1,4 +1,4 @@
-package lib.motors;
+package frc.robot.lib.motors;
 
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.numbers.N1;

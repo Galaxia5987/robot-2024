@@ -6,7 +6,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.Timer;
-import lib.motors.TalonFXSim;
+import frc.robot.lib.motors.TalonFXSim;
 
 public class ShooterIOSim implements ShooterIO {
     private final TalonFXSim topMotor;

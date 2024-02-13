@@ -1,4 +1,4 @@
-package lib.math.interpolation;
+package frc.robot.lib.math.interpolation;
 
 public class InterpolatingDoubleMap
         extends InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> {

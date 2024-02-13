@@ -2,7 +2,7 @@ package frc.robot.subsystems.swerve;
 
 import com.ctre.phoenix6.configs.*;
 import edu.wpi.first.math.geometry.Translation2d;
-import lib.webconstants.LoggedTunableNumber;
+import frc.robot.lib.webconstants.LoggedTunableNumber;
 
 public class SwerveConstants {
     public static final double NEO_CURRENT_LIMIT = 40;
