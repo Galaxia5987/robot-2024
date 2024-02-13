@@ -12,7 +12,7 @@ import frc.robot.lib.webconstants.LoggedTunableNumber;
 public class GripperConstants {
     public static final TalonFXConfiguration MOTOR_CONFIGURATION = new TalonFXConfiguration();
     public static final MutableMeasure<Angle> INTAKE_ANGLE =
-            Units.Rotations.of(0).mutableCopy(); // TODO: replace with actual value
+            Units.Rotations.of(-0.5).mutableCopy(); // TODO: replace with actual value
     public static final MutableMeasure<Angle> OUTTAKE_ANGLE =
             Units.Rotations.of(0).mutableCopy(); // TODO: replace with actual value
     public static final double INTAKE_POWER = 0; // TODO; replace with actual value

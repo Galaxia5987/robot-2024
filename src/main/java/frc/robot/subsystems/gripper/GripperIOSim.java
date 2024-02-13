@@ -32,6 +32,7 @@ public class GripperIOSim implements GripperIO {
         rollerMotor = new TalonFXSim(1, 1, 0.5, 1);
 
         angleMotor.setController(angleController);
+        inputs.hasNote = true;
     }
 
     @Override
