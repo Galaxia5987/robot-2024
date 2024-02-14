@@ -69,6 +69,10 @@ public class Gripper extends SubsystemBase {
         return run(() -> io.setAngle(angle)).withName("set wrist position");
     }
 
+    public Command setWristPower(double power) {
+        return run(() -> io.setAngleMotorPower(power)).withName("set wrist power");
+    }
+
     @Override
     public void periodic() {
         Measure<Distance> gripperHeight =

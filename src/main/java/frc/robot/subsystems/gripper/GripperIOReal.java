@@ -1,6 +1,8 @@
 package frc.robot.subsystems.gripper;
 
-import com.ctre.phoenix6.controls.PositionVoltage;
+import static frc.robot.subsystems.gripper.GripperConstants.*;
+
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkBase;
@@ -19,7 +21,7 @@ public class GripperIOReal implements GripperIO {
     private final CANSparkMax rollerMotor;
     private final SparkLimitSwitch limitSwitch;
     private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(7);
-    private final PositionVoltage positionRequest = new PositionVoltage(0);
+    private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0);
     private final VoltageOut powerRequest = new VoltageOut(0).withEnableFOC(true);
     private final Debouncer debouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
 
@@ -77,5 +79,7 @@ public class GripperIOReal implements GripperIO {
                 Units.Rotations);
         inputs.encoderPosition.mut_replace(
                 Math.IEEEremainder(inputs.encoderPosition.in(Units.Rotations), 1), Units.Rotations);
+
+        angleMotor.setPosition(inputs.encoderPosition.in(Units.Rotations));
     }
 }
