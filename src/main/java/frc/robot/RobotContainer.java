@@ -5,26 +5,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.conveyor.ConveyorIO;
-import frc.robot.subsystems.conveyor.ConveyorIOSim;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
-import frc.robot.subsystems.elevator.ElevatorIOReal;
-import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperIO;
 import frc.robot.subsystems.gripper.GripperIOReal;
 import frc.robot.subsystems.gripper.GripperIOSim;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodIO;
-import frc.robot.subsystems.hood.HoodIOReal;
-import frc.robot.subsystems.hood.HoodIOSim;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
-import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
-import frc.robot.subsystems.shooter.ShooterIOReal;
-import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.swerve.SwerveDrive;
 
 public class RobotContainer {
@@ -49,32 +41,32 @@ public class RobotContainer {
         ShooterIO shooterIO;
         switch (Constants.CURRENT_MODE) {
             case REAL:
-//                intakeIO = new IntakeIOSim(); // TODO: replace with IOReal
-//                conveyorIO = new ConveyorIOSim(); // TODO: replace with IOReal
-//                elevatorIO = new ElevatorIOReal();
+                //                intakeIO = new IntakeIOSim(); // TODO: replace with IOReal
+                //                conveyorIO = new ConveyorIOSim(); // TODO: replace with IOReal
+                //                elevatorIO = new ElevatorIOReal();
                 gripperIO = new GripperIOReal();
-//                hoodIO = new HoodIOReal();
-//                shooterIO = new ShooterIOReal();
+                //                hoodIO = new HoodIOReal();
+                //                shooterIO = new ShooterIOReal();
                 break;
             case SIM:
             case REPLAY:
             default:
-//                intakeIO = new IntakeIOSim();
-//                conveyorIO = new ConveyorIOSim();
-//                elevatorIO = new ElevatorIOSim();
+                //                intakeIO = new IntakeIOSim();
+                //                conveyorIO = new ConveyorIOSim();
+                //                elevatorIO = new ElevatorIOSim();
                 gripperIO = new GripperIOSim();
-//                hoodIO = new HoodIOSim();
-//                shooterIO = new ShooterIOSim();
+                //                hoodIO = new HoodIOSim();
+                //                shooterIO = new ShooterIOSim();
                 break;
         }
-//        Intake.initialize(intakeIO);
-//        Conveyor.initialize(conveyorIO);
-//        Elevator.initialize(elevatorIO);
+        //        Intake.initialize(intakeIO);
+        //        Conveyor.initialize(conveyorIO);
+        //        Elevator.initialize(elevatorIO);
         Gripper.initialize(gripperIO);
-//        Hood.initialize(hoodIO);
-//        Shooter.initialize(shooterIO);
-//        Constants.initSwerve();
-//        Constants.initVision();
+        //        Hood.initialize(hoodIO);
+        //        Shooter.initialize(shooterIO);
+        //        Constants.initSwerve();
+        //        Constants.initVision();
 
         swerveDrive = SwerveDrive.getInstance();
         intake = Intake.getInstance();
@@ -97,21 +89,23 @@ public class RobotContainer {
     }
 
     private void configureDefaultCommands() {
-//        swerveDrive.setDefaultCommand(
-//                swerveDrive.driveCommand(
-//                        () -> -xboxController.getLeftY(),
-//                        () -> -xboxController.getLeftX(),
-//                        () -> -xboxController.getRightX(),
-//                        0.15,
-//                        () -> true));
+        //        swerveDrive.setDefaultCommand(
+        //                swerveDrive.driveCommand(
+        //                        () -> -xboxController.getLeftY(),
+        //                        () -> -xboxController.getLeftX(),
+        //                        () -> -xboxController.getRightX(),
+        //                        0.15,
+        //                        () -> true));
     }
 
     private void configureButtonBindings() {
-        xboxController.a().onTrue(gripper.setWristPosition(
-                Units.Degrees.of(-50).mutableCopy()));
-        xboxController.b().onTrue(gripper.setRollerPower(0.7)
-                .until(gripper::hasNote)
-                .andThen(gripper.setRollerPower(0)));
+        xboxController.a().onTrue(gripper.setWristPosition(Units.Degrees.of(-50).mutableCopy()));
+        xboxController
+                .b()
+                .onTrue(
+                        gripper.setRollerPower(0.7)
+                                .until(gripper::hasNote)
+                                .andThen(gripper.setRollerPower(0)));
     }
 
     /**

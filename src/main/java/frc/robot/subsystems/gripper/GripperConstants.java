@@ -43,6 +43,8 @@ public class GripperConstants {
                 KV.initDefault(0);
                 KA.initDefault(0);
                 KG.initDefault(0);
+
+                ABSOLUTE_ENCODER_OFFSET.initDefault(-0.682_385 + 73 / 360.0);
                 break;
             case SIM:
             case REPLAY:

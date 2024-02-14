@@ -18,9 +18,8 @@ public class GripperIOReal implements GripperIO {
     private final TalonFX angleMotor;
     private final CANSparkMax rollerMotor;
     private final SparkLimitSwitch limitSwitch;
-    private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(0);
-    private final PositionVoltage positionRequest =
-            new PositionVoltage(0);
+    private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(7);
+    private final PositionVoltage positionRequest = new PositionVoltage(0);
     private final VoltageOut powerRequest = new VoltageOut(0).withEnableFOC(true);
     private final Debouncer debouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
 
@@ -35,8 +34,6 @@ public class GripperIOReal implements GripperIO {
         limitSwitch = rollerMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
 
         rollerMotor.burnFlash();
-
-        absoluteEncoder.setPositionOffset(GripperConstants.ABSOLUTE_ENCODER_OFFSET.get());
 
         rollerMotor.setSmartCurrentLimit(GripperConstants.CURRENT_LIMIT);
         rollerMotor.setInverted(GripperConstants.ROLLER_INVERTED_VALUE);
@@ -71,6 +68,13 @@ public class GripperIOReal implements GripperIO {
         inputs.rollerMotorVoltage.mut_replace(rollerMotor.get(), Units.Volts);
         inputs.currentAngle.mut_replace(angleMotor.getPosition().getValue(), Units.Rotations);
         inputs.hasNote = hasNote();
-        inputs.encoderPosition.mut_replace(absoluteEncoder.getAbsolutePosition(), Units.Rotations);
+        inputs.noOffsetEncoderPosition.mut_replace(
+                -absoluteEncoder.getAbsolutePosition(), Units.Rotations);
+        inputs.encoderPosition.mut_replace(
+                inputs.noOffsetEncoderPosition.in(Units.Rotations)
+                        - GripperConstants.ABSOLUTE_ENCODER_OFFSET.get(),
+                Units.Rotations);
+        inputs.encoderPosition.mut_replace(
+                Math.IEEEremainder(inputs.encoderPosition.in(Units.Rotations), 1), Units.Rotations);
     }
 }
