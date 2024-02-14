@@ -32,6 +32,7 @@ import frc.robot.subsystems.shooter.ShooterIOReal;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.Set;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
@@ -45,7 +46,7 @@ public class RobotContainer {
     private final CommandXboxController xboxController = new CommandXboxController(0);
 
     private CommandGroups commandGroups;
-    private ScoreState currentState;
+    @AutoLogOutput private ScoreState currentState;
     private final ShootState shootState;
     private final AmpState ampState;
     private final ClimbState climbState;
@@ -145,10 +146,14 @@ public class RobotContainer {
 
         xboxController
                 .rightTrigger()
-                .onTrue(
+                .whileTrue(
                         Commands.defer(
                                 () -> currentState.score(),
-                                Set.of(swerveDrive, conveyor, hood, shooter, elevator, gripper)));
+                                Set.of(swerveDrive, conveyor, hood, shooter, elevator, gripper)))
+                .onFalse(
+                        Commands.defer(
+                                () -> currentState.finalizeScore(),
+                                Set.of(conveyor, hood, shooter)));
     }
 
     /**

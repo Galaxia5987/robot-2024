@@ -266,7 +266,8 @@ public class SwerveDrive extends SubsystemBase {
                         SwerveConstants.ROTATION_KI.get(),
                         SwerveConstants.ROTATION_KD.get(),
                         SwerveConstants.ROTATION_KDIETER.get());
-        turnController.setTolerance(turnTolerance);
+        turnController.setTolerance(turnTolerance, 0.05);
+        turnController.enableContinuousInput(-0.5, 0.5);
         return run(() ->
                         drive(
                                 0,

@@ -37,6 +37,8 @@ public class HoodConstants {
     public static final LoggedTunableNumber kA = new LoggedTunableNumber("Hood/kA");
     public static final LoggedTunableNumber kG = new LoggedTunableNumber("Hood/kG");
 
+    public static final MutableMeasure<Angle> FOLDED_ANGLE = Units.Degrees.of(90).mutableCopy();
+
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:

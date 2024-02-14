@@ -58,7 +58,6 @@ public class CommandGroups {
                                         gripper.setRollerAndWrist(
                                                 GripperConstants.INTAKE_ANGLE,
                                                 GripperConstants.OUTTAKE_POWER)))
-                .until(() -> !gripper.hasNote())
                 .withName("feed");
     }
 
@@ -71,7 +70,6 @@ public class CommandGroups {
                                         gripper.setRollerAndWrist(
                                                 GripperConstants.INTAKE_ANGLE,
                                                 GripperConstants.OUTTAKE_POWER)))
-                .until(() -> !gripper.hasNote())
                 .withName("feedWithWait");
     }
 

@@ -12,7 +12,9 @@ import frc.robot.commandGroups.CommandGroups;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.lib.Utils;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
+import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.hood.Hood;
+import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
@@ -20,8 +22,9 @@ import java.util.List;
 import java.util.Set;
 
 public class ShootState implements ScoreState {
-    private static Shooter shooter;
-    private static Hood hood;
+    private final Shooter shooter;
+    private final Hood hood;
+    private final Conveyor conveyor;
     private Translation2d speakerPose;
     private InterpolatingDouble distanceToSpeaker = new InterpolatingDouble(0.0);
     private PoseEstimation poseEstimation;
@@ -34,6 +37,7 @@ public class ShootState implements ScoreState {
     public ShootState() {
         shooter = Shooter.getInstance();
         hood = Hood.getInstance();
+        conveyor = Conveyor.getInstance();
         poseEstimation = new PoseEstimation(SwerveDrive.getInstance());
     }
 
@@ -55,22 +59,25 @@ public class ShootState implements ScoreState {
 
     private Command setShooter() {
         return shooter.setVelocity(
-                () ->
-                        Units.RotationsPerSecond.of(
-                                        ShooterConstants.VELOCITY_BY_DISTANCE.getInterpolated(
-                                                        distanceToSpeaker)
-                                                .value)
-                                .mutableCopy());
+                        () ->
+                                Units.RotationsPerSecond.of(
+                                                ShooterConstants.VELOCITY_BY_DISTANCE
+                                                        .getInterpolated(distanceToSpeaker)
+                                                        .value)
+                                        .mutableCopy())
+                .until(shooter::atSetpoint);
     }
 
     private Command setHood() {
         return hood.setAngle(
-                () ->
-                        Units.Degrees.of(
-                                        Math.atan(
-                                                ScoreStateConstants.SHOOTER_TO_SPEAKER_HEIGHT
-                                                        / distanceToSpeaker.value))
-                                .mutableCopy());
+                        () ->
+                                Units.Degrees.of(
+                                                Math.atan(
+                                                        ScoreStateConstants
+                                                                        .SHOOTER_TO_SPEAKER_HEIGHT
+                                                                / distanceToSpeaker.value))
+                                        .mutableCopy())
+                .until(hood::atSetpoint);
     }
 
     @Override
@@ -127,8 +134,17 @@ public class ShootState implements ScoreState {
     @Override
     public Command score() {
         return Commands.sequence(
-                Commands.parallel(setShooter(), setHood(), driveToClosestOptimalPoint()),
-                Commands.runOnce(() -> SwerveDrive.getInstance().lock()),
+                Commands.parallel(
+                        driveToClosestOptimalPoint()
+                                .andThen(() -> SwerveDrive.getInstance().lock()),
+                        setShooter(),
+                        setHood()),
                 CommandGroups.getInstance().feedShooter());
+    }
+
+    @Override
+    public Command finalizeScore() {
+        return Commands.parallel(
+                shooter.stop(), hood.setAngle(() -> HoodConstants.FOLDED_ANGLE), conveyor.stop());
     }
 }
