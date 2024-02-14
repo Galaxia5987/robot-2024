@@ -2,9 +2,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
+import frc.robot.lib.GalacticProxyCommand;
 import frc.robot.scoreStates.AmpState;
 import frc.robot.scoreStates.ClimbState;
 import frc.robot.scoreStates.ScoreState;
@@ -31,8 +31,6 @@ import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOReal;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.swerve.SwerveDrive;
-import java.util.Set;
-import org.littletonrobotics.junction.AutoLogOutput;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
@@ -46,7 +44,7 @@ public class RobotContainer {
     private final CommandXboxController xboxController = new CommandXboxController(0);
 
     private CommandGroups commandGroups;
-    @AutoLogOutput private ScoreState currentState;
+    private ScoreState currentState;
     private final ShootState shootState;
     private final AmpState ampState;
     private final ClimbState climbState;
@@ -125,35 +123,37 @@ public class RobotContainer {
                         () -> true));
     }
 
-    private Command updateScoreState(ScoreState newState, Set<Subsystem> scoringRequirements) {
-        return Commands.defer(
+    private Command updateScoreState() {
+        return new GalacticProxyCommand(
                 () ->
-                        Commands.runOnce(() -> currentState = newState)
-                                .andThen(
-                                        Commands.repeatingSequence(
-                                                newState.calculateTargets(),
-                                                newState.prepareSubsystems())),
-                scoringRequirements);
+                        currentState
+                                .calculateTargets()
+                                .andThen(currentState.prepareSubsystems())
+                                .repeatedly());
     }
 
     private void configureButtonBindings() {
         xboxController.y().whileTrue(commandGroups.intake()).onFalse(intake.stop());
-        xboxController.a().onTrue(updateScoreState(shootState, Set.of(conveyor, hood, shooter)));
-
-        Set<Subsystem> ampClimbRequirements = Set.of(elevator, gripper);
-        xboxController.b().onTrue(updateScoreState(ampState, ampClimbRequirements));
-        xboxController.x().onTrue(updateScoreState(climbState, ampClimbRequirements));
+        xboxController
+                .a()
+                .onTrue(
+                        Commands.runOnce(() -> currentState = shootState)
+                                .andThen(updateScoreState()));
+        xboxController
+                .b()
+                .onTrue(
+                        Commands.runOnce(() -> currentState = ampState)
+                                .andThen(updateScoreState()));
+        xboxController
+                .x()
+                .onTrue(
+                        Commands.runOnce(() -> currentState = climbState)
+                                .andThen(updateScoreState()));
 
         xboxController
-                .rightTrigger()
-                .whileTrue(
-                        Commands.defer(
-                                () -> currentState.score(),
-                                Set.of(swerveDrive, conveyor, hood, shooter, elevator, gripper)))
-                .onFalse(
-                        Commands.defer(
-                                () -> currentState.finalizeScore(),
-                                Set.of(conveyor, hood, shooter)));
+                .rightTrigger(0.1)
+                .onTrue(new GalacticProxyCommand(() -> currentState.score()))
+                .onFalse(new GalacticProxyCommand(() -> currentState.finalizeScore()));
     }
 
     /**

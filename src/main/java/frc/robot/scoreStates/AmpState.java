@@ -8,6 +8,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
+import frc.robot.commandGroups.CommandGroups;
 import frc.robot.commandGroups.CommandGroupsConstants;
 import frc.robot.lib.Utils;
 import frc.robot.subsystems.elevator.Elevator;
@@ -58,14 +59,7 @@ public class AmpState implements ScoreState {
 
     @Override
     public Command prepareSubsystems() {
-        return Commands.parallel(
-                elevator.setHeight(CommandGroupsConstants.MAX_HEIGHT),
-                Commands.either(
-                        gripper.setRollerAndWrist(
-                                CommandGroupsConstants.WRIST_ANGLE_AMP_FORWARD, 0),
-                        gripper.setRollerAndWrist(
-                                CommandGroupsConstants.WRIST_ANGLE_AMP_BACKWARDS, 0),
-                        () -> isAmpingForward));
+        return Commands.none();
     }
 
     @Override
@@ -81,14 +75,21 @@ public class AmpState implements ScoreState {
     public Command score() {
         return Commands.sequence(
                 driveToClosestOptimalPoint(),
-                Commands.run(() -> SwerveDrive.getInstance().lock()),
-                Commands.either(
-                        gripper.setRollerAndWrist(
-                                CommandGroupsConstants.WRIST_ANGLE_AMP_FORWARD,
-                                GripperConstants.AMP_POWER_NORMAL),
-                        gripper.setRollerAndWrist(
-                                CommandGroupsConstants.WRIST_ANGLE_AMP_BACKWARDS,
-                                GripperConstants.AMP_POWER_REVERSE),
-                        () -> isAmpingForward));
+                Commands.runOnce(() -> SwerveDrive.getInstance().lock()),
+                Commands.parallel(
+                        elevator.setHeight(CommandGroupsConstants.MAX_HEIGHT),
+                        Commands.either(
+                                gripper.setRollerAndWrist(
+                                        CommandGroupsConstants.WRIST_ANGLE_AMP_FORWARD,
+                                        GripperConstants.AMP_POWER_NORMAL),
+                                gripper.setRollerAndWrist(
+                                        CommandGroupsConstants.WRIST_ANGLE_AMP_BACKWARDS,
+                                        GripperConstants.AMP_POWER_REVERSE),
+                                () -> isAmpingForward)));
+    }
+
+    @Override
+    public Command finalizeScore() {
+        return CommandGroups.getInstance().retractGrillevator();
     }
 }
