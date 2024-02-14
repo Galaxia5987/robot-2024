@@ -1,35 +1,40 @@
 package frc.robot.subsystems.gripper;
 
-import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkLimitSwitch;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public class GripperIOReal implements GripperIO {
     private final TalonFX angleMotor;
     private final CANSparkMax rollerMotor;
-    private final DigitalInput sensor;
+    private final SparkLimitSwitch limitSwitch;
     private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(0);
-    private final MotionMagicExpoTorqueCurrentFOC positionRequest =
-            new MotionMagicExpoTorqueCurrentFOC(0);
+    private final PositionVoltage positionRequest =
+            new PositionVoltage(0);
     private final VoltageOut powerRequest = new VoltageOut(0).withEnableFOC(true);
     private final Debouncer debouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
 
-    private GripperIOReal() {
-        angleMotor = new TalonFX(0);
+    public GripperIOReal() {
+        angleMotor = new TalonFX(6);
         angleMotor.getConfigurator().apply(GripperConstants.MOTOR_CONFIGURATION);
 
-        rollerMotor = new CANSparkMax(0, CANSparkLowLevel.MotorType.kBrushless);
+        rollerMotor = new CANSparkMax(7, CANSparkLowLevel.MotorType.kBrushless);
+        rollerMotor.restoreFactoryDefaults();
+        rollerMotor.setSmartCurrentLimit(40);
+        rollerMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
+        limitSwitch = rollerMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
 
-        sensor = new DigitalInput(0);
+        rollerMotor.burnFlash();
 
         absoluteEncoder.setPositionOffset(GripperConstants.ABSOLUTE_ENCODER_OFFSET.get());
 
@@ -57,7 +62,7 @@ public class GripperIOReal implements GripperIO {
     }
 
     public boolean hasNote() {
-        return debouncer.calculate(sensor.get());
+        return debouncer.calculate(limitSwitch.isPressed());
     }
 
     @Override
