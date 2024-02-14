@@ -3,10 +3,7 @@ package frc.robot.subsystems.intake;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -45,9 +42,7 @@ public class Intake extends SubsystemBase {
         return runOnce(
                 () -> {
                     inputs.angleSetpoint = angle;
-                    io.setAngle(
-                            Units.Degrees.of(Math.IEEEremainder(angle.in(Units.Degrees), 180))
-                                    .mutableCopy());
+                    io.setAngle(angle);
                 });
     }
 
@@ -85,6 +80,10 @@ public class Intake extends SubsystemBase {
                         setRollerSpeed(Units.RotationsPerSecond.zero().mutableCopy()),
                         setCenterRollerSpeed(0))
                 .withName("stopped");
+    }
+
+    public Command reset(Measure<Angle> angle) {
+        return runOnce(() -> io.reset(angle));
     }
 
     @Override

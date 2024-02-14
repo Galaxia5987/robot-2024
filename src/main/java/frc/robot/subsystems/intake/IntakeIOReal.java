@@ -3,13 +3,11 @@ package frc.robot.subsystems.intake;
 import static frc.robot.subsystems.intake.IntakeConstants.*;
 
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.*;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.*;
 import frc.robot.Constants;
 
 public class IntakeIOReal implements IntakeIO {
@@ -18,25 +16,27 @@ public class IntakeIOReal implements IntakeIO {
     private final CANSparkMax centerMotor =
             new CANSparkMax(3, CANSparkLowLevel.MotorType.kBrushless);
     private final TalonFX angleMotor = new TalonFX(1);
-    private final MotionMagicExpoTorqueCurrentFOC positionRequest =
-            new MotionMagicExpoTorqueCurrentFOC(0);
-    private SimpleMotorFeedforward spinMotorFeedforward;
+    private final PositionVoltage positionRequest =
+            new PositionVoltage(0).withEnableFOC(true);
+    private final SimpleMotorFeedforward spinMotorFeedforward;
 
     public IntakeIOReal() {
 
-        angleMotor.getConfigurator().apply(ANGLE_CONFIGURATION.Slot0);
+        angleMotor.getConfigurator().apply(ANGLE_CONFIGURATION);
 
         centerMotor.restoreFactoryDefaults();
         centerMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         centerMotor.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE.in(Units.Volts));
-        centerMotor.setInverted(true);
+        centerMotor.setInverted(false);
+        centerMotor.setSmartCurrentLimit(CENTER_CURRENT_LIMIT);
         spinMotor.restoreFactoryDefaults();
         spinMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         spinMotor.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE.in(Units.Volts));
-        spinMotor.setInverted(true);
+        spinMotor.setInverted(false);
         spinMotor.getPIDController().setP(SPIN_KP.get());
         spinMotor.getPIDController().setI(SPIN_KI.get());
         spinMotor.getPIDController().setD(SPIN_KD.get());
+        spinMotor.setSmartCurrentLimit(SPIN_CURRENT_LIMIT);
         spinMotorFeedforward =
                 new SimpleMotorFeedforward(SPIN_KS.get(), SPIN_KV.get(), SPIN_KA.get());
         for (int i = 1; i <= 6; i++) {
@@ -69,6 +69,11 @@ public class IntakeIOReal implements IntakeIO {
     }
 
     @Override
+    public void reset(Measure<Angle> angle) {
+        angleMotor.setPosition(angle.in(Units.Degrees));
+    }
+
+    @Override
     public void updateInputs() {
         inputs.currentAngle.mut_replace((angleMotor.getPosition().getValue()), Units.Degrees);
         inputs.currentCenterRollerSpeed.mut_replace(
@@ -78,5 +83,22 @@ public class IntakeIOReal implements IntakeIO {
         inputs.spinMotorVoltage.mut_replace((spinMotor.getBusVoltage()), Units.Volts);
         inputs.centerMotorVoltage.mut_replace((centerMotor.getBusVoltage()), Units.Volts);
         inputs.currentRollerSpeed.mut_replace(spinMotor.getEncoder().getVelocity(), Units.RPM);
+
+        ANGLE_CONFIGURATION.Slot0.withKP(ANGLE_KP.get());
+        if (ANGLE_KP.hasChanged(hashCode())) {
+            angleMotor.getConfigurator().apply(ANGLE_CONFIGURATION);
+        }
+        ANGLE_CONFIGURATION.Slot0.withKP(ANGLE_KI.get());
+        if (ANGLE_KI.hasChanged(hashCode())) {
+            angleMotor.getConfigurator().apply(ANGLE_CONFIGURATION);
+        }
+        ANGLE_CONFIGURATION.Slot0.withKP(ANGLE_KD.get());
+        if (ANGLE_KD.hasChanged(hashCode())) {
+            angleMotor.getConfigurator().apply(ANGLE_CONFIGURATION);
+        }
+        ANGLE_CONFIGURATION.Slot0.withKP(ANGLE_KG.get());
+        if (ANGLE_KG.hasChanged(hashCode())) {
+            angleMotor.getConfigurator().apply(ANGLE_CONFIGURATION);
+        }
     }
 }

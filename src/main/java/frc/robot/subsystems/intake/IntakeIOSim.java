@@ -6,10 +6,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.revrobotics.CANSparkBase;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.lib.motors.SparkMaxSim;
 import frc.robot.lib.motors.TalonFXSim;
@@ -52,6 +49,9 @@ public class IntakeIOSim implements IntakeIO {
     public void setCenterRollerSpeed(double speed) {
         centerRoller.setReference(speed, CANSparkBase.ControlType.kDutyCycle);
     }
+
+    @Override
+    public void reset(Measure<Angle> angle) {}
 
     @Override
     public void updateInputs() {

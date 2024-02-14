@@ -2,10 +2,7 @@ package frc.robot.subsystems.intake;
 
 import static edu.wpi.first.units.Units.*;
 
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Velocity;
-import edu.wpi.first.units.Voltage;
+import edu.wpi.first.units.*;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface IntakeIO {
@@ -17,6 +14,8 @@ public interface IntakeIO {
     void setRollerSpeed(MutableMeasure<Velocity<Angle>> speed);
 
     void setCenterRollerSpeed(double speed);
+
+    void reset(Measure<Angle> angle);
 
     void updateInputs();
 

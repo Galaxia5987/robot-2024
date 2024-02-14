@@ -44,6 +44,12 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void robotInit() {
+        if (Robot.isReal()) {
+            Constants.CURRENT_MODE = Constants.Mode.REAL;
+        } else {
+            Constants.CURRENT_MODE = Constants.Mode.SIM;
+        }
+
         // Initialize logger
         Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
         Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
