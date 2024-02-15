@@ -28,6 +28,11 @@ public final class Ports {
         public static final int CENTER_ID = 3;
     }
 
+    public static final class Elevator {
+        public static final int AUX_ID = 5;
+        public static final int MAIN_ID = 4;
+    }
+
     public static final class SwerveDrive {
         public static final int FRONT_LEFT_DRIVE_MOTOR_ID = 2;
         public static final int FRONT_LEFT_ANGLE_MOTOR_ID = 1;
