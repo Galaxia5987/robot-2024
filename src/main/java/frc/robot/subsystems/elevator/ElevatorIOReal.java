@@ -12,6 +12,7 @@ import edu.wpi.first.units.Mass;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Servo;
+import frc.robot.Ports;
 import frc.robot.lib.Utils;
 
 public class ElevatorIOReal implements ElevatorIO {
@@ -29,8 +30,8 @@ public class ElevatorIOReal implements ElevatorIO {
     private double lastAuxKg = 0;
 
     public ElevatorIOReal() {
-        mainMotor = new TalonFX(0);
-        auxMotor = new TalonFX(0);
+        mainMotor = new TalonFX(Ports.Elevator.MAIN_ID);
+        auxMotor = new TalonFX(Ports.Elevator.AUX_ID);
         servo = new Servo(0);
 
         mainMotor.getConfigurator().apply(ElevatorConstants.MAIN_MOTOR_CONFIGURATION);
