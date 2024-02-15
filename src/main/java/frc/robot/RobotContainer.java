@@ -1,5 +1,10 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -25,7 +30,10 @@ import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOReal;
 import frc.robot.subsystems.hood.HoodIOSim;
-import frc.robot.subsystems.intake.*;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOReal;
+import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOReal;
@@ -42,12 +50,12 @@ public class RobotContainer {
     private final Shooter shooter;
     private final SwerveDrive swerveDrive;
     private final CommandXboxController xboxController = new CommandXboxController(0);
-
-    private CommandGroups commandGroups;
-    private ScoreState currentState;
     private final ShootState shootState;
     private final AmpState ampState;
     private final ClimbState climbState;
+    private final SendableChooser<Command> autoChooser;
+    private CommandGroups commandGroups;
+    private ScoreState currentState;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
@@ -104,6 +112,15 @@ public class RobotContainer {
         // Configure the button bindings and default commands
         configureDefaultCommands();
         configureButtonBindings();
+
+        NamedCommands.registerCommand("intake", commandGroups.intake());
+        NamedCommands.registerCommand("shoot", commandGroups.autoShoot());
+
+        autoChooser = AutoBuilder.buildAutoChooser();
+        autoChooser.addOption("LowerFullWing", new PathPlannerAuto("LowerFullWing"));
+        autoChooser.addOption("MiddleFullWing", new PathPlannerAuto("MiddleFullWing"));
+        autoChooser.addOption("UpperFullWing", new PathPlannerAuto("UpperFullWing"));
+        SmartDashboard.putData("autoList", autoChooser);
     }
 
     public static RobotContainer getInstance() {
@@ -162,6 +179,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return null;
+        return new PathPlannerAuto("LowerFullWing");
     }
 }

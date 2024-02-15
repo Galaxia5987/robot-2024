@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Set;
 
 public class ShootState implements ScoreState {
+    private static boolean inBounds;
+    private static ShootState INSTANCE;
     private final Shooter shooter;
     private final Hood hood;
     private final Conveyor conveyor;
@@ -32,7 +34,6 @@ public class ShootState implements ScoreState {
     private List<Translation2d> optimalPoints;
     private Translation2d optimalTranslation;
     private double optimalRotation;
-    private static boolean inBounds;
 
     public ShootState() {
         shooter = Shooter.getInstance();
