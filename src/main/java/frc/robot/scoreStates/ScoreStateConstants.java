@@ -37,8 +37,6 @@ public class ScoreStateConstants {
     public static final Rotation2d AMP_ROTATION_REVERSE = new Rotation2d(Math.toRadians(-90));
     public static final MutableMeasure<Distance> MIN_DISTANCE_TO_TURN_GRIPPER =
             Units.Meters.of(3).mutableCopy();
-    public static final MutableMeasure<Distance> MIN_DISTANCE_TO_AMP =
-            Units.Meters.of(1.0).mutableCopy();
     public static final MutableMeasure<Angle> TURN_TOLERANCE = Units.Degrees.of(5).mutableCopy();
 
     public static final double SHOOTER_TO_SPEAKER_HEIGHT = 0.0; // TODO: check real value
