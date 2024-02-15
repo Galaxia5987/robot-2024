@@ -37,12 +37,14 @@ public class GripperConstants {
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                KP.initDefault(0);
+                KP.initDefault(2);
                 KI.initDefault(0);
                 KD.initDefault(0);
-                KV.initDefault(0);
-                KA.initDefault(0);
-                KG.initDefault(0);
+                KV.initDefault(3.2);
+                KA.initDefault(0.01);
+                KG.initDefault(0.65);
+
+                ABSOLUTE_ENCODER_OFFSET.initDefault(-0.682_385 + 83 / 360.0);
                 break;
             case SIM:
             case REPLAY:
@@ -58,8 +60,8 @@ public class GripperConstants {
                         new MotionMagicConfigs()
                                 .withMotionMagicExpo_kV(KV.get())
                                 .withMotionMagicExpo_kA(KA.get())
-                                .withMotionMagicAcceleration(4)
-                                .withMotionMagicCruiseVelocity(3))
+                                .withMotionMagicAcceleration(3)
+                                .withMotionMagicCruiseVelocity(1))
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(GEAR_RATIO))
                 .withSlot0(
                         new Slot0Configs()
@@ -71,7 +73,8 @@ public class GripperConstants {
                                 .withKG(GripperConstants.KG.get())
                                 .withGravityType(GravityTypeValue.Arm_Cosine))
                 .withMotorOutput(
-                        new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive))
+                        new MotorOutputConfigs()
+                                .withInverted(InvertedValue.CounterClockwise_Positive))
                 .CurrentLimits
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimitEnable(true)

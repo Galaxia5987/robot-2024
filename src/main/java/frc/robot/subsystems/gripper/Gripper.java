@@ -50,7 +50,7 @@ public class Gripper extends SubsystemBase {
     }
 
     public Command setRollerPower(double power) {
-        return runOnce(() -> io.setRollerMotorPower(power)).withName("set roller power");
+        return run(() -> io.setRollerMotorPower(power)).withName("set roller power");
     }
 
     public Command intake() {
@@ -66,7 +66,11 @@ public class Gripper extends SubsystemBase {
     }
 
     public Command setWristPosition(MutableMeasure<Angle> angle) {
-        return runOnce(() -> io.setAngle(angle)).withName("set wrist position");
+        return run(() -> io.setAngle(angle)).withName("set wrist position");
+    }
+
+    public Command setWristPower(double power) {
+        return run(() -> io.setAngleMotorPower(power)).withName("set wrist power");
     }
 
     @Override

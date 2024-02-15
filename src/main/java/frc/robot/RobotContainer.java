@@ -11,6 +11,8 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperIO;
+import frc.robot.subsystems.gripper.GripperIOReal;
+import frc.robot.subsystems.gripper.GripperIOSim;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.intake.Intake;
@@ -19,8 +21,6 @@ import frc.robot.subsystems.intake.IntakeIOReal;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
-import frc.robot.subsystems.shooter.ShooterIOReal;
-import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.swerve.SwerveDrive;
 
 public class RobotContainer {
@@ -108,6 +108,16 @@ public class RobotContainer {
         xboxController.a().whileTrue(hood.setAngle(
                 () -> Units.Rotations.of(0.25).mutableCopy()
         ));
+    private void configureButtonBindings() {
+        xboxController.a().onTrue(gripper.setWristPosition(Units.Degrees.of(40).mutableCopy()));
+        xboxController.x().onTrue(gripper.setWristPosition(Units.Degrees.of(-40).mutableCopy()));
+        xboxController
+                .b()
+                .onTrue(
+                        gripper.setRollerPower(0.7)
+                                .until(gripper::hasNote)
+                                .andThen(gripper.setRollerPower(0)));
+    }
 
         xboxController.leftBumper().onTrue(Commands.runOnce(swerveDrive::resetGyro));
     }
