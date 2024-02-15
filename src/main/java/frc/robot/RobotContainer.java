@@ -118,7 +118,8 @@ public class RobotContainer {
                         Commands.parallel(
                                 intake.stop(),
                                 hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()),
-                                gripper.setRollerPower(0),
+                                gripper.setRollerPower(
+                                        0), // Double commands requiring gripper subsystem
                                 conveyor.stop(),
                                 shooter.stop()));
         xboxController

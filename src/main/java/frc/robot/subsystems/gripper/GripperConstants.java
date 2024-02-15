@@ -12,9 +12,9 @@ import frc.robot.lib.webconstants.LoggedTunableNumber;
 public class GripperConstants {
     public static final TalonFXConfiguration MOTOR_CONFIGURATION = new TalonFXConfiguration();
 
-    public static final Measure<Angle> INTAKE_ANGLE = null;
-    public static final Measure<Angle> OUTTAKE_ANGLE = null;
-    public static final double INTAKE_POWER = 0;
+    public static final Measure<Angle> INTAKE_ANGLE = Units.Rotations.of(-1.465);
+    public static final Measure<Angle> OUTTAKE_ANGLE = Units.Rotations.of(-1.465);
+    public static final double INTAKE_POWER = 0.3;
     public static final double OUTTAKE_POWER = 0;
     public static final Measure<Dimensionless> THRESHOLD = Units.Percent.of(0.02);
     public static final Measure<Distance> GRIPPER_POSITION_X = Units.Meters.of(0);
