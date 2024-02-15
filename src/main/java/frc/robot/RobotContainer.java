@@ -21,6 +21,7 @@ import frc.robot.subsystems.hood.HoodIOReal;
 import frc.robot.subsystems.hood.HoodIOSim;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOReal;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
@@ -45,16 +46,31 @@ public class RobotContainer {
         HoodIO hoodIO;
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                hoodIO = new HoodIOReal();
+                intakeIO = new IntakeIOReal();
+//                conveyorIO = new ConveyorIOSim(); // TODO: replace with IOReal
+//                elevatorIO = new ElevatorIOReal();
+                //                gripperIO = new GripperIOReal();
+//                hoodIO = new HoodIOReal();
+//                shooterIO = new ShooterIOReal();
                 break;
             case SIM:
             case REPLAY:
             default:
-                hoodIO = new HoodIOSim();
+                intakeIO = new IntakeIOSim();
+//                conveyorIO = new ConveyorIOSim();
+//                elevatorIO = new ElevatorIOSim();
+//                gripperIO = new GripperIOSim();
+//                hoodIO = new HoodIOSim();
+//                shooterIO = new ShooterIOSim();
                 break;
         }
-        Hood.initialize(hoodIO);
-        Constants.initSwerve();
+        Intake.initialize(intakeIO);
+//        Conveyor.initialize(conveyorIO);
+//        Elevator.initialize(elevatorIO);
+        //        Gripper.initialize(gripperIO);
+//        Hood.initialize(hoodIO);
+//        Shooter.initialize(shooterIO);
+//        Constants.initSwerve();
 //        Constants.initVision();
 
         swerveDrive = SwerveDrive.getInstance();
@@ -78,15 +94,22 @@ public class RobotContainer {
     }
 
     private void configureDefaultCommands() {
-        swerveDrive.setDefaultCommand(
-                swerveDrive.driveCommand(
-                        () -> -xboxController.getLeftY(),
-                        () -> -xboxController.getLeftX(),
-                        () -> -xboxController.getRightX(),
-                        0.15,
-                        () -> true));
+//        swerveDrive.setDefaultCommand(
+//                swerveDrive.driveCommand(
+//                        () -> -xboxController.getLeftY(),
+//                        () -> -xboxController.getLeftX(),
+//                        () -> -xboxController.getRightX(),
+//                        0.15,
+//                        () -> true));
     }
 
+    private void configureButtonBindings() {
+        xboxController.a().whileTrue(intake.setAngle(Units.Degrees.zero().mutableCopy()));
+        xboxController.b().whileTrue(intake.setAngle(Units.Degrees.of(100).mutableCopy()));
+        xboxController.rightBumper().whileTrue(intake.intake())
+                        .onFalse(intake.stop());
+        xboxController.x().onTrue(intake.reset(Units.Degrees.zero()));
+    }
     private void configureButtonBindings() {
         xboxController.a().whileTrue(hood.setAngle(
                 () -> Units.Rotations.of(0.25).mutableCopy()
