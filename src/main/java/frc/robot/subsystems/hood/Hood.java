@@ -53,6 +53,7 @@ public class Hood extends SubsystemBase {
         return inputs.angle;
     }
 
+    @AutoLogOutput
     public boolean atSetpoint() {
         return inputs.angle.isNear(
                 inputs.angleSetpoint, HoodConstants.POSITION_TOLERANCE.in(Units.Value));

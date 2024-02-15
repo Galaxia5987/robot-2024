@@ -2,18 +2,19 @@ package frc.robot.subsystems.intake;
 
 import static frc.robot.subsystems.intake.IntakeConstants.*;
 
-import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.*;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants;
 import frc.robot.Ports;
 
 public class IntakeIOReal implements IntakeIO {
 
-    public final CANSparkMax spinMotor = new CANSparkMax(Ports.Intake.ROLLER_ID, CANSparkLowLevel.MotorType.kBrushless);
+    public final CANSparkMax spinMotor =
+            new CANSparkMax(Ports.Intake.ROLLER_ID, CANSparkLowLevel.MotorType.kBrushless);
     private final CANSparkMax centerMotor =
             new CANSparkMax(Ports.Intake.CENTER_ID, CANSparkLowLevel.MotorType.kBrushless);
     private final TalonFX angleMotor = new TalonFX(Ports.Intake.ANGLE_ID);
@@ -75,8 +76,11 @@ public class IntakeIOReal implements IntakeIO {
                 (centerMotor.getEncoder().getVelocity()), Units.RotationsPerSecond);
         inputs.angleMotorVoltage.mut_replace(
                 (angleMotor.getMotorVoltage().getValue()), Units.Volts);
-        inputs.spinMotorVoltage.mut_replace((spinMotor.getBusVoltage()), Units.Volts);
-        inputs.centerMotorVoltage.mut_replace((centerMotor.getBusVoltage()), Units.Volts);
+        inputs.spinMotorVoltage.mut_replace(
+                (spinMotor.getAppliedOutput() * RobotController.getBatteryVoltage()), Units.Volts);
+        inputs.centerMotorVoltage.mut_replace(
+                (centerMotor.getAppliedOutput() * RobotController.getBatteryVoltage()),
+                Units.Volts);
         inputs.currentRollerSpeed.mut_replace(spinMotor.getEncoder().getVelocity(), Units.RPM);
     }
 }

@@ -30,7 +30,8 @@ public class GripperIOReal implements GripperIO {
         angleMotor = new TalonFX(Ports.Gripper.ANGLE_ID);
         angleMotor.getConfigurator().apply(GripperConstants.MOTOR_CONFIGURATION);
 
-        rollerMotor = new CANSparkMax(Ports.Gripper.ROLLER_ID, CANSparkLowLevel.MotorType.kBrushless);
+        rollerMotor =
+                new CANSparkMax(Ports.Gripper.ROLLER_ID, CANSparkLowLevel.MotorType.kBrushless);
         rollerMotor.restoreFactoryDefaults();
         rollerMotor.setSmartCurrentLimit(40);
         rollerMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);

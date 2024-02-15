@@ -71,7 +71,7 @@ public class RobotContainer {
         Hood.initialize(hoodIO);
         Shooter.initialize(shooterIO);
         Constants.initSwerve();
-//        Constants.initVision();
+        //        Constants.initVision();
 
         swerveDrive = SwerveDrive.getInstance();
         intake = Intake.getInstance();
@@ -104,19 +104,29 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-//        xboxController
-//                .rightBumper()
-//                .whileTrue(
-//                        Commands.parallel(
-//                                intake.intake(),
-//                                hood.setAngle(() -> Units.Rotations.of(0.25).mutableCopy()),
-//                                gripper.setRollerPower(0.7),
-//                                conveyor.feed(),
-//                                shooter.setVelocity(
-//                                        () -> Units.RotationsPerSecond.of(40).mutableCopy())))
-//                .onFalse(intake.stop());
-//        xboxController.x().onTrue(intake.reset(Units.Degrees.zero()));
-//        xboxController.leftBumper().onTrue(Commands.runOnce(swerveDrive::resetGyro));
+        xboxController
+                .rightBumper()
+                .whileTrue(
+                        Commands.parallel(
+                                intake.intake(),
+                                hood.setAngle(() -> Units.Degrees.of(90).mutableCopy()),
+                                gripper.setRollerPower(0.7),
+                                conveyor.feed(),
+                                shooter.setVelocity(
+                                        () -> Units.RotationsPerSecond.of(40).mutableCopy())))
+                .onFalse(
+                        Commands.parallel(
+                                intake.stop(),
+                                hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()),
+                                gripper.setRollerPower(0),
+                                conveyor.stop(),
+                                shooter.stop()));
+        xboxController
+                .a()
+                .whileTrue(hood.setAngle(() -> Units.Degrees.of(90).mutableCopy()))
+                .onFalse(hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()));
+        xboxController.x().onTrue(intake.reset(Units.Degrees.zero()));
+        xboxController.leftBumper().onTrue(Commands.runOnce(swerveDrive::resetGyro));
     }
 
     /**

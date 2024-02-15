@@ -1,7 +1,6 @@
 package frc.robot.subsystems.conveyor;
 
-import static frc.robot.subsystems.conveyor.ConveyorConstants.FEED_VELOCITY;
-import static frc.robot.subsystems.conveyor.ConveyorConstants.SETPOINT_TOLERANCE;
+import static frc.robot.subsystems.conveyor.ConveyorConstants.*;
 
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
@@ -38,6 +37,10 @@ public class Conveyor extends SubsystemBase {
 
     public Command feed() {
         return setVelocity(() -> FEED_VELOCITY);
+    }
+
+    public Command stop() {
+        return setVelocity(() -> STOP_VELOCITY);
     }
 
     public boolean readyToFeed() {

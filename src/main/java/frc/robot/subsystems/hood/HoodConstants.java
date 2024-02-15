@@ -1,9 +1,6 @@
 package frc.robot.subsystems.hood;
 
-import com.ctre.phoenix6.configs.FeedbackConfigs;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -15,10 +12,10 @@ import frc.robot.lib.webconstants.LoggedTunableNumber;
 public class HoodConstants {
     public static Translation2d MECHANISM_2D_POSE = new Translation2d(1, 1);
     public static Measure<Distance> HOOD_LENGTH = Units.Meters.of(0.4);
-    public static Measure<Dimensionless> POSITION_TOLERANCE = Units.Percent.of(5);
-    public static Measure<Velocity<Angle>> MAX_VELOCITY = Units.RotationsPerSecond.of(100);
+    public static Measure<Dimensionless> POSITION_TOLERANCE = Units.Percent.of(1);
+    public static Measure<Velocity<Angle>> MAX_VELOCITY = Units.RotationsPerSecond.of(1);
     public static Measure<Velocity<Velocity<Angle>>> MAX_ACCELERATION =
-            Units.RotationsPerSecond.per(Units.Second).of(400);
+            Units.RotationsPerSecond.per(Units.Second).of(4);
     public static final double GEAR_RATIO = 26.33;
     public static final Measure<Mult<Mult<Mass, Distance>, Distance>> MOMENT_OF_INERTIA =
             Units.Kilograms.mult(Units.Meters).mult(Units.Meters).of(0.0003);
@@ -40,14 +37,14 @@ public class HoodConstants {
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                kP.initDefault(18.0);
-                kI.initDefault(15.0);
-                kD.initDefault(0.0);
+                kP.initDefault(265);
+                kI.initDefault(1);
+                kD.initDefault(20);
                 kS.initDefault(0.0);
-                kV.initDefault(0.0);
+                kV.initDefault(0);
                 kA.initDefault(0.0);
-                kG.initDefault(0.8);
-                ABSOLUTE_ENCODER_OFFSET.initDefault(0.79 + 0.022 - 44.65 / 360.0);
+                kG.initDefault(23.0);
+                ABSOLUTE_ENCODER_OFFSET.initDefault(0.79 + 0.022 - 34 / 360.0);
             case SIM:
             case REPLAY:
                 kP.initDefault(1);
@@ -59,6 +56,11 @@ public class HoodConstants {
         }
         MOTOR_CONFIGURATION
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(GEAR_RATIO))
+                .withMotionMagic(
+                        new MotionMagicConfigs()
+                                .withMotionMagicCruiseVelocity(
+                                        MAX_VELOCITY.in(Units.RotationsPerSecond))
+                                .withMotionMagicJerk(16))
                 .withSlot0(
                         new Slot0Configs()
                                 .withKP(HoodConstants.kP.get())

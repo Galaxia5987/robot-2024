@@ -1,7 +1,11 @@
 package frc.robot.subsystems.conveyor;
 
+import static frc.robot.subsystems.conveyor.ConveyorConstants.*;
+
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
@@ -11,7 +15,10 @@ import frc.robot.Ports;
 
 public class ConveyorIOReal implements ConveyorIO {
 
-    private CANSparkMax roller = new CANSparkMax(Ports.Conveyor.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+    private CANSparkMax roller =
+            new CANSparkMax(Ports.Conveyor.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+    public static SimpleMotorFeedforward feed =
+            new SimpleMotorFeedforward(KS.get(), KV.get(), KA.get());
 
     public ConveyorIOReal() {
         roller.restoreFactoryDefaults();
@@ -25,7 +32,12 @@ public class ConveyorIOReal implements ConveyorIO {
 
     @Override
     public void setVelocity(MutableMeasure<Velocity<Angle>> velocity) {
-        roller.set(velocity.in(Units.RotationsPerSecond));
+        roller.getPIDController()
+                .setReference(
+                        velocity.in(Units.RotationsPerSecond),
+                        CANSparkBase.ControlType.kVelocity,
+                        0,
+                        feed.calculate(velocity.in(Units.RotationsPerSecond)));
     }
 
     @Override

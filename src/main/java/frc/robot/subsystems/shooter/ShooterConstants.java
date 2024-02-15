@@ -23,8 +23,8 @@ public class ShooterConstants {
     public static final double CURRENT_LIMIT_TOP = 40;
     public static final double CURRENT_LIMIT_BOTTOM = 40;
 
-    public static final InvertedValue TOP_INVERSION = InvertedValue.Clockwise_Positive;
-    public static final InvertedValue BOTTOM_INVERSION = InvertedValue.CounterClockwise_Positive;
+    public static final InvertedValue TOP_INVERSION = InvertedValue.CounterClockwise_Positive;
+    public static final InvertedValue BOTTOM_INVERSION = InvertedValue.Clockwise_Positive;
 
     public static final LoggedTunableNumber TOP_kP = new LoggedTunableNumber("Shooter/Top kP");
     public static final LoggedTunableNumber TOP_kI = new LoggedTunableNumber("Shooter/Top kI");
@@ -103,7 +103,7 @@ public class ShooterConstants {
                                 .withKS(BOTTOM_kS.get())
                                 .withKV(BOTTOM_kV.get())
                                 .withKA(BOTTOM_kA.get()))
-                .withMotorOutput(new MotorOutputConfigs().withInverted(TOP_INVERSION))
+                .withMotorOutput(new MotorOutputConfigs().withInverted(BOTTOM_INVERSION))
                 .CurrentLimits
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimitEnable(true)

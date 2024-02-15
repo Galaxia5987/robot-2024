@@ -7,7 +7,7 @@ import frc.robot.lib.webconstants.LoggedTunableNumber;
 public class ConveyorConstants {
 
     public static final MutableMeasure<Velocity<Angle>> FEED_VELOCITY =
-            Units.RotationsPerSecond.of(10).mutableCopy();
+            Units.RotationsPerSecond.of(30).mutableCopy();
     public static final MutableMeasure<Dimensionless> SETPOINT_TOLERANCE =
             Units.Value.of(0.05).mutableCopy();
     public static final MutableMeasure<Velocity<Angle>> STOP_VELOCITY =
@@ -24,12 +24,12 @@ public class ConveyorConstants {
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                KP.initDefault(0.000_230_26);
+                KP.initDefault(0.000_178_58 * 5 * 30 / 41 * 30 / 29.3);
                 KI.initDefault(0.0);
                 KD.initDefault(0);
-                KS.initDefault(0.039_715);
-                KV.initDefault(0.035_425);
-                KA.initDefault(0.002_567_3);
+                KS.initDefault(0.4812 * 5 * 30 / 41 * 30 / 29.3);
+                KV.initDefault(0.021_95 * 5 * 30 / 41 * 30 / 29.3);
+                KA.initDefault(0.000_258_68 * 5 * 30 / 41 * 30 / 29.3);
                 break;
             case SIM:
             case REPLAY:

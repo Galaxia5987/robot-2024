@@ -9,47 +9,16 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.Ports;
 import frc.robot.lib.Utils;
-import frc.robot.lib.webconstants.LoggedTunableNumber;
 
 public class HoodIOReal implements HoodIO {
     private final TalonFX motor;
     private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(Ports.Hood.ENCODER_ID);
-    private final PositionVoltage positionControl = new PositionVoltage(0).withEnableFOC(true);
+    private final PositionTorqueCurrentFOC positionControl = new PositionTorqueCurrentFOC(0);
     private final DutyCycleOut dutyCycleOut = new DutyCycleOut(0);
 
     public HoodIOReal() {
         motor = new TalonFX(Ports.Hood.MOTOR_ID);
         motor.getConfigurator().apply(HoodConstants.MOTOR_CONFIGURATION);
-
-        LoggedTunableNumber.ifChanged(
-                hashCode(),
-                (arr) -> {
-                    motor.getConfigurator()
-                            .apply(HoodConstants.MOTOR_CONFIGURATION.Slot0.withKP(arr[0]));
-                    motor.getConfigurator()
-                            .apply(HoodConstants.MOTOR_CONFIGURATION.Slot0.withKI(arr[1]));
-                    motor.getConfigurator()
-                            .apply(HoodConstants.MOTOR_CONFIGURATION.Slot0.withKD(arr[2]));
-                    motor.getConfigurator()
-                            .apply(HoodConstants.MOTOR_CONFIGURATION.Slot0.withKS(arr[3]));
-                    motor.getConfigurator()
-                            .apply(
-                                    HoodConstants.MOTOR_CONFIGURATION.MotionMagic
-                                            .withMotionMagicExpo_kV(arr[4]));
-                    motor.getConfigurator()
-                            .apply(
-                                    HoodConstants.MOTOR_CONFIGURATION.MotionMagic
-                                            .withMotionMagicExpo_kA(arr[5]));
-                    motor.getConfigurator()
-                            .apply(HoodConstants.MOTOR_CONFIGURATION.Slot0.withKG(arr[6]));
-                },
-                HoodConstants.kP,
-                HoodConstants.kI,
-                HoodConstants.kD,
-                HoodConstants.kS,
-                HoodConstants.kV,
-                HoodConstants.kA,
-                HoodConstants.kG);
     }
 
     @Override
