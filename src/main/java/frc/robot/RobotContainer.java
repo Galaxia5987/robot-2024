@@ -126,13 +126,14 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         xboxController
-                .leftBumper()
-                .whileTrue(gripper.setRollerAndWrist(Units.Degrees.of(-80).mutableCopy(), 0));
+                .y()
+                .whileTrue(gripper.setWristPosition(Units.Radians.of(2.15).mutableCopy()))
+                .onFalse(gripper.setRollerPower(-0.4).withTimeout(1).andThen(gripper.setRollerPower(0).withTimeout(0.1)));
         xboxController
                 .rightBumper()
                 .whileTrue(
                         Commands.parallel(
-                                intake.intake(),
+                                intake.intake(), //-1.396
                                 hood.setAngle(() -> Units.Degrees.of(90).mutableCopy()),
                                 gripper.intake(),
                                 conveyor.feed(),
