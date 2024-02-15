@@ -1,15 +1,14 @@
 package frc.robot.subsystems.intake;
 
+import static edu.wpi.first.units.Units.Degrees;
+
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
 import frc.robot.Constants;
 import frc.robot.lib.webconstants.LoggedTunableNumber;
-
-import static edu.wpi.first.units.Units.Degrees;
 
 public class IntakeConstants {
     public static final double GEAR_RATIO = 45.62;

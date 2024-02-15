@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
-import frc.robot.lib.GalacticProxyCommand;
 import frc.robot.scoreStates.AmpState;
 import frc.robot.scoreStates.ClimbState;
 import frc.robot.scoreStates.ScoreState;
@@ -127,12 +126,15 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         xboxController
+                .leftBumper()
+                .whileTrue(gripper.setRollerAndWrist(Units.Degrees.of(-80).mutableCopy(), 0));
+        xboxController
                 .rightBumper()
                 .whileTrue(
                         Commands.parallel(
                                 intake.intake(),
                                 hood.setAngle(() -> Units.Degrees.of(90).mutableCopy()),
-                                gripper.setRollerPower(0.7),
+                                gripper.intake(),
                                 conveyor.feed(),
                                 shooter.setVelocity(
                                         () -> Units.RotationsPerSecond.of(40).mutableCopy())))
@@ -140,8 +142,7 @@ public class RobotContainer {
                         Commands.parallel(
                                 intake.stop(),
                                 hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()),
-                                gripper.setRollerPower(
-                                        0), // Double commands requiring gripper subsystem
+                                gripper.setRollerPower(0),
                                 conveyor.stop(),
                                 shooter.stop()));
         xboxController

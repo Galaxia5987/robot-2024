@@ -5,13 +5,14 @@ import static frc.robot.subsystems.intake.IntakeConstants.*;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.*;
 import frc.robot.Constants;
 import frc.robot.lib.webconstants.LoggedTunableNumber;
 
 public class GripperConstants {
     public static final TalonFXConfiguration MOTOR_CONFIGURATION = new TalonFXConfiguration();
-    public static final double INTAKE_POWER = 0; // TODO; replace with actual value
+    public static final double INTAKE_POWER = 0.7; // TODO; replace with actual value
     public static final double OUTTAKE_POWER = 0; // TODO: replace with actual value
     public static final double AMP_POWER_NORMAL = 0; // TODO: replace with actual value
     public static final double AMP_POWER_REVERSE = 0; // TODO: replace with actual value
@@ -28,7 +29,7 @@ public class GripperConstants {
             Units.Meters.of(0).mutableCopy();
     public static final MutableMeasure<Distance> GRIPPER_POSITION_z =
             Units.Meters.of(0.6461).mutableCopy();
-    public static final Measure<Angle> INTAKE_ANGLE = Units.Rotations.of(-1.465);
+    public static final Measure<Angle> INTAKE_ANGLE = Units.Rotations.of(-1.565);
     public static final Measure<Angle> OUTTAKE_ANGLE = Units.Rotations.of(-1.465);
     public static final double ANGLE_MOTOR_GEAR_RATIO = 58.5;
     public static final InvertedValue ANGLE_INVERTED_VALUE = InvertedValue.Clockwise_Positive;
@@ -86,7 +87,8 @@ public class GripperConstants {
                                 .withGravityType(GravityTypeValue.Arm_Cosine))
                 .withMotorOutput(
                         new MotorOutputConfigs()
-                                .withInverted(InvertedValue.CounterClockwise_Positive))
+                                .withInverted(InvertedValue.CounterClockwise_Positive)
+                                .withNeutralMode(NeutralModeValue.Brake))
                 .CurrentLimits
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimitEnable(true)

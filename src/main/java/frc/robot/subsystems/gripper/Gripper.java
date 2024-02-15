@@ -73,12 +73,15 @@ public class Gripper extends SubsystemBase {
     }
 
     public Command intake() {
-        return setRollerAndWrist(GripperConstants.INTAKE_ANGLE.mutableCopy(), GripperConstants.INTAKE_POWER)
+        return setRollerAndWrist(
+                        GripperConstants.INTAKE_ANGLE.mutableCopy(), GripperConstants.INTAKE_POWER)
                 .withName("intake");
     }
 
     public Command outtake() {
-        return setRollerAndWrist(GripperConstants.OUTTAKE_ANGLE.mutableCopy(), GripperConstants.OUTTAKE_POWER)
+        return setRollerAndWrist(
+                        GripperConstants.OUTTAKE_ANGLE.mutableCopy(),
+                        GripperConstants.OUTTAKE_POWER)
                 .withName("outtake");
     }
 
