@@ -35,8 +35,10 @@ public class GripperIOReal implements GripperIO {
         rollerMotor.restoreFactoryDefaults();
         rollerMotor.setSmartCurrentLimit(40);
         rollerMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
-        forwardLimitSwitch = rollerMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
-        reverseLimitSwitch = rollerMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
+        forwardLimitSwitch =
+                rollerMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
+        reverseLimitSwitch =
+                rollerMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
         forwardLimitSwitch.enableLimitSwitch(false);
         reverseLimitSwitch.enableLimitSwitch(false);
         rollerMotor.burnFlash();
@@ -72,8 +74,10 @@ public class GripperIOReal implements GripperIO {
 
     @Override
     public void updateInputs() {
-        inputs.angleMotorVoltage.mut_replace(angleMotor.get() * RobotController.getBatteryVoltage(), Units.Volts);
-        inputs.rollerMotorVoltage.mut_replace(rollerMotor.get() * RobotController.getBatteryVoltage(), Units.Volts);
+        inputs.angleMotorVoltage.mut_replace(
+                angleMotor.get() * RobotController.getBatteryVoltage(), Units.Volts);
+        inputs.rollerMotorVoltage.mut_replace(
+                rollerMotor.get() * RobotController.getBatteryVoltage(), Units.Volts);
         inputs.currentAngle.mut_replace(angleMotor.getPosition().getValue(), Units.Rotations);
         inputs.hasNote = hasNote();
         inputs.noOffsetEncoderPosition.mut_replace(
