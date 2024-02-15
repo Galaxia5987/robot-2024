@@ -1,17 +1,16 @@
 package frc.robot.subsystems.gripper;
 
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.elevator.ElevatorIO;
-import frc.robot.subsystems.elevator.ElevatorInputsAutoLogged;
+import frc.robot.commandGroups.CommandGroupsConstants;
+import frc.robot.lib.Utils;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -19,7 +18,8 @@ public class Gripper extends SubsystemBase {
     private static Gripper INSTANCE;
     private final GripperIO io;
     private final GripperInputsAutoLogged inputs = GripperIO.inputs;
-    private final ElevatorInputsAutoLogged elevatorInputs = ElevatorIO.inputs;
+    private Measure<Distance> gripperHeight = Units.Meters.zero();
+    private Measure<Distance> carriageHeight = Units.Meters.zero();
 
     @AutoLogOutput private final Mechanism2d mechanism2d = new Mechanism2d(1, 1);
     @AutoLogOutput private Pose3d gripperPose = new Pose3d();
@@ -28,16 +28,17 @@ public class Gripper extends SubsystemBase {
     private final MechanismLigament2d gripperLigament =
             root.append(new MechanismLigament2d("Gripper", 0.3, 0));
 
-    private Gripper(GripperIO io) {
+    private Gripper(GripperIO io, Supplier<Measure<Distance>> carriageHeight) {
         this.io = io;
+        this.carriageHeight = carriageHeight.get();
     }
 
     public static Gripper getInstance() {
         return INSTANCE;
     }
 
-    public static void initialize(GripperIO io) {
-        INSTANCE = new Gripper(io);
+    public static void initialize(GripperIO io, Supplier<Measure<Distance>> carriageHeight) {
+        INSTANCE = new Gripper(io, carriageHeight);
     }
 
     public boolean hasNote() {
@@ -46,27 +47,51 @@ public class Gripper extends SubsystemBase {
 
     public boolean atSetpoint() {
         return inputs.currentAngle.isNear(
-                inputs.angleSetpoint, GripperConstants.THRESHOLD.in(Units.Percent));
+                inputs.angleSetpoint, GripperConstants.TOLERANCE.in(Units.Percent));
+    }
+
+    public boolean isReversed() {
+        return Utils.normalize(inputs.currentAngle.in(Units.Radians))
+                > CommandGroupsConstants.WRIST_MIN_BACKWARDS_ANGLE.in(Units.Radians);
     }
 
     public Command setRollerPower(double power) {
         return run(() -> io.setRollerMotorPower(power)).withName("set roller power");
     }
 
+    public boolean isGripperNearFoldedPosition() {
+        return new Translation2d(
+                                        GripperConstants.GRIPPER_LENGTH.in(Units.Meters),
+                                        new Rotation2d(inputs.currentAngle))
+                                .getY()
+                        + gripperHeight.in(Units.Meters)
+                < GripperConstants.GRIPPER_OUTTAKE_MIN_HEIGHT.in(Units.Meters);
+    }
+
+    public Command setRollerAndWrist(MutableMeasure<Angle> wristAngle, double rollerPower) {
+        return setRollerPower(rollerPower).raceWith(setWristPosition(wristAngle));
+    }
+
     public Command intake() {
-        return setWristPosition(GripperConstants.INTAKE_ANGLE.mutableCopy())
-                .alongWith(setRollerPower(GripperConstants.INTAKE_POWER))
+        return setRollerAndWrist(GripperConstants.INTAKE_ANGLE.mutableCopy(), GripperConstants.INTAKE_POWER)
                 .withName("intake");
     }
 
     public Command outtake() {
-        return setWristPosition(GripperConstants.OUTTAKE_ANGLE.mutableCopy())
-                .alongWith(setRollerPower(GripperConstants.OUTTAKE_POWER))
+        return setRollerAndWrist(GripperConstants.OUTTAKE_ANGLE.mutableCopy(), GripperConstants.OUTTAKE_POWER)
                 .withName("outtake");
     }
 
-    public Command setWristPosition(MutableMeasure<Angle> angle) {
-        return run(() -> io.setAngle(angle)).withName("set wrist position");
+    private Command setWristPosition(MutableMeasure<Angle> angle) {
+        return Commands.runOnce(() -> io.setAngle(angle))
+                .until(this::atSetpoint)
+                .withName("set wrist position");
+    }
+
+    public Command scoreTrap() {
+        return Commands.sequence(
+                setWristPosition(GripperConstants.WRIST_TRAP_ANGLE),
+                setRollerPower(GripperConstants.TRAP_POWER));
     }
 
     public Command setWristPower(double power) {
@@ -75,8 +100,7 @@ public class Gripper extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Measure<Distance> gripperHeight =
-                elevatorInputs.carriageHeight.plus(GripperConstants.GRIPPER_POSITION_z);
+        gripperHeight = carriageHeight.plus(GripperConstants.GRIPPER_POSITION_z);
         gripperPose =
                 new Pose3d(
                         new Translation3d(

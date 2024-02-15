@@ -39,13 +39,13 @@ public class Conveyor extends SubsystemBase {
         return setVelocity(() -> FEED_VELOCITY);
     }
 
-    public Command stop() {
-        return setVelocity(() -> STOP_VELOCITY);
-    }
-
     public boolean readyToFeed() {
         return inputs.velocitySetpoint.isNear(
                 inputs.currentVelocity, SETPOINT_TOLERANCE.in(Units.Value));
+    }
+
+    public Command stop() {
+        return setVelocity(() -> STOP_VELOCITY);
     }
 
     @Override

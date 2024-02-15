@@ -23,8 +23,7 @@ public class ElevatorIOReal implements ElevatorIO {
             new MotionMagicExpoTorqueCurrentFOC(0);
     private final DutyCycleOut powerControl = new DutyCycleOut(0);
 
-    private static final MutableMeasure<Mass> movingWeight =
-            ElevatorConstants.HOOKS_MASS.mutableCopy();
+    private static final MutableMeasure<Mass> movingWeight = ElevatorConstants.HOOKS_MASS;
 
     private double lastKg = 0;
     private double lastAuxKg = 0;
@@ -71,9 +70,7 @@ public class ElevatorIOReal implements ElevatorIO {
 
         inputs.carriageHeight.mut_replace(
                 inputs.hooksHeight.gt(ElevatorConstants.GRIPPER_TO_HOOKS)
-                        ? inputs.hooksHeight
-                                .mutableCopy()
-                                .mut_minus(ElevatorConstants.GRIPPER_TO_HOOKS)
+                        ? inputs.hooksHeight.mut_minus(ElevatorConstants.GRIPPER_TO_HOOKS)
                         : Meters.zero());
 
         inputs.stopperAngle.mut_replace(servo.getAngle(), Degrees);

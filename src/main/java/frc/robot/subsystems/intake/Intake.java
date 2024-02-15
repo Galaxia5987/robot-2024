@@ -50,7 +50,7 @@ public class Intake extends SubsystemBase {
         return setAngle(intakePose.intakePose);
     }
 
-    public Command setRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
+    private Command setRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
         return Commands.runOnce(
                 () -> {
                     inputs.rollerSpeedSetpoint.mut_replace(speed);
@@ -58,7 +58,7 @@ public class Intake extends SubsystemBase {
                 });
     }
 
-    public Command setCenterRollerSpeed(double speed) {
+    private Command setCenterRollerSpeed(double speed) {
         return Commands.runOnce(
                 () -> {
                     inputs.centerRollerSpeedSetpoint = speed;

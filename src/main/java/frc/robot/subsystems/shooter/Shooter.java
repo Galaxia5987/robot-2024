@@ -58,10 +58,11 @@ public class Shooter extends SubsystemBase {
     @AutoLogOutput
     public boolean atSetpoint() {
         return topRollerInputs.velocity.isNear(
-                        topRollerInputs.velocitySetpoint, ShooterConstants.SETPOINT_TOLERANCE_TOP)
+                        topRollerInputs.velocitySetpoint,
+                        ShooterConstants.SETPOINT_TOLERANCE_TOP.in(Units.Percent))
                 && bottomRollerInputs.velocity.isNear(
                         bottomRollerInputs.velocitySetpoint,
-                        ShooterConstants.SETPOINT_TOLERANCE_BOTTOM);
+                        ShooterConstants.SETPOINT_TOLERANCE_BOTTOM.in(Units.Percent));
     }
 
     /** Updates the state of the shooter. */

@@ -5,10 +5,22 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
+import frc.robot.commandGroups.CommandGroupsConstants;
+import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.Set;
 
-public class TrapState implements ScoreState {
+public class ClimbState implements ScoreState {
+    private static Elevator elevator;
+
+    public ClimbState() {
+        elevator = Elevator.getInstance();
+    }
+
+    @Override
+    public Command prepareSubsystems() {
+        return elevator.setHeight(CommandGroupsConstants.START_CLIMB_HEIGHT);
+    }
 
     @Override
     public Command driveToClosestOptimalPoint() {
@@ -16,8 +28,8 @@ public class TrapState implements ScoreState {
                 () -> {
                     var optimalPoints =
                             isRed()
-                                    ? ScoreStateConstants.OPTIMAL_POINTS_TRAP_RED
-                                    : ScoreStateConstants.OPTIMAL_POINTS_TRAP_BLUE;
+                                    ? ScoreStateConstants.OPTIMAL_POINTS_CLIMB_RED
+                                    : ScoreStateConstants.OPTIMAL_POINTS_CLIMB_BLUE;
                     Pose2d optimalPose =
                             SwerveDrive.getInstance().getBotPose().nearest(optimalPoints);
                     return AutoBuilder.pathfindToPose(optimalPose, Constants.AUTO_CONSTRAINTS);
@@ -26,12 +38,10 @@ public class TrapState implements ScoreState {
     }
 
     @Override
-    public Command stateInitialize() {
-        return null;
-    }
-
-    @Override
     public Command score() {
-        return null;
+        return Commands.sequence(
+                driveToClosestOptimalPoint(),
+                Commands.runOnce(() -> SwerveDrive.getInstance().lock()),
+                elevator.setHeight(CommandGroupsConstants.END_CLIMB_HEIGHT));
     }
 }

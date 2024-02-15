@@ -86,7 +86,7 @@ public class SwerveConstants {
             ANGLE_KD.initDefault(0.0);
             ANGLE_KS.initDefault(0.0);
 
-            ROTATION_KP.initDefault(0.9);
+            ROTATION_KP.initDefault(0.2);
             ROTATION_KI.initDefault(0.0);
             ROTATION_KD.initDefault(0.0);
             ROTATION_KDIETER.initDefault(0.0);
