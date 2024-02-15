@@ -69,12 +69,14 @@ public class ModuleIOTalonFX implements ModuleIO {
 
         var drivePositionSignal = driveMotor.getPosition();
         var driveVelocitySignal = driveMotor.getVelocity();
+
         distanceQueue =
                 PhoenixOdometryThread.getInstance()
                         .registerSignal(driveMotor, drivePositionSignal, driveVelocitySignal);
 
         var anglePositionSignal = angleMotor.getPosition();
         var angleVelocitySignal = angleMotor.getVelocity();
+
         angleQueue =
                 PhoenixOdometryThread.getInstance()
                         .registerSignal(angleMotor, anglePositionSignal, angleVelocitySignal);
@@ -82,11 +84,7 @@ public class ModuleIOTalonFX implements ModuleIO {
         timestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
 
         BaseStatusSignal.setUpdateFrequencyForAll(
-                SwerveConstants.ODOMETRY_FREQUENCY,
-                drivePositionSignal,
-                anglePositionSignal,
-                driveVelocitySignal,
-                angleVelocitySignal);
+                SwerveConstants.ODOMETRY_FREQUENCY, drivePositionSignal, anglePositionSignal);
     }
 
     @Override

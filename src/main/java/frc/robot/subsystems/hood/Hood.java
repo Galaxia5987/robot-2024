@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -71,10 +70,6 @@ public class Hood extends SubsystemBase {
                 .withName("Set hood power");
     }
 
-    public Command updateInternalEncoder() {
-        return Commands.run(io::updateInternalEncoder).withName("Update hood internal encoder");
-    }
-
     @AutoLogOutput(key = "Hood/Pose")
     private Pose3d getPose3d() {
         return new Pose3d(
@@ -85,6 +80,7 @@ public class Hood extends SubsystemBase {
     /** Updates the state of the hood. */
     @Override
     public void periodic() {
+        io.updateInternalEncoder();
         io.updateInputs();
         Logger.processInputs("Hood", inputs);
 
