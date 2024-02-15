@@ -1,7 +1,5 @@
 package frc.robot.subsystems.gripper;
 
-import static frc.robot.subsystems.gripper.GripperConstants.*;
-
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -15,12 +13,14 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Ports;
 
 public class GripperIOReal implements GripperIO {
     private final TalonFX angleMotor;
     private final CANSparkMax rollerMotor;
-    private final SparkLimitSwitch limitSwitch;
+    private final SparkLimitSwitch forwardLimitSwitch;
+    private final SparkLimitSwitch reverseLimitSwitch;
     private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(Ports.Gripper.ENCODER_ID);
     private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0);
     private final VoltageOut powerRequest = new VoltageOut(0).withEnableFOC(true);
@@ -35,8 +35,10 @@ public class GripperIOReal implements GripperIO {
         rollerMotor.restoreFactoryDefaults();
         rollerMotor.setSmartCurrentLimit(40);
         rollerMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
-        limitSwitch = rollerMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
-
+        forwardLimitSwitch = rollerMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
+        reverseLimitSwitch = rollerMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
+        forwardLimitSwitch.enableLimitSwitch(false);
+        reverseLimitSwitch.enableLimitSwitch(false);
         rollerMotor.burnFlash();
 
         rollerMotor.setSmartCurrentLimit(GripperConstants.CURRENT_LIMIT);
@@ -47,6 +49,7 @@ public class GripperIOReal implements GripperIO {
     @Override
     public void setRollerMotorPower(double power) {
         inputs.rollerPowerSetpoint = power;
+        System.out.println("Set roller power powered with: " + power);
         rollerMotor.set(power);
     }
 
@@ -60,17 +63,17 @@ public class GripperIOReal implements GripperIO {
         inputs.angleSetpoint.mut_replace(angle);
         angleMotor.setControl(
                 positionRequest.withPosition(
-                        Math.IEEEremainder(new Rotation2d(angle).getRotations(), 0.5)));
+                        Math.IEEEremainder(new Rotation2d(angle).getRotations(), 1)));
     }
 
     public boolean hasNote() {
-        return debouncer.calculate(limitSwitch.isPressed());
+        return debouncer.calculate(forwardLimitSwitch.isPressed());
     }
 
     @Override
     public void updateInputs() {
-        inputs.angleMotorVoltage.mut_replace(angleMotor.get(), Units.Volts);
-        inputs.rollerMotorVoltage.mut_replace(rollerMotor.get(), Units.Volts);
+        inputs.angleMotorVoltage.mut_replace(angleMotor.get() * RobotController.getBatteryVoltage(), Units.Volts);
+        inputs.rollerMotorVoltage.mut_replace(rollerMotor.get() * RobotController.getBatteryVoltage(), Units.Volts);
         inputs.currentAngle.mut_replace(angleMotor.getPosition().getValue(), Units.Rotations);
         inputs.hasNote = hasNote();
         inputs.noOffsetEncoderPosition.mut_replace(
