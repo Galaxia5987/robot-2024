@@ -23,7 +23,10 @@ public class ScoreStateConstants {
                     .collect(Collectors.toList());
 
     public static final List<Pose2d> OPTIMAL_POINTS_CLIMB_BLUE =
-            List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
+            List.of(
+                    new Pose2d(4.35, 5.00, Rotation2d.fromDegrees(-47.47)),
+                    new Pose2d(4.35, 3.27, Rotation2d.fromDegrees(61.38)),
+                    new Pose2d(5.90, 4.13, Rotation2d.fromDegrees(-179.36)));
     public static final List<Pose2d> OPTIMAL_POINTS_CLIMB_RED =
             OPTIMAL_POINTS_CLIMB_BLUE.stream()
                     .map(GeometryUtil::flipFieldPose)
