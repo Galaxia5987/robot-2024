@@ -1,0 +1,184 @@
+{
+  "hubs": [
+    {
+      "x": -8,
+      "y": -8,
+      "width": 1552,
+      "height": 832,
+      "state": {
+        "sidebar": {
+          "width": 300,
+          "expanded": [
+            "/AdvantageKit",
+            "/AdvantageKit/RealOutputs",
+            "/AdvantageKit/RealOutputs/SwerveDrive",
+            "/AdvantageKit/RealOutputs/Gripper",
+            "/AdvantageKit/RealOutputs/Hood",
+            "/AdvantageKit/RealOutputs/SwerveDrive/BotPose",
+            "/AdvantageKit/RealOutputs/SwerveDrive/BotPose/translation"
+          ]
+        },
+        "tabs": {
+          "selected": 1,
+          "tabs": [
+            {
+              "type": 0,
+              "path": "../docs/INDEX.md"
+            },
+            {
+              "type": 1,
+              "legends": {
+                "left": {
+                  "lockedRange": null,
+                  "unitConversion": {
+                    "type": null,
+                    "factor": 1
+                  },
+                  "fields": []
+                },
+                "discrete": {
+                  "fields": []
+                },
+                "right": {
+                  "lockedRange": null,
+                  "unitConversion": {
+                    "type": null,
+                    "factor": 1
+                  },
+                  "fields": []
+                }
+              },
+              "title": "Line Graph"
+            },
+            {
+              "type": 6,
+              "uuid": "txmbepigmhpzqfyqjyh9o5g2emneul3d",
+              "fields": [],
+              "listFields": [
+                [
+                  {
+                    "type": "Component (Robot)",
+                    "key": "NT:/AdvantageKit/RealOutputs/IntakePose",
+                    "sourceTypeIndex": 1,
+                    "sourceType": "Pose3d"
+                  },
+                  {
+                    "type": "Component (Robot)",
+                    "key": "NT:/AdvantageKit/RealOutputs/carriagePose",
+                    "sourceTypeIndex": 1,
+                    "sourceType": "Pose3d"
+                  },
+                  {
+                    "type": "Component (Robot)",
+                    "key": "NT:/AdvantageKit/RealOutputs/elevatorPose",
+                    "sourceTypeIndex": 1,
+                    "sourceType": "Pose3d"
+                  },
+                  {
+                    "type": "Component (Robot)",
+                    "key": "NT:/AdvantageKit/RealOutputs/Gripper/GripperPose",
+                    "sourceTypeIndex": 1,
+                    "sourceType": "Pose3d"
+                  },
+                  {
+                    "type": "Component (Robot)",
+                    "key": "NT:/AdvantageKit/RealOutputs/Hood/Pose",
+                    "sourceTypeIndex": 1,
+                    "sourceType": "Pose3d"
+                  }
+                ],
+                [
+                  {
+                    "type": "Robot",
+                    "key": "NT:/AdvantageKit/RealOutputs/SwerveDrive/BotPose",
+                    "sourceTypeIndex": 1,
+                    "sourceType": "Pose2d"
+                  }
+                ]
+              ],
+              "options": {
+                "field": "2024 Field",
+                "alliance": "blue",
+                "robot": "Classified",
+                "unitDistance": "meters",
+                "unitRotation": "radians"
+              },
+              "configHidden": false,
+              "visualizer": {
+                "cameraIndex": -1,
+                "orbitFov": 50,
+                "cameraPosition": [
+                  8.866735804523751,
+                  0.4057917854009986,
+                  -6.0805535222705736
+                ],
+                "cameraTarget": [
+                  0,
+                  0.5,
+                  0
+                ]
+              },
+              "title": "3D Field"
+            },
+            {
+              "type": 10,
+              "uuid": "ch647u3gd6g3ihvwke8x3mh9kwprkfj9",
+              "fields": [
+                {
+                  "key": "NT:/AdvantageKit/RealOutputs/Elevator/Mechanism2d",
+                  "sourceTypeIndex": 0,
+                  "sourceType": "Mechanism2d"
+                },
+                null,
+                null
+              ],
+              "listFields": [],
+              "options": {},
+              "configHidden": false,
+              "visualizer": null,
+              "title": "Elevator mechanism"
+            },
+            {
+              "type": 10,
+              "uuid": "fdza09vju8sc0j3q0ljohcamvgfgqqq2",
+              "fields": [
+                {
+                  "key": "NT:/AdvantageKit/RealOutputs/Gripper/Mechanism2d",
+                  "sourceTypeIndex": 0,
+                  "sourceType": "Mechanism2d"
+                },
+                null,
+                null
+              ],
+              "listFields": [],
+              "options": {},
+              "configHidden": false,
+              "visualizer": null,
+              "title": "Gripper mechanism"
+            },
+            {
+              "type": 10,
+              "uuid": "4eukfz7zcd42ncbxd326dx2tawqb3jkw",
+              "fields": [
+                {
+                  "key": "NT:/AdvantageKit/RealOutputs/Hood/Mechanism2d",
+                  "sourceTypeIndex": 0,
+                  "sourceType": "Mechanism2d"
+                },
+                null,
+                null
+              ],
+              "listFields": [],
+              "options": {},
+              "configHidden": false,
+              "visualizer": null,
+              "title": "Hood mechanism"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "satellites": [],
+  "version": "3.1.0"
+}
