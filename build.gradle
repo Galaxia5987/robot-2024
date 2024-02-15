@@ -85,12 +85,19 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     implementation 'junit:junit:4.13.2'
 
-    annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:3.0.2"
+    def akitJson = new groovy.json.JsonSlurper().parseText(new File(projectDir.getAbsolutePath() + "/vendordeps/AdvantageKit.json").text)
+    annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:$akitJson.version"
 }
 
 configurations.all {
     exclude group: "edu.wpi.first.wpilibj"
 }
+
+task(checkAkitInstall, dependsOn: "classes", type: JavaExec) {
+    mainClass = "org.littletonrobotics.junction.CheckInstall"
+    classpath = sourceSets.main.runtimeClasspath
+}
+compileJava.finalizedBy checkAkitInstall
 
 // Simulation configuration (e.g. environment variables).
 
