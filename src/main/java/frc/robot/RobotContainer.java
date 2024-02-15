@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.conveyor.ConveyorIO;
@@ -90,6 +91,8 @@ public class RobotContainer {
         xboxController.a().whileTrue(hood.setAngle(
                 () -> Units.Rotations.of(0.25).mutableCopy()
         ));
+
+        xboxController.leftBumper().onTrue(Commands.runOnce(swerveDrive::resetGyro));
     }
 
     /**
