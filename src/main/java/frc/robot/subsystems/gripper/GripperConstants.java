@@ -13,9 +13,9 @@ import frc.robot.lib.webconstants.LoggedTunableNumber;
 public class GripperConstants {
     public static final TalonFXConfiguration MOTOR_CONFIGURATION = new TalonFXConfiguration();
     public static final double INTAKE_POWER = 0.7; // TODO; replace with actual value
-    public static final double OUTTAKE_POWER = 0; // TODO: replace with actual value
-    public static final double AMP_POWER_NORMAL = 0; // TODO: replace with actual value
-    public static final double AMP_POWER_REVERSE = 0; // TODO: replace with actual value
+    public static final double OUTTAKE_POWER = -0.5; // TODO: replace with actual value
+    public static final double AMP_POWER_NORMAL = 0.7; // TODO: replace with actual value
+    public static final double AMP_POWER_REVERSE = -0.4; // TODO: replace with actual value
     public static final double TRAP_POWER = 0; // TODO: replace with actual value
     public static final MutableMeasure<Dimensionless> TOLERANCE =
             Units.Percent.of(0.02).mutableCopy();
@@ -30,7 +30,7 @@ public class GripperConstants {
     public static final MutableMeasure<Distance> GRIPPER_POSITION_z =
             Units.Meters.of(0.6461).mutableCopy();
     public static final Measure<Angle> INTAKE_ANGLE = Units.Degrees.of(-80);
-    public static final Measure<Angle> OUTTAKE_ANGLE = Units.Rotations.of(-80);
+    public static final Measure<Angle> OUTTAKE_ANGLE = Units.Degrees.of(-80);
     public static final double ANGLE_MOTOR_GEAR_RATIO = 58.5;
     public static final InvertedValue ANGLE_INVERTED_VALUE = InvertedValue.Clockwise_Positive;
     public static final boolean ROLLER_INVERTED_VALUE = true;
