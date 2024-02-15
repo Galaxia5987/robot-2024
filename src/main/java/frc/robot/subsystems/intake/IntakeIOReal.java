@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake;
 
 import static frc.robot.subsystems.intake.IntakeConstants.*;
 
+import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -21,8 +22,7 @@ public class IntakeIOReal implements IntakeIO {
     private final SimpleMotorFeedforward spinMotorFeedforward;
 
     public IntakeIOReal() {
-
-        angleMotor.getConfigurator().apply(ANGLE_CONFIGURATION);
+        while (angleMotor.getConfigurator().apply(ANGLE_CONFIGURATION) != StatusCode.OK);
 
         centerMotor.restoreFactoryDefaults();
         centerMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
@@ -39,10 +39,6 @@ public class IntakeIOReal implements IntakeIO {
         spinMotor.setSmartCurrentLimit(SPIN_CURRENT_LIMIT);
         spinMotorFeedforward =
                 new SimpleMotorFeedforward(SPIN_KS.get(), SPIN_KV.get(), SPIN_KA.get());
-        for (int i = 1; i <= 6; i++) {
-            spinMotor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.fromId(i), 50);
-            centerMotor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.fromId(i), 50);
-        }
         spinMotor.burnFlash();
         centerMotor.burnFlash();
     }
@@ -83,22 +79,5 @@ public class IntakeIOReal implements IntakeIO {
         inputs.spinMotorVoltage.mut_replace((spinMotor.getBusVoltage()), Units.Volts);
         inputs.centerMotorVoltage.mut_replace((centerMotor.getBusVoltage()), Units.Volts);
         inputs.currentRollerSpeed.mut_replace(spinMotor.getEncoder().getVelocity(), Units.RPM);
-
-        ANGLE_CONFIGURATION.Slot0.withKP(ANGLE_KP.get());
-        if (ANGLE_KP.hasChanged(hashCode())) {
-            angleMotor.getConfigurator().apply(ANGLE_CONFIGURATION);
-        }
-        ANGLE_CONFIGURATION.Slot0.withKP(ANGLE_KI.get());
-        if (ANGLE_KI.hasChanged(hashCode())) {
-            angleMotor.getConfigurator().apply(ANGLE_CONFIGURATION);
-        }
-        ANGLE_CONFIGURATION.Slot0.withKP(ANGLE_KD.get());
-        if (ANGLE_KD.hasChanged(hashCode())) {
-            angleMotor.getConfigurator().apply(ANGLE_CONFIGURATION);
-        }
-        ANGLE_CONFIGURATION.Slot0.withKP(ANGLE_KG.get());
-        if (ANGLE_KG.hasChanged(hashCode())) {
-            angleMotor.getConfigurator().apply(ANGLE_CONFIGURATION);
-        }
     }
 }

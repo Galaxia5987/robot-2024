@@ -70,8 +70,7 @@ public class Robot extends LoggedRobot {
 
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                LoggedPowerDistribution.getInstance(0, PowerDistribution.ModuleType.kRev);
-                Logger.addDataReceiver(new WPILOGWriter());
+                LoggedPowerDistribution.getInstance();
                 Logger.addDataReceiver(new NT4Publisher());
 
                 break;

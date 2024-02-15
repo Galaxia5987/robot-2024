@@ -36,10 +36,10 @@ public class IntakeConstants {
 
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                ANGLE_KP.initDefault(0.03);
-                ANGLE_KI.initDefault(0.01);
+                ANGLE_KP.initDefault(0.09);
+                ANGLE_KI.initDefault(0.03);
                 ANGLE_KD.initDefault(0);
-                ANGLE_KG.initDefault(0.1);
+                ANGLE_KG.initDefault(0.3);
 
                 SPIN_KP.initDefault(0);
                 SPIN_KI.initDefault(0);
@@ -72,7 +72,7 @@ public class IntakeConstants {
                         new Slot0Configs()
                                 .withKP(ANGLE_KP.get())
                                 .withKI(ANGLE_KI.get())
-                                .withKP(ANGLE_KD.get())
+                                .withKD(ANGLE_KD.get())
                                 .withKG(ANGLE_KG.get())
                                 .withGravityType(GravityTypeValue.Elevator_Static))
                 .withMotorOutput(

@@ -49,22 +49,22 @@ public class RobotContainer {
         ShooterIO shooterIO;
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                intakeIO = new IntakeIOReal(); // TODO: replace with IOReal
-                conveyorIO = new ConveyorIOSim(); // TODO: replace with IOReal
-                elevatorIO = new ElevatorIOReal();
+                intakeIO = new IntakeIOReal();
+//                conveyorIO = new ConveyorIOSim(); // TODO: replace with IOReal
+//                elevatorIO = new ElevatorIOReal();
                 //                gripperIO = new GripperIOReal();
-                hoodIO = new HoodIOReal();
-                shooterIO = new ShooterIOReal();
+//                hoodIO = new HoodIOReal();
+//                shooterIO = new ShooterIOReal();
                 break;
             case SIM:
             case REPLAY:
             default:
                 intakeIO = new IntakeIOSim();
-                conveyorIO = new ConveyorIOSim();
-                elevatorIO = new ElevatorIOSim();
-                gripperIO = new GripperIOSim();
-                hoodIO = new HoodIOSim();
-                shooterIO = new ShooterIOSim();
+//                conveyorIO = new ConveyorIOSim();
+//                elevatorIO = new ElevatorIOSim();
+//                gripperIO = new GripperIOSim();
+//                hoodIO = new HoodIOSim();
+//                shooterIO = new ShooterIOSim();
                 break;
         }
         Intake.initialize(intakeIO);
