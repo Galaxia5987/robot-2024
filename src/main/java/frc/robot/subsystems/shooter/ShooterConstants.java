@@ -7,7 +7,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.*;
 import frc.robot.Constants;
-import lib.webconstants.LoggedTunableNumber;
+import frc.robot.lib.webconstants.LoggedTunableNumber;
 
 public class ShooterConstants {
     public static final double GEAR_RATIO_TOP = 1.0;

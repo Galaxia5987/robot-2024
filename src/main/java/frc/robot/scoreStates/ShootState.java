@@ -7,10 +7,10 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
-import frc.robot.swerve.SwerveDrive;
+import frc.robot.lib.Utils;
+import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.List;
 import java.util.Set;
-import lib.Utils;
 
 public class ShootState implements ScoreState {
 
@@ -34,7 +34,7 @@ public class ShootState implements ScoreState {
                         optimalTranslation = botPose.getTranslation();
                         return SwerveDrive.getInstance()
                                 .turnCommand(
-                                        Utils.calculateOptimalRotation(
+                                        Utils.calcRotationToTranslation(
                                                         optimalTranslation, speakerPose)
                                                 .getRotations(),
                                         ScoreStateConstants.TURN_TOLERANCE.in(Units.Rotations));
@@ -44,7 +44,7 @@ public class ShootState implements ScoreState {
                     return AutoBuilder.pathfindToPose(
                             new Pose2d(
                                     optimalTranslation,
-                                    Utils.calculateOptimalRotation(
+                                    Utils.calcRotationToTranslation(
                                             optimalTranslation, speakerPose)),
                             Constants.AUTO_CONSTRAINTS);
                 },

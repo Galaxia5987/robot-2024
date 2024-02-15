@@ -2,7 +2,7 @@ package frc.robot.subsystems.conveyor;
 
 import edu.wpi.first.units.*;
 import frc.robot.Constants;
-import lib.webconstants.LoggedTunableNumber;
+import frc.robot.lib.webconstants.LoggedTunableNumber;
 
 public class ConveyorConstants {
 

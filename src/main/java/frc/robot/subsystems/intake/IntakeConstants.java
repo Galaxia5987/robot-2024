@@ -7,7 +7,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import frc.robot.Constants;
-import lib.webconstants.LoggedTunableNumber;
+import frc.robot.lib.webconstants.LoggedTunableNumber;
 
 public class IntakeConstants {
     public static final double GEAR_RATIO = 45.62;
