@@ -56,7 +56,7 @@ public class CommandGroups {
                         Commands.waitUntil(conveyor::readyToFeed)
                                 .andThen(
                                         gripper.setRollerAndWrist(
-                                                GripperConstants.INTAKE_ANGLE,
+                                                GripperConstants.INTAKE_ANGLE.mutableCopy(),
                                                 GripperConstants.OUTTAKE_POWER)))
                 .withName("feed");
     }
@@ -68,7 +68,7 @@ public class CommandGroups {
                                         () -> conveyor.readyToFeed() && otherReady.getAsBoolean())
                                 .andThen(
                                         gripper.setRollerAndWrist(
-                                                GripperConstants.INTAKE_ANGLE,
+                                                GripperConstants.INTAKE_ANGLE.mutableCopy(),
                                                 GripperConstants.OUTTAKE_POWER)))
                 .withName("feedWithWait");
     }
