@@ -59,7 +59,13 @@ public class AmpState implements ScoreState {
 
     @Override
     public Command prepareSubsystems() {
-        return Commands.none();
+        return Commands.either(
+                        gripper.setRollerAndWrist(
+                                CommandGroupsConstants.WRIST_ANGLE_AMP_FORWARD, 0),
+                        gripper.setRollerAndWrist(
+                                CommandGroupsConstants.WRIST_ANGLE_AMP_BACKWARDS, 0),
+                        () -> isAmpingForward)
+                .onlyIf(() -> distance < ScoreStateConstants.MIN_DISTANCE_TO_AMP.in(Units.Meters));
     }
 
     @Override
