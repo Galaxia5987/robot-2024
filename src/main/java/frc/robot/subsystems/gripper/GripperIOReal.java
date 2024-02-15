@@ -15,21 +15,22 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import frc.robot.Ports;
 
 public class GripperIOReal implements GripperIO {
     private final TalonFX angleMotor;
     private final CANSparkMax rollerMotor;
     private final SparkLimitSwitch limitSwitch;
-    private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(7);
+    private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(Ports.Gripper.ENCODER_ID);
     private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0);
     private final VoltageOut powerRequest = new VoltageOut(0).withEnableFOC(true);
     private final Debouncer debouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
 
     public GripperIOReal() {
-        angleMotor = new TalonFX(6);
+        angleMotor = new TalonFX(Ports.Gripper.ANGLE_ID);
         angleMotor.getConfigurator().apply(GripperConstants.MOTOR_CONFIGURATION);
 
-        rollerMotor = new CANSparkMax(7, CANSparkLowLevel.MotorType.kBrushless);
+        rollerMotor = new CANSparkMax(Ports.Gripper.ROLLER_ID, CANSparkLowLevel.MotorType.kBrushless);
         rollerMotor.restoreFactoryDefaults();
         rollerMotor.setSmartCurrentLimit(40);
         rollerMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);

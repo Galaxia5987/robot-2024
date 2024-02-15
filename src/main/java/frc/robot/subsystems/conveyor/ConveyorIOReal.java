@@ -7,19 +7,17 @@ import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import frc.robot.Constants;
+import frc.robot.Ports;
 
 public class ConveyorIOReal implements ConveyorIO {
 
-    private CANSparkMax roller = new CANSparkMax(1, CANSparkLowLevel.MotorType.kBrushless);
+    private CANSparkMax roller = new CANSparkMax(Ports.Conveyor.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
 
     public ConveyorIOReal() {
         roller.restoreFactoryDefaults();
         roller.setIdleMode(CANSparkMax.IdleMode.kCoast);
         roller.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE.in(Units.Volts));
         roller.setInverted(true);
-        for (int i = 2; i <= 6; i++) {
-            roller.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.fromId(i), 1000);
-        }
         roller.burnFlash();
     }
 

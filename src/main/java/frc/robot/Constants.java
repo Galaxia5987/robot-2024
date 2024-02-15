@@ -19,7 +19,7 @@ public class Constants {
 
     public static final int CONFIG_TIMEOUT = 100; // [ms]
 
-    public static final Mode CURRENT_MODE = Mode.REAL;
+    public static Mode CURRENT_MODE = Mode.REAL;
 
     public static final Transform3d BACK_LEFT_CAMERA_POSE =
             new Transform3d(
@@ -67,7 +67,9 @@ public class Constants {
         REPLAY
     }
 
-    public static final double[] SWERVE_OFFSETS = {0.794376719859418,0.7809639195240979,0.4840726121018153,0.6090182152254554};
+    public static final double[] SWERVE_OFFSETS = {
+            0.794376719859418,0.7809639195240979,0.4840726121018153,0.6090182152254554
+    };
 
     public static void initSwerve() {
         ModuleIO[] moduleIOs = new ModuleIO[4];

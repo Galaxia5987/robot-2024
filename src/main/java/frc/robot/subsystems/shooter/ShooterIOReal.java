@@ -7,6 +7,7 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
+import frc.robot.Ports;
 
 public class ShooterIOReal implements ShooterIO {
     private final TalonFX topMotor;
@@ -15,8 +16,8 @@ public class ShooterIOReal implements ShooterIO {
     private final VelocityVoltage bottomControl = new VelocityVoltage(0);
 
     public ShooterIOReal() {
-        topMotor = new TalonFX(3); // TODO: to be changed later
-        bottomMotor = new TalonFX(5); // TODO: to be changed later
+        topMotor = new TalonFX(Ports.Shooter.TOP_MOTOR_ID); // TODO: to be changed later
+        bottomMotor = new TalonFX(Ports.Shooter.BOTTOM_MOTOR_ID); // TODO: to be changed later
 
         topMotor.setNeutralMode(NeutralModeValue.Coast);
         bottomMotor.setNeutralMode(NeutralModeValue.Coast);

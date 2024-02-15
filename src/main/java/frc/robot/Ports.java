@@ -16,6 +16,18 @@ public final class Ports {
         public static final int MOTOR_ID = 8;
     }
 
+    public static final class Gripper {
+        public static final int ANGLE_ID = 6;
+        public static final int ROLLER_ID = 7;
+        public static final int ENCODER_ID = 7;
+    }
+
+    public static final class Intake {
+        public static final int ANGLE_ID = 1;
+        public static final int ROLLER_ID = 2;
+        public static final int CENTER_ID = 3;
+    }
+
     public static final class SwerveDrive {
         public static final int FRONT_LEFT_DRIVE_MOTOR_ID = 2;
         public static final int FRONT_LEFT_ANGLE_MOTOR_ID = 1;

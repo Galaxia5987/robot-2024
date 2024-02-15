@@ -3,26 +3,25 @@ package frc.robot.subsystems.intake;
 import static frc.robot.subsystems.intake.IntakeConstants.*;
 
 import com.ctre.phoenix6.StatusCode;
-import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.*;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.*;
 import frc.robot.Constants;
+import frc.robot.Ports;
 
 public class IntakeIOReal implements IntakeIO {
 
-    public final CANSparkMax spinMotor = new CANSparkMax(2, CANSparkLowLevel.MotorType.kBrushless);
+    public final CANSparkMax spinMotor = new CANSparkMax(Ports.Intake.ROLLER_ID, CANSparkLowLevel.MotorType.kBrushless);
     private final CANSparkMax centerMotor =
-            new CANSparkMax(3, CANSparkLowLevel.MotorType.kBrushless);
-    private final TalonFX angleMotor = new TalonFX(1);
-    private final PositionVoltage positionRequest =
-            new PositionVoltage(0).withEnableFOC(true);
+            new CANSparkMax(Ports.Intake.CENTER_ID, CANSparkLowLevel.MotorType.kBrushless);
+    private final TalonFX angleMotor = new TalonFX(Ports.Intake.ANGLE_ID);
+    private final PositionVoltage positionRequest = new PositionVoltage(0).withEnableFOC(true);
     private final SimpleMotorFeedforward spinMotorFeedforward;
 
     public IntakeIOReal() {
-        while (angleMotor.getConfigurator().apply(ANGLE_CONFIGURATION) != StatusCode.OK);
+        angleMotor.getConfigurator().apply(ANGLE_CONFIGURATION);
 
         centerMotor.restoreFactoryDefaults();
         centerMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);

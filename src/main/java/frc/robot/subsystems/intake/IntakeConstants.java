@@ -7,7 +7,6 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
 import frc.robot.Constants;
 import frc.robot.lib.webconstants.LoggedTunableNumber;
 
@@ -45,9 +44,9 @@ public class IntakeConstants {
                 SPIN_KI.initDefault(0);
                 SPIN_KD.initDefault(0);
 
-                SPIN_KS.initDefault(0.15809);
-                SPIN_KV.initDefault(0.12806);
-                SPIN_KA.initDefault(0.039754);
+                SPIN_KS.initDefault(0.158_09);
+                SPIN_KV.initDefault(0.128_06);
+                SPIN_KA.initDefault(0.039_754);
                 break;
             case SIM:
             case REPLAY:
@@ -83,7 +82,8 @@ public class IntakeConstants {
                                 .withStatorCurrentLimitEnable(true)
                                 .withStatorCurrentLimit(ANGLE_CURRENT_LIMIT)
                                 .withSupplyCurrentLimit(ANGLE_CURRENT_LIMIT))
-                .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(ANGLE_GEAR_RATIO / 360));
+                .withFeedback(
+                        new FeedbackConfigs().withSensorToMechanismRatio(ANGLE_GEAR_RATIO / 360));
     }
 
     public enum IntakePose {
