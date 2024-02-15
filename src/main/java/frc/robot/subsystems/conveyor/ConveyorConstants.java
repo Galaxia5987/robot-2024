@@ -10,6 +10,8 @@ public class ConveyorConstants {
             Units.RotationsPerSecond.of(10).mutableCopy();
     public static final MutableMeasure<Dimensionless> SETPOINT_TOLERANCE =
             Units.Value.of(0.05).mutableCopy();
+    public static final MutableMeasure<Velocity<Angle>> STOP_VELOCITY =
+            Units.RotationsPerSecond.of(0).mutableCopy();
     public static final double GEAR_RATIO = 30;
     public static LoggedTunableNumber KP = new LoggedTunableNumber("Conveyor/kP");
     public static LoggedTunableNumber KI = new LoggedTunableNumber("Conveyor/kI");

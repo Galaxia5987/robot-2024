@@ -82,11 +82,7 @@ public class ModuleIOTalonFX implements ModuleIO {
         timestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
 
         BaseStatusSignal.setUpdateFrequencyForAll(
-                SwerveConstants.ODOMETRY_FREQUENCY,
-                drivePositionSignal,
-                anglePositionSignal,
-                driveVelocitySignal,
-                angleVelocitySignal);
+                SwerveConstants.ODOMETRY_FREQUENCY, drivePositionSignal, anglePositionSignal);
     }
 
     @Override

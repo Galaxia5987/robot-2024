@@ -22,7 +22,6 @@ public class SwerveModule extends SubsystemBase {
             new SwerveModulePosition[] {new SwerveModulePosition()};
     private double lastDistance = 0;
     private double[] deltas = new double[0];
-    private final double offset;
 
     public SwerveModule(ModuleIO io, int number, double offset) {
         this.io = io;
@@ -133,6 +132,10 @@ public class SwerveModule extends SubsystemBase {
         Logger.processInputs("module_" + number, loggerInputs);
     }
 
+    public SwerveModulePosition[] getHighFreqModulePositions() {
+        return highFreqModulePositions;
+    }
+
     @Override
     public void periodic() {
         deltas = new double[loggerInputs.highFreqDistances.length];
@@ -143,6 +146,16 @@ public class SwerveModule extends SubsystemBase {
 
         if (timer.advanceIfElapsed(1)) {
             io.updateOffset(new Rotation2d(Units.rotationsToRadians(offset)));
+        }
+
+        int sampleCount =
+                loggerInputs.highFreqTimestamps.length; // All signals are sampled together
+        highFreqModulePositions = new SwerveModulePosition[sampleCount];
+        for (int i = 0; i < sampleCount; i++) {
+            highFreqModulePositions[i] =
+                    new SwerveModulePosition(
+                            getHighFreqDriveDistances()[i],
+                            Rotation2d.fromRadians(getHighFreqAngles()[i]));
         }
     }
 }

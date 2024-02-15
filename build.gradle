@@ -86,6 +86,8 @@ dependencies {
     implementation 'junit:junit:4.13.2'
 
     annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:3.0.2"
+
+    implementation 'com.opencsv:opencsv:5.8'
 }
 
 configurations.all {

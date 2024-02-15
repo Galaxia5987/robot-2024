@@ -1,11 +1,10 @@
 package frc.robot.subsystems.intake;
 
-import static edu.wpi.first.units.Units.Degrees;
-
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Units;
 import frc.robot.Constants;
 import frc.robot.lib.webconstants.LoggedTunableNumber;
 
@@ -79,8 +78,8 @@ public class IntakeConstants {
     }
 
     public enum IntakePose {
-        UP(MutableMeasure.zero(Degrees)),
-        DOWN(MutableMeasure.zero(Degrees));
+        UP(Units.Rotations.of(-0.4).mutableCopy()),
+        DOWN(Units.Rotations.of(0.4).mutableCopy());
         final MutableMeasure<Angle> intakePose;
 
         IntakePose(MutableMeasure<Angle> intakePose) {

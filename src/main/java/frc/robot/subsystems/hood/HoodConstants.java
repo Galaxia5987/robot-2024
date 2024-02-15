@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -36,6 +37,8 @@ public class HoodConstants {
     public static final LoggedTunableNumber kA = new LoggedTunableNumber("Hood/kA");
     public static final LoggedTunableNumber kG = new LoggedTunableNumber("Hood/kG");
 
+    public static final MutableMeasure<Angle> FOLDED_ANGLE = Units.Degrees.of(90).mutableCopy();
+
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
@@ -66,7 +69,8 @@ public class HoodConstants {
                                 .withKS(HoodConstants.kS.get())
                                 .withKV(HoodConstants.kV.get())
                                 .withKA(HoodConstants.kA.get())
-                                .withKG(HoodConstants.kG.get()))
+                                .withKG(HoodConstants.kG.get())
+                                .withGravityType(GravityTypeValue.Arm_Cosine))
                 .withMotorOutput(new MotorOutputConfigs().withInverted(INVERTED_VALUE))
                 .CurrentLimits
                 .withStatorCurrentLimitEnable(true)

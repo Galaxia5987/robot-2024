@@ -6,16 +6,27 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.Constants;
+import frc.robot.lib.ShootingCSV;
+import frc.robot.lib.math.interpolation.InterpolatingDoubleMap;
 import frc.robot.lib.webconstants.LoggedTunableNumber;
 
 public class ShooterConstants {
     public static final double GEAR_RATIO_TOP = 1.0;
     public static final double GEAR_RATIO_BOTTOM = 1.0;
-    public static final double SETPOINT_TOLERANCE_TOP = 0.05; // Percentages
-    public static final double SETPOINT_TOLERANCE_BOTTOM = 0.05; // Percentages
-    public static final double MOMENT_OF_INERTIA_TOP = 0.08;
-    public static final double MOMENT_OF_INERTIA_BOTTOM = 0.08;
+    public static final MutableMeasure<Dimensionless> SETPOINT_TOLERANCE_TOP =
+            Units.Percent.of(0.05).mutableCopy();
+    public static final MutableMeasure<Dimensionless> SETPOINT_TOLERANCE_BOTTOM =
+            Units.Percent.of(0.05).mutableCopy();
+    public static final MutableMeasure<Mult<Mult<Mass, Distance>, Distance>> MOMENT_OF_INERTIA_TOP =
+            Units.Kilograms.mult(Units.Meters).mult(Units.Meters).of(0.0008).mutableCopy();
+    public static final MutableMeasure<Mult<Mult<Mass, Distance>, Distance>>
+            MOMENT_OF_INERTIA_BOTTOM =
+                    Units.Kilograms.mult(Units.Meters).mult(Units.Meters).of(0.0008).mutableCopy();
+    public static final MutableMeasure<Distance> SHOOTER_HEIGHT =
+            Units.Meters.of(0.4).mutableCopy(); // TODO: add real value
+    public static final double MAX_WARMUP_DISTANCE = 12; // [m] //TODO: add real value
 
     public static final TalonFXConfiguration topMotorConfiguration = new TalonFXConfiguration();
     public static final TalonFXConfiguration bottomMotorConfiguration = new TalonFXConfiguration();
@@ -25,6 +36,15 @@ public class ShooterConstants {
 
     public static final InvertedValue TOP_INVERSION = InvertedValue.Clockwise_Positive;
     public static final InvertedValue BOTTOM_INVERSION = InvertedValue.CounterClockwise_Positive;
+
+    public static final InterpolatingDoubleMap VELOCITY_BY_DISTANCE =
+            ShootingCSV.parse(
+                    Filesystem.getDeployDirectory()
+                            + "\\shootdata\\distance-to-velocity.csv"); // Velocity | Distance
+    public static final InterpolatingDoubleMap FLIGHT_TIME_BY_DISTANCE =
+            ShootingCSV.parse(
+                    Filesystem.getDeployDirectory()
+                            + "\\shootdata\\distance-to-flight-time.csv"); // Flight Time | Distance
 
     public static final LoggedTunableNumber TOP_kP = new LoggedTunableNumber("Shooter/Top kP");
     public static final LoggedTunableNumber TOP_kI = new LoggedTunableNumber("Shooter/Top kI");
@@ -112,5 +132,7 @@ public class ShooterConstants {
     }
 
     public static MutableMeasure<Velocity<Angle>> STOP_POWER =
+            Units.RotationsPerSecond.zero().mutableCopy();
+    public static MutableMeasure<Velocity<Angle>> OUTTAKE_POWER =
             Units.RotationsPerSecond.zero().mutableCopy();
 }
