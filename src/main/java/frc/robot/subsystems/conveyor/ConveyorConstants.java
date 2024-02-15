@@ -10,6 +10,9 @@ public class ConveyorConstants {
             Units.RotationsPerSecond.of(10).mutableCopy();
     public static final MutableMeasure<Dimensionless> SETPOINT_TOLERANCE =
             Units.Value.of(0.05).mutableCopy();
+    public static final MutableMeasure<Velocity<Angle>> STOP_VELOCITY =
+            Units.RotationsPerSecond.of(0).mutableCopy();
+    public static final double VELOCITY_CONVERSION_FACTOR = 1 / 60.0;
     public static final double GEAR_RATIO = 30;
     public static LoggedTunableNumber KP = new LoggedTunableNumber("Conveyor/kP");
     public static LoggedTunableNumber KI = new LoggedTunableNumber("Conveyor/kI");
@@ -21,12 +24,12 @@ public class ConveyorConstants {
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                KP.initDefault(0);
-                KI.initDefault(0.1);
+                KP.initDefault(0.000_230_26);
+                KI.initDefault(0.0);
                 KD.initDefault(0);
-                KS.initDefault(0);
-                KV.initDefault(0);
-                KA.initDefault(0);
+                KS.initDefault(0.039_715);
+                KV.initDefault(0.035_425);
+                KA.initDefault(0.002_567_3);
                 break;
             case SIM:
             case REPLAY:
