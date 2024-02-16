@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.79,
-        "y": 5.86
+        "x": 2.4005051572444116,
+        "y": 5.545975061415772
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4582617826204314,
-        "y": 5.285757807982852
+        "x": 2.4005051572444116,
+        "y": 4.940200007626478
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Middle Spike"
     },
     {
       "anchor": {
-        "x": 2.142519612674553,
-        "y": 4.701050085860856
+        "x": 2.463171542119166,
+        "y": 4.417980133670191
       },
       "prevControl": {
-        "x": 2.5050384003901907,
-        "y": 5.4143935068496925
-      },
-      "nextControl": {
-        "x": 1.4503399202868257,
-        "y": 3.339019078259197
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.6687565625843503,
-        "y": 3.85907096600518
-      },
-      "prevControl": {
-        "x": 2.1074371493472333,
-        "y": 2.946926919494865
+        "x": 2.442282747160915,
+        "y": 4.981977597542982
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Lower Spike"
     }
   ],
   "rotationTargets": [],
@@ -55,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 139.39870535499563,
+    "rotation": -28.44292862436333,
     "rotateFast": false
   },
   "reversed": false,
