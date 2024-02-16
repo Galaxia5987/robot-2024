@@ -24,8 +24,4 @@ public class SwerveModuleInputs {
 
     public double moduleDistance = 0;
     public SwerveModuleState moduleState = new SwerveModuleState();
-
-    public double[] highFreqDistances = new double[0];
-    public double[] highFreqAngles = new double[0];
-    public double[] highFreqTimestamps = new double[0];
 }

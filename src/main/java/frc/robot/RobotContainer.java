@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
+import frc.robot.lib.GeneralRobotLoop;
+import frc.robot.lib.PoseEstimation;
 import frc.robot.scoreStates.AmpState;
 import frc.robot.scoreStates.ClimbState;
 import frc.robot.scoreStates.ScoreState;
@@ -25,7 +27,10 @@ import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOReal;
 import frc.robot.subsystems.hood.HoodIOSim;
-import frc.robot.subsystems.intake.*;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOReal;
+import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOReal;
@@ -105,6 +110,10 @@ public class RobotContainer {
         // Configure the button bindings and default commands
         configureDefaultCommands();
         configureButtonBindings();
+
+        PoseEstimation poseEstimation = new PoseEstimation();
+        GeneralRobotLoop.register(() ->
+                poseEstimation.processVisionMeasurements(Constants.VISION_MEASUREMENT_MULTIPLIER));
     }
 
     public static RobotContainer getInstance() {
@@ -119,42 +128,44 @@ public class RobotContainer {
                 swerveDrive.driveCommand(
                         () -> -xboxController.getLeftY(),
                         () -> -xboxController.getLeftX(),
-                        () -> -xboxController.getRightX(),
+                        () -> 0.6 * -xboxController.getRightX(),
                         0.15,
                         () -> true));
     }
 
     private void configureButtonBindings() {
-        xboxController
-                .y()
-                .whileTrue(gripper.setWristPosition(Units.Radians.of(2.15).mutableCopy()))
-                .onFalse(
-                        gripper.setRollerPower(-0.4)
-                                .withTimeout(1)
-                                .andThen(gripper.setRollerPower(0).withTimeout(0.1)));
-        xboxController
-                .rightBumper()
-                .whileTrue(
-                        Commands.parallel(
-                                intake.intake(), // -1.396
-                                hood.setAngle(() -> Units.Degrees.of(90).mutableCopy()),
-                                gripper.intake(),
-                                conveyor.feed(),
-                                shooter.setVelocity(
-                                        () -> Units.RotationsPerSecond.of(40).mutableCopy())))
-                .onFalse(
-                        Commands.parallel(
-                                intake.stop(),
-                                hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()),
-                                gripper.setRollerPower(0),
-                                conveyor.stop(),
-                                shooter.stop()));
-        xboxController
-                .a()
-                .whileTrue(hood.setAngle(() -> Units.Degrees.of(90).mutableCopy()))
-                .onFalse(hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()));
-        xboxController.x().onTrue(intake.reset(Units.Degrees.zero()));
-        xboxController.leftBumper().onTrue(Commands.runOnce(swerveDrive::resetGyro));
+        //        xboxController
+        //                .y()
+        //                .whileTrue(gripper.setWristPosition(Units.Radians.of(2.15).mutableCopy()))
+        //                .onFalse(
+        //                        gripper.setRollerPower(-0.4)
+        //                                .withTimeout(1)
+        //                                .andThen(gripper.setRollerPower(0).withTimeout(0.1)));
+//        xboxController
+//                .rightBumper()
+//                .whileTrue(
+//                        Commands.parallel(
+                                //                                intake.intake(), // -1.396
+//                                hood.setAngle(() -> Units.Degrees.of(90).mutableCopy()),
+                                //                                gripper.intake(),
+                                //                                conveyor.feed(),
+//                                shooter.setVelocity(
+//                                        () -> Units.RotationsPerSecond.of(0).mutableCopy(),
+//                                        () -> Units.RotationsPerSecond.of(60).mutableCopy())))
+//                .onFalse(
+//                        Commands.parallel(
+//                                                                intake.stop(),
+//                                hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()),
+//                                                                gripper.setRollerPower(0),
+//                                                                conveyor.stop(),
+//                                shooter.stop()));
+        //        xboxController
+        //                .a()
+        //                .whileTrue(hood.setAngle(() -> Units.Degrees.of(90).mutableCopy()))
+        //                .onFalse(hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()));
+        //        xboxController.x().onTrue(intake.reset(Units.Degrees.zero()));
+        xboxController.leftBumper().onTrue(Commands.runOnce(swerveDrive::resetPose));
+        xboxController.rightBumper().onTrue(Commands.runOnce(swerveDrive::resetGyro));
     }
 
     /**

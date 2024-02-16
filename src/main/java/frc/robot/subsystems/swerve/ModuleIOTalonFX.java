@@ -1,6 +1,5 @@
 package frc.robot.subsystems.swerve;
 
-import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -13,10 +12,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.lib.PhoenixOdometryThread;
 import frc.robot.lib.Utils;
 import frc.robot.lib.units.Units;
-import java.util.Queue;
 
 public class ModuleIOTalonFX implements ModuleIO {
 
@@ -31,9 +28,6 @@ public class ModuleIOTalonFX implements ModuleIO {
             new PositionVoltage(0).withEnableFOC(true).withSlot(0);
     private final VelocityVoltage velocityControlRequest =
             new VelocityVoltage(0).withEnableFOC(true);
-    private final Queue<Double> distanceQueue;
-    private final Queue<Double> angleQueue;
-    private final Queue<Double> timestampQueue;
     private Rotation2d angleSetpoint = new Rotation2d();
     private Rotation2d currentAngle = new Rotation2d();
     private double driveMotorVelocitySetpoint = 0;
@@ -66,25 +60,6 @@ public class ModuleIOTalonFX implements ModuleIO {
 
         driveMotor.setNeutralMode(NeutralModeValue.Brake);
         angleMotor.setNeutralMode(NeutralModeValue.Brake);
-
-        var drivePositionSignal = driveMotor.getPosition();
-        var driveVelocitySignal = driveMotor.getVelocity();
-
-        distanceQueue =
-                PhoenixOdometryThread.getInstance()
-                        .registerSignal(driveMotor, drivePositionSignal, driveVelocitySignal);
-
-        var anglePositionSignal = angleMotor.getPosition();
-        var angleVelocitySignal = angleMotor.getVelocity();
-
-        angleQueue =
-                PhoenixOdometryThread.getInstance()
-                        .registerSignal(angleMotor, anglePositionSignal, angleVelocitySignal);
-
-        timestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
-
-        BaseStatusSignal.setUpdateFrequencyForAll(
-                SwerveConstants.ODOMETRY_FREQUENCY, drivePositionSignal, anglePositionSignal);
     }
 
     @Override
@@ -109,14 +84,6 @@ public class ModuleIOTalonFX implements ModuleIO {
 
         inputs.moduleDistance = getModulePosition().distanceMeters;
         inputs.moduleState = getModuleState();
-
-        inputs.highFreqDistances = distanceQueue.stream().mapToDouble((Double d) -> d).toArray();
-        inputs.highFreqAngles = angleQueue.stream().mapToDouble((Double d) -> d).toArray();
-        inputs.highFreqTimestamps = timestampQueue.stream().mapToDouble(Double::doubleValue).toArray();
-
-        distanceQueue.clear();
-        angleQueue.clear();
-        timestampQueue.clear();
 
         if (hasPIDChanged(SwerveConstants.PID_VALUES)) updatePID();
     }

@@ -79,10 +79,6 @@ public class ModuleIOSim implements ModuleIO {
                         driveMotor.getPosition(), SwerveConstants.WHEEL_DIAMETER / 2);
         inputs.moduleState = getModuleState();
 
-        inputs.highFreqDistances = new double[] {inputs.moduleDistance};
-        inputs.highFreqAngles = new double[] {inputs.angle.getRadians()};
-        inputs.highFreqTimestamps = new double[] {Timer.getFPGATimestamp()};
-
         if (hasPIDChanged(SwerveConstants.PID_VALUES)) updatePID();
     }
 

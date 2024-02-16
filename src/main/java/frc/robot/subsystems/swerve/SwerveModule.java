@@ -18,10 +18,6 @@ public class SwerveModule extends SubsystemBase {
     private final int number;
     private final Timer timer = new Timer();
     private final double offset;
-    private SwerveModulePosition[] highFreqModulePositions =
-            new SwerveModulePosition[] {new SwerveModulePosition()};
-    private double lastDistance = 0;
-    private double[] deltas = new double[0];
 
     public SwerveModule(ModuleIO io, int number, double offset) {
         this.io = io;
@@ -111,51 +107,15 @@ public class SwerveModule extends SubsystemBase {
         return io.checkModule();
     }
 
-    public double[] getHighFreqDriveDistanceDeltas() {
-        return deltas;
-    }
-
-    public double[] getHighFreqDriveDistances() {
-        return loggerInputs.highFreqDistances;
-    }
-
-    public double[] getHighFreqAngles() {
-        return loggerInputs.highFreqAngles;
-    }
-
-    public double[] getHighFreqTimestamps() {
-        return loggerInputs.highFreqTimestamps;
-    }
-
     public void updateInputs() {
         io.updateInputs(loggerInputs);
         Logger.processInputs("module_" + number, loggerInputs);
     }
 
-    public SwerveModulePosition[] getHighFreqModulePositions() {
-        return highFreqModulePositions;
-    }
-
     @Override
     public void periodic() {
-        deltas = new double[loggerInputs.highFreqDistances.length];
-        for (int i = 0; i < deltas.length; i++) {
-            deltas[i] = loggerInputs.highFreqDistances[i] - lastDistance;
-            lastDistance = loggerInputs.highFreqDistances[i];
-        }
-
         if (timer.advanceIfElapsed(1)) {
             io.updateOffset(new Rotation2d(Units.rotationsToRadians(offset)));
-        }
-
-        int sampleCount =
-                loggerInputs.highFreqTimestamps.length; // All signals are sampled together
-        highFreqModulePositions = new SwerveModulePosition[sampleCount];
-        for (int i = 0; i < sampleCount; i++) {
-            highFreqModulePositions[i] =
-                    new SwerveModulePosition(
-                            getHighFreqDriveDistances()[i],
-                            Rotation2d.fromRadians(getHighFreqAngles()[i]));
         }
     }
 }

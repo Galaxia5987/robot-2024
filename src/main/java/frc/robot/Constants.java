@@ -21,6 +21,8 @@ public class Constants {
 
     public static Mode CURRENT_MODE = Mode.REAL;
 
+    public static double VISION_MEASUREMENT_MULTIPLIER = 0.0005;
+
     public static final Transform3d BACK_LEFT_CAMERA_POSE =
             new Transform3d(
                     -0.293,

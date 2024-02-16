@@ -2,31 +2,46 @@ package frc.robot.lib;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
-import java.util.function.DoubleSupplier;
+import java.util.stream.Collectors;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 public class PoseEstimation {
     private final SwerveDrive swerveDrive;
     private final Vision vision;
 
-    public PoseEstimation(SwerveDrive swerveDrive) {
-        this.swerveDrive = swerveDrive;
+    public PoseEstimation() {
+        swerveDrive = SwerveDrive.getInstance();
         vision = Vision.getInstance();
     }
 
-    public void addVisionMeasurement(
-            DoubleSupplier std1, DoubleSupplier std2, DoubleSupplier std3) {
+    public void processVisionMeasurements(double multiplier) {
         var results = vision.getResults();
         for (org.photonvision.EstimatedRobotPose result : results) {
+            var ambiguities =
+                    result.targetsUsed.stream()
+                            .map(
+                                    (target) ->
+                                            Math.pow(
+                                                    target.getBestCameraToTarget()
+                                                            .getTranslation()
+                                                            .getNorm(),
+                                                    2));
+            double stddev =
+                    multiplier * Utils.averageAmbiguity(ambiguities.collect(Collectors.toList()));
             swerveDrive
                     .getEstimator()
                     .addVisionMeasurement(
                             result.estimatedPose.toPose2d(),
                             result.timestampSeconds,
                             VecBuilder.fill(
-                                    std1.getAsDouble(), std2.getAsDouble(), std3.getAsDouble()));
+                                    stddev,
+                                    stddev,
+                                    stddev
+                                            * (SwerveConstants.MAX_X_Y_VELOCITY
+                                                    / SwerveConstants.MAX_OMEGA_VELOCITY)));
         }
     }
 
