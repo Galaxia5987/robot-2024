@@ -112,7 +112,7 @@ public class ModuleIOTalonFX implements ModuleIO {
 
         inputs.highFreqDistances = distanceQueue.stream().mapToDouble((Double d) -> d).toArray();
         inputs.highFreqAngles = angleQueue.stream().mapToDouble((Double d) -> d).toArray();
-        inputs.highFreqTimestamps = timestampQueue.stream().mapToDouble((Double d) -> d).toArray();
+        inputs.highFreqTimestamps = timestampQueue.stream().mapToDouble(Double::doubleValue).toArray();
 
         distanceQueue.clear();
         angleQueue.clear();

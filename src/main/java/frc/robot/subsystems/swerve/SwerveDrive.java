@@ -13,6 +13,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.lib.PhoenixOdometryThread;
 import frc.robot.lib.controllers.DieterController;
 import frc.robot.lib.math.differential.Derivative;
 import java.util.Arrays;
@@ -23,6 +24,7 @@ import java.util.function.DoubleSupplier;
 import java.util.stream.Stream;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
+import org.photonvision.PhotonPoseEstimator;
 
 public class SwerveDrive extends SubsystemBase {
     public static final Lock odometryLock = new ReentrantLock();
@@ -57,6 +59,7 @@ public class SwerveDrive extends SubsystemBase {
         estimator =
                 new SwerveDrivePoseEstimator(
                         getKinematics(), getYaw(), getModulePositions(), getBotPose());
+//        PhoenixOdometryThread.getInstance().start();
     }
 
     public static SwerveDrive getInstance() {
@@ -139,8 +142,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void updateHighFreqPose() {
-        double[] sampleTimestamps =
-                modules[0].getHighFreqTimestamps(); // All signals are sampled together
+        double[] sampleTimestamps = modules[0].getHighFreqTimestamps(); // All signals are sampled together
         int sampleCount = sampleTimestamps.length;
         for (int i = 0; i < sampleCount; i++) {
             // Read wheel positions and deltas from each module
@@ -321,7 +323,9 @@ public class SwerveDrive extends SubsystemBase {
         updateGyroInputs();
         updateSwerveInputs();
         updateModulePositions();
-        updateHighFreqPose();
+//        updateHighFreqPose();
+        estimator.update(getRawYaw(), getModulePositions());
+        botPose = estimator.getEstimatedPosition();
         odometryLock.unlock();
 
         SwerveDriveKinematics.desaturateWheelSpeeds(
