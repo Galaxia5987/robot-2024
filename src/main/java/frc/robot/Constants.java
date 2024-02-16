@@ -5,7 +5,8 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.units.*;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.vision.PhotonVisionIOReal;
@@ -21,7 +22,7 @@ public class Constants {
 
     public static Mode CURRENT_MODE = Mode.REAL;
 
-    public static double VISION_MEASUREMENT_MULTIPLIER = 0.0005;
+    public static double VISION_MEASUREMENT_MULTIPLIER = 1;
 
     public static final Transform3d BACK_LEFT_CAMERA_POSE =
             new Transform3d(
@@ -70,10 +71,10 @@ public class Constants {
     }
 
     public static final double[] SWERVE_OFFSETS = {
-        0.794_376_719_859_418,
-        0.780_963_919_524_097_9,
-        0.484_072_612_101_815_3,
-        0.609_018_215_225_455_4
+            0.794_376_719_859_418,
+            0.780_963_919_524_097_9,
+            0.484_072_612_101_815_3,
+            0.609_018_215_225_455_4
     };
 
     public static void initSwerve() {
@@ -116,58 +117,61 @@ public class Constants {
 
     public static void initVision() {
         VisionModule rightOpi;
-                switch (CURRENT_MODE) {
-                    case REAL:
-                        rightOpi =
-                                new VisionModule(
-//                                        new PhotonVisionIOReal(
-//                                                new PhotonCamera("Front right camera"),
-//                                                FRONT_RIGHT_CAMERA_POSE,
-//                                                AprilTagFields.k2024Crescendo
-//                                                        .loadAprilTagLayoutField()),
-                                        new PhotonVisionIOReal(
-                                                new PhotonCamera("Back right camera"),
-                                                BACK_RIGHT_CAMERA_POSE,
-                                                AprilTagFields.k2024Crescendo
-                                                        .loadAprilTagLayoutField()));
-                        break;
-//                        yield new VisionModule(
-//                                new PhotonVisionIOReal(
-//                                        new PhotonCamera("Front left camera"),
-//                                        FRONT_LEFT_CAMERA_POSE,
-//                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()),
-//                                new PhotonVisionIOReal(
-//                                        new PhotonCamera("Back left camera"),
-//                                        BACK_LEFT_CAMERA_POSE,
-//                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()));
-                    default:
-                        rightOpi =
-                                new VisionModule(
-//                                        new VisionSimIO(
-//                                                new PhotonCamera("Front left camera"),
-//                                                FRONT_LEFT_CAMERA_POSE,
-//                                                AprilTagFields.k2024Crescendo
-//                                                        .loadAprilTagLayoutField(),
-//                                                SimCameraProperties.PI4_LIFECAM_640_480()),
-                                        new VisionSimIO(
-                                                new PhotonCamera("Front right camera"),
-                                                FRONT_RIGHT_CAMERA_POSE,
-                                                AprilTagFields.k2024Crescendo
-                                                        .loadAprilTagLayoutField(),
-                                                SimCameraProperties.PI4_LIFECAM_640_480()));
-                        break;
-//                        yield new VisionModule(
-//                                new VisionSimIO(
-//                                        new PhotonCamera("Back left camera"),
-//                                        BACK_LEFT_CAMERA_POSE,
-//                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-//                                        SimCameraProperties.PI4_LIFECAM_640_480()),
-//                                new VisionSimIO(
-//                                        new PhotonCamera("Back right camera"),
-//                                        BACK_RIGHT_CAMERA_POSE,
-//                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-//                                        SimCameraProperties.PI4_LIFECAM_640_480()));
-                };
-        Vision.initialize(rightOpi);
+        VisionModule leftOpi;
+        switch (CURRENT_MODE) {
+            case REAL:
+                rightOpi =
+                        new VisionModule(
+                                new PhotonVisionIOReal(
+                                        new PhotonCamera("Front right camera"),
+                                        FRONT_RIGHT_CAMERA_POSE,
+                                        AprilTagFields.k2024Crescendo
+                                                .loadAprilTagLayoutField()),
+                                new PhotonVisionIOReal(
+                                        new PhotonCamera("Front right camera"),
+                                        FRONT_RIGHT_CAMERA_POSE,
+                                        AprilTagFields.k2024Crescendo
+                                                .loadAprilTagLayoutField()));
+                leftOpi = new VisionModule(
+                        new PhotonVisionIOReal(
+                                new PhotonCamera("Front left camera"),
+                                FRONT_LEFT_CAMERA_POSE,
+                                AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()),
+                        new PhotonVisionIOReal(
+                                new PhotonCamera("Back left camera"),
+                                BACK_LEFT_CAMERA_POSE,
+                                AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()));
+                break;
+            default:
+                rightOpi =
+                        new VisionModule(
+                                new VisionSimIO(
+                                        new PhotonCamera("Front left camera"),
+                                        FRONT_LEFT_CAMERA_POSE,
+                                        AprilTagFields.k2024Crescendo
+                                                .loadAprilTagLayoutField(),
+                                        SimCameraProperties.PI4_LIFECAM_640_480()),
+                                new VisionSimIO(
+                                        new PhotonCamera("Front right camera"),
+                                        FRONT_RIGHT_CAMERA_POSE,
+                                        AprilTagFields.k2024Crescendo
+                                                .loadAprilTagLayoutField(),
+                                        SimCameraProperties.PI4_LIFECAM_640_480()));
+                leftOpi = new VisionModule(
+                        new VisionSimIO(
+                                new PhotonCamera("Back left camera"),
+                                BACK_LEFT_CAMERA_POSE,
+                                AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                                SimCameraProperties.PI4_LIFECAM_640_480()),
+                        new VisionSimIO(
+                                new PhotonCamera("Back right camera"),
+                                BACK_RIGHT_CAMERA_POSE,
+                                AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                                SimCameraProperties.PI4_LIFECAM_640_480()));
+                break;
+
+        }
+        ;
+        Vision.initialize(rightOpi, leftOpi);
     }
 }
