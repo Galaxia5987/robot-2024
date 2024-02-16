@@ -3,6 +3,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -26,14 +27,14 @@ public class Constants {
 
     public static final Transform3d BACK_LEFT_CAMERA_POSE =
             new Transform3d(
-                    -0.28936,
-                    0.34115,
+                    -0.289_36,
+                    0.341_15,
                     0.2,
                     new Rotation3d(0, -Math.toRadians(31.92), Math.toRadians(180)));
     public static final Transform3d BACK_RIGHT_CAMERA_POSE =
             new Transform3d(
-                    -0.34652,
-                    -0.28532,
+                    -0.346_52,
+                    -0.285_32,
                     0.2,
                     new Rotation3d(0, -Math.toRadians(31.92), -Math.toRadians(100)));
     public static final Transform3d FRONT_LEFT_CAMERA_POSE =
@@ -44,9 +45,9 @@ public class Constants {
     public static final Measure<Voltage> NOMINAL_VOLTAGE = Units.Volts.of(12);
 
     public static final Measure<Distance> ROBOT_LENGTH = Units.Meters.of(0.584);
-    public static final Measure<Velocity<Distance>> MAX_VELOCITY = Units.MetersPerSecond.of(4.5);
+    public static final Measure<Velocity<Distance>> MAX_VELOCITY = Units.MetersPerSecond.of(4);
     public static final Measure<Velocity<Velocity<Distance>>> MAX_ACCELERATION =
-            Units.MetersPerSecondPerSecond.of(3);
+            Units.MetersPerSecondPerSecond.of(2.5);
     public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY =
             Units.RotationsPerSecond.of(
                     MAX_VELOCITY.in(Units.MetersPerSecond)
@@ -71,10 +72,10 @@ public class Constants {
     }
 
     public static final double[] SWERVE_OFFSETS = {
-            0.794_376_719_859_418,
-            0.780_963_919_524_097_9,
-            0.484_072_612_101_815_3,
-            0.609_018_215_225_455_4
+        0.794_376_719_859_418,
+        0.780_963_919_524_097_9,
+        0.484_072_612_101_815_3,
+        0.609_018_215_225_455_4
     };
 
     public static void initSwerve() {
@@ -103,13 +104,15 @@ public class Constants {
         SwerveDrive.initialize(gyroIO, SWERVE_OFFSETS, moduleIOs);
         SwerveDrive swerveDrive = SwerveDrive.getInstance();
         AutoBuilder.configureHolonomic(
-                swerveDrive::getBotPose,
+                () -> swerveDrive.getEstimator().getEstimatedPosition(),
                 swerveDrive::resetPose,
                 swerveDrive::getCurrentSpeeds,
                 (speeds) -> swerveDrive.drive(speeds, false),
                 new HolonomicPathFollowerConfig(
+                        new PIDConstants(4, 0 ,0),
+                        new PIDConstants(4, 0, 0),
                         SwerveConstants.MAX_X_Y_VELOCITY,
-                        Constants.ROBOT_LENGTH.in(Units.Meters) / 2,
+                        Constants.ROBOT_LENGTH.in(Units.Meters) / Math.sqrt(2),
                         new ReplanningConfig()),
                 () -> false,
                 swerveDrive);
@@ -125,22 +128,21 @@ public class Constants {
                                 new PhotonVisionIOReal(
                                         new PhotonCamera("Front right camera"),
                                         FRONT_RIGHT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo
-                                                .loadAprilTagLayoutField()),
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()),
                                 new PhotonVisionIOReal(
                                         new PhotonCamera("Front right camera"),
                                         FRONT_RIGHT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo
-                                                .loadAprilTagLayoutField()));
-                leftOpi = new VisionModule(
-                        new PhotonVisionIOReal(
-                                new PhotonCamera("Front left camera"),
-                                FRONT_LEFT_CAMERA_POSE,
-                                AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()),
-                        new PhotonVisionIOReal(
-                                new PhotonCamera("Back left camera"),
-                                BACK_LEFT_CAMERA_POSE,
-                                AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()));
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()));
+                leftOpi =
+                        new VisionModule(
+                                new PhotonVisionIOReal(
+                                        new PhotonCamera("Front left camera"),
+                                        FRONT_LEFT_CAMERA_POSE,
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()),
+                                new PhotonVisionIOReal(
+                                        new PhotonCamera("Back left camera"),
+                                        BACK_LEFT_CAMERA_POSE,
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()));
                 break;
             default:
                 rightOpi =
@@ -148,28 +150,26 @@ public class Constants {
                                 new VisionSimIO(
                                         new PhotonCamera("Front left camera"),
                                         FRONT_LEFT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo
-                                                .loadAprilTagLayoutField(),
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
                                         SimCameraProperties.PI4_LIFECAM_640_480()),
                                 new VisionSimIO(
                                         new PhotonCamera("Front right camera"),
                                         FRONT_RIGHT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo
-                                                .loadAprilTagLayoutField(),
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
                                         SimCameraProperties.PI4_LIFECAM_640_480()));
-                leftOpi = new VisionModule(
-                        new VisionSimIO(
-                                new PhotonCamera("Back left camera"),
-                                BACK_LEFT_CAMERA_POSE,
-                                AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                                SimCameraProperties.PI4_LIFECAM_640_480()),
-                        new VisionSimIO(
-                                new PhotonCamera("Back right camera"),
-                                BACK_RIGHT_CAMERA_POSE,
-                                AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                                SimCameraProperties.PI4_LIFECAM_640_480()));
+                leftOpi =
+                        new VisionModule(
+                                new VisionSimIO(
+                                        new PhotonCamera("Back left camera"),
+                                        BACK_LEFT_CAMERA_POSE,
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                                        SimCameraProperties.PI4_LIFECAM_640_480()),
+                                new VisionSimIO(
+                                        new PhotonCamera("Back right camera"),
+                                        BACK_RIGHT_CAMERA_POSE,
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                                        SimCameraProperties.PI4_LIFECAM_640_480()));
                 break;
-
         }
         ;
         Vision.initialize(rightOpi, leftOpi);

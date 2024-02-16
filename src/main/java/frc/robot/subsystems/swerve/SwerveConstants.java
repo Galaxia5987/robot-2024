@@ -123,9 +123,9 @@ public class SwerveConstants {
                 ROTATION_KD.initDefault(0.0);
                 ROTATION_KDIETER.initDefault(0.0);
 
-                ROBOT_WIDTH = 0.584;
-                ROBOT_LENGTH = 0.584;
-                WHEEL_DIAMETER = 0.099;
+                ROBOT_WIDTH = 0.585;
+                ROBOT_LENGTH = 0.585;
+                WHEEL_DIAMETER = 0.102;
                 DRIVE_REDUCTION = (1 / 2.0) * (24.0 / 22.0) * (15.0 / 45.0);
                 ANGLE_REDUCTION = (14.0 / 72.0) * 0.5;
 

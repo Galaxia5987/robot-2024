@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
@@ -26,6 +27,7 @@ public class GripperIOReal implements GripperIO {
     private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0);
     private final VoltageOut powerRequest = new VoltageOut(0).withEnableFOC(true);
     private final Debouncer debouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
+    private final DigitalInput sensor = new DigitalInput(4);
     private final Timer timer = new Timer();
 
     public GripperIOReal() {
@@ -74,7 +76,7 @@ public class GripperIOReal implements GripperIO {
     }
 
     public boolean hasNote() {
-        return debouncer.calculate(forwardLimitSwitch.isPressed());
+        return debouncer.calculate(!sensor.get());
     }
 
     @Override

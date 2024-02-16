@@ -97,7 +97,6 @@ public class ShootState implements ScoreState {
                     optimalRotation =
                             Utils.calcRotationToTranslation(optimalTranslation, speakerPose)
                                     .getRotations();
-                    distanceToSpeaker.value = Utils.getDistanceFromPoint(speakerPose, botPose);
                 });
     }
 

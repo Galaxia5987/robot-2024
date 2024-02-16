@@ -1,5 +1,8 @@
 package frc.robot.commandGroups;
 
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.conveyor.Conveyor;
@@ -11,6 +14,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 public class CommandGroups {
     private static CommandGroups INSTANCE;
@@ -103,5 +107,11 @@ public class CommandGroups {
                         Commands.parallel(
                                 feed(), shooter.setVelocity(() -> ShooterConstants.OUTTAKE_POWER)))
                 .withName("outtakeShooter");
+    }
+
+    public Command shootAndConvey(Supplier<MutableMeasure<Velocity<Angle>>> velocity) {
+        return shooter.setVelocity(
+                velocity
+        ).alongWith(conveyor.setVelocity(velocity));
     }
 }

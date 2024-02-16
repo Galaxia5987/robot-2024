@@ -1,11 +1,16 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.pathfinding.Pathfinding;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
-import frc.robot.lib.GeneralRobotLoop;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.scoreStates.AmpState;
 import frc.robot.scoreStates.ClimbState;
@@ -17,16 +22,11 @@ import frc.robot.subsystems.conveyor.ConveyorIOReal;
 import frc.robot.subsystems.conveyor.ConveyorIOSim;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
-import frc.robot.subsystems.elevator.ElevatorIOReal;
-import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperIO;
 import frc.robot.subsystems.gripper.GripperIOReal;
 import frc.robot.subsystems.gripper.GripperIOSim;
-import frc.robot.subsystems.hood.Hood;
-import frc.robot.subsystems.hood.HoodIO;
-import frc.robot.subsystems.hood.HoodIOReal;
-import frc.robot.subsystems.hood.HoodIOSim;
+import frc.robot.subsystems.hood.*;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOReal;
@@ -36,6 +36,8 @@ import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOReal;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.swerve.SwerveDrive;
+
+import java.util.Set;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
@@ -56,7 +58,9 @@ public class RobotContainer {
 
     private final PoseEstimation poseEstimation;
 
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
     private RobotContainer() {
         HoodIO hoodIO;
         IntakeIO intakeIO;
@@ -71,7 +75,7 @@ public class RobotContainer {
                 gripperIO = new GripperIOReal();
                 hoodIO = new HoodIOReal();
                 shooterIO = new ShooterIOReal();
-                elevatorIO = new ElevatorIOReal();
+//                elevatorIO = new ElevatorIOReal();
                 break;
             case SIM:
             case REPLAY:
@@ -81,12 +85,12 @@ public class RobotContainer {
                 gripperIO = new GripperIOSim();
                 hoodIO = new HoodIOSim();
                 shooterIO = new ShooterIOSim();
-                elevatorIO = new ElevatorIOSim();
+//                elevatorIO = new ElevatorIOSim();
                 break;
         }
         Intake.initialize(intakeIO);
         Conveyor.initialize(conveyorIO);
-        Elevator.initialize(elevatorIO);
+//        Elevator.initialize(elevatorIO);
         Gripper.initialize(gripperIO, () -> Units.Meters.of(0));
         Hood.initialize(hoodIO);
         Shooter.initialize(shooterIO);
@@ -100,7 +104,7 @@ public class RobotContainer {
         hood = Hood.getInstance();
         shooter = Shooter.getInstance();
 
-        Gripper.initialize(gripperIO, elevator::getCarriageHeight);
+        Gripper.initialize(gripperIO, () -> Units.Meters.of(0));
         gripper = Gripper.getInstance();
         commandGroups = CommandGroups.getInstance();
 
@@ -114,6 +118,8 @@ public class RobotContainer {
         configureButtonBindings();
 
         poseEstimation = PoseEstimation.getInstance();
+
+        SmartDashboard.putNumber("Shooter Velocity", 90);
     }
 
     public static RobotContainer getInstance() {
@@ -134,38 +140,41 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        //        xboxController
-        //                .y()
-        //                .whileTrue(gripper.setWristPosition(Units.Radians.of(2.15).mutableCopy()))
-        //                .onFalse(
-        //                        gripper.setRollerPower(-0.4)
-        //                                .withTimeout(1)
-        //                                .andThen(gripper.setRollerPower(0).withTimeout(0.1)));
-//        xboxController
-//                .rightBumper()
-//                .whileTrue(
-//                        Commands.parallel(
-                                //                                intake.intake(), // -1.396
-//                                hood.setAngle(() -> Units.Degrees.of(90).mutableCopy()),
-                                //                                gripper.intake(),
-                                //                                conveyor.feed(),
-//                                shooter.setVelocity(
-//                                        () -> Units.RotationsPerSecond.of(0).mutableCopy(),
-//                                        () -> Units.RotationsPerSecond.of(60).mutableCopy())))
-//                .onFalse(
-//                        Commands.parallel(
-//                                                                intake.stop(),
-//                                hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()),
-//                                                                gripper.setRollerPower(0),
-//                                                                conveyor.stop(),
-//                                shooter.stop()));
-        //        xboxController
-        //                .a()
-        //                .whileTrue(hood.setAngle(() -> Units.Degrees.of(90).mutableCopy()))
-        //                .onFalse(hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()));
-        //        xboxController.x().onTrue(intake.reset(Units.Degrees.zero()));
-        xboxController.leftBumper().onTrue(Commands.runOnce(swerveDrive::resetPose));
-        xboxController.rightBumper().onTrue(Commands.runOnce(swerveDrive::resetGyro));
+        xboxController
+                .y()
+                .whileTrue(Commands.defer(() -> AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(13.1, 6.26), new Rotation2d()),
+                        Constants.AUTO_CONSTRAINTS), Set.of(swerveDrive)));
+        xboxController
+                .rightBumper()
+                .whileTrue(
+                        Commands.parallel(
+                                hood.setAngle(
+                                        () -> HoodKinematics.getAngleFromDistance(
+                                                Units.Meters.of(Robot.distanceToSpeaker)
+                                        ).mutableCopy()),
+                                commandGroups.shootAndConvey(() -> Units.RotationsPerSecond.of(80).mutableCopy())))
+                .onFalse(
+                        Commands.sequence(
+                                gripper.setRollerPower(0.7).withTimeout(1),
+                                Commands.parallel(
+                                        hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()),
+                                        conveyor.stop(),
+                                        shooter.stop(),
+                                        gripper.setRollerPower(0))));
+        xboxController.leftBumper().whileTrue(
+                        Commands.parallel(
+                                intake.intake(),
+                                gripper.setRollerPower(0.1)
+                        )
+                ).onFalse(
+                        Commands.parallel(
+                                intake.stop(),
+                                gripper.setRollerPower(0)
+                        )
+                );
+        xboxController.rightTrigger().onTrue(Commands.runOnce(() -> intake.reset(Units.Degrees.zero())));
+        xboxController.x().onTrue(Commands.runOnce(swerveDrive::resetPose));
+        xboxController.b().onTrue(Commands.runOnce(swerveDrive::resetGyro));
     }
 
     /**

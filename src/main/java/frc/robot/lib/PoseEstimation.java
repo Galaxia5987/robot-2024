@@ -20,7 +20,7 @@ public class PoseEstimation {
     }
 
     public static PoseEstimation getInstance() {
-        if (INSTANCE == null)  {
+        if (INSTANCE == null) {
             INSTANCE = new PoseEstimation();
         }
         return INSTANCE;

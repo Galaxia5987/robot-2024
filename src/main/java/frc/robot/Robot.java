@@ -6,12 +6,15 @@ package frc.robot;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.pathfinding.Pathfinding;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.lib.PoseEstimation;
+import frc.robot.lib.Utils;
 import frc.robot.scoreStates.LocalADStarAK;
+import frc.robot.scoreStates.ScoreStateConstants;
 import frc.robot.subsystems.conveyor.ConveyorConstants;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.gripper.GripperConstants;
@@ -19,6 +22,7 @@ import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveConstants;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -35,6 +39,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  */
 public class Robot extends LoggedRobot {
     private final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+    @AutoLogOutput public static double distanceToSpeaker;
+    @AutoLogOutput public static Translation2d toSpeaker;
     private RobotContainer robotContainer;
     private Command autonomousCommand;
 
@@ -113,7 +119,12 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        PoseEstimation.getInstance().processVisionMeasurements(Constants.VISION_MEASUREMENT_MULTIPLIER);
+        PoseEstimation.getInstance()
+                .processVisionMeasurements(Constants.VISION_MEASUREMENT_MULTIPLIER);
+        var botPose = PoseEstimation.getInstance().getEstimatedPose();
+        toSpeaker = botPose.getTranslation().minus(ScoreStateConstants.SPEAKER_POSE_RED);
+        distanceToSpeaker =
+                Utils.getDistanceFromPoint(ScoreStateConstants.SPEAKER_POSE_RED, botPose);
     }
 
     /**
