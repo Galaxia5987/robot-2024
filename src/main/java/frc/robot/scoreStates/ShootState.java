@@ -38,7 +38,7 @@ public class ShootState implements ScoreState {
         shooter = Shooter.getInstance();
         hood = Hood.getInstance();
         conveyor = Conveyor.getInstance();
-        poseEstimation = new PoseEstimation(SwerveDrive.getInstance());
+        poseEstimation = PoseEstimation.getInstance();
     }
 
     private Command rotate() {

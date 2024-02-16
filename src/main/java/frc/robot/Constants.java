@@ -25,20 +25,20 @@ public class Constants {
 
     public static final Transform3d BACK_LEFT_CAMERA_POSE =
             new Transform3d(
-                    -0.293,
-                    0.293,
+                    -0.28936,
+                    0.34115,
                     0.2,
-                    new Rotation3d(0, Math.toRadians(31.92), Math.toRadians(180)));
+                    new Rotation3d(0, -Math.toRadians(31.92), Math.toRadians(180)));
     public static final Transform3d BACK_RIGHT_CAMERA_POSE =
             new Transform3d(
-                    -0.293,
-                    -0.293,
+                    -0.34652,
+                    -0.28532,
                     0.2,
-                    new Rotation3d(0, Math.toRadians(31.92), Math.toRadians(-100)));
+                    new Rotation3d(0, -Math.toRadians(31.92), -Math.toRadians(100)));
     public static final Transform3d FRONT_LEFT_CAMERA_POSE =
-            new Transform3d(0, 0.293, 0.55, new Rotation3d(0, Math.toRadians(10.0), 0));
+            new Transform3d(0.061, 0.2848, 0.55, new Rotation3d(0, -Math.toRadians(10.0), 0));
     public static final Transform3d FRONT_RIGHT_CAMERA_POSE =
-            new Transform3d(0, -0.293, 0.55, new Rotation3d(0, Math.toRadians(25.0), 0));
+            new Transform3d(0.061, -0.2848, 0.55, new Rotation3d(0, -Math.toRadians(25.0), 0));
 
     public static final Measure<Voltage> NOMINAL_VOLTAGE = Units.Volts.of(12);
 
@@ -115,60 +115,59 @@ public class Constants {
     }
 
     public static void initVision() {
-        VisionModule orangePi1;
-        VisionModule orangePi2 =
+        VisionModule rightOpi;
                 switch (CURRENT_MODE) {
-                    case REAL -> {
-                        orangePi1 =
+                    case REAL:
+                        rightOpi =
                                 new VisionModule(
+//                                        new PhotonVisionIOReal(
+//                                                new PhotonCamera("Front right camera"),
+//                                                FRONT_RIGHT_CAMERA_POSE,
+//                                                AprilTagFields.k2024Crescendo
+//                                                        .loadAprilTagLayoutField()),
                                         new PhotonVisionIOReal(
-                                                new PhotonCamera("Front left camera"),
-                                                FRONT_LEFT_CAMERA_POSE,
-                                                AprilTagFields.k2024Crescendo
-                                                        .loadAprilTagLayoutField()),
-                                        new PhotonVisionIOReal(
-                                                new PhotonCamera("Front right camera"),
-                                                FRONT_RIGHT_CAMERA_POSE,
+                                                new PhotonCamera("Back right camera"),
+                                                BACK_RIGHT_CAMERA_POSE,
                                                 AprilTagFields.k2024Crescendo
                                                         .loadAprilTagLayoutField()));
-                        yield new VisionModule(
-                                new PhotonVisionIOReal(
-                                        new PhotonCamera("Back left camera"),
-                                        BACK_LEFT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()),
-                                new PhotonVisionIOReal(
-                                        new PhotonCamera("Back right camera"),
-                                        BACK_RIGHT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()));
-                    }
-                    default -> {
-                        orangePi1 =
+                        break;
+//                        yield new VisionModule(
+//                                new PhotonVisionIOReal(
+//                                        new PhotonCamera("Front left camera"),
+//                                        FRONT_LEFT_CAMERA_POSE,
+//                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()),
+//                                new PhotonVisionIOReal(
+//                                        new PhotonCamera("Back left camera"),
+//                                        BACK_LEFT_CAMERA_POSE,
+//                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()));
+                    default:
+                        rightOpi =
                                 new VisionModule(
-                                        new VisionSimIO(
-                                                new PhotonCamera("Front left camera"),
-                                                FRONT_LEFT_CAMERA_POSE,
-                                                AprilTagFields.k2024Crescendo
-                                                        .loadAprilTagLayoutField(),
-                                                SimCameraProperties.PI4_LIFECAM_640_480()),
+//                                        new VisionSimIO(
+//                                                new PhotonCamera("Front left camera"),
+//                                                FRONT_LEFT_CAMERA_POSE,
+//                                                AprilTagFields.k2024Crescendo
+//                                                        .loadAprilTagLayoutField(),
+//                                                SimCameraProperties.PI4_LIFECAM_640_480()),
                                         new VisionSimIO(
                                                 new PhotonCamera("Front right camera"),
                                                 FRONT_RIGHT_CAMERA_POSE,
                                                 AprilTagFields.k2024Crescendo
                                                         .loadAprilTagLayoutField(),
                                                 SimCameraProperties.PI4_LIFECAM_640_480()));
-                        yield new VisionModule(
-                                new VisionSimIO(
-                                        new PhotonCamera("Back left camera"),
-                                        BACK_LEFT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                                        SimCameraProperties.PI4_LIFECAM_640_480()),
-                                new VisionSimIO(
-                                        new PhotonCamera("Back right camera"),
-                                        BACK_RIGHT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                                        SimCameraProperties.PI4_LIFECAM_640_480()));
-                    }
+                        break;
+//                        yield new VisionModule(
+//                                new VisionSimIO(
+//                                        new PhotonCamera("Back left camera"),
+//                                        BACK_LEFT_CAMERA_POSE,
+//                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+//                                        SimCameraProperties.PI4_LIFECAM_640_480()),
+//                                new VisionSimIO(
+//                                        new PhotonCamera("Back right camera"),
+//                                        BACK_RIGHT_CAMERA_POSE,
+//                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+//                                        SimCameraProperties.PI4_LIFECAM_640_480()));
                 };
-        Vision.initialize(orangePi1, orangePi2);
+        Vision.initialize(rightOpi);
     }
 }

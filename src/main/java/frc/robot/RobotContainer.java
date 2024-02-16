@@ -54,6 +54,8 @@ public class RobotContainer {
     private final AmpState ampState;
     private final ClimbState climbState;
 
+    private final PoseEstimation poseEstimation;
+
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
         HoodIO hoodIO;
@@ -89,7 +91,7 @@ public class RobotContainer {
         Hood.initialize(hoodIO);
         Shooter.initialize(shooterIO);
         Constants.initSwerve();
-        //        Constants.initVision();
+        Constants.initVision();
 
         swerveDrive = SwerveDrive.getInstance();
         intake = Intake.getInstance();
@@ -111,9 +113,7 @@ public class RobotContainer {
         configureDefaultCommands();
         configureButtonBindings();
 
-        PoseEstimation poseEstimation = new PoseEstimation();
-        GeneralRobotLoop.register(() ->
-                poseEstimation.processVisionMeasurements(Constants.VISION_MEASUREMENT_MULTIPLIER));
+        poseEstimation = PoseEstimation.getInstance();
     }
 
     public static RobotContainer getInstance() {

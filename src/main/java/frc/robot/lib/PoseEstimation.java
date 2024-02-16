@@ -9,17 +9,29 @@ import java.util.stream.Collectors;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 public class PoseEstimation {
+    private static PoseEstimation INSTANCE = null;
+
     private final SwerveDrive swerveDrive;
     private final Vision vision;
 
-    public PoseEstimation() {
+    private PoseEstimation() {
         swerveDrive = SwerveDrive.getInstance();
         vision = Vision.getInstance();
+    }
+
+    public static PoseEstimation getInstance() {
+        if (INSTANCE == null)  {
+            INSTANCE = new PoseEstimation();
+        }
+        return INSTANCE;
     }
 
     public void processVisionMeasurements(double multiplier) {
         var results = vision.getResults();
         for (org.photonvision.EstimatedRobotPose result : results) {
+            if (result == null) {
+                continue;
+            }
             var ambiguities =
                     result.targetsUsed.stream()
                             .map(

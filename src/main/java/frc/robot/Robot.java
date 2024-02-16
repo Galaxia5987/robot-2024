@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.lib.PoseEstimation;
 import frc.robot.scoreStates.LocalADStarAK;
 import frc.robot.subsystems.conveyor.ConveyorConstants;
 import frc.robot.subsystems.elevator.ElevatorConstants;
@@ -112,6 +113,7 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        PoseEstimation.getInstance().processVisionMeasurements(Constants.VISION_MEASUREMENT_MULTIPLIER);
     }
 
     /**
