@@ -14,6 +14,7 @@ import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Ports;
 
 public class GripperIOReal implements GripperIO {
@@ -25,6 +26,7 @@ public class GripperIOReal implements GripperIO {
     private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0);
     private final VoltageOut powerRequest = new VoltageOut(0).withEnableFOC(true);
     private final Debouncer debouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
+    private final Timer timer = new Timer();
 
     public GripperIOReal() {
         angleMotor = new TalonFX(Ports.Gripper.ANGLE_ID);
@@ -46,6 +48,9 @@ public class GripperIOReal implements GripperIO {
         rollerMotor.setSmartCurrentLimit(GripperConstants.CURRENT_LIMIT);
         rollerMotor.setInverted(GripperConstants.ROLLER_INVERTED_VALUE);
         rollerMotor.burnFlash();
+
+        timer.start();
+        timer.reset();
     }
 
     @Override
@@ -89,6 +94,8 @@ public class GripperIOReal implements GripperIO {
         inputs.encoderPosition.mut_replace(
                 Math.IEEEremainder(inputs.encoderPosition.in(Units.Rotations), 1), Units.Rotations);
 
-        angleMotor.setPosition(inputs.encoderPosition.in(Units.Rotations));
+        if (timer.advanceIfElapsed(2)) {
+            angleMotor.setPosition(inputs.encoderPosition.in(Units.Rotations));
+        }
     }
 }
