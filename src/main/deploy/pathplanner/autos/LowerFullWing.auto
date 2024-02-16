@@ -20,7 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "intake-and-shoot"
+            "name": "shoot"
           }
         },
         {
@@ -36,7 +36,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": null
+                  "name": "shoot"
                 }
               }
             ]
