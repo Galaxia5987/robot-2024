@@ -114,7 +114,7 @@ public class SwerveModule extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (timer.advanceIfElapsed(1)) {
+        if (timer.advanceIfElapsed(2)) {
             io.updateOffset(new Rotation2d(Units.rotationsToRadians(offset)));
         }
     }
