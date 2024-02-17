@@ -110,8 +110,6 @@ public class CommandGroups {
     }
 
     public Command shootAndConvey(Supplier<MutableMeasure<Velocity<Angle>>> velocity) {
-        return shooter.setVelocity(
-                velocity
-        ).alongWith(conveyor.setVelocity(velocity));
+        return shooter.setVelocity(velocity).alongWith(conveyor.setVelocity(velocity));
     }
 }
