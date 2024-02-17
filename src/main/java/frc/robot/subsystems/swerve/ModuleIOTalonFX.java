@@ -66,14 +66,10 @@ public class ModuleIOTalonFX implements ModuleIO {
     public void updateInputs(SwerveModuleInputs inputs) {
         inputs.absolutePosition = encoder.getAbsolutePosition();
 
-        inputs.driveMotorSupplyCurrent = driveMotor.getSupplyCurrent().getValue();
-        inputs.driveMotorStatorCurrent = driveMotor.getStatorCurrent().getValue();
         inputs.driveMotorPosition = driveMotor.getRotorPosition().getValue();
         inputs.driveMotorVelocity = getVelocity();
         inputs.driveMotorVelocitySetpoint = driveMotorVelocitySetpoint;
 
-        inputs.angleMotorSupplyCurrent = angleMotor.getSupplyCurrent().getValue();
-        inputs.angleMotorStatorCurrent = angleMotor.getStatorCurrent().getValue();
         inputs.angleMotorPosition = angleMotor.getRotorPosition().getValue();
         inputs.angleMotorVelocity = angleMotor.getVelocity().getValue();
 

@@ -1,21 +1,16 @@
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.pathfinding.Pathfinding;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.lib.PoseEstimation;
-import frc.robot.scoreStates.AmpState;
-import frc.robot.scoreStates.ClimbState;
-import frc.robot.scoreStates.ScoreState;
-import frc.robot.scoreStates.ShootState;
+import frc.robot.lib.math.interpolation.InterpolatingDouble;
+import frc.robot.scoreStates.*;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.conveyor.ConveyorIO;
 import frc.robot.subsystems.conveyor.ConveyorIOReal;
@@ -31,13 +26,8 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOReal;
 import frc.robot.subsystems.intake.IntakeIOSim;
-import frc.robot.subsystems.shooter.Shooter;
-import frc.robot.subsystems.shooter.ShooterIO;
-import frc.robot.subsystems.shooter.ShooterIOReal;
-import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.shooter.*;
 import frc.robot.subsystems.swerve.SwerveDrive;
-
-import java.util.Set;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
@@ -48,19 +38,15 @@ public class RobotContainer {
     private final Hood hood;
     private final Shooter shooter;
     private final SwerveDrive swerveDrive;
-    private final CommandXboxController xboxController = new CommandXboxController(0);
-
-    private CommandGroups commandGroups;
-    private ScoreState currentState;
+    private final CommandPS5Controller controller = new CommandPS5Controller(0);
     private final ShootState shootState;
     private final AmpState ampState;
     private final ClimbState climbState;
-
     private final PoseEstimation poseEstimation;
+    private CommandGroups commandGroups;
+    private ScoreState currentState;
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
+    /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
         HoodIO hoodIO;
         IntakeIO intakeIO;
@@ -75,7 +61,7 @@ public class RobotContainer {
                 gripperIO = new GripperIOReal();
                 hoodIO = new HoodIOReal();
                 shooterIO = new ShooterIOReal();
-//                elevatorIO = new ElevatorIOReal();
+                //                elevatorIO = new ElevatorIOReal();
                 break;
             case SIM:
             case REPLAY:
@@ -85,12 +71,12 @@ public class RobotContainer {
                 gripperIO = new GripperIOSim();
                 hoodIO = new HoodIOSim();
                 shooterIO = new ShooterIOSim();
-//                elevatorIO = new ElevatorIOSim();
+                //                elevatorIO = new ElevatorIOSim();
                 break;
         }
         Intake.initialize(intakeIO);
         Conveyor.initialize(conveyorIO);
-//        Elevator.initialize(elevatorIO);
+        //        Elevator.initialize(elevatorIO);
         Gripper.initialize(gripperIO, () -> Units.Meters.of(0));
         Hood.initialize(hoodIO);
         Shooter.initialize(shooterIO);
@@ -132,48 +118,63 @@ public class RobotContainer {
     private void configureDefaultCommands() {
         swerveDrive.setDefaultCommand(
                 swerveDrive.driveCommand(
-                        () -> -xboxController.getLeftY(),
-                        () -> -xboxController.getLeftX(),
-                        () -> 0.6 * -xboxController.getRightX(),
-                        0.15,
+                        () -> -controller.getLeftY(),
+                        () -> -controller.getLeftX(),
+                        () -> 0.4 * -controller.getRightX(),
+                        0.1,
                         () -> true));
     }
 
     private void configureButtonBindings() {
-        xboxController
-                .y()
-                .whileTrue(Commands.defer(() -> AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(13.1, 6.26), new Rotation2d()),
-                        Constants.AUTO_CONSTRAINTS), Set.of(swerveDrive)));
-        xboxController
-                .rightBumper()
+        controller
+                .R1()
                 .whileTrue(
                         Commands.parallel(
-                                hood.setAngle(() -> Units.Degrees.of(94).mutableCopy()),
-                                commandGroups.shootAndConvey(() -> Units.RotationsPerSecond.of(65).mutableCopy())))
+                                        hood.setAngle(
+                                                () ->
+                                                        Units.Degrees.of(
+                                                                        HoodConstants
+                                                                                .ANGLE_BY_DISTANCE
+                                                                                .getInterpolated(
+                                                                                        new InterpolatingDouble(
+                                                                                                Robot
+                                                                                                        .distanceToSpeaker))
+                                                                                .value)
+                                                                .mutableCopy()),
+                                        commandGroups.shootAndConvey(
+                                                () ->
+                                                        Units.RotationsPerSecond.of(
+                                                                        ShooterConstants
+                                                                                .VELOCITY_BY_DISTANCE
+                                                                                .getInterpolated(
+                                                                                        new InterpolatingDouble(
+                                                                                                Robot
+                                                                                                        .distanceToSpeaker))
+                                                                                .value)
+                                                                .mutableCopy()))
+                                .until(
+                                        () ->
+                                                shooter.atSetpoint()
+                                                        && hood.atSetpoint())
+                                .andThen(gripper.setRollerPower(0.7)
+                                        .alongWith(intake.setCenterRollerSpeed(0.5))))
                 .onFalse(
-                        Commands.sequence(
-                                gripper.setRollerPower(0.7).withTimeout(1),
-                                Commands.parallel(
-                                        hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()),
-                                        conveyor.stop(),
-                                        shooter.stop(),
-                                        gripper.setRollerPower(0))));
-        xboxController.leftBumper().whileTrue(
+                        Commands.parallel(
+                                hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()),
+                                conveyor.stop(),
+                                shooter.stop(),
+                                intake.setCenterRollerSpeed(0),
+                                gripper.setRollerPower(0)));
+        controller
+                .L1()
+                .whileTrue(
                         Commands.parallel(
                                 intake.intake(),
                                 gripper.setRollerPower(0.3)
                                         .until(gripper::hasNote)
-                                        .andThen(gripper.setRollerPower(0))
-                        )
-                ).onFalse(
-                        Commands.parallel(
-                                intake.stop(),
-                                gripper.setRollerPower(0)
-                        )
-                );
-        xboxController.rightTrigger().onTrue(Commands.runOnce(() -> intake.reset(Units.Degrees.zero())));
-        xboxController.x().onTrue(Commands.runOnce(swerveDrive::resetPose));
-        xboxController.b().onTrue(Commands.runOnce(swerveDrive::resetGyro));
+                                        .andThen(gripper.setRollerPower(0))))
+                .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
+        controller.circle().onTrue(Commands.runOnce(swerveDrive::resetGyro));
     }
 
     /**

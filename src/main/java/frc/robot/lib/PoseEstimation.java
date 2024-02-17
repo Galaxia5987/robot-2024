@@ -5,7 +5,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 public class PoseEstimation {
@@ -32,15 +34,18 @@ public class PoseEstimation {
             if (result == null) {
                 continue;
             }
-            var ambiguities =
-                    result.targetsUsed.stream()
-                            .map(
-                                    (target) ->
-                                            Math.pow(
+            Supplier<Stream<Double>> distances =
+                    () ->
+                            result.targetsUsed.stream()
+                                    .map(
+                                            (target) ->
                                                     target.getBestCameraToTarget()
                                                             .getTranslation()
-                                                            .getNorm(),
-                                                    2));
+                                                            .getNorm());
+            if (distances.get().anyMatch((d) -> d > 2.5)) {
+                continue;
+            }
+            var ambiguities = distances.get().map((d) -> d * d);
             double stddev =
                     multiplier * Utils.averageAmbiguity(ambiguities.collect(Collectors.toList()));
             swerveDrive

@@ -84,14 +84,12 @@ public class ModuleIOSparkMax implements ModuleIO {
     public void updateInputs(SwerveModuleInputs inputs) {
         inputs.absolutePosition = getEncoderAngle();
 
-        inputs.driveMotorSupplyCurrent = driveMotor.getOutputCurrent();
         inputs.driveMotorPosition = driveEncoder.getPosition();
         inputs.driveMotorVelocity = getVelocity();
         inputs.driveMotorVelocitySetpoint = driveMotorSetpoint;
         inputs.driveMotorAppliedVoltage =
                 driveMotor.getAppliedOutput() * RobotController.getBatteryVoltage();
 
-        inputs.angleMotorSupplyCurrent = angleMotor.getOutputCurrent();
         inputs.angleMotorPosition = angleEncoder.getPosition();
         angleMotorPosition = inputs.angleMotorPosition;
         inputs.angleMotorVelocity = Units.rpmToRps(angleEncoder.getVelocity());

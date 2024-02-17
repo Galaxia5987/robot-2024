@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.intake.IntakeConstants.IntakePose;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -18,8 +17,10 @@ public class Intake extends SubsystemBase {
     private static Intake INSTANCE = null;
     private final IntakeIO io;
     private final IntakeInputsAutoLogged inputs = IntakeIO.inputs;
-    @AutoLogOutput private final Mechanism2d intakeMechanism = new Mechanism2d(2, 3);
-    @AutoLogOutput private final Pose3d robotPose = new Pose3d();
+    @AutoLogOutput
+    private final Mechanism2d intakeMechanism = new Mechanism2d(2, 3);
+    @AutoLogOutput
+    private final Pose3d robotPose = new Pose3d();
     private final MechanismRoot2d root = intakeMechanism.getRoot("Intake", 1, 1);
 
     private final MechanismLigament2d intakeLigament =
@@ -58,7 +59,7 @@ public class Intake extends SubsystemBase {
                 });
     }
 
-    private Command setCenterRollerSpeed(double speed) {
+    public Command setCenterRollerSpeed(double speed) {
         return Commands.runOnce(
                 () -> {
                     inputs.centerRollerSpeedSetpoint = speed;
@@ -68,15 +69,15 @@ public class Intake extends SubsystemBase {
 
     public Command intake() {
         return Commands.parallel(
-                        setAngle(IntakePose.DOWN),
+                        setAngle(IntakeConstants.IntakePose.DOWN),
                         setRollerSpeed(Units.RotationsPerSecond.of(50).mutableCopy()),
-                        setCenterRollerSpeed(0.5))
+                        setCenterRollerSpeed(0.7))
                 .withName("feeding position activated");
     }
 
     public Command stop() {
         return Commands.parallel(
-//                        setAngle(IntakePose.UP),
+                        setAngle(IntakeConstants.IntakePose.UP),
                         setRollerSpeed(Units.RotationsPerSecond.zero().mutableCopy()),
                         setCenterRollerSpeed(0))
                 .withName("stopped");

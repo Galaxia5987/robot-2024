@@ -8,8 +8,6 @@ import org.littletonrobotics.junction.AutoLog;
 public class SwerveModuleInputs {
     public double driveMotorVelocity = 0;
     public double driveMotorVelocitySetpoint = 0;
-    public double driveMotorSupplyCurrent = 0;
-    public double driveMotorStatorCurrent = 0;
     public double driveMotorPosition = 0;
     public double driveMotorAppliedVoltage = 0;
 
@@ -17,8 +15,6 @@ public class SwerveModuleInputs {
     public Rotation2d angleSetpoint = new Rotation2d();
     public double absolutePosition = 0;
     public double angleMotorVelocity = 0;
-    public double angleMotorSupplyCurrent = 0;
-    public double angleMotorStatorCurrent = 0;
     public double angleMotorPosition = 0;
     public double angleMotorAppliedVoltage = 0;
 

@@ -64,24 +64,6 @@ public class SwerveModule extends SubsystemBase {
     }
 
     /**
-     * Gets the stator current of both motors combined.
-     *
-     * @return Sum of the drive motor stator current and angle motor stator current. [amps]
-     */
-    public double getStatorCurrent() {
-        return loggerInputs.driveMotorStatorCurrent + loggerInputs.angleMotorStatorCurrent;
-    }
-
-    /**
-     * Gets the supply current of both motors combined.
-     *
-     * @return Sum of the drive motor supply current and angle motor supply current. [amps]
-     */
-    public double getSupplyCurrent() {
-        return loggerInputs.driveMotorSupplyCurrent + loggerInputs.angleMotorSupplyCurrent;
-    }
-
-    /**
      * Gets the position of the absolute encoder.
      *
      * @return Position of the absolute encoder. [sensor ticks]

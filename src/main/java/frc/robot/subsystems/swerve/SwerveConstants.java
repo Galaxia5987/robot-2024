@@ -8,7 +8,11 @@ public class SwerveConstants {
     public static final double NEO_CURRENT_LIMIT = 40;
     public static final double NEO_550_CURRENT_LIMIT = 20;
     public static final CurrentLimitsConfigs TALON_FX_CURRENT_LIMIT_CONFIGS =
-            new CurrentLimitsConfigs().withSupplyCurrentLimit(50).withStatorCurrentLimit(50);
+            new CurrentLimitsConfigs()
+                    .withSupplyCurrentLimit(30)
+                    .withStatorCurrentLimit(30)
+                    .withStatorCurrentLimitEnable(true)
+                    .withSupplyCurrentLimitEnable(true);
 
     public static final double VOLT_COMP_SATURATION = 12;
     public static final double NEUTRAL_DEADBAND = 0.03;
@@ -118,7 +122,7 @@ public class SwerveConstants {
                 ANGLE_KD.initDefault(0.0);
                 ANGLE_KS.initDefault(0.28);
 
-                ROTATION_KP.initDefault(0.9);
+                ROTATION_KP.initDefault(0.2);
                 ROTATION_KI.initDefault(0.0);
                 ROTATION_KD.initDefault(0.0);
                 ROTATION_KDIETER.initDefault(0.0);

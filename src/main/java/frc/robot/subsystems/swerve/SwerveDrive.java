@@ -21,6 +21,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -248,7 +249,7 @@ public class SwerveDrive extends SubsystemBase {
                                 fieldOriented.getAsBoolean()));
     }
 
-    public Command turnCommand(double rotation, double turnTolerance) {
+    public Command turnCommand(Supplier<Rotation2d> rotation, double turnTolerance) {
         DieterController turnController =
                 new DieterController(
                         SwerveConstants.ROTATION_KP.get(),
@@ -261,9 +262,34 @@ public class SwerveDrive extends SubsystemBase {
                         drive(
                                 0,
                                 0,
-                                turnController.calculate(getYaw().getRotations(), rotation),
+                                turnController.calculate(
+                                        getYaw().getRotations(), rotation.get().getRotations()),
                                 false))
                 .until(turnController::atSetpoint);
+    }
+
+    public Command driveAndAdjust(
+            Supplier<Rotation2d> rotation,
+            double turnTolerance,
+            DoubleSupplier xJoystick,
+            DoubleSupplier yJoystick,
+            double deadband) {
+        DieterController turnController =
+                new DieterController(
+                        SwerveConstants.ROTATION_KP.get(),
+                        SwerveConstants.ROTATION_KI.get(),
+                        SwerveConstants.ROTATION_KD.get(),
+                        SwerveConstants.ROTATION_KDIETER.get());
+        turnController.setTolerance(turnTolerance, 0.05);
+        turnController.enableContinuousInput(-0.5, 0.5);
+        return run(
+                () ->
+                        drive(
+                                MathUtil.applyDeadband(xJoystick.getAsDouble(), deadband),
+                                MathUtil.applyDeadband(yJoystick.getAsDouble(), deadband),
+                                turnController.calculate(
+                                        getYaw().getRotations(), rotation.get().getRotations()),
+                                true));
     }
 
     public void updateSwerveInputs() {
@@ -286,12 +312,6 @@ public class SwerveDrive extends SubsystemBase {
 
         acceleration.update(loggerInputs.linearVelocity);
         loggerInputs.acceleration = accelFilter.calculate(acceleration.get());
-
-        loggerInputs.supplyCurrent =
-                Arrays.stream(modules).mapToDouble(SwerveModule::getSupplyCurrent).sum();
-
-        loggerInputs.statorCurrent =
-                Arrays.stream(modules).mapToDouble(SwerveModule::getStatorCurrent).sum();
     }
 
     public void updateGyroInputs() {

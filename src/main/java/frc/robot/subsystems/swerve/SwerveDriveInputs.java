@@ -7,9 +7,6 @@ import org.littletonrobotics.junction.AutoLog;
 
 @AutoLog
 public class SwerveDriveInputs {
-    public double supplyCurrent;
-    public double statorCurrent;
-
     public SwerveModuleState[] currentModuleStates = new SwerveModuleState[4];
     public SwerveModuleState[] desiredModuleStates = {
         new SwerveModuleState(),

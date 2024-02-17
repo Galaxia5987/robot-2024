@@ -29,7 +29,6 @@ public interface VisionIO {
         Pose3d cameraToTarget = new Pose3d();
         Pose3d poseFieldOriented = new Pose3d();
         double bestTargetAmbiguity = 0;
-        public double[] ambiguities = new double[8];
-        public double averageAmbiguity = 0;
+        public double ambiguity = 0;
     }
 }

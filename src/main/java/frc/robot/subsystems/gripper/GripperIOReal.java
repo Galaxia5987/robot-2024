@@ -7,7 +7,6 @@ import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkLimitSwitch;
-import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
@@ -57,7 +56,6 @@ public class GripperIOReal implements GripperIO {
     @Override
     public void setRollerMotorPower(double power) {
         inputs.rollerPowerSetpoint = power;
-        System.out.println("Set roller power powered with: " + power);
         rollerMotor.set(power);
     }
 

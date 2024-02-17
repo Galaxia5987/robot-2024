@@ -22,6 +22,6 @@ public class VisionModule {
 
     public double getAverageAmbiguity() {
         return Utils.averageAmbiguity(
-                Arrays.stream(inputs).map((inputs) -> inputs.averageAmbiguity).toList());
+                Arrays.stream(inputs).map((inputs) -> inputs.ambiguity).toList());
     }
 }

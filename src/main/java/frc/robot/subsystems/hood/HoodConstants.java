@@ -6,7 +6,10 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.Constants;
+import frc.robot.lib.ShootingCSV;
+import frc.robot.lib.math.interpolation.InterpolatingDoubleMap;
 import frc.robot.lib.webconstants.LoggedTunableNumber;
 
 public class HoodConstants {
@@ -36,16 +39,19 @@ public class HoodConstants {
 
     public static final MutableMeasure<Angle> FOLDED_ANGLE = Units.Degrees.of(90).mutableCopy();
 
+    public static final InterpolatingDoubleMap ANGLE_BY_DISTANCE =
+            ShootingCSV.parse(Filesystem.getDeployDirectory() + "/shootdata/distance-to-angle.csv");
+
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                kP.initDefault(420);
+                kP.initDefault(470);
                 kI.initDefault(1);
-                kD.initDefault(43);
+                kD.initDefault(35);
                 kS.initDefault(0.0);
                 kV.initDefault(0);
                 kA.initDefault(0.0);
-                kG.initDefault(23.0);
+                kG.initDefault(25.0);
                 ABSOLUTE_ENCODER_OFFSET.initDefault(0.79 + 0.022 - 34 / 360.0);
             case SIM:
             case REPLAY:

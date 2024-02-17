@@ -3,9 +3,11 @@ package frc.robot.subsystems.vision;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import frc.robot.lib.Utils;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class PhotonVisionIOReal implements VisionIO {
 
@@ -40,7 +42,7 @@ public class PhotonVisionIOReal implements VisionIO {
     public void updateInputs(VisionInputs inputs) {
         var latestResult = camera.getLatestResult();
 
-        if (latestResult != null) { // TODO: check if the value can be null
+        if (latestResult != null) {
             inputs.latency = (long) latestResult.getLatencyMillis();
             inputs.hasTargets = latestResult.hasTargets();
 
@@ -50,7 +52,6 @@ public class PhotonVisionIOReal implements VisionIO {
                 inputs.yaw = latestResult.getBestTarget().getYaw();
                 inputs.targetSkew = latestResult.getBestTarget().getSkew();
                 inputs.targetID = latestResult.getBestTarget().getFiducialId();
-                inputs.bestTargetAmbiguity = latestResult.getBestTarget().getPoseAmbiguity();
 
                 var cameraToTarget = latestResult.getBestTarget().getBestCameraToTarget();
                 inputs.cameraToTarget =
@@ -60,6 +61,10 @@ public class PhotonVisionIOReal implements VisionIO {
             var estimatedPose = estimator.update(latestResult);
             if (estimatedPose.isPresent()) {
                 inputs.poseFieldOriented = estimatedPose.get().estimatedPose;
+                var ambiguities =
+                        estimatedPose.get().targetsUsed.stream()
+                                .map(PhotonTrackedTarget::getPoseAmbiguity);
+                inputs.ambiguity = Utils.averageAmbiguity(ambiguities.toList());
 
                 result = estimatedPose.get();
             } else {
