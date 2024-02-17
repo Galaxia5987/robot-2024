@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3900607597652863,
-        "y": 5.023755187459485
+        "x": 2.0983266398795917,
+        "y": 4.726374621112594
       },
       "isLocked": false,
       "linkedName": "Lower Spike"
     },
     {
       "anchor": {
-        "x": 2.4005051572444116,
-        "y": 5.545975061415772
+        "x": 2.463171542119166,
+        "y": 5.56829580378033
       },
       "prevControl": {
-        "x": 2.3796163622861606,
-        "y": 5.1908655471254965
+        "x": 1.958018832518524,
+        "y": 5.231527330713235
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 4.307135226748703,
     "rotateFast": false
   },
   "reversed": false,
