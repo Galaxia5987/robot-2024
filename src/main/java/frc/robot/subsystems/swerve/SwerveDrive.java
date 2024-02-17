@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -101,6 +102,14 @@ public class SwerveDrive extends SubsystemBase {
 
     public Rotation2d getPitch() {
         return loggerInputs.pitch;
+    }
+
+    public Rotation2d getOdometryYaw() {
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+            return getYaw().minus(Rotation2d.fromDegrees(180));
+        }
+        return getYaw();
     }
 
     /**
@@ -300,7 +309,7 @@ public class SwerveDrive extends SubsystemBase {
         updateGyroInputs();
         updateSwerveInputs();
         updateModulePositions();
-        estimator.update(getRawYaw(), getModulePositions());
+        estimator.update(getOdometryYaw(), getModulePositions());
         botPose = estimator.getEstimatedPosition();
 
         SwerveDriveKinematics.desaturateWheelSpeeds(

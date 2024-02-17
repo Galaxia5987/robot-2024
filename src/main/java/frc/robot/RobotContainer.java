@@ -148,11 +148,8 @@ public class RobotContainer {
                 .rightBumper()
                 .whileTrue(
                         Commands.parallel(
-                                hood.setAngle(
-                                        () -> HoodKinematics.getAngleFromDistance(
-                                                Units.Meters.of(Robot.distanceToSpeaker)
-                                        ).mutableCopy()),
-                                commandGroups.shootAndConvey(() -> Units.RotationsPerSecond.of(80).mutableCopy())))
+                                hood.setAngle(() -> Units.Degrees.of(94).mutableCopy()),
+                                commandGroups.shootAndConvey(() -> Units.RotationsPerSecond.of(65).mutableCopy())))
                 .onFalse(
                         Commands.sequence(
                                 gripper.setRollerPower(0.7).withTimeout(1),
@@ -164,7 +161,9 @@ public class RobotContainer {
         xboxController.leftBumper().whileTrue(
                         Commands.parallel(
                                 intake.intake(),
-                                gripper.setRollerPower(0.1)
+                                gripper.setRollerPower(0.3)
+                                        .until(gripper::hasNote)
+                                        .andThen(gripper.setRollerPower(0))
                         )
                 ).onFalse(
                         Commands.parallel(

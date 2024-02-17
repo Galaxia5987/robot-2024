@@ -26,7 +26,6 @@ public class GripperIOReal implements GripperIO {
     private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(Ports.Gripper.ENCODER_ID);
     private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0);
     private final VoltageOut powerRequest = new VoltageOut(0).withEnableFOC(true);
-    private final Debouncer debouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
     private final DigitalInput sensor = new DigitalInput(4);
     private final Timer timer = new Timer();
 
@@ -76,7 +75,7 @@ public class GripperIOReal implements GripperIO {
     }
 
     public boolean hasNote() {
-        return debouncer.calculate(!sensor.get());
+        return !sensor.get();
     }
 
     @Override

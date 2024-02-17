@@ -76,7 +76,7 @@ public class Intake extends SubsystemBase {
 
     public Command stop() {
         return Commands.parallel(
-                        setAngle(IntakePose.UP),
+//                        setAngle(IntakePose.UP),
                         setRollerSpeed(Units.RotationsPerSecond.zero().mutableCopy()),
                         setCenterRollerSpeed(0))
                 .withName("stopped");
