@@ -33,10 +33,7 @@ import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOReal;
 import frc.robot.subsystems.hood.HoodIOSim;
-import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeIO;
-import frc.robot.subsystems.intake.IntakeIOReal;
-import frc.robot.subsystems.intake.IntakeIOSim;
+import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOReal;
@@ -117,7 +114,8 @@ public class RobotContainer {
         configureButtonBindings();
 
         NamedCommands.registerCommand("intake", commandGroups.intake());
-        NamedCommands.registerCommand("shoot", commandGroups.autoShoot());
+        NamedCommands.registerCommand("prepareShoot", commandGroups.prepareShoot());
+        NamedCommands.registerCommand("score", shootState.score());
 //        NamedCommands.registerCommand("resetPose", new InstantCommand(()->swerveDrive.resetPose(PathPlannerAuto.getStaringPoseFromAutoFile("LowerFullWing"))));
 
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -142,6 +140,7 @@ public class RobotContainer {
                         () -> -xboxController.getRightX(),
                         0.15,
                         () -> true));
+        intake.setDefaultCommand(intake.setAngle(IntakeConstants.IntakePose.UP));
     }
 
     private Command updateScoreState() {
@@ -185,7 +184,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
 
         return new InstantCommand(() ->
-                swerveDrive.resetPose(PathPlannerAuto.getStaringPoseFromAutoFile("New Auto")), swerveDrive)
-                .andThen(AutoBuilder.buildAuto(("New Auto"))); //new PathPlannerAuto("LowerFullWing");
+                swerveDrive.resetPose(PathPlannerAuto.getStaringPoseFromAutoFile("LowerFullWing")), swerveDrive)
+                .andThen(AutoBuilder.buildAuto(("LowerFullWing"))); //new PathPlannerAuto("LowerFullWing");
     }
 }
