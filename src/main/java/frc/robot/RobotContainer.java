@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.lib.GalacticProxyCommand;
@@ -182,6 +183,9 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new PathPlannerAuto("LowerFullWing");
+
+        return new InstantCommand(() ->
+                swerveDrive.resetPose(PathPlannerAuto.getStaringPoseFromAutoFile("New Auto")), swerveDrive)
+                .andThen(AutoBuilder.buildAuto(("New Auto"))); //new PathPlannerAuto("LowerFullWing");
     }
 }
