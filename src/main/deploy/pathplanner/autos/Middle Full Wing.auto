@@ -1,12 +1,18 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 0.5518468034391548,
+      "y": 4.010648631984287
+    },
+    "rotation": 0
+  },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "race",
           "data": {
             "pathName": "Middle To Lower Spike"
           }
@@ -36,10 +42,16 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot"
+                  "name": "prepareShoot"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score"
           }
         }
       ]

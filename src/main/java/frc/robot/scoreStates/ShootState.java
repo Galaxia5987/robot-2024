@@ -30,7 +30,7 @@ public class ShootState implements ScoreState {
     private Translation2d speakerPose;
     private InterpolatingDouble distanceToSpeaker = new InterpolatingDouble(0.0);
     private PoseEstimation poseEstimation;
-    private Pose2d botPose;
+    private Pose2d botPose = new Pose2d();
     private List<Translation2d> optimalPoints;
     private Translation2d optimalTranslation;
     private double optimalRotation;

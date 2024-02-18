@@ -84,6 +84,13 @@ public class CommandGroups {
                 .withName("feedShooter");
     }
 
+    public Command prepareShoot() {
+        return Commands.repeatingSequence(
+                shootState.calculateTargets()
+                        .alongWith(shootState.prepareSubsystems())
+        );
+    }
+
     public Command intake() {
         return Commands.sequence(
                         //retractGrillevator(),
@@ -94,12 +101,6 @@ public class CommandGroups {
                                         .andThen(Commands.none()))) // TODO: replace null with leds
                 // mode
                 .withName("intake");
-    }
-
-    public Command autoShoot() {
-        return Commands.repeatingSequence(
-                Commands.sequence(
-                        shootState.prepareSubsystems().andThen(shootState.calculateTargets())));
     }
 
     public Command outtakeGripper() {
