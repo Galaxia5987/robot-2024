@@ -1,5 +1,6 @@
 package frc.robot.subsystems.gripper;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -49,6 +50,8 @@ public class GripperIOReal implements GripperIO {
         rollerMotor.setInverted(GripperConstants.ROLLER_INVERTED_VALUE);
         rollerMotor.burnFlash();
 
+        angleMotor.getSupplyVoltage().setUpdateFrequency(100);
+
         timer.start();
         timer.reset();
     }
@@ -79,7 +82,7 @@ public class GripperIOReal implements GripperIO {
     @Override
     public void updateInputs() {
         inputs.angleMotorVoltage.mut_replace(
-                angleMotor.get() * RobotController.getBatteryVoltage(), Units.Volts);
+                angleMotor.getSupplyVoltage().getValue(), Units.Volts);
         inputs.rollerMotorVoltage.mut_replace(
                 rollerMotor.get() * RobotController.getBatteryVoltage(), Units.Volts);
         inputs.currentAngle.mut_replace(angleMotor.getPosition().getValue(), Units.Rotations);

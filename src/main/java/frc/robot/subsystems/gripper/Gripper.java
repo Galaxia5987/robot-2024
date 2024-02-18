@@ -2,6 +2,7 @@ package frc.robot.subsystems.gripper;
 
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -20,6 +21,7 @@ public class Gripper extends SubsystemBase {
     private final GripperInputsAutoLogged inputs = GripperIO.inputs;
     private Measure<Distance> gripperHeight = Units.Meters.zero();
     private Measure<Distance> carriageHeight = Units.Meters.zero();
+    private Timer timer = new Timer();
 
     @AutoLogOutput private final Mechanism2d mechanism2d = new Mechanism2d(1, 1);
     @AutoLogOutput private Pose3d gripperPose = new Pose3d();
@@ -31,6 +33,9 @@ public class Gripper extends SubsystemBase {
     private Gripper(GripperIO io, Supplier<Measure<Distance>> carriageHeight) {
         this.io = io;
         this.carriageHeight = carriageHeight.get();
+
+        timer.start();
+        timer.reset();
     }
 
     public static Gripper getInstance() {
@@ -113,7 +118,9 @@ public class Gripper extends SubsystemBase {
                         new Rotation3d(0, -inputs.currentAngle.in(Units.Radians), 0));
 
         io.updateInputs();
-        Logger.processInputs(this.getClass().getSimpleName(), inputs);
+        if (timer.advanceIfElapsed(0.1)) {
+            Logger.processInputs(this.getClass().getSimpleName(), inputs);
+        }
 
         gripperLigament.setAngle(new Rotation2d(inputs.currentAngle));
     }

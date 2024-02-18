@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -20,12 +21,16 @@ public class Intake extends SubsystemBase {
     @AutoLogOutput private final Mechanism2d intakeMechanism = new Mechanism2d(2, 3);
     @AutoLogOutput private final Pose3d robotPose = new Pose3d();
     private final MechanismRoot2d root = intakeMechanism.getRoot("Intake", 1, 1);
+    private final Timer timer = new Timer();
 
     private final MechanismLigament2d intakeLigament =
             root.append(new MechanismLigament2d("IntakeLigmament", 0.21, 0));
 
     public Intake(IntakeIO io) {
         this.io = io;
+
+        timer.start();
+        timer.reset();
     }
 
     public static Intake getInstance() {
@@ -88,7 +93,9 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs();
-        Logger.processInputs(this.getClass().getSimpleName(), inputs);
+        if (timer.advanceIfElapsed(0.1)) {
+            Logger.processInputs(this.getClass().getSimpleName(), inputs);
+        }
         Logger.recordOutput(
                 "IntakePose",
                 new Pose3d(

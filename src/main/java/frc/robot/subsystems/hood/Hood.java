@@ -36,6 +36,7 @@ public class Hood extends SubsystemBase {
      */
     private Hood(HoodIO io) {
         this.io = io;
+
         timer.start();
         timer.reset();
     }
@@ -82,7 +83,9 @@ public class Hood extends SubsystemBase {
             io.updateInternalEncoder();
         }
         io.updateInputs();
-        Logger.processInputs("Hood", inputs);
+        if (timer.advanceIfElapsed(0.1)) {
+            Logger.processInputs("Hood", inputs);
+        }
 
         hood.setAngle(inputs.angle.in(Units.Degrees));
     }
