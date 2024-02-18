@@ -26,9 +26,6 @@ public class ElevatorIOReal implements ElevatorIO {
 
     private static final MutableMeasure<Mass> movingWeight = ElevatorConstants.HOOKS_MASS;
 
-    private double lastKg = 0;
-    private double lastAuxKg = 0;
-
     public ElevatorIOReal() {
         mainMotor = new TalonFX(Ports.Elevator.MAIN_ID);
         auxMotor = new TalonFX(Ports.Elevator.AUX_ID);
@@ -81,7 +78,7 @@ public class ElevatorIOReal implements ElevatorIO {
             movingWeight.mut_acc(ElevatorConstants.ELEVATOR_MASS);
         }
 
-        lastKg = ElevatorConstants.MAIN_MOTOR_CONFIGURATION.Slot0.kG;
+        double lastKg = ElevatorConstants.MAIN_MOTOR_CONFIGURATION.Slot0.kG;
         double newKg = ElevatorConstants.KG.get() * movingWeight.in(Units.Kilograms);
         if (!Utils.epsilonEquals(lastKg, newKg)) {
             mainMotor
