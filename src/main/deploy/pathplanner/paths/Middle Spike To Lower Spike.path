@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.463171542119166,
-        "y": 5.56829580378033
+        "x": 2.4005051572444116,
+        "y": 5.545975061415772
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.236500454477852,
-        "y": 4.849424640117878
+        "x": 2.4005051572444116,
+        "y": 4.940200007626478
       },
       "isLocked": false,
       "linkedName": "Middle Spike"
@@ -20,8 +20,8 @@
         "y": 4.417980133670191
       },
       "prevControl": {
-        "x": 2.208424025305373,
-        "y": 4.71342198753309
+        "x": 2.442282747160915,
+        "y": 4.981977597542982
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Middle",
   "previewStartingState": null,
   "useDefaultConstraints": false
 }
