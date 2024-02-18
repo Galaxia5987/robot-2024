@@ -8,7 +8,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MiddleToLowerSpike"
+            "pathName": "Middle To Lower Spike"
           }
         },
         {
@@ -30,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LowerSpikeToMiddleSpike"
+                  "pathName": "Lower Spike To Middle Spike"
                 }
               },
               {
