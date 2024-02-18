@@ -11,6 +11,7 @@ import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Mass;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
 import frc.robot.Ports;
 import frc.robot.lib.Utils;
@@ -23,6 +24,8 @@ public class ElevatorIOReal implements ElevatorIO {
     private final MotionMagicExpoTorqueCurrentFOC positionControl =
             new MotionMagicExpoTorqueCurrentFOC(0);
     private final DutyCycleOut powerControl = new DutyCycleOut(0);
+
+    private final DigitalInput sensor = new DigitalInput(3);
 
     private static final MutableMeasure<Mass> movingWeight = ElevatorConstants.HOOKS_MASS;
 
@@ -63,7 +66,7 @@ public class ElevatorIOReal implements ElevatorIO {
 
     @Override
     public void updateInputs(ElevatorInputs inputs) {
-        inputs.isBottom = mainMotor.getFault_ReverseHardLimit().getValue();
+        inputs.isBottom = sensor.get();
         inputs.hooksHeight.mut_replace(mainMotor.getPosition().getValue(), Meters);
 
         inputs.carriageHeight.mut_replace(
