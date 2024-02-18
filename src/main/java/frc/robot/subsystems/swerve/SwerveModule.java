@@ -92,7 +92,7 @@ public class SwerveModule extends SubsystemBase {
     }
 
     public void updateInputs() {
-        io.updateInputs(loggerInputs);
+        io.updateInputs();
         Logger.processInputs("module_" + number, loggerInputs);
     }
 

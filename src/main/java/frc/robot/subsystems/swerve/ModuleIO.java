@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.lib.webconstants.LoggedTunableNumber;
 
 public interface ModuleIO {
-    void updateInputs(SwerveModuleInputs inputs);
+    void updateInputs();
 
     SwerveModuleInputsAutoLogged getInputs();
 

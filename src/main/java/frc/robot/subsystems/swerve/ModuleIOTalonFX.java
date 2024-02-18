@@ -1,5 +1,6 @@
 package frc.robot.subsystems.swerve;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -58,18 +59,27 @@ public class ModuleIOTalonFX implements ModuleIO {
         angleMotor.getConfigurator().apply(angleConfig);
         angleMotor.setPosition(0);
 
+        BaseStatusSignal.setUpdateFrequencyForAll(
+                100,
+                driveMotor.getVelocity(),
+                driveMotor.getPosition(),
+                angleMotor.getPosition(),
+                angleMotor.getSupplyVoltage());
+
         driveMotor.setNeutralMode(NeutralModeValue.Brake);
         angleMotor.setNeutralMode(NeutralModeValue.Brake);
     }
 
     @Override
-    public void updateInputs(SwerveModuleInputs inputs) {
+    public void updateInputs() {
         inputs.absolutePosition = encoder.getAbsolutePosition();
 
         inputs.driveMotorPosition = driveMotor.getRotorPosition().getValue();
-        inputs.driveMotorVelocity = getVelocity();
+        inputs.driveMotorVelocity = Units.rpsToMetersPerSecond(
+                driveMotor.getVelocity().getValue(), SwerveConstants.WHEEL_DIAMETER / 2);
 
-        inputs.angle = getAngle();
+        inputs.angle = Utils.normalize(Rotation2d.fromRotations(angleMotor.getPosition().getValue()));
+        inputs.angleMotorAppliedVoltage = angleMotor.getSupplyVoltage().getValue();
 
         inputs.moduleDistance = getModulePosition().distanceMeters;
         inputs.moduleState = getModuleState();
@@ -104,7 +114,7 @@ public class ModuleIOTalonFX implements ModuleIO {
 
     @Override
     public Rotation2d getAngle() {
-        return Utils.normalize(Rotation2d.fromRotations(angleMotor.getPosition().getValue()));
+        return inputs.angle;
     }
 
     @Override
@@ -121,8 +131,7 @@ public class ModuleIOTalonFX implements ModuleIO {
 
     @Override
     public double getVelocity() {
-        return Units.rpsToMetersPerSecond(
-                driveMotor.getVelocity().getValue(), SwerveConstants.WHEEL_DIAMETER / 2);
+        return inputs.driveMotorVelocity;
     }
 
     @Override

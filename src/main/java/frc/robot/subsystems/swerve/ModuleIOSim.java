@@ -57,7 +57,7 @@ public class ModuleIOSim implements ModuleIO {
     }
 
     @Override
-    public void updateInputs(SwerveModuleInputs inputs) {
+    public void updateInputs() {
         driveMotor.update(Timer.getFPGATimestamp());
         angleMotor.update(Timer.getFPGATimestamp());
 

@@ -77,7 +77,7 @@ public class ModuleIOSparkMax implements ModuleIO {
     }
 
     @Override
-    public void updateInputs(SwerveModuleInputs inputs) {
+    public void updateInputs() {
         inputs.absolutePosition = getEncoderAngle();
 
         inputs.driveMotorPosition = driveEncoder.getPosition();
