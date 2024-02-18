@@ -97,7 +97,7 @@ public class Constants {
                     }
                     default -> {
                         for (int i = 0; i < moduleIOs.length; i++) {
-                            moduleIOs[i] = new ModuleIOSim();
+                            moduleIOs[i] = new ModuleIOSim(new SwerveModuleInputsAutoLogged());
                         }
                         yield new GyroIOSim();
                     }
