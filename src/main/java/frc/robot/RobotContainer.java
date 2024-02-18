@@ -1,8 +1,6 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -141,7 +139,9 @@ public class RobotContainer {
                                                                                 .ANGLE_BY_DISTANCE
                                                                                 .getInterpolated(
                                                                                         new InterpolatingDouble(
-                                                                                                PoseEstimation.getInstance().getDistanceToSpeaker()))
+                                                                                                PoseEstimation
+                                                                                                        .getInstance()
+                                                                                                        .getDistanceToSpeaker()))
                                                                                 .value)
                                                                 .mutableCopy()),
                                         commandGroups.shootAndConvey(
@@ -151,15 +151,15 @@ public class RobotContainer {
                                                                                 .VELOCITY_BY_DISTANCE
                                                                                 .getInterpolated(
                                                                                         new InterpolatingDouble(
-                                                                                                PoseEstimation.getInstance().getDistanceToSpeaker()))
+                                                                                                PoseEstimation
+                                                                                                        .getInstance()
+                                                                                                        .getDistanceToSpeaker()))
                                                                                 .value)
                                                                 .mutableCopy()))
-                                .until(
-                                        () ->
-                                                shooter.atSetpoint()
-                                                        && hood.atSetpoint())
-                                .andThen(gripper.setRollerPower(0.7)
-                                        .alongWith(intake.setCenterRollerSpeed(0.5))))
+                                .until(() -> shooter.atSetpoint() && hood.atSetpoint())
+                                .andThen(
+                                        gripper.setRollerPower(0.7)
+                                                .alongWith(intake.setCenterRollerSpeed(0.5))))
                 .onFalse(
                         Commands.parallel(
                                 hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()),
@@ -178,12 +178,18 @@ public class RobotContainer {
                 .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
         xboxController.leftBumper().onTrue(intake.reset(Units.Degrees.of(0)));
         xboxController.b().onTrue(Commands.runOnce(swerveDrive::resetGyro));
-        xboxController.a().whileTrue(elevator.setHeight(Units.Meters.of(0.4)
-                .mutableCopy())).whileFalse(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
-        xboxController.y().whileTrue(elevator.setHeight(Units.Meters.of(0.7)
-                .mutableCopy())).whileFalse(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
-        xboxController.x().whileTrue(elevator.setHeight(Units.Meters.of(1.0)
-                .mutableCopy())).whileFalse(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
+        xboxController
+                .a()
+                .whileTrue(elevator.setHeight(Units.Meters.of(0.4).mutableCopy()))
+                .whileFalse(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
+        xboxController
+                .y()
+                .whileTrue(elevator.setHeight(Units.Meters.of(0.7).mutableCopy()))
+                .whileFalse(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
+        xboxController
+                .x()
+                .whileTrue(elevator.setHeight(Units.Meters.of(1.0).mutableCopy()))
+                .whileFalse(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
     }
 
     /**

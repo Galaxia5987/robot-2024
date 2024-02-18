@@ -48,7 +48,7 @@ public class Elevator extends SubsystemBase {
         INSTANCE = new Elevator(io);
     }
 
-    public void reset(MutableMeasure<Distance> height){
+    public void reset(MutableMeasure<Distance> height) {
         inputs.carriageHeight = Units.Meters.of(0).mutableCopy();
     }
 
