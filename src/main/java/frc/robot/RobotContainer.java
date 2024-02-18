@@ -137,8 +137,7 @@ public class RobotContainer {
                                                                                 .ANGLE_BY_DISTANCE
                                                                                 .getInterpolated(
                                                                                         new InterpolatingDouble(
-                                                                                                Robot
-                                                                                                        .distanceToSpeaker))
+                                                                                                PoseEstimation.getInstance().getDistanceToSpeaker()))
                                                                                 .value)
                                                                 .mutableCopy()),
                                         commandGroups.shootAndConvey(
@@ -148,8 +147,7 @@ public class RobotContainer {
                                                                                 .VELOCITY_BY_DISTANCE
                                                                                 .getInterpolated(
                                                                                         new InterpolatingDouble(
-                                                                                                Robot
-                                                                                                        .distanceToSpeaker))
+                                                                                                PoseEstimation.getInstance().getDistanceToSpeaker()))
                                                                                 .value)
                                                                 .mutableCopy()))
                                 .until(

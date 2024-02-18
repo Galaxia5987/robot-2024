@@ -2,6 +2,9 @@ package frc.robot.lib;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.scoreStates.ScoreStateConstants;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
@@ -16,9 +19,21 @@ public class PoseEstimation {
     private final SwerveDrive swerveDrive;
     private final Vision vision;
 
+    private final Translation2d speakerPose;
+
     private PoseEstimation() {
         swerveDrive = SwerveDrive.getInstance();
         vision = Vision.getInstance();
+
+        if (DriverStation.getAlliance().isPresent()) {
+            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+                speakerPose = ScoreStateConstants.SPEAKER_POSE_RED;
+            } else {
+                speakerPose = ScoreStateConstants.SPEAKER_POSE_BLUE;
+            }
+        } else {
+            speakerPose = ScoreStateConstants.SPEAKER_POSE_BLUE;
+        }
     }
 
     public static PoseEstimation getInstance() {
@@ -65,5 +80,10 @@ public class PoseEstimation {
     @AutoLogOutput(key = "EstimatedRobotPose")
     public Pose2d getEstimatedPose() {
         return swerveDrive.getEstimator().getEstimatedPosition();
+    }
+
+    @AutoLogOutput(key = "DistanceToSpeaker")
+    public double getDistanceToSpeaker() {
+        return speakerPose.getDistance(getEstimatedPose().getTranslation());
     }
 }
