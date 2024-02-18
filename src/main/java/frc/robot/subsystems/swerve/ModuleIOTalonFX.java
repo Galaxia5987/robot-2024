@@ -70,9 +70,6 @@ public class ModuleIOTalonFX implements ModuleIO {
         inputs.driveMotorVelocity = getVelocity();
         inputs.driveMotorVelocitySetpoint = driveMotorVelocitySetpoint;
 
-        inputs.angleMotorPosition = angleMotor.getRotorPosition().getValue();
-        inputs.angleMotorVelocity = angleMotor.getVelocity().getValue();
-
         inputs.angle = getAngle();
         currentAngle = inputs.angle;
 

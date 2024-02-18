@@ -1,7 +1,6 @@
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.geometry.Transform3d;
-import frc.robot.lib.Utils;
 import java.util.Arrays;
 
 public class VisionModule {
@@ -18,10 +17,5 @@ public class VisionModule {
                         .map(VisionIO::getCameraToRobot)
                         .toList()
                         .toArray(new Transform3d[0]);
-    }
-
-    public double getAverageAmbiguity() {
-        return Utils.averageAmbiguity(
-                Arrays.stream(inputs).map((inputs) -> inputs.ambiguity).toList());
     }
 }

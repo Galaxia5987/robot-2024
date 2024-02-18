@@ -61,7 +61,6 @@ public class ModuleIOSim implements ModuleIO {
         driveMotor.update(Timer.getFPGATimestamp());
         angleMotor.update(Timer.getFPGATimestamp());
 
-        inputs.driveMotorAppliedVoltage = driveMotor.getAppliedVoltage();
         inputs.driveMotorVelocity =
                 Units.rpsToMetersPerSecond(
                         driveMotor.getVelocity(), SwerveConstants.WHEEL_DIAMETER / 2);
@@ -69,7 +68,6 @@ public class ModuleIOSim implements ModuleIO {
         inputs.driveMotorVelocitySetpoint = velocitySetpoint;
 
         inputs.angleMotorAppliedVoltage = angleMotor.getAppliedVoltage();
-        inputs.angleMotorVelocity = angleMotor.getVelocity();
         inputs.angleSetpoint = angleSetpoint;
         inputs.angle = Rotation2d.fromRotations(angleMotor.getPosition());
         currentAngle = inputs.angle;

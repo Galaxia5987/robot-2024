@@ -9,7 +9,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.lib.Utils;
@@ -87,12 +86,6 @@ public class ModuleIOSparkMax implements ModuleIO {
         inputs.driveMotorPosition = driveEncoder.getPosition();
         inputs.driveMotorVelocity = getVelocity();
         inputs.driveMotorVelocitySetpoint = driveMotorSetpoint;
-        inputs.driveMotorAppliedVoltage =
-                driveMotor.getAppliedOutput() * RobotController.getBatteryVoltage();
-
-        inputs.angleMotorPosition = angleEncoder.getPosition();
-        angleMotorPosition = inputs.angleMotorPosition;
-        inputs.angleMotorVelocity = Units.rpmToRps(angleEncoder.getVelocity());
 
         inputs.angle =
                 Rotation2d.fromRadians(Utils.normalize(angleEncoder.getPosition() * 2 * Math.PI));

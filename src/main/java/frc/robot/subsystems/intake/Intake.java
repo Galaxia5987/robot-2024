@@ -17,10 +17,8 @@ public class Intake extends SubsystemBase {
     private static Intake INSTANCE = null;
     private final IntakeIO io;
     private final IntakeInputsAutoLogged inputs = IntakeIO.inputs;
-    @AutoLogOutput
-    private final Mechanism2d intakeMechanism = new Mechanism2d(2, 3);
-    @AutoLogOutput
-    private final Pose3d robotPose = new Pose3d();
+    @AutoLogOutput private final Mechanism2d intakeMechanism = new Mechanism2d(2, 3);
+    @AutoLogOutput private final Pose3d robotPose = new Pose3d();
     private final MechanismRoot2d root = intakeMechanism.getRoot("Intake", 1, 1);
 
     private final MechanismLigament2d intakeLigament =
@@ -51,10 +49,10 @@ public class Intake extends SubsystemBase {
         return setAngle(intakePose.intakePose);
     }
 
-    private Command setRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
+    private Command setRollerSpeed(double speed) {
         return Commands.runOnce(
                 () -> {
-                    inputs.rollerSpeedSetpoint.mut_replace(speed);
+                    inputs.rollerSpeedSetpoint = speed;
                     io.setRollerSpeed(speed);
                 });
     }
@@ -70,7 +68,7 @@ public class Intake extends SubsystemBase {
     public Command intake() {
         return Commands.parallel(
                         setAngle(IntakeConstants.IntakePose.DOWN),
-                        setRollerSpeed(Units.RotationsPerSecond.of(50).mutableCopy()),
+                        setRollerSpeed(0.5),
                         setCenterRollerSpeed(0.7))
                 .withName("feeding position activated");
     }
@@ -78,7 +76,7 @@ public class Intake extends SubsystemBase {
     public Command stop() {
         return Commands.parallel(
                         setAngle(IntakeConstants.IntakePose.UP),
-                        setRollerSpeed(Units.RotationsPerSecond.zero().mutableCopy()),
+                        setRollerSpeed(0),
                         setCenterRollerSpeed(0))
                 .withName("stopped");
     }

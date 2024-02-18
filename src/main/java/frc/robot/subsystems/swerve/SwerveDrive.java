@@ -101,10 +101,6 @@ public class SwerveDrive extends SubsystemBase {
         return loggerInputs.yaw;
     }
 
-    public Rotation2d getPitch() {
-        return loggerInputs.pitch;
-    }
-
     public Rotation2d getOdometryYaw() {
         var alliance = DriverStation.getAlliance();
         if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
@@ -317,7 +313,6 @@ public class SwerveDrive extends SubsystemBase {
     public void updateGyroInputs() {
         loggerInputs.rawYaw = gyro.getRawYaw();
         loggerInputs.yaw = gyro.getYaw();
-        loggerInputs.pitch = gyro.getPitch();
         gyro.updateInputs(loggerInputs);
     }
 

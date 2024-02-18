@@ -19,16 +19,6 @@ public interface VisionIO {
 
     @AutoLog
     class VisionInputs {
-        long latency = 0;
-        boolean hasTargets = false;
-        double yaw = 0;
-        double pitch = 0;
-        double area = 0;
-        double targetSkew = 0;
-        long targetID = 0;
-        Pose3d cameraToTarget = new Pose3d();
         Pose3d poseFieldOriented = new Pose3d();
-        double bestTargetAmbiguity = 0;
-        public double ambiguity = 0;
     }
 }

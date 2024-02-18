@@ -17,14 +17,6 @@ public class IntakeConstants {
     public static final LoggedTunableNumber ANGLE_KD = new LoggedTunableNumber("Intake/Angle/kD");
     public static final LoggedTunableNumber ANGLE_KG = new LoggedTunableNumber("Intake/Angle/kG");
 
-    public static final LoggedTunableNumber SPIN_KP = new LoggedTunableNumber("Intake/Spin/kP");
-    public static final LoggedTunableNumber SPIN_KI = new LoggedTunableNumber("Intake/Spin/kI");
-    public static final LoggedTunableNumber SPIN_KD = new LoggedTunableNumber("Intake/Spin/kD");
-
-    public static final LoggedTunableNumber SPIN_KS = new LoggedTunableNumber("Intake/Spin/kS");
-    public static final LoggedTunableNumber SPIN_KV = new LoggedTunableNumber("Intake/Spin/kV");
-    public static final LoggedTunableNumber SPIN_KA = new LoggedTunableNumber("Intake/Spin/kA");
-
     public static final double ANGLE_GEAR_RATIO = 44.44;
     public static final double ANGLE_CURRENT_LIMIT = 15;
     public static final int SPIN_CURRENT_LIMIT = 40;
@@ -39,14 +31,6 @@ public class IntakeConstants {
                 ANGLE_KI.initDefault(0.03);
                 ANGLE_KD.initDefault(0);
                 ANGLE_KG.initDefault(0.3);
-
-                SPIN_KP.initDefault(0);
-                SPIN_KI.initDefault(0);
-                SPIN_KD.initDefault(0);
-
-                SPIN_KS.initDefault(0.158_09);
-                SPIN_KV.initDefault(0.128_06);
-                SPIN_KA.initDefault(0.039_754);
                 break;
             case SIM:
             case REPLAY:
@@ -54,15 +38,6 @@ public class IntakeConstants {
                 ANGLE_KP.initDefault(10.1 / 360.0);
                 ANGLE_KI.initDefault(0);
                 ANGLE_KD.initDefault(0);
-
-                SPIN_KP.initDefault(0);
-                SPIN_KI.initDefault(0);
-                SPIN_KD.initDefault(0);
-
-                SPIN_KS.initDefault(0);
-                SPIN_KV.initDefault(0.002_083_333);
-                SPIN_KA.initDefault(0);
-
                 break;
         }
 

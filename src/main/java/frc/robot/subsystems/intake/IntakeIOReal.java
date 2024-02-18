@@ -5,7 +5,6 @@ import static frc.robot.subsystems.intake.IntakeConstants.*;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.*;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants;
@@ -19,7 +18,6 @@ public class IntakeIOReal implements IntakeIO {
             new CANSparkMax(Ports.Intake.CENTER_ID, CANSparkLowLevel.MotorType.kBrushless);
     private final TalonFX angleMotor = new TalonFX(Ports.Intake.ANGLE_ID);
     private final PositionVoltage positionRequest = new PositionVoltage(0).withEnableFOC(true);
-    private final SimpleMotorFeedforward spinMotorFeedforward;
 
     public IntakeIOReal() {
         angleMotor.getConfigurator().apply(ANGLE_CONFIGURATION);
@@ -33,12 +31,7 @@ public class IntakeIOReal implements IntakeIO {
         spinMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         spinMotor.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE.in(Units.Volts));
         spinMotor.setInverted(false);
-        spinMotor.getPIDController().setP(SPIN_KP.get());
-        spinMotor.getPIDController().setI(SPIN_KI.get());
-        spinMotor.getPIDController().setD(SPIN_KD.get());
         spinMotor.setSmartCurrentLimit(SPIN_CURRENT_LIMIT);
-        spinMotorFeedforward =
-                new SimpleMotorFeedforward(SPIN_KS.get(), SPIN_KV.get(), SPIN_KA.get());
         spinMotor.burnFlash();
         centerMotor.burnFlash();
     }
@@ -49,14 +42,8 @@ public class IntakeIOReal implements IntakeIO {
     }
 
     @Override
-    public void setRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
-        spinMotor
-                .getPIDController()
-                .setReference(
-                        speed.in(Units.RotationsPerSecond),
-                        CANSparkBase.ControlType.kVelocity,
-                        0,
-                        spinMotorFeedforward.calculate(speed.in(Units.RotationsPerSecond)));
+    public void setRollerSpeed(double speed) {
+        spinMotor.set(speed);
     }
 
     @Override
@@ -72,8 +59,6 @@ public class IntakeIOReal implements IntakeIO {
     @Override
     public void updateInputs() {
         inputs.currentAngle.mut_replace((angleMotor.getPosition().getValue()), Units.Degrees);
-        inputs.currentCenterRollerSpeed.mut_replace(
-                (centerMotor.getEncoder().getVelocity()), Units.RotationsPerSecond);
         inputs.angleMotorVoltage.mut_replace(
                 (angleMotor.getMotorVoltage().getValue()), Units.Volts);
         inputs.spinMotorVoltage.mut_replace(
@@ -81,6 +66,5 @@ public class IntakeIOReal implements IntakeIO {
         inputs.centerMotorVoltage.mut_replace(
                 (centerMotor.getAppliedOutput() * RobotController.getBatteryVoltage()),
                 Units.Volts);
-        inputs.currentRollerSpeed.mut_replace(spinMotor.getEncoder().getVelocity(), Units.RPM);
     }
 }
