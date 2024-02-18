@@ -25,7 +25,7 @@ public class ElevatorIOReal implements ElevatorIO {
             new MotionMagicExpoTorqueCurrentFOC(0);
     private final DutyCycleOut powerControl = new DutyCycleOut(0);
 
-    private final DigitalInput sensor = new DigitalInput(3);
+    private final DigitalInput sensor = new DigitalInput(1);
 
     private static final MutableMeasure<Mass> movingWeight = ElevatorConstants.HOOKS_MASS;
 

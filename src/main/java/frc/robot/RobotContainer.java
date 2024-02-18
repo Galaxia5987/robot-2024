@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -17,6 +18,8 @@ import frc.robot.subsystems.conveyor.ConveyorIOReal;
 import frc.robot.subsystems.conveyor.ConveyorIOSim;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIOReal;
+import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperIO;
 import frc.robot.subsystems.gripper.GripperIOReal;
@@ -39,6 +42,7 @@ public class RobotContainer {
     private final Shooter shooter;
     private final SwerveDrive swerveDrive;
     private final CommandPS5Controller controller = new CommandPS5Controller(0);
+    private final CommandXboxController xboxController = new CommandXboxController(0);
     private final ShootState shootState;
     private final AmpState ampState;
     private final ClimbState climbState;
@@ -61,7 +65,7 @@ public class RobotContainer {
                 gripperIO = new GripperIOReal();
                 hoodIO = new HoodIOReal();
                 shooterIO = new ShooterIOReal();
-                //                elevatorIO = new ElevatorIOReal();
+                elevatorIO = new ElevatorIOReal();
                 break;
             case SIM:
             case REPLAY:
@@ -71,12 +75,12 @@ public class RobotContainer {
                 gripperIO = new GripperIOSim();
                 hoodIO = new HoodIOSim();
                 shooterIO = new ShooterIOSim();
-                //                elevatorIO = new ElevatorIOSim();
+                elevatorIO = new ElevatorIOSim();
                 break;
         }
         Intake.initialize(intakeIO);
         Conveyor.initialize(conveyorIO);
-        //        Elevator.initialize(elevatorIO);
+        Elevator.initialize(elevatorIO);
         Gripper.initialize(gripperIO, () -> Units.Meters.of(0));
         Hood.initialize(hoodIO);
         Shooter.initialize(shooterIO);
@@ -118,16 +122,16 @@ public class RobotContainer {
     private void configureDefaultCommands() {
         swerveDrive.setDefaultCommand(
                 swerveDrive.driveCommand(
-                        () -> -controller.getLeftY(),
-                        () -> -controller.getLeftX(),
-                        () -> 0.4 * -controller.getRightX(),
+                        () -> -xboxController.getLeftY(),
+                        () -> -xboxController.getLeftX(),
+                        () -> 0.4 * -xboxController.getRightX(),
                         0.1,
                         () -> true));
     }
 
     private void configureButtonBindings() {
-        controller
-                .R1()
+        xboxController
+                .rightTrigger()
                 .whileTrue(
                         Commands.parallel(
                                         hood.setAngle(
@@ -163,8 +167,8 @@ public class RobotContainer {
                                 shooter.stop(),
                                 intake.setCenterRollerSpeed(0),
                                 gripper.setRollerPower(0)));
-        controller
-                .L1()
+        xboxController
+                .leftTrigger()
                 .whileTrue(
                         Commands.parallel(
                                 intake.intake(),
@@ -172,7 +176,14 @@ public class RobotContainer {
                                         .until(gripper::hasNote)
                                         .andThen(gripper.setRollerPower(0))))
                 .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
-        controller.circle().onTrue(Commands.runOnce(swerveDrive::resetGyro));
+        xboxController.leftBumper().onTrue(intake.reset(Units.Degrees.of(0)));
+        xboxController.b().onTrue(Commands.runOnce(swerveDrive::resetGyro));
+        xboxController.a().whileTrue(elevator.setHeight(Units.Meters.of(0.4)
+                .mutableCopy())).whileFalse(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
+        xboxController.y().whileTrue(elevator.setHeight(Units.Meters.of(0.7)
+                .mutableCopy())).whileFalse(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
+        xboxController.x().whileTrue(elevator.setHeight(Units.Meters.of(1.0)
+                .mutableCopy())).whileFalse(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
     }
 
     /**
