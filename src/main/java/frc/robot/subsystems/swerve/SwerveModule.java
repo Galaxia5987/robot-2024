@@ -11,7 +11,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule extends SubsystemBase {
 
-    private final SwerveModuleInputsAutoLogged loggerInputs = new SwerveModuleInputsAutoLogged();
+    private final SwerveModuleInputsAutoLogged loggerInputs;
 
     private final ModuleIO io;
 
@@ -23,6 +23,8 @@ public class SwerveModule extends SubsystemBase {
         this.io = io;
         this.number = number;
         this.offset = offset;
+
+        loggerInputs = io.getInputs();
 
         timer.start();
         timer.reset();

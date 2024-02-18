@@ -90,7 +90,8 @@ public class Constants {
                                             Ports.SwerveDrive.ANGLE_IDS[i],
                                             Ports.SwerveDrive.ENCODER_IDS[i],
                                             SwerveConstants.DRIVE_MOTOR_CONFIGS,
-                                            SwerveConstants.ANGLE_MOTOR_CONFIGS);
+                                            SwerveConstants.ANGLE_MOTOR_CONFIGS,
+                                            new SwerveModuleInputsAutoLogged());
                         }
                         yield new GyroIOReal();
                     }

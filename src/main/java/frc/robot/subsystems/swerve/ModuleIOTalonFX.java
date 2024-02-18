@@ -28,16 +28,16 @@ public class ModuleIOTalonFX implements ModuleIO {
             new PositionVoltage(0).withEnableFOC(true).withSlot(0);
     private final VelocityVoltage velocityControlRequest =
             new VelocityVoltage(0).withEnableFOC(true);
-    private Rotation2d angleSetpoint = new Rotation2d();
-    private Rotation2d currentAngle = new Rotation2d();
-    private double driveMotorVelocitySetpoint = 0;
+    private final SwerveModuleInputsAutoLogged inputs;
 
     public ModuleIOTalonFX(
             int driveMotorID,
             int angleMotorID,
             int encoderID,
             TalonFXConfiguration driveConfig,
-            TalonFXConfiguration angleConfig) {
+            TalonFXConfiguration angleConfig,
+            SwerveModuleInputsAutoLogged inputs) {
+        this.inputs = inputs;
 
         this.driveMotor = new TalonFX(driveMotorID, "swerveDrive");
         this.angleMotor = new TalonFX(angleMotorID, "swerveDrive");
@@ -68,17 +68,18 @@ public class ModuleIOTalonFX implements ModuleIO {
 
         inputs.driveMotorPosition = driveMotor.getRotorPosition().getValue();
         inputs.driveMotorVelocity = getVelocity();
-        inputs.driveMotorVelocitySetpoint = driveMotorVelocitySetpoint;
 
         inputs.angle = getAngle();
-        currentAngle = inputs.angle;
-
-        inputs.angleSetpoint = angleSetpoint;
 
         inputs.moduleDistance = getModulePosition().distanceMeters;
         inputs.moduleState = getModuleState();
 
         if (hasPIDChanged(SwerveConstants.PID_VALUES)) updatePID();
+    }
+
+    @Override
+    public SwerveModuleInputsAutoLogged getInputs() {
+        return inputs;
     }
 
     @Override
@@ -109,8 +110,8 @@ public class ModuleIOTalonFX implements ModuleIO {
     @Override
     public void setAngle(Rotation2d angle) {
         angle = Utils.normalize(angle);
-        angleSetpoint = angle;
-        Rotation2d error = angle.minus(currentAngle);
+        inputs.angleSetpoint = angle;
+        Rotation2d error = angle.minus(inputs.angle);
         angleControlRequest
                 .withPosition(angleMotor.getPosition().getValue() + error.getRotations())
                 .withFeedForward(SwerveConstants.ANGLE_KS.get())
@@ -126,7 +127,7 @@ public class ModuleIOTalonFX implements ModuleIO {
 
     @Override
     public void setVelocity(double velocity) {
-        driveMotorVelocitySetpoint = velocity;
+        inputs.driveMotorVelocitySetpoint = velocity;
 
         velocityControlRequest
                 .withVelocity(Units.metersToRotations(velocity, SwerveConstants.WHEEL_DIAMETER / 2))

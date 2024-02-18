@@ -9,6 +9,8 @@ import frc.robot.lib.webconstants.LoggedTunableNumber;
 public interface ModuleIO {
     void updateInputs(SwerveModuleInputs inputs);
 
+    SwerveModuleInputsAutoLogged getInputs();
+
     void updatePID();
 
     default boolean hasPIDChanged(LoggedTunableNumber[] PIDValues) {
