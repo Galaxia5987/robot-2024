@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.5518468034391548,
-      "y": 4.010648631984287
+      "x": 2.463171542119166,
+      "y": 4.417980133670191
     },
     "rotation": 0
   },
@@ -14,35 +14,85 @@
         {
           "type": "race",
           "data": {
-            "commands": []
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Lower Spike To Middle Spike"
+                  "name": "intake"
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "prepareShoot"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Middle To Lower Spike"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "prepareShoot"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Lower Spike To Middle Spike"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "prepareShoot"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Middle Spike To Higher Spike"
                 }
               }
             ]

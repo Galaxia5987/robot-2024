@@ -184,7 +184,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
 
         return new InstantCommand(() ->
-                swerveDrive.resetPose(PathPlannerAuto.getStaringPoseFromAutoFile("LowerFullWing")), swerveDrive)
-                .andThen(AutoBuilder.buildAuto(("LowerFullWing"))); //new PathPlannerAuto("LowerFullWing");
+                swerveDrive.resetPose(PathPlannerAuto.getStaringPoseFromAutoFile("Middle Full Wing")), swerveDrive)
+                .andThen(AutoBuilder.buildAuto(("Middle Full Wing"))); //new PathPlannerAuto("LowerFullWing");
     }
 }
