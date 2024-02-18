@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.5518468034391548,
-        "y": 4.010648631984287
+        "x": 7.9077377527963995,
+        "y": 5.74182983123801
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6591379088216374,
-        "y": 4.374155283091771
+        "x": 3.159911049166827,
+        "y": 1.4383809964201122
       },
       "isLocked": false,
-      "linkedName": "Middle Start Point"
+      "linkedName": "center note line #2"
     },
     {
       "anchor": {
@@ -20,12 +20,12 @@
         "y": 4.259958191277884
       },
       "prevControl": {
-        "x": 1.6942698139479073,
-        "y": 4.455091874142219
+        "x": 3.6978421535190646,
+        "y": 8.057272410841119
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "middle scoring pose"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -38,12 +38,12 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": -24.44395478041654,
+    "velocity": 0,
+    "rotation": -44.95474438754478,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Middle",
+  "folder": "Center line",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
