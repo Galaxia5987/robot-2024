@@ -14,7 +14,6 @@ public class HoodIOReal implements HoodIO {
     private final TalonFX motor;
     private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(Ports.Hood.ENCODER_ID);
     private final PositionTorqueCurrentFOC positionControl = new PositionTorqueCurrentFOC(0);
-    private final DutyCycleOut dutyCycleOut = new DutyCycleOut(0);
 
     public HoodIOReal() {
         motor = new TalonFX(Ports.Hood.MOTOR_ID);
@@ -30,12 +29,6 @@ public class HoodIOReal implements HoodIO {
     public void setAngle(MutableMeasure<Angle> angle) {
         inputs.angleSetpoint.mut_replace(angle);
         motor.setControl(positionControl.withPosition(angle.in(Units.Rotations)));
-    }
-
-    @Override
-    public void setPower(double power) {
-        inputs.powerSetpoint = power;
-        motor.setControl(dutyCycleOut.withOutput(power));
     }
 
     private double getEncoderPosition() {

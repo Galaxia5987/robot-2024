@@ -12,8 +12,6 @@ public interface HoodIO {
 
     void setAngle(MutableMeasure<Angle> angle);
 
-    void setPower(double power);
-
     /** Update the inputs of the hood */
     void updateInputs();
 
@@ -22,13 +20,6 @@ public interface HoodIO {
         public MutableMeasure<Angle> angle = MutableMeasure.zero(Rotations);
         public MutableMeasure<Angle> angleSetpoint = MutableMeasure.zero(Rotations);
         public MutableMeasure<Voltage> voltage = MutableMeasure.zero(Volts);
-        public double powerSetpoint = 0;
         public MutableMeasure<Angle> absoluteEncoderAngle = MutableMeasure.zero(Rotations);
-        public Mode controlMode = Mode.POWER;
-    }
-
-    enum Mode {
-        POWER,
-        ANGLE
     }
 }
