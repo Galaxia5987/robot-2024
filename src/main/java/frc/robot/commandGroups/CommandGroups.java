@@ -23,7 +23,6 @@ public class CommandGroups {
     private final Hood hood;
     private final Conveyor conveyor;
     private SwerveDrive swerveDrive;
-    private ShootState shootState = new ShootState();
     private boolean override;
 
     private CommandGroups() {
@@ -84,16 +83,9 @@ public class CommandGroups {
                 .withName("feedShooter");
     }
 
-    public Command prepareShoot() {
-        return Commands.repeatingSequence(
-                shootState.calculateTargets()
-                        .alongWith(shootState.prepareSubsystems())
-        );
-    }
-
     public Command intake() {
         return Commands.sequence(
-                        //retractGrillevator(),
+                        // retractGrillevator(),
                         Commands.parallel(
                                 intake.intake(),
                                 gripper.intake(),

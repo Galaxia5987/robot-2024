@@ -3,13 +3,9 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.lib.GalacticProxyCommand;
@@ -114,14 +110,12 @@ public class RobotContainer {
         configureButtonBindings();
 
         NamedCommands.registerCommand("intake", commandGroups.intake());
-        NamedCommands.registerCommand("prepareShoot", commandGroups.prepareShoot());
-        NamedCommands.registerCommand("score", shootState.score());
-//        NamedCommands.registerCommand("resetPose", new InstantCommand(()->swerveDrive.resetPose(PathPlannerAuto.getStaringPoseFromAutoFile("LowerFullWing"))));
+        NamedCommands.registerCommand("prepareShoot", updateScoreState());
+        NamedCommands.registerCommand("score", currentState.score());
+        //        NamedCommands.registerCommand("resetPose", new
+        // InstantCommand(()->swerveDrive.resetPose(PathPlannerAuto.getStaringPoseFromAutoFile("LowerFullWing"))));
 
         autoChooser = AutoBuilder.buildAutoChooser();
-        autoChooser.addOption("LowerFullWing", new PathPlannerAuto("LowerFullWing"));
-        autoChooser.addOption("MiddleFullWing", new PathPlannerAuto("MiddleFullWing"));
-        autoChooser.addOption("UpperFullWing", new PathPlannerAuto("UpperFullWing"));
         SmartDashboard.putData("autoList", autoChooser);
     }
 
@@ -153,6 +147,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
+        CommandScheduler.getInstance().onCommandInitialize(System.out::println);
         xboxController.y().whileTrue(commandGroups.intake()).onFalse(intake.stop());
         xboxController
                 .a()
@@ -183,8 +178,14 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
 
-        return new InstantCommand(() ->
-                swerveDrive.resetPose(PathPlannerAuto.getStaringPoseFromAutoFile("Middle Full Wing")), swerveDrive)
-                .andThen(AutoBuilder.buildAuto(("Middle Full Wing"))); //new PathPlannerAuto("LowerFullWing");
+        return new InstantCommand(
+                        () ->
+                                swerveDrive.resetPose(
+                                        PathPlannerAuto.getStaringPoseFromAutoFile(
+                                                "Middle Full Wing")),
+                        swerveDrive)
+                .andThen(
+                        AutoBuilder.buildAuto(
+                                ("Middle Full Wing"))); // new PathPlannerAuto("LowerFullWing");
     }
 }

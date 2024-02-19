@@ -122,6 +122,7 @@ public class ShootState implements ScoreState {
                         optimalTranslation = botPose.getTranslation();
                         return rotate();
                     }
+                    calculateTargets();
                     optimalTranslation = botPose.getTranslation().nearest(optimalPoints);
 
                     return AutoBuilder.pathfindToPose(
