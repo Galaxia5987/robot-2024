@@ -3,6 +3,7 @@ package frc.robot.subsystems.elevator;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.*;
 import frc.robot.Constants;
@@ -15,7 +16,8 @@ public class ElevatorConstants { // TODO: check real values
     public static final double MECHANISM_WIDTH = 0.8; // [m]
     public static final double MECHANISM_HEIGHT = 2; // [m]
     public static final double GEAR_RATIO = 12.0;
-    public static final double DRUM_RADIUS = 0.02; // [m]
+    public static final double DRUM_RADIUS = 0.0195; // [m]
+    public static final double CIRCUMFERENCE = DRUM_RADIUS * (2 * Math.PI);
 
     public static final MutableMeasure<Angle> OPEN_POSITION = Units.Degrees.of(0).mutableCopy();
     public static final MutableMeasure<Angle> LOCKED_POSITION = Units.Degrees.of(0).mutableCopy();
@@ -48,12 +50,12 @@ public class ElevatorConstants { // TODO: check real values
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                KP.initDefault(0.8);
+                KP.initDefault(0.0);
                 KI.initDefault(0.0);
                 KD.initDefault(0.0);
                 KV.initDefault(0.0);
                 KA.initDefault(0.0);
-                KG.initDefault(0.0);
+                KG.initDefault(-3.0);
             case SIM:
             case REPLAY:
                 KP.initDefault(43.0);
@@ -62,17 +64,13 @@ public class ElevatorConstants { // TODO: check real values
         }
 
         MAIN_MOTOR_CONFIGURATION
-                .withHardwareLimitSwitch(
-                        new HardwareLimitSwitchConfigs().withReverseLimitAutosetPositionValue(0))
                 .withMotionMagic(
                         new MotionMagicConfigs()
-                                .withMotionMagicExpo_kV(KV.get())
-                                .withMotionMagicExpo_kA(KA.get())
                                 .withMotionMagicAcceleration(MAX_ACCELERATION)
                                 .withMotionMagicCruiseVelocity(MAX_VELOCITY))
                 .withFeedback(
                         new FeedbackConfigs()
-                                .withSensorToMechanismRatio(ElevatorConstants.GEAR_RATIO))
+                                .withSensorToMechanismRatio(GEAR_RATIO / CIRCUMFERENCE))
                 .withSlot0(
                         new Slot0Configs()
                                 .withKP(ElevatorConstants.KP.get())
@@ -83,7 +81,8 @@ public class ElevatorConstants { // TODO: check real values
                                 .withKG(ElevatorConstants.KG.get())
                                 .withGravityType(GravityTypeValue.Elevator_Static))
                 .withMotorOutput(
-                        new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive))
+                        new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive)
+                                .withNeutralMode(NeutralModeValue.Brake))
                 .CurrentLimits
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimitEnable(true)
@@ -93,8 +92,9 @@ public class ElevatorConstants { // TODO: check real values
         AUX_MOTOR_CONFIGURATION
                 .withFeedback(
                         new FeedbackConfigs()
-                                .withSensorToMechanismRatio(ElevatorConstants.GEAR_RATIO))
+                                .withSensorToMechanismRatio(GEAR_RATIO / CIRCUMFERENCE))
                 .withMotorOutput(
-                        new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive));
+                        new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive)
+                                .withNeutralMode(NeutralModeValue.Brake));
     }
 }

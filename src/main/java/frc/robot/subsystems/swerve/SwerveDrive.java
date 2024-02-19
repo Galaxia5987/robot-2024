@@ -174,10 +174,13 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void lock() {
-        modules[0].setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
-        modules[1].setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(135)));
-        modules[2].setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(315)));
-        modules[3].setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(225)));
+        loggerInputs.desiredModuleStates =
+                new SwerveModuleState[] {
+                    new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
+                    new SwerveModuleState(0, Rotation2d.fromDegrees(135)),
+                    new SwerveModuleState(0, Rotation2d.fromDegrees(315)),
+                    new SwerveModuleState(0, Rotation2d.fromDegrees(225))
+                };
     }
 
     public void updateOffsets(double[] offsets) {
@@ -252,14 +255,18 @@ public class SwerveDrive extends SubsystemBase {
                         SwerveConstants.ROTATION_KI.get(),
                         SwerveConstants.ROTATION_KD.get(),
                         SwerveConstants.ROTATION_KDIETER.get());
-        turnController.setTolerance(turnTolerance, 0.05);
+        turnController.setTolerance(turnTolerance);
         turnController.enableContinuousInput(-0.5, 0.5);
         return run(() ->
                         drive(
                                 0,
                                 0,
                                 turnController.calculate(
-                                        getYaw().getRotations(), rotation.get().getRotations()),
+                                        estimator
+                                                .getEstimatedPosition()
+                                                .getRotation()
+                                                .getRotations(),
+                                        rotation.get().getRotations()),
                                 false))
                 .until(turnController::atSetpoint);
     }

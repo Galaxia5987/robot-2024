@@ -9,8 +9,8 @@ public class SwerveConstants {
     public static final double NEO_550_CURRENT_LIMIT = 20;
     public static final CurrentLimitsConfigs TALON_FX_CURRENT_LIMIT_CONFIGS =
             new CurrentLimitsConfigs()
-                    .withSupplyCurrentLimit(30)
-                    .withStatorCurrentLimit(30)
+                    .withSupplyCurrentLimit(50)
+                    .withStatorCurrentLimit(50)
                     .withStatorCurrentLimitEnable(true)
                     .withSupplyCurrentLimitEnable(true);
 
@@ -122,9 +122,9 @@ public class SwerveConstants {
                 ANGLE_KD.initDefault(0.0);
                 ANGLE_KS.initDefault(0.28);
 
-                ROTATION_KP.initDefault(0.2);
+                ROTATION_KP.initDefault(3.0);
                 ROTATION_KI.initDefault(0.0);
-                ROTATION_KD.initDefault(0.0);
+                ROTATION_KD.initDefault(0.2);
                 ROTATION_KDIETER.initDefault(0.0);
 
                 ROBOT_WIDTH = 0.585;

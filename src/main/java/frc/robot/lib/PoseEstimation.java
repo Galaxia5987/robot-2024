@@ -8,7 +8,6 @@ import frc.robot.scoreStates.ScoreStateConstants;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -25,12 +24,10 @@ public class PoseEstimation {
         swerveDrive = SwerveDrive.getInstance();
         vision = Vision.getInstance();
 
-        if (DriverStation.getAlliance().isPresent()) {
-            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-                speakerPose = ScoreStateConstants.SPEAKER_POSE_RED;
-            } else {
-                speakerPose = ScoreStateConstants.SPEAKER_POSE_BLUE;
-            }
+        while (DriverStation.getAlliance().isEmpty())
+            ;
+        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+            speakerPose = ScoreStateConstants.SPEAKER_POSE_RED;
         } else {
             speakerPose = ScoreStateConstants.SPEAKER_POSE_BLUE;
         }
@@ -49,18 +46,14 @@ public class PoseEstimation {
             if (result == null) {
                 continue;
             }
-            Supplier<Stream<Double>> distances =
-                    () ->
-                            result.targetsUsed.stream()
-                                    .map(
-                                            (target) ->
-                                                    target.getBestCameraToTarget()
-                                                            .getTranslation()
-                                                            .getNorm());
-            if (distances.get().anyMatch((d) -> d > 2.5)) {
-                continue;
-            }
-            var ambiguities = distances.get().map((d) -> d * d);
+            Stream<Double> distances =
+                    result.targetsUsed.stream()
+                            .map(
+                                    (target) ->
+                                            target.getBestCameraToTarget()
+                                                    .getTranslation()
+                                                    .getNorm());
+            var ambiguities = distances.map((d) -> d * d);
             double stddev =
                     multiplier * Utils.averageAmbiguity(ambiguities.collect(Collectors.toList()));
             swerveDrive
@@ -84,6 +77,11 @@ public class PoseEstimation {
 
     @AutoLogOutput(key = "DistanceToSpeaker")
     public double getDistanceToSpeaker() {
-        return speakerPose.getDistance(getEstimatedPose().getTranslation());
+        return getPoseRelativeToSpeaker().getNorm();
+    }
+
+    @AutoLogOutput(key = "ToSpeaker")
+    public Translation2d getPoseRelativeToSpeaker() {
+        return speakerPose.minus(getEstimatedPose().getTranslation());
     }
 }

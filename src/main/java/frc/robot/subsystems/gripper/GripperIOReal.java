@@ -37,10 +37,8 @@ public class GripperIOReal implements GripperIO {
         rollerMotor.restoreFactoryDefaults();
         rollerMotor.setSmartCurrentLimit(40);
         rollerMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
-        forwardLimitSwitch =
-                rollerMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
-        reverseLimitSwitch =
-                rollerMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
+        forwardLimitSwitch = rollerMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+        reverseLimitSwitch = rollerMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
         forwardLimitSwitch.enableLimitSwitch(false);
         reverseLimitSwitch.enableLimitSwitch(false);
         rollerMotor.burnFlash();
@@ -75,7 +73,7 @@ public class GripperIOReal implements GripperIO {
     }
 
     public boolean hasNote() {
-        return !sensor.get();
+        return forwardLimitSwitch.isPressed() || reverseLimitSwitch.isPressed();
     }
 
     @Override

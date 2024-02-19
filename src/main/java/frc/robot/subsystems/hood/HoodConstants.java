@@ -15,7 +15,7 @@ import frc.robot.lib.webconstants.LoggedTunableNumber;
 public class HoodConstants {
     public static Translation2d MECHANISM_2D_POSE = new Translation2d(1, 1);
     public static Measure<Distance> HOOD_LENGTH = Units.Meters.of(0.4);
-    public static Measure<Dimensionless> POSITION_TOLERANCE = Units.Percent.of(1);
+    public static Measure<Dimensionless> POSITION_TOLERANCE = Units.Percent.of(0.5);
     public static Measure<Velocity<Angle>> MAX_VELOCITY = Units.RotationsPerSecond.of(1);
     public static Measure<Velocity<Velocity<Angle>>> MAX_ACCELERATION =
             Units.RotationsPerSecond.per(Units.Second).of(4);
@@ -45,9 +45,9 @@ public class HoodConstants {
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                kP.initDefault(470);
+                kP.initDefault(570);
                 kI.initDefault(1);
-                kD.initDefault(35);
+                kD.initDefault(59);
                 kS.initDefault(0.0);
                 kV.initDefault(0);
                 kA.initDefault(0.0);
