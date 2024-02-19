@@ -16,6 +16,12 @@
           "data": {
             "commands": [
               {
+                "type": "path",
+                "data": {
+                  "pathName": "Middle To Lower Spike"
+                }
+              },
+              {
                 "type": "named",
                 "data": {
                   "name": "intake"
@@ -25,12 +31,6 @@
                 "type": "named",
                 "data": {
                   "name": "prepareShoot"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Middle To Lower Spike"
                 }
               }
             ]
@@ -46,37 +46,12 @@
           "type": "race",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "prepareShoot"
-                }
-              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "Lower Spike To Middle Spike"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "score"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
+              },
               {
                 "type": "named",
                 "data": {
@@ -88,20 +63,33 @@
                 "data": {
                   "name": "prepareShoot"
                 }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Middle Spike To Higher Spike"
-                }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "score"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Middle Spike To Higher Spike"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "prepareShoot"
+                }
+              }
+            ]
           }
         }
       ]
