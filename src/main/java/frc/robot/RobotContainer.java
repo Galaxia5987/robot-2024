@@ -178,14 +178,13 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
 
-        return new InstantCommand(
-                        () ->
-                                swerveDrive.resetPose(
-                                        PathPlannerAuto.getStaringPoseFromAutoFile(
-                                                "Middle Full Wing")),
-                        swerveDrive)
-                .andThen(
-                        AutoBuilder.buildAuto(
-                                ("Middle Full Wing"))); // new PathPlannerAuto("LowerFullWing");
+//        return new InstantCommand(
+//                        () ->
+//                                swerveDrive.resetPose(
+//                                        PathPlannerAuto.getStaringPoseFromAutoFile(
+//                                                "Middle Full Wing")),
+//                        swerveDrive)
+//                .andThen(
+                        return new PathPlannerAuto("Middle Full Wing");
     }
 }
