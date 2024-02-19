@@ -4,8 +4,9 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meters;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.StrictFollower;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Mass;
@@ -14,18 +15,18 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
 import frc.robot.Ports;
-import frc.robot.lib.Utils;
+import frc.robot.lib.math.differential.BooleanTrigger;
 
 public class ElevatorIOReal implements ElevatorIO {
     private final Servo servo;
     private final TalonFX mainMotor;
     private final TalonFX auxMotor;
 
-    private final MotionMagicExpoTorqueCurrentFOC positionControl =
-            new MotionMagicExpoTorqueCurrentFOC(0);
-    private final DutyCycleOut powerControl = new DutyCycleOut(0);
+    private final MotionMagicTorqueCurrentFOC positionControl = new MotionMagicTorqueCurrentFOC(0);
+    private final VoltageOut powerControl = new VoltageOut(0);
 
     private final DigitalInput sensor = new DigitalInput(1);
+    private final BooleanTrigger trigger = new BooleanTrigger();
 
     private static final MutableMeasure<Mass> movingWeight = ElevatorConstants.HOOKS_MASS;
 
@@ -42,7 +43,7 @@ public class ElevatorIOReal implements ElevatorIO {
 
     @Override
     public void setPower(double power) {
-        mainMotor.setControl(powerControl.withOutput(power));
+        mainMotor.setControl(powerControl.withOutput(power * 12));
     }
 
     @Override
@@ -66,12 +67,14 @@ public class ElevatorIOReal implements ElevatorIO {
 
     @Override
     public void updateInputs(ElevatorInputs inputs) {
-        inputs.isBottom = sensor.get();
+        inputs.isBottom = !sensor.get();
+        trigger.update(inputs.isBottom);
+
         inputs.hooksHeight.mut_replace(mainMotor.getPosition().getValue(), Meters);
 
         inputs.carriageHeight.mut_replace(
                 inputs.hooksHeight.gt(ElevatorConstants.GRIPPER_TO_HOOKS)
-                        ? inputs.hooksHeight.mut_minus(ElevatorConstants.GRIPPER_TO_HOOKS)
+                        ? inputs.hooksHeight.minus(ElevatorConstants.GRIPPER_TO_HOOKS)
                         : Meters.zero());
 
         inputs.stopperAngle.mut_replace(servo.getAngle(), Degrees);
@@ -81,14 +84,9 @@ public class ElevatorIOReal implements ElevatorIO {
             movingWeight.mut_acc(ElevatorConstants.ELEVATOR_MASS);
         }
 
-        double lastKg = ElevatorConstants.MAIN_MOTOR_CONFIGURATION.Slot0.kG;
-        double newKg = ElevatorConstants.KG.get() * movingWeight.in(Units.Kilograms);
-        if (!Utils.epsilonEquals(lastKg, newKg)) {
-            mainMotor
-                    .getConfigurator()
-                    .apply(ElevatorConstants.MAIN_MOTOR_CONFIGURATION.Slot0.withKG(newKg));
-            auxMotor.getConfigurator()
-                    .apply(ElevatorConstants.AUX_MOTOR_CONFIGURATION.Slot0.withKG(newKg));
+        if (trigger.triggered()) {
+            mainMotor.setPosition(0);
+            auxMotor.setPosition(0);
         }
     }
 }
