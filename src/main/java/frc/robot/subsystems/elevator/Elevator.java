@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.*;
+import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -48,10 +49,6 @@ public class Elevator extends SubsystemBase {
         INSTANCE = new Elevator(io);
     }
 
-    public void reset(MutableMeasure<Distance> height) {
-        inputs.carriageHeight = Units.Meters.of(0).mutableCopy();
-    }
-
     public MutableMeasure<Distance> getCurrentHeight() {
         return inputs.hooksHeight;
     }
@@ -81,6 +78,13 @@ public class Elevator extends SubsystemBase {
                         run(() -> io.setHeight(height)).until(this::atHeightSetpoint),
                         run(io::closeStopper).until(this::stopperAtSetpoint).withTimeout(0.3))
                 .withName("set height");
+    }
+
+    public Command manualElevator(DoubleSupplier power) {
+        return Commands.parallel(run(() -> {
+            System.out.println(power.getAsDouble());
+            io.setPower(power.getAsDouble());
+        }));
     }
 
     @Override
