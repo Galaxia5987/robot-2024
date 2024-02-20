@@ -2,14 +2,18 @@ package frc.robot.commandGroups;
 
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.lib.PoseEstimation;
+import frc.robot.lib.math.interpolation.InterpolatingDouble;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperConstants;
 import frc.robot.subsystems.hood.Hood;
+import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
@@ -96,6 +100,38 @@ public class CommandGroups {
                                         .andThen(Commands.none()))) // TODO: replace null with leds
                 // mode
                 .withName("intake");
+    }
+
+    public Command setShooter() {
+        var distanceToSpeaker =
+                new InterpolatingDouble(PoseEstimation.getInstance().getDistanceToSpeaker());
+        return Commands.repeatingSequence(
+                shooter.setVelocity(
+                                () ->
+                                        Units.RotationsPerSecond.of(
+                                                        ShooterConstants.VELOCITY_BY_DISTANCE
+                                                                .getInterpolated(distanceToSpeaker)
+                                                                .value)
+                                                .mutableCopy())
+                        .until(shooter::atSetpoint));
+    }
+
+    public Command setScoringSystems() {
+        return Commands.parallel(setHood(), setShooter());
+    }
+
+    public Command setHood() {
+        var distanceToSpeaker =
+                new InterpolatingDouble(PoseEstimation.getInstance().getDistanceToSpeaker());
+        return Commands.repeatingSequence(
+                hood.setAngle(
+                                () ->
+                                        Units.Degrees.of(
+                                                        HoodConstants.ANGLE_BY_DISTANCE
+                                                                .getInterpolated(distanceToSpeaker)
+                                                                .value)
+                                                .mutableCopy())
+                        .until(hood::atSetpoint));
     }
 
     public Command outtakeGripper() {
