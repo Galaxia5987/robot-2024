@@ -16,15 +16,15 @@ public class ModuleIOSim implements ModuleIO {
     private final TalonFXSim driveMotor;
     private final TalonFXSim angleMotor;
     private final PIDController velocityController;
+
     private final PIDController angleController;
     private VelocityVoltage driveControlRequest = new VelocityVoltage(0).withEnableFOC(true);
     private PositionVoltage angleControlRequest = new PositionVoltage(0).withEnableFOC(true);
-    private double currentVelocity = 0;
-    private double velocitySetpoint = 0;
-    private Rotation2d currentAngle = new Rotation2d();
-    private Rotation2d angleSetpoint = new Rotation2d();
+    private final SwerveModuleInputsAutoLogged inputs;
 
-    public ModuleIOSim() {
+    public ModuleIOSim(SwerveModuleInputsAutoLogged inputs) {
+        this.inputs = inputs;
+
         driveMotor =
                 new TalonFXSim(
                         1,
@@ -57,31 +57,21 @@ public class ModuleIOSim implements ModuleIO {
     }
 
     @Override
-    public void updateInputs(SwerveModuleInputs inputs) {
+    public void updateInputs() {
         driveMotor.update(Timer.getFPGATimestamp());
         angleMotor.update(Timer.getFPGATimestamp());
 
-        inputs.driveMotorAppliedVoltage = driveMotor.getAppliedVoltage();
         inputs.driveMotorVelocity =
                 Units.rpsToMetersPerSecond(
                         driveMotor.getVelocity(), SwerveConstants.WHEEL_DIAMETER / 2);
-        currentVelocity = inputs.driveMotorVelocity;
-        inputs.driveMotorVelocitySetpoint = velocitySetpoint;
 
         inputs.angleMotorAppliedVoltage = angleMotor.getAppliedVoltage();
-        inputs.angleMotorVelocity = angleMotor.getVelocity();
-        inputs.angleSetpoint = angleSetpoint;
         inputs.angle = Rotation2d.fromRotations(angleMotor.getPosition());
-        currentAngle = inputs.angle;
 
         inputs.moduleDistance =
                 Units.rpsToMetersPerSecond(
                         driveMotor.getPosition(), SwerveConstants.WHEEL_DIAMETER / 2);
         inputs.moduleState = getModuleState();
-
-        inputs.highFreqDistances = new double[] {inputs.moduleDistance};
-        inputs.highFreqAngles = new double[] {inputs.angle.getRadians()};
-        inputs.highFreqTimestamps = new double[] {Timer.getFPGATimestamp()};
 
         if (hasPIDChanged(SwerveConstants.PID_VALUES)) updatePID();
     }
@@ -100,23 +90,23 @@ public class ModuleIOSim implements ModuleIO {
 
     @Override
     public Rotation2d getAngle() {
-        return currentAngle;
+        return inputs.angle;
     }
 
     @Override
     public void setAngle(Rotation2d angle) {
-        angleSetpoint = angle;
+        inputs.angleSetpoint = angle;
         angleMotor.setControl(angleControlRequest.withPosition(angle.getRotations()));
     }
 
     @Override
     public double getVelocity() {
-        return currentVelocity;
+        return inputs.driveMotorVelocity;
     }
 
     @Override
     public void setVelocity(double velocity) {
-        velocitySetpoint = velocity;
+        inputs.driveMotorVelocitySetpoint = velocity;
         driveControlRequest.withVelocity(
                 Units.metersToRotations(velocity, SwerveConstants.WHEEL_DIAMETER / 2));
         driveMotor.setControl(driveControlRequest);
@@ -132,7 +122,7 @@ public class ModuleIOSim implements ModuleIO {
         return new SwerveModulePosition(
                 Units.rpsToMetersPerSecond(
                         driveMotor.getPosition(), SwerveConstants.WHEEL_DIAMETER / 2),
-                currentAngle);
+                inputs.angle);
     }
 
     @Override
@@ -153,5 +143,10 @@ public class ModuleIOSim implements ModuleIO {
                     angleControlRequest.withVelocity(0.2 * SwerveConstants.MAX_X_Y_VELOCITY);
                     angleMotor.setControl(angleControlRequest);
                 });
+    }
+
+    @Override
+    public SwerveModuleInputsAutoLogged getInputs() {
+        return inputs;
     }
 }

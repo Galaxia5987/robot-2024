@@ -1,7 +1,6 @@
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -40,23 +39,7 @@ public class PhotonVisionIOReal implements VisionIO {
     public void updateInputs(VisionInputs inputs) {
         var latestResult = camera.getLatestResult();
 
-        if (latestResult != null) { // TODO: check if the value can be null
-            inputs.latency = (long) latestResult.getLatencyMillis();
-            inputs.hasTargets = latestResult.hasTargets();
-
-            if (latestResult.getBestTarget() != null) {
-                inputs.area = latestResult.getBestTarget().getArea();
-                inputs.pitch = latestResult.getBestTarget().getPitch();
-                inputs.yaw = latestResult.getBestTarget().getYaw();
-                inputs.targetSkew = latestResult.getBestTarget().getSkew();
-                inputs.targetID = latestResult.getBestTarget().getFiducialId();
-                inputs.bestTargetAmbiguity = latestResult.getBestTarget().getPoseAmbiguity();
-
-                var cameraToTarget = latestResult.getBestTarget().getBestCameraToTarget();
-                inputs.cameraToTarget =
-                        new Pose3d(cameraToTarget.getTranslation(), cameraToTarget.getRotation());
-            }
-
+        if (latestResult != null) {
             var estimatedPose = estimator.update(latestResult);
             if (estimatedPose.isPresent()) {
                 inputs.poseFieldOriented = estimatedPose.get().estimatedPose;

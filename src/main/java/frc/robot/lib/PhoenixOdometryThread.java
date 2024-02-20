@@ -19,10 +19,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.ParentDevice;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import org.littletonrobotics.junction.Logger;
@@ -48,7 +45,6 @@ public class PhoenixOdometryThread extends Thread {
     private PhoenixOdometryThread() {
         setName("PhoenixOdometryThread");
         setDaemon(true);
-        start();
     }
 
     public static PhoenixOdometryThread getInstance() {
@@ -56,6 +52,13 @@ public class PhoenixOdometryThread extends Thread {
             instance = new PhoenixOdometryThread();
         }
         return instance;
+    }
+
+    @Override
+    public void start() {
+        if (!timestampQueues.isEmpty()) {
+            super.start();
+        }
     }
 
     public Queue<Double> makeTimestampQueue() {
@@ -90,13 +93,9 @@ public class PhoenixOdometryThread extends Thread {
 
     @Override
     public void run() {
-        List<StatusSignal<Double>> all =
-                new ArrayList<>() {
-                    {
-                        addAll(signals);
-                        addAll(signalSlopes);
-                    }
-                };
+        List<StatusSignal<Double>> all = new ArrayList<>();
+        all.addAll(signals);
+        all.addAll(signalSlopes);
         BaseStatusSignal[] allArr = all.toArray(new BaseStatusSignal[0]);
 
         while (true) {

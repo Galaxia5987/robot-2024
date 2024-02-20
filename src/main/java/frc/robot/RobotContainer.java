@@ -2,12 +2,14 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
-import frc.robot.lib.GalacticProxyCommand;
+import frc.robot.lib.PoseEstimation;
 import frc.robot.scoreStates.AmpState;
 import frc.robot.scoreStates.ClimbState;
 import frc.robot.scoreStates.ScoreState;
@@ -24,15 +26,12 @@ import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperIO;
 import frc.robot.subsystems.gripper.GripperIOReal;
 import frc.robot.subsystems.gripper.GripperIOSim;
-import frc.robot.subsystems.hood.Hood;
-import frc.robot.subsystems.hood.HoodIO;
-import frc.robot.subsystems.hood.HoodIOReal;
-import frc.robot.subsystems.hood.HoodIOSim;
-import frc.robot.subsystems.intake.*;
-import frc.robot.subsystems.shooter.Shooter;
-import frc.robot.subsystems.shooter.ShooterIO;
-import frc.robot.subsystems.shooter.ShooterIOReal;
-import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.hood.*;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOReal;
+import frc.robot.subsystems.intake.IntakeIOSim;
+import frc.robot.subsystems.shooter.*;
 import frc.robot.subsystems.swerve.SwerveDrive;
 
 public class RobotContainer {
@@ -48,41 +47,43 @@ public class RobotContainer {
     private final ShootState shootState;
     private final AmpState ampState;
     private final ClimbState climbState;
-    private final SendableChooser<Command> autoChooser;
+    private final PoseEstimation poseEstimation;
     private CommandGroups commandGroups;
     private ScoreState currentState;
+    private final SendableChooser<Command> autoChooser;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
+        HoodIO hoodIO;
         IntakeIO intakeIO;
         ConveyorIO conveyorIO;
-        ElevatorIO elevatorIO;
-        GripperIO gripperIO;
-        HoodIO hoodIO;
         ShooterIO shooterIO;
+        GripperIO gripperIO;
+        ElevatorIO elevatorIO;
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 intakeIO = new IntakeIOReal();
                 conveyorIO = new ConveyorIOReal();
-                elevatorIO = new ElevatorIOReal();
                 gripperIO = new GripperIOReal();
                 hoodIO = new HoodIOReal();
                 shooterIO = new ShooterIOReal();
+                elevatorIO = new ElevatorIOReal();
                 break;
             case SIM:
             case REPLAY:
             default:
                 intakeIO = new IntakeIOSim();
                 conveyorIO = new ConveyorIOSim();
-                elevatorIO = new ElevatorIOSim();
                 gripperIO = new GripperIOSim();
                 hoodIO = new HoodIOSim();
                 shooterIO = new ShooterIOSim();
+                elevatorIO = new ElevatorIOSim();
                 break;
         }
         Intake.initialize(intakeIO);
         Conveyor.initialize(conveyorIO);
         Elevator.initialize(elevatorIO);
+        Gripper.initialize(gripperIO, () -> Units.Meters.of(0));
         Hood.initialize(hoodIO);
         Shooter.initialize(shooterIO);
         Constants.initSwerve();
@@ -95,7 +96,7 @@ public class RobotContainer {
         hood = Hood.getInstance();
         shooter = Shooter.getInstance();
 
-        Gripper.initialize(gripperIO, elevator::getCarriageHeight);
+        Gripper.initialize(gripperIO, () -> Units.Meters.of(0));
         gripper = Gripper.getInstance();
         commandGroups = CommandGroups.getInstance();
 
@@ -107,15 +108,11 @@ public class RobotContainer {
         // Configure the button bindings and default commands
         configureDefaultCommands();
         configureButtonBindings();
-
-        NamedCommands.registerCommand("intake", commandGroups.intake());
-        NamedCommands.registerCommand("prepareShoot", updateScoreState());
-        NamedCommands.registerCommand("score", shootState.setShooter());
-        //        NamedCommands.registerCommand("resetPose", new
-        // InstantCommand(()->swerveDrive.resetPose(PathPlannerAuto.getStaringPoseFromAutoFile("LowerFullWing"))));
-
+        poseEstimation = PoseEstimation.getInstance();
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("autoList", autoChooser);
+        NamedCommands.registerCommand("intake", commandGroups.intake());
+        NamedCommands.registerCommand("score", shootState.setShooter());
     }
 
     public static RobotContainer getInstance() {
@@ -130,43 +127,130 @@ public class RobotContainer {
                 swerveDrive.driveCommand(
                         () -> -xboxController.getLeftY(),
                         () -> -xboxController.getLeftX(),
-                        () -> -xboxController.getRightX(),
-                        0.15,
+                        () -> 0.4 * -xboxController.getRightX(),
+                        0.1,
                         () -> true));
-        intake.setDefaultCommand(intake.setAngle(IntakeConstants.IntakePose.UP));
-    }
-
-    private Command updateScoreState() {
-        return new GalacticProxyCommand(
-                () ->
-                        currentState
-                                .calculateTargets()
-                                .andThen(currentState.prepareSubsystems())
-                                .repeatedly());
     }
 
     private void configureButtonBindings() {
-        xboxController.y().whileTrue(commandGroups.intake()).onFalse(intake.stop());
+
+        //        xboxController
+        //                .rightTrigger()
+        //                .whileTrue(
+        //                        Commands.parallel(
+        //                                        hood.setAngle(
+        //                                                () ->
+        //                                                        Units.Degrees.of(
+        //                                                                        HoodConstants
+        //
+        // .ANGLE_BY_DISTANCE
+        //
+        // .getInterpolated(
+        //
+        // new InterpolatingDouble(
+        //
+        //      PoseEstimation
+        //
+        //              .getInstance()
+        //
+        //              .getDistanceToSpeaker()))
+        //                                                                                .value)
+        //                                                                .mutableCopy()),
+        //                                        commandGroups.shootAndConvey(
+        //                                                () ->
+        //                                                        Units.RotationsPerSecond.of(
+        //                                                                        ShooterConstants
+        //
+        // .VELOCITY_BY_DISTANCE
+        //
+        // .getInterpolated(
+        //
+        // new InterpolatingDouble(
+        //
+        //      PoseEstimation
+        //
+        //              .getInstance()
+        //
+        //              .getDistanceToSpeaker()))
+        //                                                                                .value)
+        //                                                                .mutableCopy()))
+        //                                .until(() -> shooter.atSetpoint() && hood.atSetpoint())
+        //                                .andThen(
+        //                                        gripper.setRollerPower(0.7)
+        //
+        // .alongWith(intake.setCenterRollerSpeed(0.5))))
+        //                .onFalse(
+        //                        Commands.parallel(
+        //                                hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()),
+        //                                conveyor.stop(),
+        //                                shooter.stop(),
+        //                                intake.setCenterRollerSpeed(0),
+        //                                gripper.setRollerPower(0)));
+        //        xboxController
+        //                .leftTrigger()
+        //                .whileTrue(
+        //                        Commands.parallel(
+        //                                intake.intake(),
+        //                                gripper.setRollerPower(0.3)
+        //                                        .until(gripper::hasNote)
+        //                                        .andThen(gripper.setRollerPower(0))))
+        //                .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
+        xboxController.leftBumper().onTrue(intake.reset(Units.Degrees.of(0)));
+        xboxController.b().onTrue(Commands.runOnce(swerveDrive::resetGyro));
         xboxController
                 .a()
-                .onTrue(
-                        Commands.runOnce(() -> currentState = shootState)
-                                .andThen(updateScoreState()));
+                .whileTrue(elevator.setHeight(Units.Meters.of(0.4).mutableCopy()))
+                .whileFalse(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
         xboxController
-                .b()
-                .onTrue(
-                        Commands.runOnce(() -> currentState = ampState)
-                                .andThen(updateScoreState()));
+                .y()
+                .whileTrue(elevator.setHeight(Units.Meters.of(0.7).mutableCopy()))
+                .whileFalse(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
         xboxController
                 .x()
-                .onTrue(
-                        Commands.runOnce(() -> currentState = climbState)
-                                .andThen(updateScoreState()));
-
+                .whileTrue(elevator.setHeight(Units.Meters.of(1.0).mutableCopy()))
+                .whileFalse(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
         xboxController
-                .rightTrigger(0.1)
-                .onTrue(new GalacticProxyCommand(() -> currentState.score()))
-                .onFalse(new GalacticProxyCommand(() -> currentState.finalizeScore()));
+                .rightBumper()
+                .whileTrue(gripper.setWristPosition(Units.Degrees.of(90).mutableCopy()))
+                .onFalse(gripper.setRollerPower(-0.7));
+        //        xboxController
+        //                .rightTrigger()
+        //                .whileTrue(
+        //                        Commands.defer(
+        //                                () ->
+        //                                        swerveDrive
+        //                                                .turnCommand(
+        //                                                        () -> {
+        //                                                            var toSpeaker =
+        //
+        // PoseEstimation.getInstance()
+        //
+        // .getPoseRelativeToSpeaker();
+        //                                                            var res =
+        //                                                                    new Rotation2d(
+        //
+        // toSpeaker.getX(),
+        //
+        // toSpeaker.getY());
+        //                                                            if
+        // (DriverStation.getAlliance().get()
+        //                                                                    ==
+        // DriverStation.Alliance.Red) {
+        //                                                                res =
+        //                                                                        res.minus(
+        //                                                                                Rotation2d
+        //
+        // .fromDegrees(
+        //
+        //      180));
+        //                                                            }
+        //                                                            wantedRobotRotation = res;
+        //                                                            return res;
+        //                                                        },
+        //
+        // Rotation2d.fromDegrees(0.5).getRotations())
+        //                                                .finallyDo(swerveDrive::lock),
+        //                                Set.of(swerveDrive)));
     }
 
     /**

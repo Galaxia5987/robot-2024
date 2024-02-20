@@ -7,10 +7,12 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.*;
+import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -20,6 +22,7 @@ public class Elevator extends SubsystemBase {
 
     private final ElevatorInputsAutoLogged inputs = ElevatorIO.inputs;
     private final ElevatorIO io;
+    private final Timer timer = new Timer();
 
     @AutoLogOutput
     private final Mechanism2d mechanism2d = new Mechanism2d(MECHANISM_WIDTH, MECHANISM_HEIGHT);
@@ -33,6 +36,9 @@ public class Elevator extends SubsystemBase {
 
     private Elevator(ElevatorIO io) {
         this.io = io;
+
+        timer.start();
+        timer.reset();
     }
 
     public static Elevator getInstance() {
@@ -67,18 +73,26 @@ public class Elevator extends SubsystemBase {
 
     public Command setHeight(MutableMeasure<Distance> height) {
         return Commands.sequence(
-                        runOnce(() -> inputs.heightSetpoint = height),
-                        run(io::openStopper).until(this::stopperAtSetpoint).withTimeout(0.3),
-                        run(() -> io.setHeight(height)).until(this::atHeightSetpoint),
-                        run(io::closeStopper).until(this::stopperAtSetpoint).withTimeout(0.3))
+                        //                        runOnce(() -> inputs.heightSetpoint = height),
+                        //
+                        // run(io::openStopper).until(this::stopperAtSetpoint).withTimeout(0.3),
+                        run(() -> io.setHeight(height)).until(this::atHeightSetpoint))
+                //
+                // run(io::closeStopper).until(this::stopperAtSetpoint).withTimeout(0.3))
                 .withName("set height");
+    }
+
+    public Command manualElevator(DoubleSupplier power) {
+        return Commands.parallel(run(() -> io.setPower(power.getAsDouble())));
     }
 
     @Override
     public void periodic() {
         io.updateInputs(inputs);
         elevator.setLength(getCurrentHeight().in(Units.Meters));
-        Logger.processInputs(this.getClass().getSimpleName(), inputs);
+        if (timer.advanceIfElapsed(0.1)) {
+            Logger.processInputs(this.getClass().getSimpleName(), inputs);
+        }
 
         Logger.recordOutput(
                 "elevatorPose",

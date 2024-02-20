@@ -11,22 +11,20 @@ import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule extends SubsystemBase {
 
-    private final SwerveModuleInputsAutoLogged loggerInputs = new SwerveModuleInputsAutoLogged();
+    private final SwerveModuleInputsAutoLogged loggerInputs;
 
     private final ModuleIO io;
 
     private final int number;
     private final Timer timer = new Timer();
     private final double offset;
-    private SwerveModulePosition[] highFreqModulePositions =
-            new SwerveModulePosition[] {new SwerveModulePosition()};
-    private double lastDistance = 0;
-    private double[] deltas = new double[0];
 
     public SwerveModule(ModuleIO io, int number, double offset) {
         this.io = io;
         this.number = number;
         this.offset = offset;
+
+        loggerInputs = io.getInputs();
 
         timer.start();
         timer.reset();
@@ -68,24 +66,6 @@ public class SwerveModule extends SubsystemBase {
     }
 
     /**
-     * Gets the stator current of both motors combined.
-     *
-     * @return Sum of the drive motor stator current and angle motor stator current. [amps]
-     */
-    public double getStatorCurrent() {
-        return loggerInputs.driveMotorStatorCurrent + loggerInputs.angleMotorStatorCurrent;
-    }
-
-    /**
-     * Gets the supply current of both motors combined.
-     *
-     * @return Sum of the drive motor supply current and angle motor supply current. [amps]
-     */
-    public double getSupplyCurrent() {
-        return loggerInputs.driveMotorSupplyCurrent + loggerInputs.angleMotorSupplyCurrent;
-    }
-
-    /**
      * Gets the position of the absolute encoder.
      *
      * @return Position of the absolute encoder. [sensor ticks]
@@ -111,51 +91,17 @@ public class SwerveModule extends SubsystemBase {
         return io.checkModule();
     }
 
-    public double[] getHighFreqDriveDistanceDeltas() {
-        return deltas;
-    }
-
-    public double[] getHighFreqDriveDistances() {
-        return loggerInputs.highFreqDistances;
-    }
-
-    public double[] getHighFreqAngles() {
-        return loggerInputs.highFreqAngles;
-    }
-
-    public double[] getHighFreqTimestamps() {
-        return loggerInputs.highFreqTimestamps;
-    }
-
     public void updateInputs() {
-        io.updateInputs(loggerInputs);
-        Logger.processInputs("module_" + number, loggerInputs);
-    }
-
-    public SwerveModulePosition[] getHighFreqModulePositions() {
-        return highFreqModulePositions;
+        io.updateInputs();
+        if (timer.advanceIfElapsed(0.1)) {
+            Logger.processInputs("module_" + number, loggerInputs);
+        }
     }
 
     @Override
     public void periodic() {
-        deltas = new double[loggerInputs.highFreqDistances.length];
-        for (int i = 0; i < deltas.length; i++) {
-            deltas[i] = loggerInputs.highFreqDistances[i] - lastDistance;
-            lastDistance = loggerInputs.highFreqDistances[i];
-        }
-
-        if (timer.advanceIfElapsed(1)) {
+        if (timer.advanceIfElapsed(2)) {
             io.updateOffset(new Rotation2d(Units.rotationsToRadians(offset)));
-        }
-
-        int sampleCount =
-                loggerInputs.highFreqTimestamps.length; // All signals are sampled together
-        highFreqModulePositions = new SwerveModulePosition[sampleCount];
-        for (int i = 0; i < sampleCount; i++) {
-            highFreqModulePositions[i] =
-                    new SwerveModulePosition(
-                            getHighFreqDriveDistances()[i],
-                            Rotation2d.fromRadians(getHighFreqAngles()[i]));
         }
     }
 }

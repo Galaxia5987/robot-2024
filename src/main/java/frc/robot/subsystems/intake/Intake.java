@@ -3,17 +3,14 @@ package frc.robot.subsystems.intake;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.intake.IntakeConstants.IntakePose;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -24,12 +21,16 @@ public class Intake extends SubsystemBase {
     @AutoLogOutput private final Mechanism2d intakeMechanism = new Mechanism2d(2, 3);
     @AutoLogOutput private final Pose3d robotPose = new Pose3d();
     private final MechanismRoot2d root = intakeMechanism.getRoot("Intake", 1, 1);
+    private final Timer timer = new Timer();
 
     private final MechanismLigament2d intakeLigament =
             root.append(new MechanismLigament2d("IntakeLigmament", 0.21, 0));
 
     public Intake(IntakeIO io) {
         this.io = io;
+
+        timer.start();
+        timer.reset();
     }
 
     public static Intake getInstance() {
@@ -45,9 +46,7 @@ public class Intake extends SubsystemBase {
         return runOnce(
                 () -> {
                     inputs.angleSetpoint = angle;
-                    io.setAngle(
-                            Units.Degrees.of(Math.IEEEremainder(angle.in(Units.Degrees), 180))
-                                    .mutableCopy());
+                    io.setAngle(angle);
                 });
     }
 
@@ -55,15 +54,15 @@ public class Intake extends SubsystemBase {
         return setAngle(intakePose.intakePose);
     }
 
-    private Command setRollerSpeed(MutableMeasure<Velocity<Angle>> speed) {
+    private Command setRollerSpeed(double speed) {
         return Commands.runOnce(
                 () -> {
-                    inputs.rollerSpeedSetpoint.mut_replace(speed);
+                    inputs.rollerSpeedSetpoint = speed;
                     io.setRollerSpeed(speed);
                 });
     }
 
-    private Command setCenterRollerSpeed(double speed) {
+    public Command setCenterRollerSpeed(double speed) {
         return Commands.runOnce(
                 () -> {
                     inputs.centerRollerSpeedSetpoint = speed;
@@ -73,24 +72,30 @@ public class Intake extends SubsystemBase {
 
     public Command intake() {
         return Commands.parallel(
-                        setAngle(IntakePose.DOWN),
-                        setRollerSpeed(Units.RotationsPerSecond.of(50).mutableCopy()),
-                        setCenterRollerSpeed(0.5))
+                        setAngle(IntakeConstants.IntakePose.DOWN),
+                        setRollerSpeed(0.83),
+                        setCenterRollerSpeed(0.7))
                 .withName("feeding position activated");
     }
 
     public Command stop() {
         return Commands.parallel(
-                        setAngle(IntakePose.UP),
-                        setRollerSpeed(Units.RotationsPerSecond.zero().mutableCopy()),
+                        setAngle(IntakeConstants.IntakePose.UP),
+                        setRollerSpeed(0),
                         setCenterRollerSpeed(0))
                 .withName("stopped");
+    }
+
+    public Command reset(Measure<Angle> angle) {
+        return runOnce(() -> io.reset(angle));
     }
 
     @Override
     public void periodic() {
         io.updateInputs();
-        Logger.processInputs(this.getClass().getSimpleName(), inputs);
+        if (timer.advanceIfElapsed(0.1)) {
+            Logger.processInputs(this.getClass().getSimpleName(), inputs);
+        }
         Logger.recordOutput(
                 "IntakePose",
                 new Pose3d(

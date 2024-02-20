@@ -11,7 +11,8 @@ public class GripperInputs {
     public MutableMeasure<Voltage> angleMotorVoltage = Units.Volts.of(0).mutableCopy();
     public MutableMeasure<Voltage> rollerMotorVoltage = Units.Volts.of(0).mutableCopy();
     public boolean hasNote = false;
-    public MutableMeasure<Velocity<Velocity<Distance>>> acceleration =
-            Units.MetersPerSecondPerSecond.of(0).mutableCopy();
+    public MutableMeasure<Velocity<Velocity<Angle>>> acceleration =
+            Units.RotationsPerSecond.per(Units.Second).of(0).mutableCopy();
     public MutableMeasure<Angle> encoderPosition = Units.Degrees.of(0).mutableCopy();
+    public MutableMeasure<Angle> noOffsetEncoderPosition = Units.Degrees.of(0).mutableCopy();
 }

@@ -7,9 +7,6 @@ import org.littletonrobotics.junction.AutoLog;
 
 @AutoLog
 public class SwerveDriveInputs {
-    public double supplyCurrent;
-    public double statorCurrent;
-
     public SwerveModuleState[] currentModuleStates = new SwerveModuleState[4];
     public SwerveModuleState[] desiredModuleStates = {
         new SwerveModuleState(),
@@ -27,7 +24,6 @@ public class SwerveDriveInputs {
 
     public double[] absolutePositions = new double[4];
 
-    public Rotation2d pitch = new Rotation2d();
     public Rotation2d rawYaw = new Rotation2d();
     public Rotation2d yaw = new Rotation2d();
     public Rotation2d gyroOffset = new Rotation2d();

@@ -8,7 +8,11 @@ public class SwerveConstants {
     public static final double NEO_CURRENT_LIMIT = 40;
     public static final double NEO_550_CURRENT_LIMIT = 20;
     public static final CurrentLimitsConfigs TALON_FX_CURRENT_LIMIT_CONFIGS =
-            new CurrentLimitsConfigs().withSupplyCurrentLimit(50).withStatorCurrentLimit(50);
+            new CurrentLimitsConfigs()
+                    .withSupplyCurrentLimit(50)
+                    .withStatorCurrentLimit(50)
+                    .withStatorCurrentLimitEnable(true)
+                    .withSupplyCurrentLimitEnable(true);
 
     public static final double VOLT_COMP_SATURATION = 12;
     public static final double NEUTRAL_DEADBAND = 0.03;
@@ -61,26 +65,11 @@ public class SwerveConstants {
     public static Translation2d[] WHEEL_POSITIONS;
     public static double WHEEL_DIAMETER;
     public static double DRIVE_REDUCTION;
-    public static final FeedbackConfigs FEEDBACK_CONFIGS_DRIVE =
-            new FeedbackConfigs()
-                    .withRotorToSensorRatio(1)
-                    .withSensorToMechanismRatio(1 / DRIVE_REDUCTION);
-    public static final TalonFXConfiguration DRIVE_MOTOR_CONFIGS =
-            new TalonFXConfiguration()
-                    .withVoltage(VOLTAGE_CONFIGS)
-                    .withCurrentLimits(TALON_FX_CURRENT_LIMIT_CONFIGS)
-                    .withFeedback(FEEDBACK_CONFIGS_DRIVE);
+    public static FeedbackConfigs FEEDBACK_CONFIGS_DRIVE;
+    public static TalonFXConfiguration DRIVE_MOTOR_CONFIGS;
     public static double ANGLE_REDUCTION;
-    public static final FeedbackConfigs FEEDBACK_CONFIGS_ANGLE =
-            new FeedbackConfigs()
-                    .withRotorToSensorRatio(1)
-                    .withSensorToMechanismRatio(1 / ANGLE_REDUCTION);
-    public static final TalonFXConfiguration ANGLE_MOTOR_CONFIGS =
-            new TalonFXConfiguration()
-                    .withVoltage(VOLTAGE_CONFIGS)
-                    .withCurrentLimits(TALON_FX_CURRENT_LIMIT_CONFIGS)
-                    .withFeedback(FEEDBACK_CONFIGS_ANGLE)
-                    .withMotorOutput(MOTOR_OUTPUT_CONFIGS);
+    public static FeedbackConfigs FEEDBACK_CONFIGS_ANGLE;
+    public static TalonFXConfiguration ANGLE_MOTOR_CONFIGS;
 
     public static double DRIVE_MOTOR_MOMENT_OF_INERTIA = 0.025;
     public static double ANGLE_MOTOR_MOMENT_OF_INERTIA = 0.004;
@@ -133,14 +122,14 @@ public class SwerveConstants {
                 ANGLE_KD.initDefault(0.0);
                 ANGLE_KS.initDefault(0.28);
 
-                ROTATION_KP.initDefault(0.9);
+                ROTATION_KP.initDefault(3.0);
                 ROTATION_KI.initDefault(0.0);
-                ROTATION_KD.initDefault(0.0);
+                ROTATION_KD.initDefault(0.2);
                 ROTATION_KDIETER.initDefault(0.0);
 
-                ROBOT_WIDTH = 0.584;
-                ROBOT_LENGTH = 0.584;
-                WHEEL_DIAMETER = 0.099;
+                ROBOT_WIDTH = 0.585;
+                ROBOT_LENGTH = 0.585;
+                WHEEL_DIAMETER = 0.102;
                 DRIVE_REDUCTION = (1 / 2.0) * (24.0 / 22.0) * (15.0 / 45.0);
                 ANGLE_REDUCTION = (14.0 / 72.0) * 0.5;
 
@@ -198,5 +187,26 @@ public class SwerveConstants {
                     new Translation2d(-ROBOT_LENGTH / 2, ROBOT_WIDTH / 2), // RL
                     new Translation2d(-ROBOT_LENGTH / 2, -ROBOT_WIDTH / 2) // RR
                 };
+
+        FEEDBACK_CONFIGS_DRIVE =
+                new FeedbackConfigs()
+                        .withRotorToSensorRatio(1)
+                        .withSensorToMechanismRatio(1 / DRIVE_REDUCTION);
+        DRIVE_MOTOR_CONFIGS =
+                new TalonFXConfiguration()
+                        .withVoltage(VOLTAGE_CONFIGS)
+                        .withCurrentLimits(TALON_FX_CURRENT_LIMIT_CONFIGS)
+                        .withFeedback(FEEDBACK_CONFIGS_DRIVE);
+
+        FEEDBACK_CONFIGS_ANGLE =
+                new FeedbackConfigs()
+                        .withRotorToSensorRatio(1)
+                        .withSensorToMechanismRatio(1 / ANGLE_REDUCTION);
+        ANGLE_MOTOR_CONFIGS =
+                new TalonFXConfiguration()
+                        .withVoltage(VOLTAGE_CONFIGS)
+                        .withCurrentLimits(TALON_FX_CURRENT_LIMIT_CONFIGS)
+                        .withFeedback(FEEDBACK_CONFIGS_ANGLE)
+                        .withMotorOutput(MOTOR_OUTPUT_CONFIGS);
     }
 }

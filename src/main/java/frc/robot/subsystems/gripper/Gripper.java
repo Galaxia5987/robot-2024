@@ -2,6 +2,7 @@ package frc.robot.subsystems.gripper;
 
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -20,6 +21,7 @@ public class Gripper extends SubsystemBase {
     private final GripperInputsAutoLogged inputs = GripperIO.inputs;
     private Measure<Distance> gripperHeight = Units.Meters.zero();
     private Measure<Distance> carriageHeight = Units.Meters.zero();
+    private Timer timer = new Timer();
 
     @AutoLogOutput private final Mechanism2d mechanism2d = new Mechanism2d(1, 1);
     @AutoLogOutput private Pose3d gripperPose = new Pose3d();
@@ -31,6 +33,9 @@ public class Gripper extends SubsystemBase {
     private Gripper(GripperIO io, Supplier<Measure<Distance>> carriageHeight) {
         this.io = io;
         this.carriageHeight = carriageHeight.get();
+
+        timer.start();
+        timer.reset();
     }
 
     public static Gripper getInstance() {
@@ -55,6 +60,10 @@ public class Gripper extends SubsystemBase {
                 > CommandGroupsConstants.WRIST_MIN_BACKWARDS_ANGLE.in(Units.Radians);
     }
 
+    public Command setRollerPower(double power) {
+        return run(() -> io.setRollerMotorPower(power)).withName("set roller power");
+    }
+
     public boolean isGripperNearFoldedPosition() {
         return new Translation2d(
                                         GripperConstants.GRIPPER_LENGTH.in(Units.Meters),
@@ -64,27 +73,24 @@ public class Gripper extends SubsystemBase {
                 < GripperConstants.GRIPPER_OUTTAKE_MIN_HEIGHT.in(Units.Meters);
     }
 
-    private Command setRollerPower(double power) {
-        return Commands.run(() -> io.setRollerMotorPower(power))
-                .withName("set roller power")
-                .finallyDo(() -> setRollerPower(0));
-    }
-
     public Command setRollerAndWrist(MutableMeasure<Angle> wristAngle, double rollerPower) {
         return setRollerPower(rollerPower).raceWith(setWristPosition(wristAngle));
     }
 
     public Command intake() {
-        return setRollerAndWrist(GripperConstants.INTAKE_ANGLE, GripperConstants.INTAKE_POWER)
+        return setRollerAndWrist(
+                        GripperConstants.INTAKE_ANGLE.mutableCopy(), GripperConstants.INTAKE_POWER)
                 .withName("intake");
     }
 
     public Command outtake() {
-        return setRollerAndWrist(GripperConstants.OUTTAKE_ANGLE, GripperConstants.OUTTAKE_POWER)
+        return setRollerAndWrist(
+                        GripperConstants.OUTTAKE_ANGLE.mutableCopy(),
+                        GripperConstants.OUTTAKE_POWER)
                 .withName("outtake");
     }
 
-    private Command setWristPosition(MutableMeasure<Angle> angle) {
+    public Command setWristPosition(MutableMeasure<Angle> angle) {
         return Commands.runOnce(() -> io.setAngle(angle))
                 .until(this::atSetpoint)
                 .withName("set wrist position");
@@ -94,6 +100,10 @@ public class Gripper extends SubsystemBase {
         return Commands.sequence(
                 setWristPosition(GripperConstants.WRIST_TRAP_ANGLE),
                 setRollerPower(GripperConstants.TRAP_POWER));
+    }
+
+    public Command setWristPower(double power) {
+        return run(() -> io.setAngleMotorPower(power)).withName("set wrist power");
     }
 
     @Override
@@ -108,7 +118,9 @@ public class Gripper extends SubsystemBase {
                         new Rotation3d(0, -inputs.currentAngle.in(Units.Radians), 0));
 
         io.updateInputs();
-        Logger.processInputs(this.getClass().getSimpleName(), inputs);
+        if (timer.advanceIfElapsed(0.1)) {
+            Logger.processInputs(this.getClass().getSimpleName(), inputs);
+        }
 
         gripperLigament.setAngle(new Rotation2d(inputs.currentAngle));
     }

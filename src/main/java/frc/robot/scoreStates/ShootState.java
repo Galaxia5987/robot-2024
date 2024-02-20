@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
@@ -18,7 +19,6 @@ import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
-
 import java.util.List;
 import java.util.Set;
 
@@ -40,13 +40,14 @@ public class ShootState implements ScoreState {
         shooter = Shooter.getInstance();
         hood = Hood.getInstance();
         conveyor = Conveyor.getInstance();
-        poseEstimation = new PoseEstimation(SwerveDrive.getInstance());
+        poseEstimation = PoseEstimation.getInstance();
     }
 
     private Command rotate() {
         return SwerveDrive.getInstance()
                 .turnCommand(
-                        optimalRotation, ScoreStateConstants.TURN_TOLERANCE.in(Units.Rotations));
+                        () -> Rotation2d.fromRotations(optimalRotation),
+                        ScoreStateConstants.TURN_TOLERANCE.in(Units.Rotations));
     }
 
     private void updateInBounds() {
@@ -74,10 +75,9 @@ public class ShootState implements ScoreState {
         return hood.setAngle(
                         () ->
                                 Units.Degrees.of(
-                                                Math.atan(
-                                                        ScoreStateConstants
-                                                                .SHOOTER_TO_SPEAKER_HEIGHT
-                                                                / distanceToSpeaker.value))
+                                                HoodConstants.ANGLE_BY_DISTANCE.getInterpolated(
+                                                                distanceToSpeaker)
+                                                        .value)
                                         .mutableCopy())
                 .until(hood::atSetpoint);
     }
@@ -99,7 +99,10 @@ public class ShootState implements ScoreState {
                     optimalRotation =
                             Utils.calcRotationToTranslation(optimalTranslation, speakerPose)
                                     .getRotations();
-                    distanceToSpeaker.value = Utils.getDistanceFromPoint(speakerPose, botPose);
+                    if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+                        optimalRotation =
+                                Math.IEEEremainder(optimalRotation - Math.PI, Math.PI * 2);
+                    }
                 });
     }
 
@@ -111,7 +114,8 @@ public class ShootState implements ScoreState {
                         () ->
                                 Math.abs(botPose.getX() - speakerPose.getX())
                                         <= ShooterConstants.MAX_WARMUP_DISTANCE)
-                .alongWith(CommandGroups.getInstance().retractGrillevator());
+        //                .alongWith(CommandGroups.getInstance().retractGrillevator())
+        ;
     }
 
     @Override
@@ -138,12 +142,11 @@ public class ShootState implements ScoreState {
     public Command score() {
         return Commands.repeatingSequence(
                 Commands.parallel(
-                        driveToClosestOptimalPoint().andThen(() -> SwerveDrive.getInstance().lock()),
+                        driveToClosestOptimalPoint()
+                                .andThen(() -> SwerveDrive.getInstance().lock()),
                         setShooter(),
                         setHood(),
-                        CommandGroups.getInstance().feedShooter())
-        )
-                ;
+                        CommandGroups.getInstance().feedShooter()));
     }
 
     @Override

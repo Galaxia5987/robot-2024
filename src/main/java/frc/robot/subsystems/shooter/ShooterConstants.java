@@ -16,9 +16,9 @@ public class ShooterConstants {
     public static final double GEAR_RATIO_TOP = 1.0;
     public static final double GEAR_RATIO_BOTTOM = 1.0;
     public static final MutableMeasure<Dimensionless> SETPOINT_TOLERANCE_TOP =
-            Units.Percent.of(0.05).mutableCopy();
+            Units.Percent.of(0.03).mutableCopy();
     public static final MutableMeasure<Dimensionless> SETPOINT_TOLERANCE_BOTTOM =
-            Units.Percent.of(0.05).mutableCopy();
+            Units.Percent.of(0.03).mutableCopy();
     public static final MutableMeasure<Mult<Mult<Mass, Distance>, Distance>> MOMENT_OF_INERTIA_TOP =
             Units.Kilograms.mult(Units.Meters).mult(Units.Meters).of(0.0008).mutableCopy();
     public static final MutableMeasure<Mult<Mult<Mass, Distance>, Distance>>
@@ -34,17 +34,17 @@ public class ShooterConstants {
     public static final double CURRENT_LIMIT_TOP = 40;
     public static final double CURRENT_LIMIT_BOTTOM = 40;
 
-    public static final InvertedValue TOP_INVERSION = InvertedValue.Clockwise_Positive;
-    public static final InvertedValue BOTTOM_INVERSION = InvertedValue.CounterClockwise_Positive;
+    public static final InvertedValue TOP_INVERSION = InvertedValue.CounterClockwise_Positive;
+    public static final InvertedValue BOTTOM_INVERSION = InvertedValue.Clockwise_Positive;
 
     public static final InterpolatingDoubleMap VELOCITY_BY_DISTANCE =
             ShootingCSV.parse(
                     Filesystem.getDeployDirectory()
-                            + "\\shootdata\\distance-to-velocity.csv"); // Velocity | Distance
+                            + "/shootdata/distance-to-velocity.csv"); // Velocity | Distance
     public static final InterpolatingDoubleMap FLIGHT_TIME_BY_DISTANCE =
             ShootingCSV.parse(
                     Filesystem.getDeployDirectory()
-                            + "\\shootdata\\distance-to-flight-time.csv"); // Flight Time | Distance
+                            + "/shootdata/distance-to-flight-time.csv"); // Flight Time | Distance
 
     public static final LoggedTunableNumber TOP_kP = new LoggedTunableNumber("Shooter/Top kP");
     public static final LoggedTunableNumber TOP_kI = new LoggedTunableNumber("Shooter/Top kI");
@@ -69,18 +69,18 @@ public class ShooterConstants {
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                TOP_kP.initDefault(10.0);
+                TOP_kP.initDefault(0.1);
                 TOP_kI.initDefault(0.0);
                 TOP_kD.initDefault(0.0);
                 TOP_kS.initDefault(0.0);
-                TOP_kV.initDefault(0.112);
-                TOP_kA.initDefault(0.0);
-                BOTTOM_kP.initDefault(10.0);
+                TOP_kV.initDefault(0.1232);
+                TOP_kA.initDefault(0.057_19);
+                BOTTOM_kP.initDefault(0.1);
                 BOTTOM_kI.initDefault(0.0);
                 BOTTOM_kD.initDefault(0.0);
                 BOTTOM_kS.initDefault(0.0);
-                BOTTOM_kV.initDefault(0.112);
-                BOTTOM_kA.initDefault(0.0);
+                BOTTOM_kV.initDefault(0.1232);
+                BOTTOM_kA.initDefault(0.057_19);
             case SIM:
             case REPLAY:
                 TOP_kP.initDefault(10.0);
@@ -123,7 +123,7 @@ public class ShooterConstants {
                                 .withKS(BOTTOM_kS.get())
                                 .withKV(BOTTOM_kV.get())
                                 .withKA(BOTTOM_kA.get()))
-                .withMotorOutput(new MotorOutputConfigs().withInverted(TOP_INVERSION))
+                .withMotorOutput(new MotorOutputConfigs().withInverted(BOTTOM_INVERSION))
                 .CurrentLimits
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimitEnable(true)

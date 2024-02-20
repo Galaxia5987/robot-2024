@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,6 +21,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -99,8 +101,12 @@ public class SwerveDrive extends SubsystemBase {
         return loggerInputs.yaw;
     }
 
-    public Rotation2d getPitch() {
-        return loggerInputs.pitch;
+    public Rotation2d getOdometryYaw() {
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+            return getYaw().minus(Rotation2d.fromDegrees(180));
+        }
+        return getYaw();
     }
 
     /**
@@ -132,26 +138,6 @@ public class SwerveDrive extends SubsystemBase {
 
     public ChassisSpeeds getCurrentSpeeds() {
         return loggerInputs.currentSpeeds;
-    }
-
-    public double[] getHighFreqTimeStamps() {
-        return modules[0].getHighFreqTimestamps();
-    }
-
-    public void updateHighFreqPose() {
-        double[] sampleTimestamps =
-                modules[0].getHighFreqTimestamps(); // All signals are sampled together
-        int sampleCount = sampleTimestamps.length;
-        for (int i = 0; i < sampleCount; i++) {
-            // Read wheel positions and deltas from each module
-            SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
-            for (int moduleIndex = 0; moduleIndex < 4; moduleIndex++) {
-                modulePositions[moduleIndex] = modules[moduleIndex].getHighFreqModulePositions()[i];
-            }
-
-            estimator.updateWithTime(sampleTimestamps[i], getRawYaw(), modulePositions);
-        }
-        botPose = estimator.getEstimatedPosition();
     }
 
     public SwerveDrivePoseEstimator getEstimator() {
@@ -188,10 +174,13 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void lock() {
-        modules[0].setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
-        modules[1].setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(135)));
-        modules[2].setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(315)));
-        modules[3].setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(225)));
+        loggerInputs.desiredModuleStates =
+                new SwerveModuleState[] {
+                    new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
+                    new SwerveModuleState(0, Rotation2d.fromDegrees(135)),
+                    new SwerveModuleState(0, Rotation2d.fromDegrees(315)),
+                    new SwerveModuleState(0, Rotation2d.fromDegrees(225))
+                };
     }
 
     public void updateOffsets(double[] offsets) {
@@ -259,7 +248,35 @@ public class SwerveDrive extends SubsystemBase {
                                 fieldOriented.getAsBoolean()));
     }
 
-    public Command turnCommand(double rotation, double turnTolerance) {
+    public Command turnCommand(Supplier<Rotation2d> rotation, double turnTolerance) {
+        DieterController turnController =
+                new DieterController(
+                        SwerveConstants.ROTATION_KP.get(),
+                        SwerveConstants.ROTATION_KI.get(),
+                        SwerveConstants.ROTATION_KD.get(),
+                        SwerveConstants.ROTATION_KDIETER.get());
+        turnController.setTolerance(turnTolerance);
+        turnController.enableContinuousInput(-0.5, 0.5);
+        return run(() ->
+                        drive(
+                                0,
+                                0,
+                                turnController.calculate(
+                                        estimator
+                                                .getEstimatedPosition()
+                                                .getRotation()
+                                                .getRotations(),
+                                        rotation.get().getRotations()),
+                                false))
+                .until(turnController::atSetpoint);
+    }
+
+    public Command driveAndAdjust(
+            Supplier<Rotation2d> rotation,
+            double turnTolerance,
+            DoubleSupplier xJoystick,
+            DoubleSupplier yJoystick,
+            double deadband) {
         DieterController turnController =
                 new DieterController(
                         SwerveConstants.ROTATION_KP.get(),
@@ -268,13 +285,14 @@ public class SwerveDrive extends SubsystemBase {
                         SwerveConstants.ROTATION_KDIETER.get());
         turnController.setTolerance(turnTolerance, 0.05);
         turnController.enableContinuousInput(-0.5, 0.5);
-        return run(() ->
+        return run(
+                () ->
                         drive(
-                                0,
-                                0,
-                                turnController.calculate(getYaw().getRotations(), rotation),
-                                false))
-                .until(turnController::atSetpoint);
+                                MathUtil.applyDeadband(xJoystick.getAsDouble(), deadband),
+                                MathUtil.applyDeadband(yJoystick.getAsDouble(), deadband),
+                                turnController.calculate(
+                                        getYaw().getRotations(), rotation.get().getRotations()),
+                                true));
     }
 
     public void updateSwerveInputs() {
@@ -297,32 +315,24 @@ public class SwerveDrive extends SubsystemBase {
 
         acceleration.update(loggerInputs.linearVelocity);
         loggerInputs.acceleration = accelFilter.calculate(acceleration.get());
-
-        loggerInputs.supplyCurrent =
-                Arrays.stream(modules).mapToDouble(SwerveModule::getSupplyCurrent).sum();
-
-        loggerInputs.statorCurrent =
-                Arrays.stream(modules).mapToDouble(SwerveModule::getStatorCurrent).sum();
     }
 
     public void updateGyroInputs() {
         loggerInputs.rawYaw = gyro.getRawYaw();
         loggerInputs.yaw = gyro.getYaw();
-        loggerInputs.pitch = gyro.getPitch();
         gyro.updateInputs(loggerInputs);
     }
 
     @Override
     public void periodic() {
-        odometryLock.lock();
         for (SwerveModule module : modules) {
             module.updateInputs();
         }
         updateGyroInputs();
         updateSwerveInputs();
         updateModulePositions();
-        updateHighFreqPose();
-        odometryLock.unlock();
+        estimator.update(getOdometryYaw(), getModulePositions());
+        botPose = estimator.getEstimatedPosition();
 
         SwerveDriveKinematics.desaturateWheelSpeeds(
                 loggerInputs.desiredModuleStates, SwerveConstants.MAX_X_Y_VELOCITY);

@@ -2,10 +2,7 @@ package frc.robot.subsystems.intake;
 
 import static edu.wpi.first.units.Units.*;
 
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Velocity;
-import edu.wpi.first.units.Voltage;
+import edu.wpi.first.units.*;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface IntakeIO {
@@ -14,9 +11,11 @@ public interface IntakeIO {
 
     void setAngle(MutableMeasure<Angle> angle);
 
-    void setRollerSpeed(MutableMeasure<Velocity<Angle>> speed);
+    void setRollerSpeed(double speed);
 
     void setCenterRollerSpeed(double speed);
+
+    void reset(Measure<Angle> angle);
 
     void updateInputs();
 
@@ -24,12 +23,7 @@ public interface IntakeIO {
     class IntakeInputs {
         MutableMeasure<Angle> currentAngle = MutableMeasure.zero(Radians);
         MutableMeasure<Angle> angleSetpoint = MutableMeasure.zero(Radians);
-        MutableMeasure<Velocity<Angle>> currentRollerSpeed =
-                MutableMeasure.zero(RotationsPerSecond);
-        MutableMeasure<Velocity<Angle>> rollerSpeedSetpoint =
-                MutableMeasure.zero(RotationsPerSecond);
-        MutableMeasure<Velocity<Angle>> currentCenterRollerSpeed =
-                MutableMeasure.zero(RotationsPerSecond);
+        double rollerSpeedSetpoint = 0;
         double centerRollerSpeedSetpoint = 0;
         MutableMeasure<Voltage> angleMotorVoltage = MutableMeasure.zero(Volts);
         MutableMeasure<Voltage> spinMotorVoltage = MutableMeasure.zero(Volts);

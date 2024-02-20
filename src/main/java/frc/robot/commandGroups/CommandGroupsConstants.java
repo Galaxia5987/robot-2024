@@ -19,9 +19,9 @@ public class CommandGroupsConstants {
     public static final MutableMeasure<Angle> WRIST_BASE_ANGLE =
             Units.Degrees.of(-80).mutableCopy(); // TODO: replace with actual value
     public static final MutableMeasure<Angle> WRIST_ANGLE_AMP_FORWARD =
-            Units.Degrees.of(0).mutableCopy(); // TODO: replace with actual value;
+            Units.Rotations.of(-1.396).mutableCopy(); // TODO: replace with actual value;
     public static final MutableMeasure<Angle> WRIST_MIN_BACKWARDS_ANGLE =
             Units.Degrees.of(90).mutableCopy();
     public static final MutableMeasure<Angle> WRIST_ANGLE_AMP_BACKWARDS =
-            Units.Degrees.of(120).mutableCopy(); // TODO: replace with actual value;
+            Units.Radians.of(2.15).mutableCopy(); // TODO: replace with actual value;
 }

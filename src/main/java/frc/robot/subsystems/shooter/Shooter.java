@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.Supplier;
@@ -12,6 +13,7 @@ public class Shooter extends SubsystemBase {
     private final RollerInputsAutoLogged topRollerInputs = ShooterIO.topRollerInputs;
     private final RollerInputsAutoLogged bottomRollerInputs = ShooterIO.bottomRollerInputs;
     private final ShooterIO io;
+    private final Timer timer = new Timer();
 
     private final String SUBSYSTEM_NAME = this.getClass().getSimpleName();
 
@@ -22,6 +24,9 @@ public class Shooter extends SubsystemBase {
      */
     private Shooter(ShooterIO io) {
         this.io = io;
+
+        timer.start();
+        timer.reset();
     }
 
     /**
@@ -69,7 +74,9 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs();
-        Logger.processInputs(SUBSYSTEM_NAME + "/TopRoller", topRollerInputs);
-        Logger.processInputs(SUBSYSTEM_NAME + "/BottomRoller", bottomRollerInputs);
+        if (timer.advanceIfElapsed(0.1)) {
+            Logger.processInputs(SUBSYSTEM_NAME + "/TopRoller", topRollerInputs);
+            Logger.processInputs(SUBSYSTEM_NAME + "/BottomRoller", bottomRollerInputs);
+        }
     }
 }

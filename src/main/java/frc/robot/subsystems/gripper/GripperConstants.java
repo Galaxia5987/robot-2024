@@ -5,23 +5,20 @@ import static frc.robot.subsystems.intake.IntakeConstants.*;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.*;
 import frc.robot.Constants;
 import frc.robot.lib.webconstants.LoggedTunableNumber;
 
 public class GripperConstants {
     public static final TalonFXConfiguration MOTOR_CONFIGURATION = new TalonFXConfiguration();
-    public static final MutableMeasure<Angle> INTAKE_ANGLE =
-            Units.Rotations.of(-0.5).mutableCopy(); // TODO: replace with actual value
-    public static final MutableMeasure<Angle> OUTTAKE_ANGLE =
-            Units.Rotations.of(0).mutableCopy(); // TODO: replace with actual value
-    public static final double INTAKE_POWER = 0; // TODO; replace with actual value
-    public static final double OUTTAKE_POWER = 0; // TODO: replace with actual value
-    public static final double AMP_POWER_NORMAL = 0; // TODO: replace with actual value
-    public static final double AMP_POWER_REVERSE = 0; // TODO: replace with actual value
+    public static final double INTAKE_POWER = 0.7; // TODO; replace with actual value
+    public static final double OUTTAKE_POWER = -0.5; // TODO: replace with actual value
+    public static final double AMP_POWER_NORMAL = 0.7; // TODO: replace with actual value
+    public static final double AMP_POWER_REVERSE = -0.4; // TODO: replace with actual value
     public static final double TRAP_POWER = 0; // TODO: replace with actual value
     public static final MutableMeasure<Dimensionless> TOLERANCE =
-            Units.Percent.of(0.02).mutableCopy();
+            Units.Percent.of(0.07).mutableCopy();
     public static final MutableMeasure<Distance> GRIPPER_OUTTAKE_MIN_HEIGHT =
             Units.Meters.of(0).mutableCopy(); // TODO: replace with actual value
     public static final MutableMeasure<Distance> GRIPPER_LENGTH =
@@ -32,6 +29,8 @@ public class GripperConstants {
             Units.Meters.of(0).mutableCopy();
     public static final MutableMeasure<Distance> GRIPPER_POSITION_z =
             Units.Meters.of(0.6461).mutableCopy();
+    public static final Measure<Angle> INTAKE_ANGLE = Units.Degrees.of(-85.78);
+    public static final Measure<Angle> OUTTAKE_ANGLE = Units.Degrees.of(-80);
     public static final double ANGLE_MOTOR_GEAR_RATIO = 58.5;
     public static final InvertedValue ANGLE_INVERTED_VALUE = InvertedValue.Clockwise_Positive;
     public static final boolean ROLLER_INVERTED_VALUE = true;
@@ -51,12 +50,14 @@ public class GripperConstants {
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                KP.initDefault(0);
+                KP.initDefault(2);
                 KI.initDefault(0);
                 KD.initDefault(0);
-                KV.initDefault(0);
-                KA.initDefault(0);
-                KG.initDefault(0);
+                KV.initDefault(3.2);
+                KA.initDefault(0.01);
+                KG.initDefault(0.65);
+
+                ABSOLUTE_ENCODER_OFFSET.initDefault(-0.682_385 + 83 / 360.0);
                 break;
             case SIM:
             case REPLAY:
@@ -72,8 +73,8 @@ public class GripperConstants {
                         new MotionMagicConfigs()
                                 .withMotionMagicExpo_kV(KV.get())
                                 .withMotionMagicExpo_kA(KA.get())
-                                .withMotionMagicAcceleration(4)
-                                .withMotionMagicCruiseVelocity(3))
+                                .withMotionMagicAcceleration(3)
+                                .withMotionMagicCruiseVelocity(1))
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(GEAR_RATIO))
                 .withSlot0(
                         new Slot0Configs()
@@ -85,7 +86,9 @@ public class GripperConstants {
                                 .withKG(GripperConstants.KG.get())
                                 .withGravityType(GravityTypeValue.Arm_Cosine))
                 .withMotorOutput(
-                        new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive))
+                        new MotorOutputConfigs()
+                                .withInverted(InvertedValue.CounterClockwise_Positive)
+                                .withNeutralMode(NeutralModeValue.Brake))
                 .CurrentLimits
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimitEnable(true)

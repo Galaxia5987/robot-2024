@@ -9,7 +9,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.lib.Utils;
@@ -26,20 +25,17 @@ public class ModuleIOSparkMax implements ModuleIO {
 
     private final DutyCycleEncoder encoder;
 
-    private Rotation2d angleSetpoint;
-    private Rotation2d currentAngle;
-    private double angleMotorPosition;
-    private double moduleDistance;
-    private double driveMotorSetpoint;
-
     private SimpleMotorFeedforward feedforward;
+    private final SwerveModuleInputsAutoLogged inputs;
 
     public ModuleIOSparkMax(
             int driveMotorID,
             int angleMotorID,
             int encoderID,
             boolean driveInverted,
-            boolean angleInverted) {
+            boolean angleInverted,
+            SwerveModuleInputsAutoLogged inputs) {
+        this.inputs = inputs;
 
         this.driveMotor = new CANSparkMax(driveMotorID, CANSparkBase.MotorType.kBrushless);
         this.angleMotor = new CANSparkMax(angleMotorID, CANSparkBase.MotorType.kBrushless);
@@ -81,34 +77,26 @@ public class ModuleIOSparkMax implements ModuleIO {
     }
 
     @Override
-    public void updateInputs(SwerveModuleInputs inputs) {
+    public void updateInputs() {
         inputs.absolutePosition = getEncoderAngle();
 
-        inputs.driveMotorSupplyCurrent = driveMotor.getOutputCurrent();
         inputs.driveMotorPosition = driveEncoder.getPosition();
         inputs.driveMotorVelocity = getVelocity();
-        inputs.driveMotorVelocitySetpoint = driveMotorSetpoint;
-        inputs.driveMotorAppliedVoltage =
-                driveMotor.getAppliedOutput() * RobotController.getBatteryVoltage();
-
-        inputs.angleMotorSupplyCurrent = angleMotor.getOutputCurrent();
-        inputs.angleMotorPosition = angleEncoder.getPosition();
-        angleMotorPosition = inputs.angleMotorPosition;
-        inputs.angleMotorVelocity = Units.rpmToRps(angleEncoder.getVelocity());
 
         inputs.angle =
                 Rotation2d.fromRadians(Utils.normalize(angleEncoder.getPosition() * 2 * Math.PI));
-        currentAngle = inputs.angle;
-
-        inputs.angleSetpoint = angleSetpoint;
 
         inputs.moduleDistance =
                 inputs.driveMotorPosition
                         * frc.robot.subsystems.swerve.SwerveConstants.WHEEL_DIAMETER
                         * Math.PI;
-        moduleDistance = inputs.moduleDistance;
 
         if (hasPIDChanged(frc.robot.subsystems.swerve.SwerveConstants.PID_VALUES)) updatePID();
+    }
+
+    @Override
+    public SwerveModuleInputsAutoLogged getInputs() {
+        return inputs;
     }
 
     @Override
@@ -126,15 +114,16 @@ public class ModuleIOSparkMax implements ModuleIO {
 
     @Override
     public Rotation2d getAngle() {
-        return currentAngle;
+        return inputs.angle;
     }
 
     @Override
     public void setAngle(Rotation2d angle) {
-        angleSetpoint = Utils.normalize(angle);
-        Rotation2d error = angle.minus(currentAngle);
+        inputs.angleSetpoint = Utils.normalize(angle);
+        Rotation2d error = angle.minus(inputs.angle);
         anglePIDController.setReference(
-                angleMotorPosition + error.getRotations(), CANSparkMax.ControlType.kPosition);
+                inputs.angle.getRotations() + error.getRotations(),
+                CANSparkMax.ControlType.kPosition);
     }
 
     @Override
@@ -145,21 +134,21 @@ public class ModuleIOSparkMax implements ModuleIO {
 
     @Override
     public void setVelocity(double velocity) {
-        var angleError = angleSetpoint.minus(currentAngle);
+        var angleError = inputs.angleSetpoint.minus(inputs.angle);
         velocity *= angleError.getCos();
-        driveMotorSetpoint = velocity;
+        inputs.driveMotorVelocitySetpoint = velocity;
         drivePIDController.setReference(
                 feedforward.calculate(velocity), CANSparkMax.ControlType.kVoltage);
     }
 
     @Override
     public SwerveModuleState getModuleState() {
-        return new SwerveModuleState(getVelocity(), currentAngle);
+        return new SwerveModuleState(getVelocity(), inputs.angle);
     }
 
     @Override
     public SwerveModulePosition getModulePosition() {
-        return new SwerveModulePosition(moduleDistance, getAngle());
+        return new SwerveModulePosition(inputs.moduleDistance, getAngle());
     }
 
     @Override

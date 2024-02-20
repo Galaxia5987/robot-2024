@@ -4,13 +4,12 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.lib.PoseEstimation;
 import frc.robot.scoreStates.LocalADStarAK;
 import frc.robot.subsystems.conveyor.ConveyorConstants;
 import frc.robot.subsystems.elevator.ElevatorConstants;
@@ -44,6 +43,12 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void robotInit() {
+        if (Robot.isReal()) {
+            Constants.CURRENT_MODE = Constants.Mode.REAL;
+        } else {
+            Constants.CURRENT_MODE = Constants.Mode.SIM;
+        }
+
         // Initialize logger
         Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
         Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -64,8 +69,7 @@ public class Robot extends LoggedRobot {
 
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                LoggedPowerDistribution.getInstance(0, PowerDistribution.ModuleType.kRev);
-                Logger.addDataReceiver(new WPILOGWriter());
+                LoggedPowerDistribution.getInstance();
                 Logger.addDataReceiver(new NT4Publisher());
 
                 break;
@@ -82,7 +86,6 @@ public class Robot extends LoggedRobot {
         }
 
         Logger.start();
-        SignalLogger.enableAutoLogging(true);
 
         Pathfinding.setPathfinder(new LocalADStarAK());
 
@@ -108,6 +111,8 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        PoseEstimation.getInstance()
+                .processVisionMeasurements(Constants.VISION_MEASUREMENT_MULTIPLIER);
     }
 
     /**

@@ -1,22 +1,23 @@
 package frc.robot.subsystems.shooter;
 
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
+import frc.robot.Ports;
 
 public class ShooterIOReal implements ShooterIO {
     private final TalonFX topMotor;
     private final TalonFX bottomMotor;
-    private final VelocityTorqueCurrentFOC topControl = new VelocityTorqueCurrentFOC(0);
-    private final VelocityTorqueCurrentFOC bottomControl = new VelocityTorqueCurrentFOC(0);
+    private final VelocityVoltage topControl = new VelocityVoltage(0);
+    private final VelocityVoltage bottomControl = new VelocityVoltage(0);
 
     public ShooterIOReal() {
-        topMotor = new TalonFX(3); // TODO: to be changed later
-        bottomMotor = new TalonFX(5); // TODO: to be changed later
+        topMotor = new TalonFX(Ports.Shooter.TOP_MOTOR_ID); // TODO: to be changed later
+        bottomMotor = new TalonFX(Ports.Shooter.BOTTOM_MOTOR_ID); // TODO: to be changed later
 
         topMotor.setNeutralMode(NeutralModeValue.Coast);
         bottomMotor.setNeutralMode(NeutralModeValue.Coast);
@@ -49,12 +50,8 @@ public class ShooterIOReal implements ShooterIO {
     public void updateInputs() {
         topRollerInputs.velocity.mut_replace(
                 topMotor.getVelocity().getValue(), Units.RotationsPerSecond);
-        topRollerInputs.appliedVoltage.mut_replace(
-                topMotor.getMotorVoltage().getValue(), Units.Volts);
 
         bottomRollerInputs.velocity.mut_replace(
                 bottomMotor.getVelocity().getValue(), Units.RotationsPerSecond);
-        bottomRollerInputs.appliedVoltage.mut_replace(
-                bottomMotor.getMotorVoltage().getValue(), Units.Volts);
     }
 }
