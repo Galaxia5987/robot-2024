@@ -2,7 +2,6 @@ package frc.robot.commandGroups;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.scoreStates.ShootState;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.gripper.Gripper;
@@ -84,7 +83,7 @@ public class CommandGroups {
     }
 
     public Command intake() {
-        return Commands.sequence(
+        return Commands.repeatingSequence(
                         // retractGrillevator(),
                         Commands.parallel(
                                 intake.intake(),

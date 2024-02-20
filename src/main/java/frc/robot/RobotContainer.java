@@ -2,7 +2,6 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
@@ -111,7 +110,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("intake", commandGroups.intake());
         NamedCommands.registerCommand("prepareShoot", updateScoreState());
-        NamedCommands.registerCommand("score", currentState.score());
+        NamedCommands.registerCommand("score", shootState.setShooter());
         //        NamedCommands.registerCommand("resetPose", new
         // InstantCommand(()->swerveDrive.resetPose(PathPlannerAuto.getStaringPoseFromAutoFile("LowerFullWing"))));
 
@@ -147,7 +146,6 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        CommandScheduler.getInstance().onCommandInitialize(System.out::println);
         xboxController.y().whileTrue(commandGroups.intake()).onFalse(intake.stop());
         xboxController
                 .a()
@@ -178,13 +176,13 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
 
-//        return new InstantCommand(
-//                        () ->
-//                                swerveDrive.resetPose(
-//                                        PathPlannerAuto.getStaringPoseFromAutoFile(
-//                                                "Middle Full Wing")),
-//                        swerveDrive)
-//                .andThen(
-                        return new PathPlannerAuto("Middle Full Wing");
+        //        return new InstantCommand(
+        //                        () ->
+        //                                swerveDrive.resetPose(
+        //                                        PathPlannerAuto.getStaringPoseFromAutoFile(
+        //                                                "Middle Full Wing")),
+        //                        swerveDrive)
+        //                .andThen(
+        return AutoBuilder.buildAuto("Middle Full Wing");
     }
 }

@@ -18,6 +18,7 @@ import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
+
 import java.util.List;
 import java.util.Set;
 
@@ -58,7 +59,7 @@ public class ShootState implements ScoreState {
         }
     }
 
-    private Command setShooter() {
+    public Command setShooter() {
         return shooter.setVelocity(
                         () ->
                                 Units.RotationsPerSecond.of(
@@ -69,13 +70,13 @@ public class ShootState implements ScoreState {
                 .until(shooter::atSetpoint);
     }
 
-    private Command setHood() {
+    public Command setHood() {
         return hood.setAngle(
                         () ->
                                 Units.Degrees.of(
                                                 Math.atan(
                                                         ScoreStateConstants
-                                                                        .SHOOTER_TO_SPEAKER_HEIGHT
+                                                                .SHOOTER_TO_SPEAKER_HEIGHT
                                                                 / distanceToSpeaker.value))
                                         .mutableCopy())
                 .until(hood::atSetpoint);
@@ -135,13 +136,14 @@ public class ShootState implements ScoreState {
 
     @Override
     public Command score() {
-        return Commands.sequence(
+        return Commands.repeatingSequence(
                 Commands.parallel(
-                        driveToClosestOptimalPoint()
-                                .andThen(() -> SwerveDrive.getInstance().lock()),
+                        driveToClosestOptimalPoint().andThen(() -> SwerveDrive.getInstance().lock()),
                         setShooter(),
-                        setHood()),
-                CommandGroups.getInstance().feedShooter());
+                        setHood(),
+                        CommandGroups.getInstance().feedShooter())
+        )
+                ;
     }
 
     @Override
