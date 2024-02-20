@@ -112,7 +112,7 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("autoList", autoChooser);
         NamedCommands.registerCommand("intake", commandGroups.intake());
-        NamedCommands.registerCommand("score", shootState.setShooter());
+        NamedCommands.registerCommand("score", commandGroups.setScoringSystems());
     }
 
     public static RobotContainer getInstance() {
