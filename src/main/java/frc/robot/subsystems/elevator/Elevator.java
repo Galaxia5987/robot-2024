@@ -73,18 +73,17 @@ public class Elevator extends SubsystemBase {
 
     public Command setHeight(MutableMeasure<Distance> height) {
         return Commands.sequence(
-                        runOnce(() -> inputs.heightSetpoint = height),
-                        run(io::openStopper).until(this::stopperAtSetpoint).withTimeout(0.3),
-                        run(() -> io.setHeight(height)).until(this::atHeightSetpoint),
-                        run(io::closeStopper).until(this::stopperAtSetpoint).withTimeout(0.3))
+                        //                        runOnce(() -> inputs.heightSetpoint = height),
+                        //
+                        // run(io::openStopper).until(this::stopperAtSetpoint).withTimeout(0.3),
+                        run(() -> io.setHeight(height)).until(this::atHeightSetpoint))
+                //
+                // run(io::closeStopper).until(this::stopperAtSetpoint).withTimeout(0.3))
                 .withName("set height");
     }
 
     public Command manualElevator(DoubleSupplier power) {
-        return Commands.parallel(run(() -> {
-            System.out.println(power.getAsDouble());
-            io.setPower(power.getAsDouble());
-        }));
+        return Commands.parallel(run(() -> io.setPower(power.getAsDouble())));
     }
 
     @Override

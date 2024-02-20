@@ -73,7 +73,7 @@ public class CommandGroups {
                                 .andThen(
                                         gripper.setRollerAndWrist(
                                                 GripperConstants.INTAKE_ANGLE.mutableCopy(),
-                                                GripperConstants.OUTTAKE_POWER)))
+                                                GripperConstants.INTAKE_POWER)))
                 .withName("feedWithWait");
     }
 
@@ -84,12 +84,12 @@ public class CommandGroups {
 
     public Command intake() {
         return Commands.sequence(
-                        retractGrillevator(),
-                        Commands.parallel(
-                                intake.intake(),
-                                gripper.intake(),
-                                Commands.waitUntil(gripper::hasNote)
-                                        .andThen(Commands.none()))) // TODO: replace null with leds
+                        //                        retractGrillevator(),
+                        Commands.parallel(intake.intake(), gripper.intake()))
+                //                                        .until(gripper::hasNote)
+                //
+                // .andThen(gripper.setRollerPower(0).alongWith(Commands.none())))) TODO: Replace
+                // with LEDs
                 // mode
                 .withName("intake");
     }

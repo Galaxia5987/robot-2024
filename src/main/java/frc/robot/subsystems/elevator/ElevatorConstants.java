@@ -31,11 +31,11 @@ public class ElevatorConstants { // TODO: check real values
     public static final MutableMeasure<Mass> ELEVATOR_MASS =
             Units.Kilograms.of(5).mutableCopy(); // TODO: Calibrate real value
 
-    public static final double MAX_VELOCITY = 3;
-    public static final double MAX_ACCELERATION = 7;
+    public static final double MAX_VELOCITY = 1;
+    public static final double MAX_ACCELERATION = 3;
 
     public static final Measure<Distance> GRIPPER_TO_HOOKS =
-            Units.Meters.of(0.3); // TODO: Calibrate real value
+            Units.Meters.of(0.305); // TODO: Calibrate real value
 
     public static final TrapezoidProfile.Constraints TRAPEZOID_PROFILE =
             new TrapezoidProfile.Constraints(MAX_VELOCITY, MAX_ACCELERATION);
@@ -45,17 +45,21 @@ public class ElevatorConstants { // TODO: check real values
     public static final LoggedTunableNumber KD = new LoggedTunableNumber("kd");
     public static final LoggedTunableNumber KV = new LoggedTunableNumber("kv");
     public static final LoggedTunableNumber KA = new LoggedTunableNumber("ka");
+    public static final LoggedTunableNumber KS = new LoggedTunableNumber("ks");
     public static final LoggedTunableNumber KG = new LoggedTunableNumber("kg");
 
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
+                //                KP.initDefault(50.0);
                 KP.initDefault(0.0);
                 KI.initDefault(0.0);
                 KD.initDefault(0.0);
                 KV.initDefault(0.0);
                 KA.initDefault(0.0);
-                KG.initDefault(-3.0);
+                KS.initDefault(10.0);
+                KG.initDefault(-9.0);
+                KG.initDefault(0.0);
             case SIM:
             case REPLAY:
                 KP.initDefault(43.0);
@@ -81,7 +85,8 @@ public class ElevatorConstants { // TODO: check real values
                                 .withKG(ElevatorConstants.KG.get())
                                 .withGravityType(GravityTypeValue.Elevator_Static))
                 .withMotorOutput(
-                        new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive)
+                        new MotorOutputConfigs()
+                                .withInverted(InvertedValue.Clockwise_Positive)
                                 .withNeutralMode(NeutralModeValue.Brake))
                 .CurrentLimits
                 .withStatorCurrentLimitEnable(true)
@@ -94,7 +99,8 @@ public class ElevatorConstants { // TODO: check real values
                         new FeedbackConfigs()
                                 .withSensorToMechanismRatio(GEAR_RATIO / CIRCUMFERENCE))
                 .withMotorOutput(
-                        new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive)
+                        new MotorOutputConfigs()
+                                .withInverted(InvertedValue.Clockwise_Positive)
                                 .withNeutralMode(NeutralModeValue.Brake));
     }
 }

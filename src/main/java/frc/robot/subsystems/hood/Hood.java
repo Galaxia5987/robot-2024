@@ -2,22 +2,26 @@ package frc.robot.subsystems.hood;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.units.*;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
+
+import java.util.function.Supplier;
 
 public class Hood extends SubsystemBase {
     private static Hood INSTANCE = null;
     private final HoodInputsAutoLogged inputs = HoodIO.inputs;
     private final HoodIO io;
-    @AutoLogOutput private final Mechanism2d mechanism2d = new Mechanism2d(3, 3);
+    @AutoLogOutput
+    private final Mechanism2d mechanism2d = new Mechanism2d(3, 3);
     private final MechanismRoot2d root =
             mechanism2d.getRoot(
                     "Hood",
@@ -75,12 +79,12 @@ public class Hood extends SubsystemBase {
                 new Rotation3d(0.0, -getAngle().in(Units.Radians), 0.0));
     }
 
-    /** Updates the state of the hood. */
+    /**
+     * Updates the state of the hood.
+     */
     @Override
     public void periodic() {
-        if (timer.advanceIfElapsed(2)) {
-            io.updateInternalEncoder();
-        }
+        io.updateInternalEncoder();
         io.updateInputs();
         if (timer.advanceIfElapsed(0.1)) {
             Logger.processInputs("Hood", inputs);

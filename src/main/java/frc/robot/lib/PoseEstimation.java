@@ -18,19 +18,11 @@ public class PoseEstimation {
     private final SwerveDrive swerveDrive;
     private final Vision vision;
 
-    private final Translation2d speakerPose;
+    private Translation2d speakerPose;
 
     private PoseEstimation() {
         swerveDrive = SwerveDrive.getInstance();
         vision = Vision.getInstance();
-
-        while (DriverStation.getAlliance().isEmpty())
-            ;
-        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-            speakerPose = ScoreStateConstants.SPEAKER_POSE_RED;
-        } else {
-            speakerPose = ScoreStateConstants.SPEAKER_POSE_BLUE;
-        }
     }
 
     public static PoseEstimation getInstance() {
@@ -82,6 +74,11 @@ public class PoseEstimation {
 
     @AutoLogOutput(key = "ToSpeaker")
     public Translation2d getPoseRelativeToSpeaker() {
+        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+            speakerPose = ScoreStateConstants.SPEAKER_POSE_RED;
+        } else {
+            speakerPose = ScoreStateConstants.SPEAKER_POSE_BLUE;
+        }
         return speakerPose.minus(getEstimatedPose().getTranslation());
     }
 }

@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
@@ -73,10 +74,9 @@ public class ShootState implements ScoreState {
         return hood.setAngle(
                         () ->
                                 Units.Degrees.of(
-                                                Math.atan(
-                                                        ScoreStateConstants
-                                                                        .SHOOTER_TO_SPEAKER_HEIGHT
-                                                                / distanceToSpeaker.value))
+                                                HoodConstants.ANGLE_BY_DISTANCE.getInterpolated(
+                                                                distanceToSpeaker)
+                                                        .value)
                                         .mutableCopy())
                 .until(hood::atSetpoint);
     }
@@ -98,6 +98,10 @@ public class ShootState implements ScoreState {
                     optimalRotation =
                             Utils.calcRotationToTranslation(optimalTranslation, speakerPose)
                                     .getRotations();
+                    if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+                        optimalRotation =
+                                Math.IEEEremainder(optimalRotation - Math.PI, Math.PI * 2);
+                    }
                 });
     }
 
@@ -109,7 +113,8 @@ public class ShootState implements ScoreState {
                         () ->
                                 Math.abs(botPose.getX() - speakerPose.getX())
                                         <= ShooterConstants.MAX_WARMUP_DISTANCE)
-                .alongWith(CommandGroups.getInstance().retractGrillevator());
+        //                .alongWith(CommandGroups.getInstance().retractGrillevator())
+        ;
     }
 
     @Override
