@@ -8,8 +8,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
+import frc.robot.lib.GalacticProxyCommand;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.scoreStates.AmpState;
 import frc.robot.scoreStates.ClimbState;
@@ -113,7 +115,17 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("autoList", autoChooser);
         NamedCommands.registerCommand("intake", commandGroups.intake());
-        NamedCommands.registerCommand("score", commandGroups.setScoringSystems());
+        NamedCommands.registerCommand("score", Commands.none());
+        NamedCommands.registerCommand("prepareShoot", updateScoreState());
+    }
+
+    private Command updateScoreState() {
+        return new GalacticProxyCommand(
+                () ->
+                        currentState
+                                .calculateTargets()
+                                .andThen(currentState.prepareSubsystems())
+                                .repeatedly());
     }
 
     public static RobotContainer getInstance() {
@@ -261,13 +273,13 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
 
-        //        return new InstantCommand(
-        //                        () ->
-        //                                swerveDrive.resetPose(
-        //                                        PathPlannerAuto.getStaringPoseFromAutoFile(
-        //                                                "Middle Full Wing")),
-        //                        swerveDrive)
-        //                .andThen(
-        return new PathPlannerAuto("New Auto");
+                return new InstantCommand(
+                                () ->
+                                        swerveDrive.resetPose(
+                                                PathPlannerAuto.getStaringPoseFromAutoFile(
+                                                        "New Auto")),
+                                swerveDrive)
+                        .andThen(
+        new PathPlannerAuto("New Auto"));
     }
 }
