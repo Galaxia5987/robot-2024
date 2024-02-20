@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -267,6 +268,6 @@ public class RobotContainer {
         //                                                "Middle Full Wing")),
         //                        swerveDrive)
         //                .andThen(
-        return AutoBuilder.buildAuto("Middle Full Wing");
+        return new PathPlannerAuto("New Auto");
     }
 }
