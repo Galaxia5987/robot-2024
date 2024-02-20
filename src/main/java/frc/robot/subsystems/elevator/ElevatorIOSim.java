@@ -50,6 +50,9 @@ public class ElevatorIOSim implements ElevatorIO {
     public void closeStopper() {}
 
     @Override
+    public void manualReset() {}
+
+    @Override
     public void updateInputs(ElevatorInputs inputs) {
         motor.update(Timer.getFPGATimestamp());
 

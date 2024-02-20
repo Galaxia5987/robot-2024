@@ -45,21 +45,28 @@ public class ElevatorConstants { // TODO: check real values
     public static final LoggedTunableNumber KD = new LoggedTunableNumber("kd");
     public static final LoggedTunableNumber KV = new LoggedTunableNumber("kv");
     public static final LoggedTunableNumber KA = new LoggedTunableNumber("ka");
-    public static final LoggedTunableNumber KS = new LoggedTunableNumber("ks");
-    public static final LoggedTunableNumber KG = new LoggedTunableNumber("kg");
+    public static final LoggedTunableNumber KS_FIRST_STAGE =
+            new LoggedTunableNumber("ks_first_stage");
+    public static final LoggedTunableNumber KS_SECOND_STAGE =
+            new LoggedTunableNumber("ks_second_stage");
+    public static final LoggedTunableNumber KG_FIRST_STAGE =
+            new LoggedTunableNumber("kg_first_stage");
+    public static final LoggedTunableNumber KG_SECOND_STAGE =
+            new LoggedTunableNumber("kg_second_stage");
 
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 //                KP.initDefault(50.0);
-                KP.initDefault(0.0);
+                KP.initDefault(50.0);
                 KI.initDefault(0.0);
-                KD.initDefault(0.0);
+                KD.initDefault(15.0);
                 KV.initDefault(0.0);
                 KA.initDefault(0.0);
-                KS.initDefault(10.0);
-                KG.initDefault(-9.0);
-                KG.initDefault(0.0);
+                KS_FIRST_STAGE.initDefault(9.0);
+                KS_SECOND_STAGE.initDefault(3.0);
+                KG_FIRST_STAGE.initDefault(-10.0);
+                KG_SECOND_STAGE.initDefault(-2.5);
             case SIM:
             case REPLAY:
                 KP.initDefault(43.0);
@@ -82,7 +89,8 @@ public class ElevatorConstants { // TODO: check real values
                                 .withKD(ElevatorConstants.KD.get())
                                 .withKV(ElevatorConstants.KV.get())
                                 .withKA(ElevatorConstants.KA.get())
-                                .withKG(ElevatorConstants.KG.get())
+                                .withKS(ElevatorConstants.KS_FIRST_STAGE.get())
+                                .withKG(ElevatorConstants.KG_SECOND_STAGE.get())
                                 .withGravityType(GravityTypeValue.Elevator_Static))
                 .withMotorOutput(
                         new MotorOutputConfigs()

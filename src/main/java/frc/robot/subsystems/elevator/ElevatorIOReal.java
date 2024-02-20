@@ -56,7 +56,7 @@ public class ElevatorIOReal implements ElevatorIO {
                                                 inputs.heightSetpoint
                                                         .minus(inputs.hooksHeight)
                                                         .baseUnitMagnitude())
-                                        * ElevatorConstants.KS.get()));
+                                        * ElevatorConstants.MAIN_MOTOR_CONFIGURATION.Slot0.kS));
     }
 
     public void openStopper() {
@@ -71,6 +71,10 @@ public class ElevatorIOReal implements ElevatorIO {
 
     public void stopMotor() {
         mainMotor.stopMotor();
+    }
+
+    public void manualReset() {
+        mainMotor.setPosition(0);
     }
 
     @Override
@@ -89,13 +93,29 @@ public class ElevatorIOReal implements ElevatorIO {
 
         movingWeightTrigger.update(inputs.hooksHeight.gt(ElevatorConstants.GRIPPER_TO_HOOKS));
         if (movingWeightTrigger.triggered()) {
-            ElevatorConstants.MAIN_MOTOR_CONFIGURATION.Slot0.kG = -2.5;
-            ElevatorConstants.AUX_MOTOR_CONFIGURATION.Slot0.kG = -2.5;
+            System.out.println("going up");
+            ElevatorConstants.MAIN_MOTOR_CONFIGURATION.Slot0.kG =
+                    ElevatorConstants.KG_SECOND_STAGE.get();
+            ElevatorConstants.AUX_MOTOR_CONFIGURATION.Slot0.kG =
+                    ElevatorConstants.KG_SECOND_STAGE.get();
+            ElevatorConstants.MAIN_MOTOR_CONFIGURATION.Slot0.kS =
+                    ElevatorConstants.KS_SECOND_STAGE.get();
+            ElevatorConstants.AUX_MOTOR_CONFIGURATION.Slot0.kS =
+                    ElevatorConstants.KS_SECOND_STAGE.get();
             mainMotor.getConfigurator().apply(ElevatorConstants.MAIN_MOTOR_CONFIGURATION);
             auxMotor.getConfigurator().apply(ElevatorConstants.AUX_MOTOR_CONFIGURATION);
         } else if (movingWeightTrigger.released()) {
-            ElevatorConstants.MAIN_MOTOR_CONFIGURATION.Slot0.kG = -9.0;
-            ElevatorConstants.AUX_MOTOR_CONFIGURATION.Slot0.kG = -9.0;
+            System.out.println("going down");
+            ElevatorConstants.MAIN_MOTOR_CONFIGURATION.Slot0.kG =
+                    ElevatorConstants.KG_FIRST_STAGE.get();
+            ElevatorConstants.AUX_MOTOR_CONFIGURATION.Slot0.kG =
+                    ElevatorConstants.KG_FIRST_STAGE.get();
+            ElevatorConstants.MAIN_MOTOR_CONFIGURATION.Slot0.kS =
+                    ElevatorConstants.KS_FIRST_STAGE.get();
+            ;
+            ElevatorConstants.AUX_MOTOR_CONFIGURATION.Slot0.kS =
+                    ElevatorConstants.KS_FIRST_STAGE.get();
+            ;
             mainMotor.getConfigurator().apply(ElevatorConstants.MAIN_MOTOR_CONFIGURATION);
             auxMotor.getConfigurator().apply(ElevatorConstants.AUX_MOTOR_CONFIGURATION);
         }

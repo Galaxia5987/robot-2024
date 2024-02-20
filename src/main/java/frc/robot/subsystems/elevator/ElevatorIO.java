@@ -14,6 +14,8 @@ public interface ElevatorIO {
 
     void closeStopper();
 
+    void manualReset();
+
     void updateInputs(ElevatorInputs inputs);
 
     enum ControlMode {

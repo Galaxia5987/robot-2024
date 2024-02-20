@@ -6,12 +6,16 @@ import static frc.robot.subsystems.elevator.ElevatorConstants.MECHANISM_WIDTH;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.units.*;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -73,7 +77,7 @@ public class Elevator extends SubsystemBase {
 
     public Command setHeight(MutableMeasure<Distance> height) {
         return Commands.sequence(
-                        //                        runOnce(() -> inputs.heightSetpoint = height),
+                        runOnce(() -> inputs.heightSetpoint = height),
                         //
                         // run(io::openStopper).until(this::stopperAtSetpoint).withTimeout(0.3),
                         run(() -> io.setHeight(height)).until(this::atHeightSetpoint))
@@ -84,6 +88,10 @@ public class Elevator extends SubsystemBase {
 
     public Command manualElevator(DoubleSupplier power) {
         return Commands.parallel(run(() -> io.setPower(power.getAsDouble())));
+    }
+
+    public Command manualReset() {
+        return Commands.runOnce(io::manualReset);
     }
 
     @Override
