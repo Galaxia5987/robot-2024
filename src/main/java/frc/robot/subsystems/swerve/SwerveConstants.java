@@ -15,7 +15,7 @@ public class SwerveConstants {
                     .withSupplyCurrentLimitEnable(true);
 
     public static final double VOLT_COMP_SATURATION = 12;
-    public static final double NEUTRAL_DEADBAND = 0.03;
+    public static final double NEUTRAL_DEADBAND = 0.0;
     public static final double XBOX_DEADBAND = 0.15;
     public static final LoggedTunableNumber STEERING_MULTIPLIER =
             new LoggedTunableNumber("Steering multiplier", 0.6);
@@ -37,12 +37,16 @@ public class SwerveConstants {
             new LoggedTunableNumber("Swerve Drive/PID/angleKI");
     public static final LoggedTunableNumber ANGLE_KD =
             new LoggedTunableNumber("Swerve Drive/PID/angleKD");
+    public static final LoggedTunableNumber ANGLE_KV =
+            new LoggedTunableNumber("Swerve Drive/PID/angleKV");
     public static final LoggedTunableNumber ANGLE_KS =
             new LoggedTunableNumber("Swerve Drive/PID/angleKS");
+    public static final LoggedTunableNumber ANGLE_KA =
+            new LoggedTunableNumber("Swerve Drive/PID/angleKA");
     public static final LoggedTunableNumber[] PID_VALUES =
             new LoggedTunableNumber[] {
                 DRIVE_KP, DRIVE_KI, DRIVE_KD, DRIVE_KV, DRIVE_KS, DRIVE_KA, ANGLE_KP, ANGLE_KI,
-                ANGLE_KD, ANGLE_KS
+                ANGLE_KD, ANGLE_KV, ANGLE_KS, ANGLE_KA
             };
     public static final LoggedTunableNumber ROTATION_KP =
             new LoggedTunableNumber("Swerve Drive/Rotation/rotationKP");
@@ -59,6 +63,10 @@ public class SwerveConstants {
                     .withPeakReverseVoltage(VOLT_COMP_SATURATION);
     public static final MotorOutputConfigs MOTOR_OUTPUT_CONFIGS =
             new MotorOutputConfigs().withDutyCycleNeutralDeadband(NEUTRAL_DEADBAND);
+    public static final MotionMagicConfigs MOTION_MAGIC_CONFIGS =
+            new MotionMagicConfigs()
+                    .withMotionMagicCruiseVelocity(3)
+                    .withMotionMagicAcceleration(12);
     public static final double ODOMETRY_FREQUENCY = 250;
     public static double ROBOT_WIDTH;
     public static double ROBOT_LENGTH;
@@ -110,17 +118,20 @@ public class SwerveConstants {
                             * Math.PI;
         } else {
             if (isWCP) {
+                //                DRIVE_KP.initDefault(0.35747925);
                 DRIVE_KP.initDefault(0.0);
                 DRIVE_KI.initDefault(0.0);
                 DRIVE_KD.initDefault(0.0);
-                DRIVE_KV.initDefault(0.6);
-                DRIVE_KS.initDefault(0.6);
-                DRIVE_KA.initDefault(0.0);
+                DRIVE_KV.initDefault(0.675_205);
+                DRIVE_KS.initDefault(0.248_33);
+                DRIVE_KA.initDefault(0.100_370_75);
 
                 ANGLE_KP.initDefault(28.0);
                 ANGLE_KI.initDefault(0.0);
                 ANGLE_KD.initDefault(0.0);
-                ANGLE_KS.initDefault(0.28);
+                ANGLE_KS.initDefault(0.335_905);
+                ANGLE_KV.initDefault(1.327_55);
+                ANGLE_KA.initDefault(0.197_637_5);
 
                 ROTATION_KP.initDefault(3.0);
                 ROTATION_KI.initDefault(0.0);
@@ -207,6 +218,10 @@ public class SwerveConstants {
                         .withVoltage(VOLTAGE_CONFIGS)
                         .withCurrentLimits(TALON_FX_CURRENT_LIMIT_CONFIGS)
                         .withFeedback(FEEDBACK_CONFIGS_ANGLE)
-                        .withMotorOutput(MOTOR_OUTPUT_CONFIGS);
+                        .withMotorOutput(MOTOR_OUTPUT_CONFIGS)
+                        .withMotionMagic(
+                                new MotionMagicConfigs()
+                                        .withMotionMagicCruiseVelocity(30)
+                                        .withMotionMagicAcceleration(120));
     }
 }

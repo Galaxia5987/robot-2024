@@ -2,8 +2,7 @@ package frc.robot.subsystems.swerve;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.*;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -25,8 +24,8 @@ public class ModuleIOTalonFX implements ModuleIO {
     private final TalonFXConfiguration driveConfig;
     private final TalonFXConfiguration angleConfig;
 
-    private final PositionVoltage angleControlRequest =
-            new PositionVoltage(0).withEnableFOC(true).withSlot(0);
+    private final MotionMagicVoltage angleControlRequest =
+            new MotionMagicVoltage(0).withEnableFOC(true).withSlot(0);
     private final VelocityVoltage velocityControlRequest =
             new VelocityVoltage(0).withEnableFOC(true);
     private final SwerveModuleInputsAutoLogged inputs;
@@ -78,10 +77,12 @@ public class ModuleIOTalonFX implements ModuleIO {
         inputs.driveMotorVelocity =
                 Units.rpsToMetersPerSecond(
                         driveMotor.getVelocity().getValue(), SwerveConstants.WHEEL_DIAMETER / 2);
+        inputs.driveMotorVoltage = driveMotor.getMotorVoltage().getValue();
 
         inputs.angle =
                 Utils.normalize(Rotation2d.fromRotations(angleMotor.getPosition().getValue()));
-        inputs.angleMotorAppliedVoltage = angleMotor.getSupplyVoltage().getValue();
+        inputs.angleMotorAppliedVoltage = angleMotor.getMotorVoltage().getValue();
+        inputs.angleMotorVelocity = angleMotor.getVelocity().getValue();
 
         inputs.moduleDistance =
                 Units.rpsToMetersPerSecond(
@@ -174,5 +175,10 @@ public class ModuleIOTalonFX implements ModuleIO {
     @Override
     public void updateOffset(Rotation2d offset) {
         angleMotor.setPosition(encoder.getAbsolutePosition() - offset.getRotations());
+    }
+
+    public void setVoltage(double volts) {
+        //        driveMotor.setControl(new VoltageOut(volts));
+        angleMotor.setControl(new VoltageOut(volts));
     }
 }
