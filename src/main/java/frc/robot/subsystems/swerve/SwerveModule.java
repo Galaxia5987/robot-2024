@@ -114,8 +114,11 @@ public class SwerveModule extends SubsystemBase {
     public void updateSysIdRoutineLog(SysIdRoutineLog log) {
         log.motor("" + number)
                 .voltage(edu.wpi.first.units.Units.Volts.of(loggerInputs.angleMotorAppliedVoltage))
-                .angularPosition( edu.wpi.first.units.Units.Rotations.of(loggerInputs.angle.getRotations()))
-                .angularVelocity(edu.wpi.first.units.Units.RotationsPerSecond.of(
-                        loggerInputs.driveMotorVelocity / (SwerveConstants.WHEEL_DIAMETER * Math.PI)));
+                .angularPosition(
+                        edu.wpi.first.units.Units.Rotations.of(loggerInputs.angle.getRotations()))
+                .angularVelocity(
+                        edu.wpi.first.units.Units.RotationsPerSecond.of(
+                                loggerInputs.driveMotorVelocity
+                                        / (SwerveConstants.WHEEL_DIAMETER * Math.PI)));
     }
 }

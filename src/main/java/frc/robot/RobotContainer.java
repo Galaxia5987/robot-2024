@@ -3,16 +3,17 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.lib.GalacticProxyCommand;
 import frc.robot.lib.PoseEstimation;
+import frc.robot.lib.math.interpolation.InterpolatingDouble;
 import frc.robot.scoreStates.AmpState;
 import frc.robot.scoreStates.ClimbState;
 import frc.robot.scoreStates.ScoreState;
@@ -29,19 +30,15 @@ import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperIO;
 import frc.robot.subsystems.gripper.GripperIOReal;
 import frc.robot.subsystems.gripper.GripperIOSim;
-import frc.robot.subsystems.hood.Hood;
-import frc.robot.subsystems.hood.HoodIO;
-import frc.robot.subsystems.hood.HoodIOReal;
-import frc.robot.subsystems.hood.HoodIOSim;
+import frc.robot.subsystems.hood.*;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOReal;
 import frc.robot.subsystems.intake.IntakeIOSim;
-import frc.robot.subsystems.shooter.Shooter;
-import frc.robot.subsystems.shooter.ShooterIO;
-import frc.robot.subsystems.shooter.ShooterIOReal;
-import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.shooter.*;
 import frc.robot.subsystems.swerve.SwerveDrive;
+
+import java.util.Set;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
@@ -121,8 +118,37 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("autoList", autoChooser);
         NamedCommands.registerCommand("intake", commandGroups.intake());
-        NamedCommands.registerCommand("score", Commands.none());
-        NamedCommands.registerCommand("prepareShoot", updateScoreState());
+        NamedCommands.registerCommand("stopIntake", intake.stop());
+        NamedCommands.registerCommand("score", commandGroups.feedShooter());
+        NamedCommands.registerCommand("prepareShoot", prepare());
+    }
+
+    private Command prepare(){
+        return Commands.parallel(
+                hood.setAngle(
+                        () ->
+                                Units.Degrees.of(
+                                                HoodConstants
+                                                        .ANGLE_BY_DISTANCE
+                                                        .getInterpolated(
+                                                                new InterpolatingDouble(
+                                                                        PoseEstimation
+                                                                                .getInstance()
+                                                                                .getDistanceToSpeaker()))
+                                                        .value)
+                                        .mutableCopy()),
+                commandGroups.shootAndConvey(
+                        () ->
+                                Units.RotationsPerSecond.of(
+                                                ShooterConstants
+                                                        .VELOCITY_BY_DISTANCE
+                                                        .getInterpolated(
+                                                                new InterpolatingDouble(
+                                                                        PoseEstimation
+                                                                                .getInstance()
+                                                                                .getDistanceToSpeaker()))
+                                                        .value)
+                                        .mutableCopy()));
     }
 
     private Command updateScoreState() {
@@ -149,121 +175,60 @@ public class RobotContainer {
                         () -> 0.4 * -xboxController.getRightX(),
                         0.1,
                         () -> true));
-
-        elevator.setDefaultCommand(
-                (elevator.manualElevator(
-                        () ->
-                                -xboxController.getLeftTriggerAxis()
-                                        + xboxController.getRightTriggerAxis())));
     }
 
     private void configureButtonBindings() {
 
-        //        xboxController
-        //                .rightTrigger()
-        //                .whileTrue(
-        //                        Commands.parallel(
-        //                                        hood.setAngle(
-        //                                                () ->
-        //                                                        Units.Degrees.of(
-        //                                                                        HoodConstants
-        //
-        // .ANGLE_BY_DISTANCE
-        //
-        // .getInterpolated(
-        //
-        // new InterpolatingDouble(
-        //
-        //      PoseEstimation
-        //
-        //              .getInstance()
-        //
-        //              .getDistanceToSpeaker()))
-        //                                                                                .value)
-        //                                                                .mutableCopy()),
-        //                                        commandGroups.shootAndConvey(
-        //                                                () ->
-        //                                                        Units.RotationsPerSecond.of(
-        //                                                                        ShooterConstants
-        //
-        // .VELOCITY_BY_DISTANCE
-        //
-        // .getInterpolated(
-        //
-        // new InterpolatingDouble(
-        //
-        //      PoseEstimation
-        //
-        //              .getInstance()
-        //
-        //              .getDistanceToSpeaker()))
-        //                                                                                .value)
-        //                                                                .mutableCopy()))
-        //                                .until(() -> shooter.atSetpoint() && hood.atSetpoint())
-        //                                .andThen(
-        //                                        gripper.setRollerPower(0.7)
-        //
-        // .alongWith(intake.setCenterRollerSpeed(0.5))))
-        //                .onFalse(
-        //                        Commands.parallel(
-        //                                hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()),
-        //                                conveyor.stop(),
-        //                                shooter.stop(),
-        //                                intake.setCenterRollerSpeed(0),
-        //                                gripper.setRollerPower(0)));
-        //        xboxController
-        //                .leftTrigger()
-        //                .whileTrue(
-        //                        Commands.parallel(
-        //                                intake.intake(),
-        //                                gripper.setRollerPower(0.3)
-        //                                        .until(gripper::hasNote)
-        //                                        .andThen(gripper.setRollerPower(0))))
-        //                .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
+        xboxController
+                .rightTrigger()
+                .whileTrue(
+                        Commands.parallel(
+                                        hood.setAngle(
+                                                () ->
+                                                        Units.Degrees.of(
+                                                                        HoodConstants
+                                                                                .ANGLE_BY_DISTANCE
+                                                                                .getInterpolated(
+                                                                                        new InterpolatingDouble(
+                                                                                                PoseEstimation
+                                                                                                        .getInstance()
+                                                                                                        .getDistanceToSpeaker()))
+                                                                                .value)
+                                                                .mutableCopy()),
+                                        commandGroups.shootAndConvey(
+                                                () ->
+                                                        Units.RotationsPerSecond.of(
+                                                                        ShooterConstants
+                                                                                .VELOCITY_BY_DISTANCE
+                                                                                .getInterpolated(
+                                                                                        new InterpolatingDouble(
+                                                                                                PoseEstimation
+                                                                                                        .getInstance()
+                                                                                                        .getDistanceToSpeaker()))
+                                                                                .value)
+                                                                .mutableCopy()))
+                                .until(() -> shooter.atSetpoint() && hood.atSetpoint())
+                                .andThen(
+                                        gripper.setRollerPower(0.7)
+                                                .alongWith(intake.setCenterRollerSpeed(0.5))))
+                .onFalse(
+                        Commands.parallel(
+                                hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()),
+                                conveyor.stop(),
+                                shooter.stop(),
+                                intake.setCenterRollerSpeed(0),
+                                gripper.setRollerPower(0)));
+        xboxController
+                .leftTrigger()
+                .whileTrue(
+                        Commands.parallel(
+                                intake.intake(),
+                                gripper.setRollerPower(0.3)
+                                        .until(gripper::hasNote)
+                                        .andThen(gripper.setRollerPower(0))))
+                .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
         xboxController.leftBumper().onTrue(intake.reset(Units.Degrees.of(0)));
         xboxController.b().onTrue(Commands.runOnce(swerveDrive::resetGyro));
-        xboxController
-                .rightBumper()
-                .whileTrue(gripper.setWristPosition(Units.Degrees.of(90).mutableCopy()))
-                .onFalse(gripper.setRollerPower(-0.7));
-        //        xboxController
-        //                .rightTrigger()
-        //                .whileTrue(
-        //                        Commands.defer(
-        //                                () ->
-        //                                        swerveDrive
-        //                                                .turnCommand(
-        //                                                        () -> {
-        //                                                            var toSpeaker =
-        //
-        // PoseEstimation.getInstance()
-        //
-        // .getPoseRelativeToSpeaker();
-        //                                                            var res =
-        //                                                                    new Rotation2d(
-        //
-        // toSpeaker.getX(),
-        //
-        // toSpeaker.getY());
-        //                                                            if
-        // (DriverStation.getAlliance().get()
-        //                                                                    ==
-        // DriverStation.Alliance.Red) {
-        //                                                                res =
-        //                                                                        res.minus(
-        //                                                                                Rotation2d
-        //
-        // .fromDegrees(
-        //
-        //      180));
-        //                                                            }
-        //                                                            wantedRobotRotation = res;
-        //                                                            return res;
-        //                                                        },
-        //
-        // Rotation2d.fromDegrees(0.5).getRotations())
-        //                                                .finallyDo(swerveDrive::lock),
-        //                                Set.of(swerveDrive)));
     }
 
     /**
@@ -272,14 +237,13 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-
-                return new InstantCommand(
-                                () ->
-                                        swerveDrive.resetPose(
-                                                PathPlannerAuto.getStaringPoseFromAutoFile(
-                                                        "New Auto")),
-                                swerveDrive)
-                        .andThen(
-        new PathPlannerAuto("New Auto"));
+        //        return new InstantCommand(
+        //                () ->
+        //                        swerveDrive.resetPose(
+        //                                PathPlannerAuto.getStaringPoseFromAutoFile(
+        //                                        "New Auto")),
+        //                                swerveDrive)
+        //                        .andThen(
+        return new PathPlannerAuto("New Auto");
     }
 }

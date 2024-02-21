@@ -80,13 +80,12 @@ public class SwerveDrive extends SubsystemBase {
      *
      * @param angle The desired angle. [rad]
      */
-    public void resetGyro(double angle) {
-        Rotation2d angleR2d = new Rotation2d(angle);
-        gyro.resetGyro(angleR2d);
+    public void resetGyro(Rotation2d angle) {
+        gyro.resetGyro(angle);
     }
 
     public void resetGyro() {
-        resetGyro(0);
+        resetGyro(new Rotation2d());
     }
 
     /**
@@ -156,7 +155,8 @@ public class SwerveDrive extends SubsystemBase {
 
     public void resetPose(Pose2d pose) {
         botPose = pose;
-        estimator.resetPosition(getRawYaw(), modulePositions, pose);
+        resetGyro(pose.getRotation());
+        estimator.resetPosition(getOdometryYaw(), modulePositions, pose);
     }
 
     public void resetPose() {

@@ -74,14 +74,10 @@ public class CommandGroups {
     }
 
     public Command feedWithWait(BooleanSupplier otherReady) {
-        return conveyor.feed()
-                .alongWith(
-                        Commands.waitUntil(
-                                        () -> conveyor.readyToFeed() && otherReady.getAsBoolean())
+        return Commands.waitUntil(otherReady)
                                 .andThen(
-                                        gripper.setRollerAndWrist(
-                                                GripperConstants.INTAKE_ANGLE.mutableCopy(),
-                                                GripperConstants.INTAKE_POWER)))
+                                        gripper.setRollerPower(GripperConstants.INTAKE_POWER)
+                                                .withTimeout(1))
                 .withName("feedWithWait");
     }
 
@@ -95,9 +91,8 @@ public class CommandGroups {
                         // retractGrillevator(),
                         Commands.parallel(
                                 intake.intake(),
-                                gripper.intake(),
-                                Commands.waitUntil(gripper::hasNote)
-                                        .andThen(Commands.none()))) // TODO: replace null with leds
+                                gripper.setRollerPower(0.3).until(gripper::hasNote)
+                                        .andThen(gripper.setRollerPower(0)))) // TODO: replace null with leds
                 // mode
                 .withName("intake");
     }
