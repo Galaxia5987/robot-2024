@@ -8,6 +8,7 @@ import frc.robot.scoreStates.ScoreStateConstants;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -74,7 +75,8 @@ public class PoseEstimation {
 
     @AutoLogOutput(key = "ToSpeaker")
     public Translation2d getPoseRelativeToSpeaker() {
-        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+        Optional<DriverStation.Alliance> allianceColor = DriverStation.getAlliance();
+        if (allianceColor.isPresent() && (allianceColor.get() == DriverStation.Alliance.Red)) {
             speakerPose = ScoreStateConstants.SPEAKER_POSE_RED;
         } else {
             speakerPose = ScoreStateConstants.SPEAKER_POSE_BLUE;

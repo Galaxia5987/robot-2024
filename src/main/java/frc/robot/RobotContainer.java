@@ -1,12 +1,17 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
+import frc.robot.lib.GalacticProxyCommand;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.scoreStates.AmpState;
 import frc.robot.scoreStates.ClimbState;
@@ -37,7 +42,6 @@ import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOReal;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.swerve.SwerveDrive;
-import org.littletonrobotics.junction.AutoLogOutput;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
@@ -55,7 +59,7 @@ public class RobotContainer {
     private final PoseEstimation poseEstimation;
     private CommandGroups commandGroups;
     private ScoreState currentState;
-    @AutoLogOutput private Rotation2d wantedRobotRotation;
+    private final SendableChooser<Command> autoChooser;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
@@ -113,8 +117,21 @@ public class RobotContainer {
         // Configure the button bindings and default commands
         configureDefaultCommands();
         configureButtonBindings();
-
         poseEstimation = PoseEstimation.getInstance();
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("autoList", autoChooser);
+        NamedCommands.registerCommand("intake", commandGroups.intake());
+        NamedCommands.registerCommand("score", Commands.none());
+        NamedCommands.registerCommand("prepareShoot", updateScoreState());
+    }
+
+    private Command updateScoreState() {
+        return new GalacticProxyCommand(
+                () ->
+                        currentState
+                                .calculateTargets()
+                                .andThen(currentState.prepareSubsystems())
+                                .repeatedly());
     }
 
     public static RobotContainer getInstance() {
@@ -255,6 +272,14 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new PathPlannerAuto("New Auto");
+
+                return new InstantCommand(
+                                () ->
+                                        swerveDrive.resetPose(
+                                                PathPlannerAuto.getStaringPoseFromAutoFile(
+                                                        "New Auto")),
+                                swerveDrive)
+                        .andThen(
+        new PathPlannerAuto("New Auto"));
     }
 }

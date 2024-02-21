@@ -23,17 +23,18 @@ import java.util.List;
 import java.util.Set;
 
 public class ShootState implements ScoreState {
+    private static boolean inBounds;
+    private static ShootState INSTANCE;
     private final Shooter shooter;
     private final Hood hood;
     private final Conveyor conveyor;
     private Translation2d speakerPose;
     private InterpolatingDouble distanceToSpeaker = new InterpolatingDouble(0.0);
     private PoseEstimation poseEstimation;
-    private Pose2d botPose;
+    private Pose2d botPose = new Pose2d();
     private List<Translation2d> optimalPoints;
     private Translation2d optimalTranslation;
     private double optimalRotation;
-    private static boolean inBounds;
 
     public ShootState() {
         shooter = Shooter.getInstance();
@@ -59,7 +60,7 @@ public class ShootState implements ScoreState {
         }
     }
 
-    private Command setShooter() {
+    public Command setShooter() {
         return shooter.setVelocity(
                         () ->
                                 Units.RotationsPerSecond.of(
@@ -70,7 +71,7 @@ public class ShootState implements ScoreState {
                 .until(shooter::atSetpoint);
     }
 
-    private Command setHood() {
+    public Command setHood() {
         return hood.setAngle(
                         () ->
                                 Units.Degrees.of(
@@ -126,6 +127,7 @@ public class ShootState implements ScoreState {
                         optimalTranslation = botPose.getTranslation();
                         return rotate();
                     }
+                    calculateTargets();
                     optimalTranslation = botPose.getTranslation().nearest(optimalPoints);
 
                     return AutoBuilder.pathfindToPose(
@@ -138,13 +140,13 @@ public class ShootState implements ScoreState {
 
     @Override
     public Command score() {
-        return Commands.sequence(
+        return Commands.repeatingSequence(
                 Commands.parallel(
                         driveToClosestOptimalPoint()
                                 .andThen(() -> SwerveDrive.getInstance().lock()),
                         setShooter(),
-                        setHood()),
-                CommandGroups.getInstance().feedShooter());
+                        setHood(),
+                        CommandGroups.getInstance().feedShooter()));
     }
 
     @Override
