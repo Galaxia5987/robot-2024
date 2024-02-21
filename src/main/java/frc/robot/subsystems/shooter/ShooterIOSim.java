@@ -64,9 +64,7 @@ public class ShooterIOSim implements ShooterIO {
         topRollerInputs.velocitySetpoint.mut_replace(velocity);
         topMotor.setControl(
                 topControl
-                        .withVelocity(velocity.in(Units.RotationsPerSecond))
-                        .withFeedForward(
-                                topFeedForward.calculate(velocity.in(Units.RotationsPerSecond))));
+                        .withVelocity(velocity.in(Units.RotationsPerSecond)));
     }
 
     @Override
@@ -74,10 +72,7 @@ public class ShooterIOSim implements ShooterIO {
         bottomRollerInputs.velocitySetpoint.mut_replace(velocity);
         bottomMotor.setControl(
                 bottomControl
-                        .withVelocity(velocity.in(Units.RotationsPerSecond))
-                        .withFeedForward(
-                                bottomFeedForward.calculate(
-                                        velocity.in(Units.RotationsPerSecond))));
+                        .withVelocity(velocity.in(Units.RotationsPerSecond)));
     }
 
     @Override

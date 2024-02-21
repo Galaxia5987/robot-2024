@@ -24,13 +24,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "intake"
+                  "name": "prepareShoot"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "prepareShoot"
+                  "name": "intake"
                 }
               }
             ]
@@ -68,6 +68,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "score"
+          }
+        },
+        {
           "type": "race",
           "data": {
             "commands": [
@@ -90,6 +96,18 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score"
           }
         }
       ]

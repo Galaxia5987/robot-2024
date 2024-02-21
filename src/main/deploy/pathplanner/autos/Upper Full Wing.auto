@@ -37,7 +37,13 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "named",
+          "data": {
+            "name": "score"
+          }
+        },
+        {
+          "type": "race",
           "data": {
             "commands": [
               {
@@ -51,12 +57,24 @@
                 "data": {
                   "name": "intake"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "prepareShoot"
+                }
               }
             ]
           }
         },
         {
-          "type": "sequential",
+          "type": "named",
+          "data": {
+            "name": "score"
+          }
+        },
+        {
+          "type": "race",
           "data": {
             "commands": [
               {
@@ -70,8 +88,26 @@
                 "data": {
                   "name": "intake"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "prepareShoot"
+                }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopIntake"
           }
         }
       ]
