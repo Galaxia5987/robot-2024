@@ -3,6 +3,7 @@ package frc.robot.subsystems.elevator;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meters;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.StrictFollower;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -22,7 +23,7 @@ public class ElevatorIOReal implements ElevatorIO {
     private final TalonFX auxMotor;
 
     private final PositionTorqueCurrentFOC positionControl = new PositionTorqueCurrentFOC(0);
-    private final VoltageOut powerControl = new VoltageOut(0);
+    private final DutyCycleOut powerControl = new DutyCycleOut(0).withEnableFOC(true);
 
     private final DigitalInput sensor = new DigitalInput(1);
     private final BooleanTrigger sensorTrigger = new BooleanTrigger();
@@ -43,7 +44,7 @@ public class ElevatorIOReal implements ElevatorIO {
 
     @Override
     public void setPower(double power) {
-        mainMotor.setControl(powerControl.withOutput(power * 12));
+        mainMotor.setControl(powerControl.withOutput(power));
     }
 
     @Override
