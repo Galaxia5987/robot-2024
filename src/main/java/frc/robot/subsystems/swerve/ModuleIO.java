@@ -38,4 +38,6 @@ public interface ModuleIO {
     Command checkModule();
 
     default void updateOffset(Rotation2d offset) {}
+
+    default void setVoltage(double volts) {}
 }

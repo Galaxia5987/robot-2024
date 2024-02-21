@@ -5,6 +5,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
@@ -103,5 +104,18 @@ public class SwerveModule extends SubsystemBase {
         if (timer.advanceIfElapsed(2)) {
             io.updateOffset(new Rotation2d(Units.rotationsToRadians(offset)));
         }
+    }
+
+    public void characterize(double voltage) {
+        io.setVoltage(voltage);
+        io.setAngle(new Rotation2d());
+    }
+
+    public void updateSysIdRoutineLog(SysIdRoutineLog log) {
+        log.motor("" + number)
+                .voltage(edu.wpi.first.units.Units.Volts.of(loggerInputs.angleMotorAppliedVoltage))
+                .angularPosition( edu.wpi.first.units.Units.Rotations.of(loggerInputs.angle.getRotations()))
+                .angularVelocity(edu.wpi.first.units.Units.RotationsPerSecond.of(
+                        loggerInputs.driveMotorVelocity / (SwerveConstants.WHEEL_DIAMETER * Math.PI)));
     }
 }

@@ -10,10 +10,14 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.lib.controllers.DieterController;
 import frc.robot.lib.math.differential.Derivative;
 import java.util.Arrays;
@@ -46,6 +50,8 @@ public class SwerveDrive extends SubsystemBase {
     private final SwerveDrivePoseEstimator estimator;
     private final SwerveDriveInputsAutoLogged loggerInputs = new SwerveDriveInputsAutoLogged();
     @AutoLogOutput private Pose2d botPose = new Pose2d();
+
+    private boolean inCharacterizationMode = false;
 
     private SwerveDrive(GyroIO gyroIO, double[] wheelOffsets, ModuleIO... moduleIOs) {
         this.gyro = gyroIO;
@@ -336,10 +342,41 @@ public class SwerveDrive extends SubsystemBase {
 
         SwerveDriveKinematics.desaturateWheelSpeeds(
                 loggerInputs.desiredModuleStates, SwerveConstants.MAX_X_Y_VELOCITY);
-        for (int i = 0; i < modules.length; i++) {
-            modules[i].setModuleState(loggerInputs.desiredModuleStates[i]);
+        if (!inCharacterizationMode) {
+            for (int i = 0; i < modules.length; i++) {
+                modules[i].setModuleState(loggerInputs.desiredModuleStates[i]);
+            }
         }
 
         Logger.processInputs("SwerveDrive", loggerInputs);
+    }
+
+    public Command characterize() {
+        SysIdRoutine routine =
+                new SysIdRoutine(
+                        new SysIdRoutine.Config(),
+                        new SysIdRoutine.Mechanism(
+                                (Measure<Voltage> volts) -> {
+                                    for (SwerveModule module : modules) {
+                                        module.characterize(
+                                                volts.in(edu.wpi.first.units.Units.Volts));
+                                    }
+                                },
+                                (SysIdRoutineLog log) -> {
+                                    for (SwerveModule module : modules) {
+                                        module.updateSysIdRoutineLog(log);
+                                    }
+                                },
+                                this));
+        return Commands.sequence(
+                        Commands.runOnce(() -> inCharacterizationMode = true),
+                        routine.dynamic(SysIdRoutine.Direction.kForward),
+                        Commands.waitSeconds(1),
+                        routine.dynamic(SysIdRoutine.Direction.kReverse),
+                        Commands.waitSeconds(1),
+                        routine.quasistatic(SysIdRoutine.Direction.kForward),
+                        Commands.waitSeconds(1),
+                        routine.quasistatic(SysIdRoutine.Direction.kReverse))
+                .finallyDo(() -> inCharacterizationMode = false);
     }
 }

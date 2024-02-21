@@ -24,12 +24,18 @@ import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperIO;
 import frc.robot.subsystems.gripper.GripperIOReal;
 import frc.robot.subsystems.gripper.GripperIOSim;
-import frc.robot.subsystems.hood.*;
+import frc.robot.subsystems.hood.Hood;
+import frc.robot.subsystems.hood.HoodIO;
+import frc.robot.subsystems.hood.HoodIOReal;
+import frc.robot.subsystems.hood.HoodIOSim;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOReal;
 import frc.robot.subsystems.intake.IntakeIOSim;
-import frc.robot.subsystems.shooter.*;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterIO;
+import frc.robot.subsystems.shooter.ShooterIOReal;
+import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import org.littletonrobotics.junction.AutoLogOutput;
 
@@ -119,13 +125,13 @@ public class RobotContainer {
     }
 
     private void configureDefaultCommands() {
-                swerveDrive.setDefaultCommand(
-                        swerveDrive.driveCommand(
-                                () -> -xboxController.getLeftY(),
-                                () -> -xboxController.getLeftX(),
-                                () -> 0.4 * -xboxController.getRightX(),
-                                0.1,
-                                () -> true));
+        swerveDrive.setDefaultCommand(
+                swerveDrive.driveCommand(
+                        () -> -xboxController.getLeftY(),
+                        () -> -xboxController.getLeftX(),
+                        () -> 0.4 * -xboxController.getRightX(),
+                        0.1,
+                        () -> true));
 
         elevator.setDefaultCommand(
                 (elevator.manualElevator(
@@ -197,12 +203,8 @@ public class RobotContainer {
         //                                        .until(gripper::hasNote)
         //                                        .andThen(gripper.setRollerPower(0))))
         //                .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
-        xboxController.b().onTrue(elevator.manualReset());
         xboxController.leftBumper().onTrue(intake.reset(Units.Degrees.of(0)));
         xboxController.b().onTrue(Commands.runOnce(swerveDrive::resetGyro));
-        xboxController.a().whileTrue(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
-        xboxController.x().whileTrue(elevator.setHeight(Units.Meters.of(0.225).mutableCopy()));
-        xboxController.y().whileTrue(elevator.setHeight(Units.Meters.of(0.45).mutableCopy()));
         xboxController
                 .rightBumper()
                 .whileTrue(gripper.setWristPosition(Units.Degrees.of(90).mutableCopy()))
