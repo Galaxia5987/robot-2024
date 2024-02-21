@@ -52,7 +52,7 @@ public class ShootState implements ScoreState {
     private void updateInBounds() {
         double poseX = botPose.getX();
         InterpolatingDouble poseY = new InterpolatingDouble(botPose.getY());
-        if (isRed()) {
+        if (ScoreState.isRed()) {
             inBounds = poseX >= ScoreStateConstants.RED_BOUNDS_MAP.getInterpolated(poseY).value;
         } else {
             inBounds = poseX <= ScoreStateConstants.BLUE_BOUNDS_MAP.getInterpolated(poseY).value;
@@ -87,7 +87,7 @@ public class ShootState implements ScoreState {
                 () -> {
                     botPose = poseEstimation.getEstimatedPose();
                     updateInBounds();
-                    if (isRed()) {
+                    if (ScoreState.isRed()) {
                         speakerPose = ScoreStateConstants.SPEAKER_POSE_RED;
                         optimalPoints = ScoreStateConstants.OPTIMAL_POINTS_SHOOT_RED;
                     } else {

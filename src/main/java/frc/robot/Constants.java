@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.scoreStates.ScoreState;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.vision.PhotonVisionIOReal;
 import frc.robot.subsystems.vision.Vision;
@@ -116,7 +117,7 @@ public class Constants {
                         SwerveConstants.MAX_X_Y_VELOCITY,
                         Constants.ROBOT_LENGTH.in(Units.Meters) / Math.sqrt(2),
                         new ReplanningConfig()),
-                () -> true,
+                ScoreState::isRed,
                 swerveDrive);
 
 

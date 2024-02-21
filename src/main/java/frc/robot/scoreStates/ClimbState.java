@@ -27,7 +27,7 @@ public class ClimbState implements ScoreState {
         return Commands.defer(
                 () -> {
                     var optimalPoints =
-                            isRed()
+                            ScoreState.isRed()
                                     ? ScoreStateConstants.OPTIMAL_POINTS_CLIMB_RED
                                     : ScoreStateConstants.OPTIMAL_POINTS_CLIMB_BLUE;
                     Pose2d optimalPose =

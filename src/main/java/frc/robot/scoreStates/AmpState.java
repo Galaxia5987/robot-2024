@@ -37,7 +37,7 @@ public class AmpState implements ScoreState {
         return Commands.runOnce(
                 () -> {
                     isAmpingForward = true;
-                    if (isRed()) {
+                    if (ScoreState.isRed()) {
                         ampPose = ScoreStateConstants.AMP_POSE_RED;
                     } else {
                         ampPose = ScoreStateConstants.AMP_POSE_BLUE;
