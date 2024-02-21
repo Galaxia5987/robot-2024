@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.5518468034391548,
-      "y": 4.010648631984287
+      "x": 0.53,
+      "y": 1.99
     },
-    "rotation": 0
+    "rotation": 47.87
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle to middle scoring position"
+            "pathName": "Lower to lower scoring position"
           }
         },
         {
@@ -30,7 +30,32 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Middle To Lower Spike"
+                  "pathName": "Lower to lower scoring position"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "score"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Lower To center line #3"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center line #3 to lower scoring position"
                 }
               },
               {
@@ -51,17 +76,29 @@
         {
           "type": "named",
           "data": {
+            "name": "stopIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "score"
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "Lower To center line #4"
+          }
+        },
+        {
           "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Lower Spike To Middle Spike"
+                  "pathName": "Center line #4 to lower scoring position"
                 }
               },
               {
@@ -80,13 +117,31 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "stopIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Lower To center line #5"
+          }
+        },
+        {
           "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Middle Spike To Higher Spike"
+                  "pathName": "Center line #5 to lower scoring position"
                 }
               },
               {
@@ -102,6 +157,18 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "prepareShoot"
           }
         }
       ]

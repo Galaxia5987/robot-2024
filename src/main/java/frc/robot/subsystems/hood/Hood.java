@@ -1,9 +1,7 @@
 package frc.robot.subsystems.hood;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
@@ -76,7 +74,10 @@ public class Hood extends SubsystemBase {
     private Pose3d getPose3d() {
         return new Pose3d(
                 HoodConstants.ROOT_POSITION,
-                new Rotation3d(0.0, getAngle().plus(HoodConstants.SIMULATION_OFFSET).in(Units.Radians), 0.0));
+                new Rotation3d(
+                        0.0,
+                        getAngle().plus(HoodConstants.SIMULATION_OFFSET).in(Units.Radians),
+                        0.0));
     }
 
     /** Updates the state of the hood. */

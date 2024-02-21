@@ -3,16 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.520415705125599,
-        "y": 5.7844864444177295
+        "x": 0.5936243933556576,
+        "y": 7.091745888326383
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.456247650864607,
-        "y": 4.3694937568824965
+        "x": 3.391422014160755,
+        "y": 5.950035719763017
       },
       "isLocked": false,
-      "linkedName": "center note line #2"
+      "linkedName": "Upper Starting Point"
+    },
+    {
+      "anchor": {
+        "x": 4.881365492268351,
+        "y": 4.119255498297474
+      },
+      "prevControl": {
+        "x": 4.376380267977908,
+        "y": 4.363172600368364
+      },
+      "nextControl": {
+        "x": 5.386350716558795,
+        "y": 3.875338396226584
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,12 +36,12 @@
         "y": 4.092954054853979
       },
       "prevControl": {
-        "x": 7.884349443912564,
-        "y": 4.092954054853979
+        "x": 5.601700436197863,
+        "y": 4.054001284184499
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "center note line #3"
     }
   ],
   "rotationTargets": [],
@@ -39,11 +55,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -44.95474438754478,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Center line",
+  "folder": "Upper",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

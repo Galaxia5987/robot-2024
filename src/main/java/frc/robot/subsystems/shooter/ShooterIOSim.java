@@ -62,17 +62,13 @@ public class ShooterIOSim implements ShooterIO {
     @Override
     public void setTopVelocity(MutableMeasure<Velocity<Angle>> velocity) {
         topRollerInputs.velocitySetpoint.mut_replace(velocity);
-        topMotor.setControl(
-                topControl
-                        .withVelocity(velocity.in(Units.RotationsPerSecond)));
+        topMotor.setControl(topControl.withVelocity(velocity.in(Units.RotationsPerSecond)));
     }
 
     @Override
     public void setBottomVelocity(MutableMeasure<Velocity<Angle>> velocity) {
         bottomRollerInputs.velocitySetpoint.mut_replace(velocity);
-        bottomMotor.setControl(
-                bottomControl
-                        .withVelocity(velocity.in(Units.RotationsPerSecond)));
+        bottomMotor.setControl(bottomControl.withVelocity(velocity.in(Units.RotationsPerSecond)));
     }
 
     @Override
