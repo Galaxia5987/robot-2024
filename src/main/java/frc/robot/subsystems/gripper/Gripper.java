@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commandGroups.CommandGroupsConstants;
 import frc.robot.lib.Utils;
+
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -102,8 +104,8 @@ public class Gripper extends SubsystemBase {
                 setRollerPower(GripperConstants.TRAP_POWER));
     }
 
-    public Command setWristPower(double power) {
-        return run(() -> io.setAngleMotorPower(power)).withName("set wrist power");
+    public Command setWristPower(DoubleSupplier power) {
+        return run(() -> io.setAngleMotorPower(power.getAsDouble())).withName("set wrist power");
     }
 
     @Override
