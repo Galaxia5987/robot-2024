@@ -22,7 +22,7 @@ public class ElevatorConstants { // TODO: check real values
     public static final MutableMeasure<Angle> OPEN_POSITION = Units.Degrees.of(0).mutableCopy();
     public static final MutableMeasure<Angle> LOCKED_POSITION = Units.Degrees.of(0).mutableCopy();
     public static final MutableMeasure<Dimensionless> HEIGHT_TOLERANCE =
-            Units.Percent.of(2).mutableCopy();
+            Units.Percent.of(1).mutableCopy();
     public static final MutableMeasure<Dimensionless> STOPPER_TOLERANCE =
             Units.Percent.of(2).mutableCopy();
 
@@ -57,12 +57,12 @@ public class ElevatorConstants { // TODO: check real values
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                KP.initDefault(20.0);
-                KI.initDefault(0.0);
-                KD.initDefault(0.0);
-                KV.initDefault(0.0);
-                KA.initDefault(0.0);
-                KS_FIRST_STAGE.initDefault(5.7);
+                KP.initDefault(18.0);
+                KI.initDefault(0.00005);
+                KD.initDefault(2.0);
+                KV.initDefault(5.0);
+                KA.initDefault(10.0);
+                KS_FIRST_STAGE.initDefault(6.2);
                 KS_SECOND_STAGE.initDefault(2.2);
                 KG_FIRST_STAGE.initDefault(-6.0);
                 KG_SECOND_STAGE.initDefault(-1.5);
