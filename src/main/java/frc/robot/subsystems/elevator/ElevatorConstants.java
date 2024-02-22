@@ -35,7 +35,7 @@ public class ElevatorConstants { // TODO: check real values
     public static final double MAX_ACCELERATION = 3;
 
     public static final Measure<Distance> GRIPPER_TO_HOOKS =
-            Units.Meters.of(0.305); // TODO: Calibrate real value
+            Units.Meters.of(0.335); // TODO: Calibrate real value
 
     public static final TrapezoidProfile.Constraints TRAPEZOID_PROFILE =
             new TrapezoidProfile.Constraints(MAX_VELOCITY, MAX_ACCELERATION);
@@ -46,7 +46,7 @@ public class ElevatorConstants { // TODO: check real values
     public static final LoggedTunableNumber KV = new LoggedTunableNumber("kv");
     public static final LoggedTunableNumber KA = new LoggedTunableNumber("ka");
     public static final LoggedTunableNumber KS_FIRST_STAGE =
-            new LoggedTunableNumber("ks_first_stage");
+            new LoggedTunableNumber("ks_first_stage_up");
     public static final LoggedTunableNumber KS_SECOND_STAGE =
             new LoggedTunableNumber("ks_second_stage");
     public static final LoggedTunableNumber KG_FIRST_STAGE =
@@ -57,16 +57,15 @@ public class ElevatorConstants { // TODO: check real values
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                //                KP.initDefault(50.0);
-                KP.initDefault(50.0);
+                KP.initDefault(20.0);
                 KI.initDefault(0.0);
-                KD.initDefault(15.0);
+                KD.initDefault(0.0);
                 KV.initDefault(0.0);
                 KA.initDefault(0.0);
-                KS_FIRST_STAGE.initDefault(9.0);
-                KS_SECOND_STAGE.initDefault(3.0);
-                KG_FIRST_STAGE.initDefault(-10.0);
-                KG_SECOND_STAGE.initDefault(-2.5);
+                KS_FIRST_STAGE.initDefault(5.7);
+                KS_SECOND_STAGE.initDefault(2.2);
+                KG_FIRST_STAGE.initDefault(-6.0);
+                KG_SECOND_STAGE.initDefault(-1.5);
             case SIM:
             case REPLAY:
                 KP.initDefault(43.0);
@@ -89,8 +88,6 @@ public class ElevatorConstants { // TODO: check real values
                                 .withKD(ElevatorConstants.KD.get())
                                 .withKV(ElevatorConstants.KV.get())
                                 .withKA(ElevatorConstants.KA.get())
-                                .withKS(ElevatorConstants.KS_FIRST_STAGE.get())
-                                .withKG(ElevatorConstants.KG_SECOND_STAGE.get())
                                 .withGravityType(GravityTypeValue.Elevator_Static))
                 .withMotorOutput(
                         new MotorOutputConfigs()

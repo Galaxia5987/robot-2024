@@ -6,10 +6,8 @@ import static edu.wpi.first.units.Units.Meters;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.StrictFollower;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.Distance;
-import edu.wpi.first.units.Mass;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -29,7 +27,8 @@ public class ElevatorIOReal implements ElevatorIO {
     private final BooleanTrigger sensorTrigger = new BooleanTrigger();
     private final BooleanTrigger movingWeightTrigger = new BooleanTrigger();
 
-    private static final MutableMeasure<Mass> movingWeight = ElevatorConstants.HOOKS_MASS;
+    private double kS = ElevatorConstants.KS_FIRST_STAGE.get();
+    private double kG = ElevatorConstants.KG_FIRST_STAGE.get();
 
     public ElevatorIOReal() {
         mainMotor = new TalonFX(Ports.Elevator.MAIN_ID);
@@ -49,15 +48,14 @@ public class ElevatorIOReal implements ElevatorIO {
 
     @Override
     public void setHeight(MutableMeasure<Distance> height) {
+        double feedforward = Math.signum(
+                inputs.heightSetpoint
+                        .minus(inputs.hooksHeight)
+                        .baseUnitMagnitude()) * kS + kG;
         mainMotor.setControl(
                 positionControl
                         .withPosition(height.in(Units.Meters))
-                        .withFeedForward(
-                                Math.signum(
-                                                inputs.heightSetpoint
-                                                        .minus(inputs.hooksHeight)
-                                                        .baseUnitMagnitude())
-                                        * ElevatorConstants.MAIN_MOTOR_CONFIGURATION.Slot0.kS));
+                        .withFeedForward(feedforward));
     }
 
     public void openStopper() {
@@ -94,31 +92,11 @@ public class ElevatorIOReal implements ElevatorIO {
 
         movingWeightTrigger.update(inputs.hooksHeight.gt(ElevatorConstants.GRIPPER_TO_HOOKS));
         if (movingWeightTrigger.triggered()) {
-            System.out.println("going up");
-            ElevatorConstants.MAIN_MOTOR_CONFIGURATION.Slot0.kG =
-                    ElevatorConstants.KG_SECOND_STAGE.get();
-            ElevatorConstants.AUX_MOTOR_CONFIGURATION.Slot0.kG =
-                    ElevatorConstants.KG_SECOND_STAGE.get();
-            ElevatorConstants.MAIN_MOTOR_CONFIGURATION.Slot0.kS =
-                    ElevatorConstants.KS_SECOND_STAGE.get();
-            ElevatorConstants.AUX_MOTOR_CONFIGURATION.Slot0.kS =
-                    ElevatorConstants.KS_SECOND_STAGE.get();
-            mainMotor.getConfigurator().apply(ElevatorConstants.MAIN_MOTOR_CONFIGURATION);
-            auxMotor.getConfigurator().apply(ElevatorConstants.AUX_MOTOR_CONFIGURATION);
+            kG = ElevatorConstants.KG_SECOND_STAGE.get();
+            kS = ElevatorConstants.KS_SECOND_STAGE.get();
         } else if (movingWeightTrigger.released()) {
-            System.out.println("going down");
-            ElevatorConstants.MAIN_MOTOR_CONFIGURATION.Slot0.kG =
-                    ElevatorConstants.KG_FIRST_STAGE.get();
-            ElevatorConstants.AUX_MOTOR_CONFIGURATION.Slot0.kG =
-                    ElevatorConstants.KG_FIRST_STAGE.get();
-            ElevatorConstants.MAIN_MOTOR_CONFIGURATION.Slot0.kS =
-                    ElevatorConstants.KS_FIRST_STAGE.get();
-            ;
-            ElevatorConstants.AUX_MOTOR_CONFIGURATION.Slot0.kS =
-                    ElevatorConstants.KS_FIRST_STAGE.get();
-            ;
-            mainMotor.getConfigurator().apply(ElevatorConstants.MAIN_MOTOR_CONFIGURATION);
-            auxMotor.getConfigurator().apply(ElevatorConstants.AUX_MOTOR_CONFIGURATION);
+            kG = ElevatorConstants.KG_FIRST_STAGE.get();
+            kS = ElevatorConstants.KS_FIRST_STAGE.get();
         }
 
         if (sensorTrigger.triggered()) {
