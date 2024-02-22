@@ -166,21 +166,48 @@ public class RobotContainer {
     private void configureDefaultCommands() {
         swerveDrive.setDefaultCommand(
                 swerveDrive.driveCommand(
-                        () -> -xboxController.getLeftY(),
-                        () -> -xboxController.getLeftX(),
-                        () -> 0.4 * -xboxController.getRightX(),
+                        () -> -driveController.getLeftY(),
+                        () -> -driveController.getLeftX(),
+                        () -> 0.4 * -driveController.getRightX(),
                         0.1,
                         () -> true));
 
-        gripper.setDefaultCommand(
-                gripper.setWristPower(
-                        ()-> MathUtil.applyDeadband(-xboxController.getLeftY(), 0.15)
-                )
-        );
+//        elevator.setDefaultCommand(
+//                elevator.manualElevator(()->
+//                        MathUtil.applyDeadband(xboxController.getRightY(), 0.15)
+//                )
+//        );
+
+//        gripper.setDefaultCommand(
+//                gripper.setWristPower(
+//                        ()-> MathUtil.applyDeadband(-xboxController.getLeftY(), 0.15)
+//                )
+//        );
     }
 
     private void configureButtonBindings() {
-        xboxController.leftBumper().onTrue(Commands.runOnce(swerveDrive::resetGyro));
+        driveController.rightBumper().onTrue(Commands.runOnce(swerveDrive::resetGyro));
+
+        xboxController.povUp().whileTrue(
+                        Commands.parallel(
+                                        hood.setAngle(
+                                                () ->
+                                                        Units.Degrees.of(109).mutableCopy()),
+                                        commandGroups.shootAndConvey(
+                                                () ->
+                                                        Units.RotationsPerSecond.of(55)
+                                                                .mutableCopy()))
+                                .until(() -> shooter.atSetpoint() && hood.atSetpoint())
+                                .andThen(
+                                        gripper.setRollerPower(0.7)
+                                                .alongWith(intake.setCenterRollerSpeed(0.5))))
+                .onFalse(
+                        Commands.parallel(
+                                hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()),
+                                conveyor.stop(),
+                                shooter.stop(),
+                                intake.setCenterRollerSpeed(0),
+                                gripper.setRollerPower(0)));
 
         xboxController
                 .rightTrigger()
@@ -221,6 +248,7 @@ public class RobotContainer {
                                 shooter.stop(),
                                 intake.setCenterRollerSpeed(0),
                                 gripper.setRollerPower(0)));
+
         xboxController
                 .leftTrigger()
                 .whileTrue(
@@ -230,11 +258,16 @@ public class RobotContainer {
                                         .until(gripper::hasNote)
                                         .andThen(gripper.setRollerPower(0))))
                 .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
-        xboxController.b().onTrue(intake.reset(Units.Degrees.of(197)));
+        xboxController.leftBumper().whileTrue(intake.outtake())
+                .onFalse(intake.stop());
+        xboxController.b().whileTrue(
+                intake.setAngle(Units.Degrees.of(-100).mutableCopy()))
+                        .onFalse(
+                intake.reset(Units.Degrees.of(0)));
 
-        xboxController.rightBumper().whileTrue(gripper.setRollerPower(0.4))
+        xboxController.povRight().whileTrue(gripper.setRollerPower(0.4))
                 .onFalse(gripper.setRollerPower(0));
-        xboxController.leftBumper().whileTrue(gripper.setRollerPower(-0.4))
+        xboxController.povLeft().whileTrue(gripper.setRollerPower(-0.4))
                 .onFalse(gripper.setRollerPower(0));
 
 //        xboxController.b().whileTrue(hood.setAngle(()-> Units.Degrees.of(65).mutableCopy()));

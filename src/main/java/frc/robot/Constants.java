@@ -173,7 +173,6 @@ public class Constants {
                                         SimCameraProperties.PI4_LIFECAM_640_480()));
                 break;
         }
-        ;
         Vision.initialize(rightOpi, leftOpi);
     }
 }
