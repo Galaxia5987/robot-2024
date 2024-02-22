@@ -48,14 +48,12 @@ public class ElevatorIOReal implements ElevatorIO {
 
     @Override
     public void setHeight(MutableMeasure<Distance> height) {
-        double feedforward = Math.signum(
-                inputs.heightSetpoint
-                        .minus(inputs.hooksHeight)
-                        .baseUnitMagnitude()) * kS + kG;
+        double feedforward =
+                Math.signum(inputs.heightSetpoint.minus(inputs.hooksHeight).baseUnitMagnitude())
+                                * kS
+                        + kG;
         mainMotor.setControl(
-                positionControl
-                        .withPosition(height.in(Units.Meters))
-                        .withFeedForward(feedforward));
+                positionControl.withPosition(height.in(Units.Meters)).withFeedForward(feedforward));
     }
 
     public void openStopper() {
