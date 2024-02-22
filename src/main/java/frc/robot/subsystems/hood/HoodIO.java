@@ -21,5 +21,6 @@ public interface HoodIO {
         public MutableMeasure<Angle> angleSetpoint = MutableMeasure.zero(Rotations);
         public MutableMeasure<Voltage> voltage = MutableMeasure.zero(Volts);
         public MutableMeasure<Angle> absoluteEncoderAngle = MutableMeasure.zero(Rotations);
+        public MutableMeasure<Angle> absoluteEncoderAngleNoOffset = MutableMeasure.zero(Rotations);
     }
 }
