@@ -13,10 +13,8 @@ public class ShooterIOSim implements ShooterIO {
     private final TalonFXSim bottomMotor;
 
     private final VelocityVoltage topControl = new VelocityVoltage(0);
-    private final SimpleMotorFeedforward topFeedForward;
 
     private final VelocityVoltage bottomControl = new VelocityVoltage(0);
-    private final SimpleMotorFeedforward bottomFeedForward;
 
     private final DutyCycleOut stop = new DutyCycleOut(0);
 
@@ -46,28 +44,15 @@ public class ShooterIOSim implements ShooterIO {
                         ShooterConstants.BOTTOM_kP.get(),
                         ShooterConstants.BOTTOM_kI.get(),
                         ShooterConstants.BOTTOM_kD.get()));
-
-        topFeedForward =
-                new SimpleMotorFeedforward(
-                        ShooterConstants.TOP_kS.get(),
-                        ShooterConstants.TOP_kV.get(),
-                        ShooterConstants.TOP_kA.get());
-        bottomFeedForward =
-                new SimpleMotorFeedforward(
-                        ShooterConstants.BOTTOM_kS.get(),
-                        ShooterConstants.BOTTOM_kV.get(),
-                        ShooterConstants.BOTTOM_kA.get());
     }
 
     @Override
     public void setTopVelocity(MutableMeasure<Velocity<Angle>> velocity) {
-        topRollerInputs.velocitySetpoint.mut_replace(velocity);
         topMotor.setControl(topControl.withVelocity(velocity.in(Units.RotationsPerSecond)));
     }
 
     @Override
     public void setBottomVelocity(MutableMeasure<Velocity<Angle>> velocity) {
-        bottomRollerInputs.velocitySetpoint.mut_replace(velocity);
         bottomMotor.setControl(bottomControl.withVelocity(velocity.in(Units.RotationsPerSecond)));
     }
 

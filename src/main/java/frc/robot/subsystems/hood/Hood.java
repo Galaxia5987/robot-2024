@@ -69,12 +69,18 @@ public class Hood extends SubsystemBase {
     }
 
     public Command setAngle(MutableMeasure<Angle> angle) {
-        return run(() -> io.setAngle(angle)).withName("Set hood angle");
+        return run(() -> {
+            inputs.angleSetpoint.mut_replace(angle);
+            io.setAngle(angle);
+        }).withName("Set hood angle");
     }
 
     public Command setAngle(MutableMeasure<Angle> angle, boolean useChassisCompensation) {
         if (useChassisCompensation) {
-            return run(() -> io.setAngle(angle, chassisCompensationTorque))
+            return run(() -> {
+                inputs.angleSetpoint.mut_replace(angle);
+                io.setAngle(angle, chassisCompensationTorque);
+            })
                     .withName("Set hood angle");
         }
         return setAngle(angle);

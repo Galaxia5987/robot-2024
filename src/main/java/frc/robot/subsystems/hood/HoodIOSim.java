@@ -39,7 +39,6 @@ public class HoodIOSim implements HoodIO {
 
     @Override
     public void setAngle(MutableMeasure<Angle> angle) {
-        inputs.angleSetpoint.mut_replace(angle);
         motor.setControl(control.withPosition(angle.in(Units.Rotations)));
     }
 

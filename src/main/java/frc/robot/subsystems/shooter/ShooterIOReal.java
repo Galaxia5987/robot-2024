@@ -28,20 +28,16 @@ public class ShooterIOReal implements ShooterIO {
 
     @Override
     public void setTopVelocity(MutableMeasure<Velocity<Angle>> velocity) {
-        topRollerInputs.velocitySetpoint.mut_replace(velocity);
         topMotor.setControl(topControl.withVelocity(velocity.in(Units.RotationsPerSecond)));
     }
 
     @Override
     public void setBottomVelocity(MutableMeasure<Velocity<Angle>> velocity) {
-        bottomRollerInputs.velocitySetpoint.mut_replace(velocity);
         bottomMotor.setControl(bottomControl.withVelocity(velocity.in(Units.RotationsPerSecond)));
     }
 
     @Override
     public void stop() {
-        bottomRollerInputs.velocitySetpoint.mut_replace(ShooterConstants.STOP_POWER);
-        topRollerInputs.velocitySetpoint.mut_replace(ShooterConstants.STOP_POWER);
         bottomMotor.stopMotor();
         topMotor.stopMotor();
     }
