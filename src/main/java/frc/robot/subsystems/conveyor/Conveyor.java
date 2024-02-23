@@ -9,7 +9,6 @@ import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -36,13 +35,16 @@ public class Conveyor extends SubsystemBase {
         INSTANCE = new Conveyor(io);
     }
 
-    public Command setVelocity(Supplier<MutableMeasure<Velocity<Angle>>> velocity) {
-        return runOnce(() -> inputs.velocitySetpoint = velocity.get())
-                .andThen(run(() -> io.setVelocity(velocity.get())));
+    public Command setVelocity(MutableMeasure<Velocity<Angle>> velocity) {
+        return run(
+                () -> {
+                    inputs.velocitySetpoint.mut_replace(velocity);
+                    io.setVelocity(velocity);
+                });
     }
 
     public Command feed() {
-        return setVelocity(() -> FEED_VELOCITY);
+        return setVelocity(FEED_VELOCITY);
     }
 
     @AutoLogOutput
@@ -52,7 +54,7 @@ public class Conveyor extends SubsystemBase {
     }
 
     public Command stop() {
-        return setVelocity(() -> STOP_VELOCITY);
+        return setVelocity(STOP_VELOCITY);
     }
 
     @Override

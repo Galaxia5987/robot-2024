@@ -4,7 +4,6 @@ import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -43,16 +42,18 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command setVelocity(
-            Supplier<MutableMeasure<Velocity<Angle>>> topVelocity,
-            Supplier<MutableMeasure<Velocity<Angle>>> bottomVelocity) {
+            MutableMeasure<Velocity<Angle>> topVelocity,
+            MutableMeasure<Velocity<Angle>> bottomVelocity) {
         return run(() -> {
-                    io.setTopVelocity(topVelocity.get());
-                    io.setBottomVelocity(bottomVelocity.get());
+                    topRollerInputs.velocitySetpoint.mut_replace(topVelocity);
+                    io.setTopVelocity(topVelocity);
+                    bottomVelocity.mut_replace(bottomVelocity);
+                    io.setBottomVelocity(bottomVelocity);
                 })
                 .withName("Set Shooter Velocity");
     }
 
-    public Command setVelocity(Supplier<MutableMeasure<Velocity<Angle>>> velocity) {
+    public Command setVelocity(MutableMeasure<Velocity<Angle>> velocity) {
         return setVelocity(velocity, velocity);
     }
 

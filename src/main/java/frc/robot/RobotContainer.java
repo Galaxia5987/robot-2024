@@ -12,13 +12,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
-import frc.robot.lib.GalacticProxyCommand;
 import frc.robot.lib.PoseEstimation;
-import frc.robot.lib.math.interpolation.InterpolatingDouble;
 import frc.robot.scoreStates.AmpState;
 import frc.robot.scoreStates.ClimbState;
 import frc.robot.scoreStates.ScoreState;
 import frc.robot.scoreStates.ShootState;
+import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.conveyor.ConveyorIO;
 import frc.robot.subsystems.conveyor.ConveyorIOReal;
@@ -47,13 +46,7 @@ public class RobotContainer {
     private final SwerveDrive swerveDrive;
     private final CommandXboxController xboxController = new CommandXboxController(0);
     private final CommandXboxController driveController = new CommandXboxController(1);
-    private final CommandPS5Controller ps5Controller = new CommandPS5Controller(1);
-    private final ShootState shootState;
-    private final AmpState ampState;
-    private final ClimbState climbState;
-    private final PoseEstimation poseEstimation;
-    private CommandGroups commandGroups;
-    private ScoreState currentState;
+    private final CommandGroups commandGroups;
     private final SendableChooser<Command> autoChooser;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -104,53 +97,22 @@ public class RobotContainer {
         gripper = Gripper.getInstance();
         commandGroups = CommandGroups.getInstance();
 
-        currentState = new ShootState();
-        shootState = new ShootState();
-        ampState = new AmpState();
-        climbState = new ClimbState();
-
         // Configure the button bindings and default commands
         configureDefaultCommands();
         configureButtonBindings();
-        poseEstimation = PoseEstimation.getInstance();
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("autoList", autoChooser);
         NamedCommands.registerCommand("intake", commandGroups.intake());
         NamedCommands.registerCommand("stopIntake", intake.stop());
         NamedCommands.registerCommand("score", commandGroups.feedShooter());
-        NamedCommands.registerCommand("prepareShoot", updateScoreState());
+        NamedCommands.registerCommand("prepareShoot", prepare());
     }
 
     private Command prepare() {
         return Commands.parallel(
-                hood.setAngle(
-                        () ->
-                                Units.Degrees.of(
-                                                HoodConstants.ANGLE_BY_DISTANCE.getInterpolated(
-                                                                new InterpolatingDouble(
-                                                                        PoseEstimation.getInstance()
-                                                                                .getDistanceToSpeaker()))
-                                                        .value)
-                                        .mutableCopy()),
+                hood.setAngle(ShootingManager.getInstance().getHoodCommandedAngle()),
                 commandGroups.shootAndConvey(
-                        () ->
-                                Units.RotationsPerSecond.of(
-                                                ShooterConstants.VELOCITY_BY_DISTANCE
-                                                        .getInterpolated(
-                                                                new InterpolatingDouble(
-                                                                        PoseEstimation.getInstance()
-                                                                                .getDistanceToSpeaker()))
-                                                        .value)
-                                        .mutableCopy()));
-    }
-
-    private Command updateScoreState() {
-        return new GalacticProxyCommand(
-                () ->
-                        currentState
-                                .calculateTargets()
-                                .andThen(currentState.prepareSubsystems())
-                                .repeatedly());
+                        ShootingManager.getInstance().getShooterCommandedVelocity()));
     }
 
     public static RobotContainer getInstance() {
@@ -189,18 +151,16 @@ public class RobotContainer {
                 .a()
                 .whileTrue(
                         Commands.parallel(
-                                        hood.setAngle(() -> Units.Degrees.of(109).mutableCopy()),
+                                        hood.setAngle(Units.Degrees.of(109).mutableCopy()),
                                         commandGroups.shootAndConvey(
-                                                () ->
-                                                        Units.RotationsPerSecond.of(60)
-                                                                .mutableCopy()))
+                                                Units.RotationsPerSecond.of(60).mutableCopy()))
                                 .until(() -> shooter.atSetpoint() && hood.atSetpoint())
                                 .andThen(
                                         gripper.setRollerPower(0.7)
                                                 .alongWith(intake.setCenterRollerSpeed(0.5))))
                 .onFalse(
                         Commands.parallel(
-                                hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()),
+                                hood.setAngle(Units.Degrees.of(114).mutableCopy()),
                                 conveyor.stop(),
                                 shooter.stop(),
                                 intake.setCenterRollerSpeed(0),
@@ -211,36 +171,24 @@ public class RobotContainer {
                 .whileTrue(
                         Commands.parallel(
                                         hood.setAngle(
-                                                () ->
-                                                        Units.Degrees.of(
-                                                                        HoodConstants
-                                                                                .ANGLE_BY_DISTANCE
-                                                                                .getInterpolated(
-                                                                                        new InterpolatingDouble(
-                                                                                                PoseEstimation
-                                                                                                        .getInstance()
-                                                                                                        .getDistanceToSpeaker()))
-                                                                                .value)
-                                                                .mutableCopy()),
+                                                ShootingManager.getInstance()
+                                                        .getHoodCommandedAngle()),
                                         commandGroups.shootAndConvey(
-                                                () ->
-                                                        Units.RotationsPerSecond.of(
-                                                                        ShooterConstants
-                                                                                .VELOCITY_BY_DISTANCE
-                                                                                .getInterpolated(
-                                                                                        new InterpolatingDouble(
-                                                                                                PoseEstimation
-                                                                                                        .getInstance()
-                                                                                                        .getDistanceToSpeaker()))
-                                                                                .value)
-                                                                .mutableCopy()))
-                                .until(() -> shooter.atSetpoint() && hood.atSetpoint())
+                                                ShootingManager.getInstance()
+                                                        .getShooterCommandedVelocity()),
+                                        swerveDrive.driveAndAdjust(
+                                                ShootingManager.getInstance()
+                                                        .getSwerveCommandedAngle(),
+                                                () -> -driveController.getLeftY(),
+                                                () -> -driveController.getLeftX(),
+                                                0.1))
+                                .until(ShootingManager.getInstance()::readyToShoot)
                                 .andThen(
                                         gripper.setRollerPower(0.7)
                                                 .alongWith(intake.setCenterRollerSpeed(0.5))))
                 .onFalse(
                         Commands.parallel(
-                                hood.setAngle(() -> Units.Degrees.of(114).mutableCopy()),
+                                hood.setAngle(Units.Degrees.of(114).mutableCopy()),
                                 conveyor.stop(),
                                 shooter.stop(),
                                 intake.setCenterRollerSpeed(0),
@@ -260,9 +208,6 @@ public class RobotContainer {
                 .x()
                 .whileTrue(intake.setAngle(Units.Degrees.of(-130).mutableCopy()))
                 .onFalse(intake.reset(Units.Degrees.of(0)));
-
-        //        xboxController.b().whileTrue(hood.setAngle(()->
-        // Units.Degrees.of(65).mutableCopy()));
 
         xboxController
                 .rightBumper()
@@ -289,13 +234,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        //        return new InstantCommand(
-        //                () ->
-        //                        swerveDrive.resetPose(
-        //                                PathPlannerAuto.getStaringPoseFromAutoFile(
-        //                                        "New Auto")),
-        //                                swerveDrive)
-        //                        .andThen(
         return new PathPlannerAuto("D345");
     }
 }

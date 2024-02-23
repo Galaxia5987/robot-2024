@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.scoreStates.LocalADStarAK;
+import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.conveyor.ConveyorConstants;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.gripper.GripperConstants;
@@ -60,7 +61,7 @@ public class Robot extends LoggedRobot {
                 Logger.recordMetadata("GitDirty", "All changes committed");
                 break;
             case 1:
-                Logger.recordMetadata("GitDirty", "Uncomitted changes");
+                Logger.recordMetadata("GitDirty", "Uncommitted changes");
                 break;
             default:
                 Logger.recordMetadata("GitDirty", "Unknown");
@@ -111,15 +112,16 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void robotPeriodic() {
-        CommandScheduler.getInstance().run();
         PoseEstimation.getInstance()
                 .processVisionMeasurements(Constants.VISION_MEASUREMENT_MULTIPLIER);
+        ShootingManager.getInstance().updateCommandedState();
+        CommandScheduler.getInstance().run();
     }
 
     /**
      * This autonomous (along with the chooser code above) shows how to select between different
      * autonomous modes using the dashboard. The sendable chooser code works with the Java
-     * SmartDashboard. If you prefer the LabVIEW Dashboard, remove all of the chooser code and
+     * SmartDashboard. If you prefer the LabVIEW Dashboard, remove all the chooser code and
      * uncomment the getString line to get the auto name from the text box below the Gyro
      *
      * <p>You can add additional auto modes by adding additional comparisons to the switch structure

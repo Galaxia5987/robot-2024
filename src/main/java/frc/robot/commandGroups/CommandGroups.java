@@ -2,24 +2,21 @@ package frc.robot.commandGroups;
 
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
+import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperConstants;
 import frc.robot.subsystems.hood.Hood;
-import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
-import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
 
 public class CommandGroups {
     private static CommandGroups INSTANCE;
@@ -29,7 +26,6 @@ public class CommandGroups {
     private final Shooter shooter;
     private final Hood hood;
     private final Conveyor conveyor;
-    private SwerveDrive swerveDrive;
     private boolean override;
 
     private CommandGroups() {
@@ -39,7 +35,6 @@ public class CommandGroups {
         shooter = Shooter.getInstance();
         hood = Hood.getInstance();
         conveyor = Conveyor.getInstance();
-        swerveDrive = SwerveDrive.getInstance();
 
         override = false;
     }
@@ -99,16 +94,8 @@ public class CommandGroups {
     }
 
     public Command setShooter() {
-        var distanceToSpeaker =
-                new InterpolatingDouble(PoseEstimation.getInstance().getDistanceToSpeaker());
         return Commands.repeatingSequence(
-                shooter.setVelocity(
-                                () ->
-                                        Units.RotationsPerSecond.of(
-                                                        ShooterConstants.VELOCITY_BY_DISTANCE
-                                                                .getInterpolated(distanceToSpeaker)
-                                                                .value)
-                                                .mutableCopy())
+                shooter.setVelocity(ShootingManager.getInstance().getShooterCommandedVelocity())
                         .until(shooter::atSetpoint));
     }
 
@@ -120,13 +107,7 @@ public class CommandGroups {
         var distanceToSpeaker =
                 new InterpolatingDouble(PoseEstimation.getInstance().getDistanceToSpeaker());
         return Commands.repeatingSequence(
-                hood.setAngle(
-                                () ->
-                                        Units.Degrees.of(
-                                                        HoodConstants.ANGLE_BY_DISTANCE
-                                                                .getInterpolated(distanceToSpeaker)
-                                                                .value)
-                                                .mutableCopy())
+                hood.setAngle(ShootingManager.getInstance().getHoodCommandedAngle())
                         .until(hood::atSetpoint));
     }
 
@@ -141,11 +122,11 @@ public class CommandGroups {
         return retractGrillevator()
                 .andThen(
                         Commands.parallel(
-                                feed(), shooter.setVelocity(() -> ShooterConstants.OUTTAKE_POWER)))
+                                feed(), shooter.setVelocity(ShooterConstants.OUTTAKE_POWER)))
                 .withName("outtakeShooter");
     }
 
-    public Command shootAndConvey(Supplier<MutableMeasure<Velocity<Angle>>> velocity) {
+    public Command shootAndConvey(MutableMeasure<Velocity<Angle>> velocity) {
         return shooter.setVelocity(velocity).alongWith(conveyor.setVelocity(velocity));
     }
 }

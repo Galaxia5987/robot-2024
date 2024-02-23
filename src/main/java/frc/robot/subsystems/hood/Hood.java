@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.function.Supplier;
+import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -30,6 +30,8 @@ public class Hood extends SubsystemBase {
                     new MechanismLigament2d(
                             "Hood", HoodConstants.HOOD_LENGTH.in(Units.Meters), 45));
     private final Timer timer = new Timer();
+
+    @Setter private double chassisCompensationTorque;
 
     /**
      * Constructor for Hood subsystem.
@@ -66,8 +68,16 @@ public class Hood extends SubsystemBase {
                 inputs.angleSetpoint, HoodConstants.POSITION_TOLERANCE.in(Units.Value));
     }
 
-    public Command setAngle(Supplier<MutableMeasure<Angle>> angle) {
-        return run(() -> io.setAngle(angle.get())).withName("Set hood angle");
+    public Command setAngle(MutableMeasure<Angle> angle) {
+        return run(() -> io.setAngle(angle)).withName("Set hood angle");
+    }
+
+    public Command setAngle(MutableMeasure<Angle> angle, boolean useChassisCompensation) {
+        if (useChassisCompensation) {
+            return run(() -> io.setAngle(angle, chassisCompensationTorque))
+                    .withName("Set hood angle");
+        }
+        return setAngle(angle);
     }
 
     @AutoLogOutput(key = "Hood/Pose")

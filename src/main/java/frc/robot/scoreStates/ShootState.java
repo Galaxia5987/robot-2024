@@ -13,6 +13,7 @@ import frc.robot.commandGroups.CommandGroups;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.lib.Utils;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
+import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodConstants;
@@ -24,7 +25,6 @@ import java.util.Set;
 
 public class ShootState implements ScoreState {
     private static boolean inBounds;
-    private static ShootState INSTANCE;
     private final Shooter shooter;
     private final Hood hood;
     private final Conveyor conveyor;
@@ -61,24 +61,12 @@ public class ShootState implements ScoreState {
     }
 
     public Command setShooter() {
-        return shooter.setVelocity(
-                        () ->
-                                Units.RotationsPerSecond.of(
-                                                ShooterConstants.VELOCITY_BY_DISTANCE
-                                                        .getInterpolated(distanceToSpeaker)
-                                                        .value)
-                                        .mutableCopy())
+        return shooter.setVelocity(ShootingManager.getInstance().getShooterCommandedVelocity())
                 .until(shooter::atSetpoint);
     }
 
     public Command setHood() {
-        return hood.setAngle(
-                        () ->
-                                Units.Degrees.of(
-                                                HoodConstants.ANGLE_BY_DISTANCE.getInterpolated(
-                                                                distanceToSpeaker)
-                                                        .value)
-                                        .mutableCopy())
+        return hood.setAngle(ShootingManager.getInstance().getHoodCommandedAngle())
                 .until(hood::atSetpoint);
     }
 
@@ -153,6 +141,6 @@ public class ShootState implements ScoreState {
     @Override
     public Command finalizeScore() {
         return Commands.parallel(
-                shooter.stop(), hood.setAngle(() -> HoodConstants.FOLDED_ANGLE), conveyor.stop());
+                shooter.stop(), hood.setAngle(HoodConstants.FOLDED_ANGLE), conveyor.stop());
     }
 }

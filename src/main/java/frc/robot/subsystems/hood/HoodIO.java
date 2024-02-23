@@ -12,6 +12,8 @@ public interface HoodIO {
 
     void setAngle(MutableMeasure<Angle> angle);
 
+    default void setAngle(MutableMeasure<Angle> angle, double torqueChassisCompensation) {}
+
     /** Update the inputs of the hood */
     void updateInputs();
 

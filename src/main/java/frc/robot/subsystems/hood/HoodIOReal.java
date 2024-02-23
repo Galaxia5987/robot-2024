@@ -31,6 +31,16 @@ public class HoodIOReal implements HoodIO {
         motor.setControl(positionControl.withPosition(angle.in(Units.Rotations)));
     }
 
+    @Override
+    public void setAngle(MutableMeasure<Angle> angle, double torqueChassisCompensation) {
+        inputs.angleSetpoint.mut_replace(angle);
+        motor.setControl(
+                positionControl
+                        .withPosition(angle.in(Units.Rotations))
+                        .withFeedForward(
+                                torqueChassisCompensation * HoodConstants.TORQUE_TO_CURRENT));
+    }
+
     private double getEncoderPosition() {
         double val =
                 absoluteEncoder.getAbsolutePosition() - HoodConstants.ABSOLUTE_ENCODER_OFFSET.get();

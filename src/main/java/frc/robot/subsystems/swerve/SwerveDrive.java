@@ -10,7 +10,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
@@ -27,6 +29,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+import lombok.Getter;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -35,21 +38,24 @@ public class SwerveDrive extends SubsystemBase {
     private static SwerveDrive INSTANCE = null;
     private final SwerveModule[] modules; // FL, FR, RL, RR
 
-    @AutoLogOutput
+    @Getter @AutoLogOutput
     private final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
 
     private final GyroIO gyro;
+
+    @Getter
     private final SwerveDriveKinematics kinematics =
             new SwerveDriveKinematics(
                     SwerveConstants.WHEEL_POSITIONS[0],
                     SwerveConstants.WHEEL_POSITIONS[1],
                     SwerveConstants.WHEEL_POSITIONS[2],
                     SwerveConstants.WHEEL_POSITIONS[3]);
+
     private final Derivative acceleration = new Derivative();
     private final LinearFilter accelFilter = LinearFilter.movingAverage(15);
-    private final SwerveDrivePoseEstimator estimator;
+    @Getter private final SwerveDrivePoseEstimator estimator;
     private final SwerveDriveInputsAutoLogged loggerInputs = new SwerveDriveInputsAutoLogged();
-    @AutoLogOutput private Pose2d botPose = new Pose2d();
+    @Getter @AutoLogOutput private Pose2d botPose = new Pose2d();
 
     private boolean inCharacterizationMode = false;
 
@@ -129,28 +135,12 @@ public class SwerveDrive extends SubsystemBase {
         }
     }
 
-    public SwerveModulePosition[] getModulePositions() {
-        return modulePositions;
-    }
-
-    public SwerveDriveKinematics getKinematics() {
-        return kinematics;
-    }
-
     public double getVelocity() {
         return loggerInputs.linearVelocity;
     }
 
     public ChassisSpeeds getCurrentSpeeds() {
         return loggerInputs.currentSpeeds;
-    }
-
-    public SwerveDrivePoseEstimator getEstimator() {
-        return estimator;
-    }
-
-    public Pose2d getBotPose() {
-        return botPose;
     }
 
     public void resetPose(Pose2d pose) {
@@ -278,7 +268,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public Command driveAndAdjust(
-            Supplier<Rotation2d> rotation,
+            MutableMeasure<Angle> rotation,
             DoubleSupplier xJoystick,
             DoubleSupplier yJoystick,
             double deadband) {
@@ -299,7 +289,7 @@ public class SwerveDrive extends SubsystemBase {
                                                 .getEstimatedPosition()
                                                 .getRotation()
                                                 .getRotations(),
-                                        rotation.get().getRotations()),
+                                        rotation.in(edu.wpi.first.units.Units.Rotations)),
                                 true));
     }
 
@@ -321,7 +311,7 @@ public class SwerveDrive extends SubsystemBase {
                         loggerInputs.currentSpeeds.vxMetersPerSecond,
                         loggerInputs.currentSpeeds.vyMetersPerSecond);
 
-        acceleration.update(loggerInputs.linearVelocity);
+        acceleration.update(loggerInputs.currentSpeeds.vxMetersPerSecond);
         loggerInputs.acceleration = accelFilter.calculate(acceleration.get());
     }
 
@@ -329,6 +319,10 @@ public class SwerveDrive extends SubsystemBase {
         loggerInputs.rawYaw = gyro.getRawYaw();
         loggerInputs.yaw = gyro.getYaw();
         gyro.updateInputs(loggerInputs);
+    }
+
+    public double getAcceleration() {
+        return loggerInputs.acceleration;
     }
 
     @Override

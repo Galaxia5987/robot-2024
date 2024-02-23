@@ -5,6 +5,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.Constants;
@@ -42,6 +43,12 @@ public class HoodConstants {
 
     public static final InterpolatingDoubleMap ANGLE_BY_DISTANCE =
             ShootingCSV.parse(Filesystem.getDeployDirectory() + "/shootdata/distance-to-angle.csv");
+
+    public static final double TORQUE_TO_CURRENT =
+            DCMotor.getFalcon500(1).KtNMPerAmp / HoodConstants.GEAR_RATIO;
+    public static final Measure<Mass> MASS = Units.Kilograms.of(7.5);
+    public static final Measure<Distance> CM_RADIUS = Units.Millimeters.of(110);
+    public static final Measure<Distance> AXIS_DISTANCE_TO_CENTER = Units.Millimeters.of(270);
 
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
