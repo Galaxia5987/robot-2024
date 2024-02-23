@@ -279,7 +279,6 @@ public class SwerveDrive extends SubsystemBase {
 
     public Command driveAndAdjust(
             Supplier<Rotation2d> rotation,
-            double turnTolerance,
             DoubleSupplier xJoystick,
             DoubleSupplier yJoystick,
             double deadband) {
@@ -289,7 +288,6 @@ public class SwerveDrive extends SubsystemBase {
                         SwerveConstants.ROTATION_KI.get(),
                         SwerveConstants.ROTATION_KD.get(),
                         SwerveConstants.ROTATION_KDIETER.get());
-        turnController.setTolerance(turnTolerance, 0.05);
         turnController.enableContinuousInput(-0.5, 0.5);
         return run(
                 () ->
@@ -297,7 +295,11 @@ public class SwerveDrive extends SubsystemBase {
                                 MathUtil.applyDeadband(xJoystick.getAsDouble(), deadband),
                                 MathUtil.applyDeadband(yJoystick.getAsDouble(), deadband),
                                 turnController.calculate(
-                                        getYaw().getRotations(), rotation.get().getRotations()),
+                                        estimator
+                                                .getEstimatedPosition()
+                                                .getRotation()
+                                                .getRotations(),
+                                        rotation.get().getRotations()),
                                 true));
     }
 
