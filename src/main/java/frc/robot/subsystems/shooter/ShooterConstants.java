@@ -83,7 +83,7 @@ public class ShooterConstants {
                 BOTTOM_kA.initDefault(0.057_19);
             case SIM:
             case REPLAY:
-                TOP_kP.initDefault(10.0);
+                TOP_kP.initDefault(3.0);
                 TOP_kI.initDefault(0.0);
                 TOP_kD.initDefault(0.0);
                 TOP_kS.initDefault(0.0);
