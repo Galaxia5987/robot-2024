@@ -32,10 +32,7 @@ import frc.robot.subsystems.gripper.GripperIO;
 import frc.robot.subsystems.gripper.GripperIOReal;
 import frc.robot.subsystems.gripper.GripperIOSim;
 import frc.robot.subsystems.hood.*;
-import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeIO;
-import frc.robot.subsystems.intake.IntakeIOReal;
-import frc.robot.subsystems.intake.IntakeIOSim;
+import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.shooter.*;
 import frc.robot.subsystems.swerve.SwerveDrive;
 
@@ -121,7 +118,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("intake", commandGroups.intake());
         NamedCommands.registerCommand("stopIntake", intake.stop());
         NamedCommands.registerCommand("score", commandGroups.feedShooter());
-        NamedCommands.registerCommand("prepareShoot", prepare());
+        NamedCommands.registerCommand("prepareShoot", updateScoreState());
     }
 
     private Command prepare() {
@@ -168,34 +165,37 @@ public class RobotContainer {
                 swerveDrive.driveCommand(
                         () -> -driveController.getLeftY(),
                         () -> -driveController.getLeftX(),
-                        () -> 0.4 * -driveController.getRightX(),
+                        () -> 0.6 * -driveController.getRightX(),
                         0.1,
                         () -> true));
 
-//        elevator.setDefaultCommand(
-//                elevator.manualElevator(()->
-//                        MathUtil.applyDeadband(xboxController.getRightY(), 0.15)
-//                )
-//        );
+        elevator.setDefaultCommand(
+                elevator.manualElevator(()->
+                        MathUtil.applyDeadband(
+                                -xboxController.getLeftTriggerAxis()
+                                + xboxController.getRightTriggerAxis()
+                                , 0.15)
+                )
+        );
 
-//        gripper.setDefaultCommand(
-//                gripper.setWristPower(
-//                        ()-> MathUtil.applyDeadband(-xboxController.getLeftY(), 0.15)
-//                )
-//        );
+        gripper.setDefaultCommand(
+                gripper.setWristPower(
+                        ()-> MathUtil.applyDeadband(-xboxController.getLeftY(), 0.15)
+                )
+        );
     }
 
     private void configureButtonBindings() {
-        driveController.rightBumper().onTrue(Commands.runOnce(swerveDrive::resetGyro));
+        driveController.b().onTrue(Commands.runOnce(swerveDrive::resetGyro));
 
-        xboxController.povUp().whileTrue(
+        driveController.a().whileTrue(
                         Commands.parallel(
                                         hood.setAngle(
                                                 () ->
                                                         Units.Degrees.of(109).mutableCopy()),
                                         commandGroups.shootAndConvey(
                                                 () ->
-                                                        Units.RotationsPerSecond.of(55)
+                                                        Units.RotationsPerSecond.of(60)
                                                                 .mutableCopy()))
                                 .until(() -> shooter.atSetpoint() && hood.atSetpoint())
                                 .andThen(
@@ -209,7 +209,7 @@ public class RobotContainer {
                                 intake.setCenterRollerSpeed(0),
                                 gripper.setRollerPower(0)));
 
-        xboxController
+        driveController
                 .rightTrigger()
                 .whileTrue(
                         Commands.parallel(
@@ -249,7 +249,7 @@ public class RobotContainer {
                                 intake.setCenterRollerSpeed(0),
                                 gripper.setRollerPower(0)));
 
-        xboxController
+        driveController
                 .leftTrigger()
                 .whileTrue(
                         Commands.parallel(
@@ -258,19 +258,22 @@ public class RobotContainer {
                                         .until(gripper::hasNote)
                                         .andThen(gripper.setRollerPower(0))))
                 .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
-        xboxController.leftBumper().whileTrue(intake.outtake())
+        driveController.rightBumper().whileTrue(intake.outtake())
                 .onFalse(intake.stop());
-        xboxController.b().whileTrue(
-                intake.setAngle(Units.Degrees.of(-100).mutableCopy()))
+        driveController.x().whileTrue(
+                intake.setAngle(Units.Degrees.of(-130).mutableCopy()))
                         .onFalse(
                 intake.reset(Units.Degrees.of(0)));
 
-        xboxController.povRight().whileTrue(gripper.setRollerPower(0.4))
-                .onFalse(gripper.setRollerPower(0));
-        xboxController.povLeft().whileTrue(gripper.setRollerPower(-0.4))
-                .onFalse(gripper.setRollerPower(0));
-
 //        xboxController.b().whileTrue(hood.setAngle(()-> Units.Degrees.of(65).mutableCopy()));
+
+        xboxController.rightBumper().whileTrue(gripper.setRollerPower(0.4))
+                        .onFalse(gripper.setRollerPower(0));
+        xboxController.leftBumper().whileTrue(gripper.setRollerPower(-0.4))
+                        .onFalse(gripper.setRollerPower(0));
+
+        xboxController.b().whileTrue(intake.setAngle(IntakeConstants.IntakePose.DOWN))
+                        .onFalse(intake.setAngle(IntakeConstants.IntakePose.UP));
 
         xboxController.a().whileTrue(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
         xboxController.x().whileTrue(elevator.setHeight(Units.Meters.of(0.2).mutableCopy()));
@@ -290,6 +293,6 @@ public class RobotContainer {
         //                                        "New Auto")),
         //                                swerveDrive)
         //                        .andThen(
-        return new PathPlannerAuto("Safety B");
+        return new PathPlannerAuto("D345");
     }
 }

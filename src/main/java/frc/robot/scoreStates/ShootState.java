@@ -99,7 +99,8 @@ public class ShootState implements ScoreState {
                     optimalRotation =
                             Utils.calcRotationToTranslation(optimalTranslation, speakerPose)
                                     .getRotations();
-                    if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+                    if (DriverStation.getAlliance().isPresent()
+                            && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
                         optimalRotation =
                                 Math.IEEEremainder(optimalRotation - Math.PI, Math.PI * 2);
                     }

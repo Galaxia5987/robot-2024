@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.737722414411965,
-      "y": 6.899551121039565
+      "x": 0.53,
+      "y": 1.99
     },
-    "rotation": -24.60179042537536
+    "rotation": 47.87
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Up To Upper scoring position"
+            "pathName": "Lower to lower scoring position"
           }
         },
         {
@@ -24,13 +24,19 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "Lower To center line #4"
+          }
+        },
+        {
           "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Up To Upper Spike"
+                  "pathName": "Center line #4 to lower scoring position"
                 }
               },
               {
@@ -49,41 +55,58 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "named",
+          "data": {
+            "name": "stopIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Lower To center line #5"
+          }
+        },
+        {
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Up Spike To Middle Spike"
+                  "pathName": "Center line #5 to lower scoring position"
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "prepareShoot"
                 }
               }
             ]
           }
         },
         {
-          "type": "sequential",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Middle Spike To Lower Spike"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake"
-                }
-              }
-            ]
+            "name": "stopIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score"
           }
         }
       ]

@@ -71,6 +71,7 @@ public class Robot extends LoggedRobot {
             case REAL:
                 LoggedPowerDistribution.getInstance();
                 Logger.addDataReceiver(new NT4Publisher());
+                Logger.addDataReceiver(new WPILOGWriter("/home/lvuser/logs"));
 
                 break;
             case SIM:
