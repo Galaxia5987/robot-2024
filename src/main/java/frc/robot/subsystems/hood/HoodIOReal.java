@@ -42,6 +42,7 @@ public class HoodIOReal implements HoodIO {
         inputs.angle.mut_replace(motor.getPosition().getValue(), Units.Rotations);
         inputs.absoluteEncoderAngle.mut_replace(getEncoderPosition(), Units.Rotations);
         inputs.voltage.mut_replace(motor.getMotorVoltage().getValue(), Units.Volts);
-        inputs.absoluteEncoderAngleNoOffset.mut_replace(absoluteEncoder.getAbsolutePosition(), Units.Rotations);
+        inputs.absoluteEncoderAngleNoOffset.mut_replace(
+                absoluteEncoder.getAbsolutePosition(), Units.Rotations);
     }
 }

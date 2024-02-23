@@ -58,7 +58,7 @@ public class ElevatorConstants { // TODO: check real values
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 KP.initDefault(18.0);
-                KI.initDefault(0.00005);
+                KI.initDefault(0.000_05);
                 KD.initDefault(2.0);
                 KV.initDefault(5.0);
                 KA.initDefault(10.0);

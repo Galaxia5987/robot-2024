@@ -170,29 +170,26 @@ public class RobotContainer {
                         () -> true));
 
         elevator.setDefaultCommand(
-                elevator.manualElevator(()->
-                        MathUtil.applyDeadband(
-                                -xboxController.getLeftTriggerAxis()
-                                + xboxController.getRightTriggerAxis()
-                                , 0.15)
-                )
-        );
+                elevator.manualElevator(
+                        () ->
+                                MathUtil.applyDeadband(
+                                        -xboxController.getLeftTriggerAxis()
+                                                + xboxController.getRightTriggerAxis(),
+                                        0.15)));
 
         gripper.setDefaultCommand(
                 gripper.setWristPower(
-                        ()-> MathUtil.applyDeadband(-xboxController.getLeftY(), 0.15)
-                )
-        );
+                        () -> MathUtil.applyDeadband(-xboxController.getLeftY(), 0.15)));
     }
 
     private void configureButtonBindings() {
         driveController.b().onTrue(Commands.runOnce(swerveDrive::resetGyro));
 
-        driveController.a().whileTrue(
+        driveController
+                .a()
+                .whileTrue(
                         Commands.parallel(
-                                        hood.setAngle(
-                                                () ->
-                                                        Units.Degrees.of(109).mutableCopy()),
+                                        hood.setAngle(() -> Units.Degrees.of(109).mutableCopy()),
                                         commandGroups.shootAndConvey(
                                                 () ->
                                                         Units.RotationsPerSecond.of(60)
@@ -258,22 +255,28 @@ public class RobotContainer {
                                         .until(gripper::hasNote)
                                         .andThen(gripper.setRollerPower(0))))
                 .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
-        driveController.rightBumper().whileTrue(intake.outtake())
-                .onFalse(intake.stop());
-        driveController.x().whileTrue(
-                intake.setAngle(Units.Degrees.of(-130).mutableCopy()))
-                        .onFalse(
-                intake.reset(Units.Degrees.of(0)));
+        driveController.rightBumper().whileTrue(intake.outtake()).onFalse(intake.stop());
+        driveController
+                .x()
+                .whileTrue(intake.setAngle(Units.Degrees.of(-130).mutableCopy()))
+                .onFalse(intake.reset(Units.Degrees.of(0)));
 
-//        xboxController.b().whileTrue(hood.setAngle(()-> Units.Degrees.of(65).mutableCopy()));
+        //        xboxController.b().whileTrue(hood.setAngle(()->
+        // Units.Degrees.of(65).mutableCopy()));
 
-        xboxController.rightBumper().whileTrue(gripper.setRollerPower(0.4))
-                        .onFalse(gripper.setRollerPower(0));
-        xboxController.leftBumper().whileTrue(gripper.setRollerPower(-0.4))
-                        .onFalse(gripper.setRollerPower(0));
+        xboxController
+                .rightBumper()
+                .whileTrue(gripper.setRollerPower(0.4))
+                .onFalse(gripper.setRollerPower(0));
+        xboxController
+                .leftBumper()
+                .whileTrue(gripper.setRollerPower(-0.4))
+                .onFalse(gripper.setRollerPower(0));
 
-        xboxController.b().whileTrue(intake.setAngle(IntakeConstants.IntakePose.DOWN))
-                        .onFalse(intake.setAngle(IntakeConstants.IntakePose.UP));
+        xboxController
+                .b()
+                .whileTrue(intake.setAngle(IntakeConstants.IntakePose.DOWN))
+                .onFalse(intake.setAngle(IntakeConstants.IntakePose.UP));
 
         xboxController.a().whileTrue(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
         xboxController.x().whileTrue(elevator.setHeight(Units.Meters.of(0.2).mutableCopy()));

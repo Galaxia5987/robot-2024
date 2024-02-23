@@ -18,7 +18,6 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
-
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
