@@ -91,6 +91,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("stopIntake", intake.stop());
         NamedCommands.registerCommand("score", commandGroups.feedShooter());
         NamedCommands.registerCommand("prepareShoot", prepare());
+        NamedCommands.registerCommand("shootAndIntake", commandGroups.shootAndIntake());
     }
 
     private Command prepare() {
@@ -210,7 +211,9 @@ public class RobotContainer {
 
         xboxController.a().whileTrue(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
         xboxController.x().whileTrue(elevator.setHeight(Units.Meters.of(0.2).mutableCopy()));
-        xboxController.y().whileTrue(elevator.setHeight(Units.Meters.of(0.48).mutableCopy()));
+        //
+        // xboxController.y().whileTrue(elevator.setHeight(Units.Meters.of(0.48).mutableCopy()));
+        xboxController.y().onTrue(commandGroups.shootAndIntake());
     }
 
     /**

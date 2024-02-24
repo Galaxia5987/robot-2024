@@ -155,6 +155,13 @@ public class CommandGroups {
                                 hood.setAngle(Units.Degrees.of(114).mutableCopy())));
     }
 
+    public Command shootAndIntake() {
+        return Commands.parallel(
+                intake.intake(),
+                shootAndConvey(ShootingManager.getInstance().getShooterCommandedVelocity()),
+                gripper.intake());
+    }
+
     public Command allBits() {
         return Commands.sequence(
                 intakeBit(),
