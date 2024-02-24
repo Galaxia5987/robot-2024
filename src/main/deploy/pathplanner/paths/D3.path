@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.4928750142535927,
-        "y": 2.661683993201716
+        "x": 2.0138839138077134,
+        "y": 3.344528170537823
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.52634938524034,
-        "y": 2.8859284321894068
+        "x": 3.651065535749305,
+        "y": 2.946926919494865
       },
       "isLocked": false,
       "linkedName": "D0"
@@ -20,12 +20,12 @@
         "y": 4.02665014356157
       },
       "prevControl": {
-        "x": 4.119101822289933,
-        "y": 3.733125006094758
+        "x": 4.247467412313741,
+        "y": 2.982009382822185
       },
       "nextControl": {
-        "x": 5.862066260949625,
-        "y": 4.416640472235815
+        "x": 5.132244488928727,
+        "y": 4.472477302075769
       },
       "isLocked": false,
       "linkedName": "Middle Stage"
@@ -52,24 +52,24 @@
         "y": 4.02665014356157
       },
       "prevControl": {
-        "x": 6.707292155152567,
-        "y": 4.433095764656023
+        "x": 5.324870160647808,
+        "y": 4.633838416430349
       },
       "nextControl": {
-        "x": 4.029111716180679,
-        "y": 3.8414047374413043
+        "x": 4.072055095677142,
+        "y": 2.9703152283797456
       },
       "isLocked": false,
       "linkedName": "Middle Stage"
     },
     {
       "anchor": {
-        "x": 3.4928750142535927,
-        "y": 2.661683993201716
+        "x": 2.0138839138077134,
+        "y": 3.344528170537823
       },
       "prevControl": {
-        "x": 4.57509817632462,
-        "y": 2.798180608237701
+        "x": 3.7446187712888244,
+        "y": 2.8884561472826653
       },
       "nextControl": null,
       "isLocked": false,
@@ -87,7 +87,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 2.6,
+      "waypointRelativePos": 2.55,
       "command": {
         "type": "parallel",
         "data": {
@@ -104,7 +104,7 @@
     },
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 1.4,
       "command": {
         "type": "parallel",
         "data": {
@@ -121,8 +121,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 2.5,
+    "maxVelocity": 4.5,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

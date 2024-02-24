@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.4928750142535927,
-        "y": 2.661683993201716
+        "x": 2.0138839138077134,
+        "y": 3.344528170537823
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.662846000276325,
-        "y": 0.8774782395170491
+        "x": 3.4288766013429455,
+        "y": 1.3448277608805934
       },
       "isLocked": false,
       "linkedName": "D0"
@@ -20,24 +20,24 @@
         "y": 2.4440782784699477
       },
       "prevControl": {
-        "x": 7.207532894875768,
-        "y": 2.0084501926723575
+        "x": 6.130226277546571,
+        "y": 1.5904050041718334
       },
       "nextControl": {
-        "x": 8.435958553111856,
-        "y": 2.7199700682973207
+        "x": 8.306264318215028,
+        "y": 2.6058281272331203
       },
       "isLocked": false,
       "linkedName": "center note line #4"
     },
     {
       "anchor": {
-        "x": 3.4928750142535927,
-        "y": 2.661683993201716
+        "x": 2.0138839138077134,
+        "y": 3.344528170537823
       },
       "prevControl": {
-        "x": 5.4818256904922364,
-        "y": 0.5167371854933731
+        "x": 4.341020647853261,
+        "y": 0.4794603321400393
       },
       "nextControl": null,
       "isLocked": false,
@@ -55,7 +55,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.65,
       "command": {
         "type": "parallel",
         "data": {
@@ -72,7 +72,7 @@
     },
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 1.4,
+      "waypointRelativePos": 1.35,
       "command": {
         "type": "parallel",
         "data": {
@@ -89,8 +89,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 2.5,
+    "maxVelocity": 4.5,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
