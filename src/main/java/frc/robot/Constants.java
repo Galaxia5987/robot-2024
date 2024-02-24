@@ -138,10 +138,6 @@ public class Constants {
                 leftOpi =
                         new VisionModule(
                                 new PhotonVisionIOReal(
-                                        new PhotonCamera("Front_left_camera"),
-                                        FRONT_LEFT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()),
-                                new PhotonVisionIOReal(
                                         new PhotonCamera("Back_left_camera"),
                                         BACK_LEFT_CAMERA_POSE,
                                         AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()));
