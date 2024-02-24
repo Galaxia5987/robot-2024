@@ -60,7 +60,7 @@ public class ShootingManager {
                 && hood.atSetpoint()
                 && shooter.atSetpoint()
                 && Utils.epsilonEquals(
-                        swerveDrive.getYaw().getDegrees(), swerveCommandedAngle.in(Degrees), 3);
+                        swerveDrive.getYaw().getDegrees(), swerveCommandedAngle.in(Degrees), 7);
     }
 
     public void updateCommandedState() {
