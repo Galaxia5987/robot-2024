@@ -40,6 +40,12 @@
                     {
                       "type": "named",
                       "data": {
+                        "name": "finishScore"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
                         "name": "stopIntake"
                       }
                     },

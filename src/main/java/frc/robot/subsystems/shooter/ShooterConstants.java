@@ -16,9 +16,9 @@ public class ShooterConstants {
     public static final double GEAR_RATIO_TOP = 1.0;
     public static final double GEAR_RATIO_BOTTOM = 1.0;
     public static final MutableMeasure<Dimensionless> SETPOINT_TOLERANCE_TOP =
-            Units.Percent.of(0.03).mutableCopy();
+            Units.Percent.of(5).mutableCopy();
     public static final MutableMeasure<Dimensionless> SETPOINT_TOLERANCE_BOTTOM =
-            Units.Percent.of(0.03).mutableCopy();
+            Units.Percent.of(5).mutableCopy();
     public static final MutableMeasure<Mult<Mult<Mass, Distance>, Distance>> MOMENT_OF_INERTIA_TOP =
             Units.Kilograms.mult(Units.Meters).mult(Units.Meters).of(0.0008).mutableCopy();
     public static final MutableMeasure<Mult<Mult<Mass, Distance>, Distance>>

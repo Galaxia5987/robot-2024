@@ -1,11 +1,13 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.units.*;
@@ -31,7 +33,7 @@ public class Constants {
                     -0.289_36,
                     0.341_15,
                     0.2,
-                    new Rotation3d(0, -Math.toRadians(31.92), Math.toRadians(190)));
+                    new Rotation3d(0, -Math.toRadians(31.92), Math.toRadians(170)));
     public static final Transform3d BACK_RIGHT_CAMERA_POSE =
             new Transform3d(
                     -0.346_52,
@@ -107,7 +109,7 @@ public class Constants {
         SwerveDrive swerveDrive = SwerveDrive.getInstance();
         AutoBuilder.configureHolonomic(
                 () -> swerveDrive.getEstimator().getEstimatedPosition(),
-                swerveDrive::resetPose,
+                (pose)->{},
                 swerveDrive::getCurrentSpeeds,
                 (speeds) -> swerveDrive.drive(speeds, false),
                 new HolonomicPathFollowerConfig(

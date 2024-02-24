@@ -78,6 +78,7 @@ public class CommandGroups {
 
     public Command feedShooter() {
         return feedWithWait(() -> shooter.atSetpoint() && hood.atSetpoint())
+                .alongWith(Commands.runOnce(() -> ShootingManager.getInstance().setShooting(true)))
                 .withName("feedShooter");
     }
 
@@ -160,10 +161,10 @@ public class CommandGroups {
     }
 
     public Command shootAndIntake() {
-        return Commands.parallel(
-                intake.intake(),
-                shootAndConvey(ShootingManager.getInstance().getShooterCommandedVelocity()),
-                gripper.intake());
+        return Commands.sequence(
+                feedShooter(),
+                intake.intake()
+        );
     }
 
     public Command allBits() {

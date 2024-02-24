@@ -34,6 +34,8 @@ public class IntakeIOReal implements IntakeIO {
         spinMotor.setSmartCurrentLimit(SPIN_CURRENT_LIMIT);
         spinMotor.burnFlash();
         centerMotor.burnFlash();
+
+        angleMotor.setPosition(110);
     }
 
     @Override

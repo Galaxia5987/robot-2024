@@ -16,6 +16,7 @@ import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import lombok.Getter;
 import lombok.Setter;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class ShootingManager {
 
@@ -41,6 +42,8 @@ public class ShootingManager {
 
     @Setter private Measure<Distance> maxShootingDistance = Meters.of(2.5);
 
+    private boolean isShooting = false;
+
     private ShootingManager() {
         poseEstimation = PoseEstimation.getInstance();
         swerveDrive = SwerveDrive.getInstance();
@@ -55,12 +58,16 @@ public class ShootingManager {
         return INSTANCE;
     }
 
+    @AutoLogOutput
     public boolean readyToShoot() {
         return poseEstimation.getDistanceToSpeaker() < maxShootingDistance.in(Meters)
                 && hood.atSetpoint()
-                && shooter.atSetpoint()
-                && Utils.epsilonEquals(
-                        swerveDrive.getYaw().getDegrees(), swerveCommandedAngle.in(Degrees), 7);
+                && shooter.atSetpoint();
+//                && Utils.epsilonEquals(
+//                PoseEstimation.getInstance()
+//                        .getEstimatedPose()
+//                        .getRotation()
+//                        .getDegrees(), swerveCommandedAngle.in(Degrees), 7);
     }
 
     public void updateCommandedState() {
@@ -108,5 +115,9 @@ public class ShootingManager {
 
     public Command shootToAmp(){
         return CommandGroups.getInstance().shootAndConvey(RotationsPerSecond.zero().mutableCopy(), RotationsPerSecond.of(40).mutableCopy());
+    }
+
+    public void setShooting(boolean shooting) {
+        isShooting = shooting;
     }
 }

@@ -3,6 +3,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -98,6 +99,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("intake", commandGroups.intake());
         NamedCommands.registerCommand("stopIntake", intake.stop());
         NamedCommands.registerCommand("score", commandGroups.feedShooter());
+        NamedCommands.registerCommand("finishScore", Commands.runOnce(() -> ShootingManager.getInstance().setShooting(false)));
         NamedCommands.registerCommand("prepareShoot", prepare());
         NamedCommands.registerCommand("shootAndIntake", commandGroups.shootAndIntake());
     }
@@ -229,6 +231,9 @@ public class RobotContainer {
                 .whileTrue(intake.setAngle(IntakeConstants.IntakePose.DOWN))
                 .onFalse(intake.setAngle(IntakeConstants.IntakePose.UP));
 
+        xboxController.a().onTrue(elevator.unlock());
+        xboxController.y().onTrue(elevator.lock());
+
 //        xboxController.a().whileTrue(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
 //        xboxController.x().whileTrue(elevator.setHeight(Units.Meters.of(0.2).mutableCopy()));
 //        xboxController.y().whileTrue(elevator.setHeight(Units.Meters.of(0.48).mutableCopy()));
@@ -240,6 +245,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new PathPlannerAuto("D345");
+        return new PathPlannerAuto("AH123");
     }
 }
