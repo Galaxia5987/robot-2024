@@ -95,11 +95,7 @@ public class ShootingManager {
                                 - Math.cos(hoodAngle) * HoodConstants.CM_RADIUS.in(Meters));
         double effectiveAcceleration = swerveDrive.getAcceleration() - radialAcceleration;
 
-        double theta = hoodAngle - Math.PI;
-        if (theta < 0) {
-            theta = theta + Math.PI / 2;
-        }
-        double tangentialAcceleration = effectiveAcceleration * Math.cos(theta);
+        double tangentialAcceleration = effectiveAcceleration * Math.cos(hoodAngle - Math.PI / 2);
         double torque =
                 tangentialAcceleration
                         * HoodConstants.MASS.in(Kilograms)
