@@ -31,7 +31,7 @@ public class Constants {
                     -0.289_36,
                     0.341_15,
                     0.2,
-                    new Rotation3d(0, -Math.toRadians(31.92), Math.toRadians(180)));
+                    new Rotation3d(0, -Math.toRadians(31.92), Math.toRadians(190)));
     public static final Transform3d BACK_RIGHT_CAMERA_POSE =
             new Transform3d(
                     -0.346_52,
