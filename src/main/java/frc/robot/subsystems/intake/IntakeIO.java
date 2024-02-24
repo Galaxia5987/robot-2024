@@ -21,7 +21,8 @@ public interface IntakeIO {
 
     @AutoLog
     class IntakeInputs {
-        MutableMeasure<Angle> currentAngle = Degrees.of(110).mutableCopy(); //TODO: check default value
+        MutableMeasure<Angle> currentAngle =
+                Degrees.of(110).mutableCopy(); // TODO: check default value
         MutableMeasure<Angle> angleSetpoint = MutableMeasure.zero(Radians);
         double rollerSpeedSetpoint = 0;
         double centerRollerSpeedSetpoint = 0;

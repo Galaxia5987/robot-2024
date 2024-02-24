@@ -75,11 +75,11 @@ public class Elevator extends SubsystemBase {
                 inputs.stopperSetpoint, ElevatorConstants.STOPPER_TOLERANCE.in(Units.Value));
     }
 
-    public Command lock(){
+    public Command lock() {
         return Commands.runOnce(io::closeStopper);
     }
 
-    public Command unlock(){
+    public Command unlock() {
         return Commands.runOnce(io::openStopper);
     }
 

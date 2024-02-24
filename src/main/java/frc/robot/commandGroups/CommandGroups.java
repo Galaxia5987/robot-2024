@@ -18,7 +18,6 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
-
 import java.util.function.BooleanSupplier;
 
 public class CommandGroups {
@@ -133,40 +132,34 @@ public class CommandGroups {
         return shooter.setVelocity(velocity).alongWith(conveyor.setVelocity(velocity));
     }
 
-    public Command grillevatorBit(){
+    public Command grillevatorBit() {
         return Commands.sequence(
                 elevator.setHeight(CommandGroupsConstants.MAX_HEIGHT),
                 gripper.setRollerAndWrist(0.3, CommandGroupsConstants.WRIST_ANGLE_AMP_FORWARD),
                 Commands.waitSeconds(3),
-                retractGrillevator()
-        );
+                retractGrillevator());
     }
 
-    public Command intakeBit(){
-        return Commands.sequence(
-                intake.intake(),
-                Commands.waitSeconds(3),
-                intake.stop()
-        );
+    public Command intakeBit() {
+        return Commands.sequence(intake.intake(), Commands.waitSeconds(3), intake.stop());
     }
 
-    public Command shooterBit(){
+    public Command shooterBit() {
         return Commands.parallel(
-                shooter.setVelocity(Units.RotationsPerSecond.of(55).mutableCopy()),
-                hood.setAngle(Units.Degrees.of(70).mutableCopy())
-        ).andThen( Commands.sequence(
-                Commands.waitSeconds(3),
-                shooter.stop(),
-                hood.setAngle(Units.Degrees.of(114).mutableCopy()))
-        );
+                        shooter.setVelocity(Units.RotationsPerSecond.of(55).mutableCopy()),
+                        hood.setAngle(Units.Degrees.of(70).mutableCopy()))
+                .andThen(
+                        Commands.sequence(
+                                Commands.waitSeconds(3),
+                                shooter.stop(),
+                                hood.setAngle(Units.Degrees.of(114).mutableCopy())));
     }
 
-    public Command allBits(){
+    public Command allBits() {
         return Commands.sequence(
                 intakeBit(),
                 shooterBit(),
                 grillevatorBit(),
-                SwerveDrive.getInstance().checkSwerve()
-        );
+                SwerveDrive.getInstance().checkSwerve());
     }
 }
