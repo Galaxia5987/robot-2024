@@ -10,10 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Voltage;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -244,7 +241,7 @@ public class SwerveDrive extends SubsystemBase {
                                 fieldOriented.getAsBoolean()));
     }
 
-    public Command turnCommand(Supplier<Rotation2d> rotation, double turnTolerance) {
+    public Command turnCommand(MutableMeasure<Angle> rotation, double turnTolerance) {
         DieterController turnController =
                 new DieterController(
                         SwerveConstants.ROTATION_KP.get(),
@@ -262,7 +259,7 @@ public class SwerveDrive extends SubsystemBase {
                                                 .getEstimatedPosition()
                                                 .getRotation()
                                                 .getRotations(),
-                                        rotation.get().getRotations()),
+                                        rotation.in(edu.wpi.first.units.Units.Rotations)),
                                 false))
                 .until(turnController::atSetpoint);
     }

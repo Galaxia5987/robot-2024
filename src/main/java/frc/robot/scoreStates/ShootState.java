@@ -46,7 +46,7 @@ public class ShootState implements ScoreState {
     private Command rotate() {
         return SwerveDrive.getInstance()
                 .turnCommand(
-                        () -> Rotation2d.fromRotations(optimalRotation),
+                        Units.Rotations.of(optimalRotation).mutableCopy(),
                         ScoreStateConstants.TURN_TOLERANCE.in(Units.Rotations));
     }
 
