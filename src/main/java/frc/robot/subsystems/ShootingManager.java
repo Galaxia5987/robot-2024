@@ -120,4 +120,9 @@ public class ShootingManager {
     public void setShooting(boolean shooting) {
         isShooting = shooting;
     }
+
+    @AutoLogOutput
+    public boolean isShooting() {
+        return isShooting;
+    }
 }

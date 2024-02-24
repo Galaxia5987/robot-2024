@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.66845697224158,
-        "y": 4.244978062605699
+        "x": 4.536099143457196,
+        "y": 3.62691005667047
       },
       "isLocked": false,
       "linkedName": "A2"
@@ -36,8 +36,8 @@
         "y": 5.063568873576495
       },
       "prevControl": {
-        "x": 5.9314256520250925,
-        "y": 4.478861151454497
+        "x": 5.316079800805683,
+        "y": 4.631135153006649
       },
       "nextControl": null,
       "isLocked": false,
@@ -55,7 +55,7 @@
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
         "data": {

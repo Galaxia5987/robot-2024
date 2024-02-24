@@ -77,7 +77,7 @@ public class CommandGroups {
     }
 
     public Command feedShooter() {
-        return feedWithWait(() -> shooter.atSetpoint() && hood.atSetpoint())
+        return feedWithWait(ShootingManager.getInstance()::readyToShoot)
                 .alongWith(Commands.runOnce(() -> ShootingManager.getInstance().setShooting(true)))
                 .withName("feedShooter");
     }

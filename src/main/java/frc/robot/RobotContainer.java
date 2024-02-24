@@ -5,6 +5,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,6 +23,8 @@ import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.shooter.*;
 import frc.robot.subsystems.swerve.SwerveDrive;
+
+import java.util.Optional;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
@@ -102,6 +105,14 @@ public class RobotContainer {
         NamedCommands.registerCommand("finishScore", Commands.runOnce(() -> ShootingManager.getInstance().setShooting(false)));
         NamedCommands.registerCommand("prepareShoot", prepare());
         NamedCommands.registerCommand("shootAndIntake", commandGroups.shootAndIntake());
+
+        PPHolonomicDriveController.setRotationTargetOverride(
+                () -> {
+                    if (ShootingManager.getInstance().isShooting()) {
+                        return Optional.of(new Rotation2d(ShootingManager.getInstance().getSwerveCommandedAngle()));
+                    }
+                    return Optional.empty();
+                });
     }
 
     private Command prepare() {
@@ -245,6 +256,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new PathPlannerAuto("AH123");
+        return new PathPlannerAuto("I cant do this");
     }
 }

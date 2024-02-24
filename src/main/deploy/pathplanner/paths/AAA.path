@@ -8,47 +8,29 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.585842153872604,
-        "y": 6.903746733702119
+        "x": 1.348002632180494,
+        "y": 6.893079059317263
       },
       "isLocked": false,
-      "linkedName": "A"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.4399011268331336,
+        "x": 1.952413215990329,
         "y": 6.903746733702119
       },
       "prevControl": {
-        "x": 2.25190197220887,
-        "y": 6.893302336222993
+        "x": 1.9248509224052734,
+        "y": 6.922328333967831
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "AH"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "intake"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 2.5,
@@ -57,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 2.273749388498288,
+    "rotation": 43.28412155126616,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "AH123",
   "previewStartingState": {
-    "rotation": 47.231174608031246,
+    "rotation": 45.51069410038363,
     "velocity": 0
   },
   "useDefaultConstraints": true
