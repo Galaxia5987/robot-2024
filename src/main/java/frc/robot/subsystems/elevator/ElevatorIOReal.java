@@ -4,7 +4,7 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meters;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.StrictFollower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.Distance;
@@ -20,7 +20,7 @@ public class ElevatorIOReal implements ElevatorIO {
     private final TalonFX mainMotor;
     private final TalonFX auxMotor;
 
-    private final PositionTorqueCurrentFOC positionControl = new PositionTorqueCurrentFOC(0);
+    private final PositionVoltage positionControl = new PositionVoltage(0).withEnableFOC(true);
     private final DutyCycleOut powerControl = new DutyCycleOut(0).withEnableFOC(true);
 
     private final DigitalInput sensor = new DigitalInput(1);

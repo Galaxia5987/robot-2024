@@ -57,15 +57,15 @@ public class ElevatorConstants { // TODO: check real values
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                KP.initDefault(18.0);
-                KI.initDefault(0.000_05);
-                KD.initDefault(2.0);
-                KV.initDefault(5.0);
-                KA.initDefault(10.0);
-                KS_FIRST_STAGE.initDefault(6.2);
-                KS_SECOND_STAGE.initDefault(2.2);
-                KG_FIRST_STAGE.initDefault(-6.0);
-                KG_SECOND_STAGE.initDefault(-1.5);
+                KP.initDefault(0.0);
+                KI.initDefault(0.0);
+                KD.initDefault(0.0);
+                KV.initDefault(0.0);
+                KA.initDefault(0.0);
+                KS_FIRST_STAGE.initDefault(0.62);
+                KS_SECOND_STAGE.initDefault(0.22);
+                KG_FIRST_STAGE.initDefault(-0.60);
+                KG_SECOND_STAGE.initDefault(-0.15);
             case SIM:
             case REPLAY:
                 KP.initDefault(43.0);
