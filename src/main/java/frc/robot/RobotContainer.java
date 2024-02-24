@@ -99,6 +99,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("stopIntake", intake.stop());
         NamedCommands.registerCommand("score", commandGroups.feedShooter());
         NamedCommands.registerCommand("prepareShoot", prepare());
+        NamedCommands.registerCommand("shootAndIntake", commandGroups.shootAndIntake());
     }
 
     private Command prepare() {

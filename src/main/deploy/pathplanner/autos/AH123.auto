@@ -28,12 +28,6 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "A0"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
                         "pathName": "AH"
                       }
                     },
@@ -59,12 +53,6 @@
                       "type": "path",
                       "data": {
                         "pathName": "A2"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "A3"
                       }
                     }
                   ]

@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.7947301034551182,
+        "x": 1.3560654093318372,
         "y": 6.903746733702119
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0245068479958848,
+        "x": 1.5858421538726037,
         "y": 6.903746733702119
       },
       "isLocked": false,
-      "linkedName": "A0"
+      "linkedName": "A"
     },
     {
       "anchor": {
@@ -32,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "intake",
-      "waypointRelativePos": 0.0,
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "intake"
+                "name": "shootAndIntake"
               }
             }
           ]

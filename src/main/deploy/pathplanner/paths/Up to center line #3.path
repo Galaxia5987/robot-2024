@@ -59,7 +59,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Center line",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
