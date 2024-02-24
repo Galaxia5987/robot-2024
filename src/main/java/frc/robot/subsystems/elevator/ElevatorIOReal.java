@@ -33,7 +33,7 @@ public class ElevatorIOReal implements ElevatorIO {
     public ElevatorIOReal() {
         mainMotor = new TalonFX(Ports.Elevator.MAIN_ID);
         auxMotor = new TalonFX(Ports.Elevator.AUX_ID);
-        servo = new Servo(0);
+        servo = new Servo(9);
 
         mainMotor.getConfigurator().apply(ElevatorConstants.MAIN_MOTOR_CONFIGURATION);
         auxMotor.getConfigurator().apply(ElevatorConstants.AUX_MOTOR_CONFIGURATION);

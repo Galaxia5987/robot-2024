@@ -3,6 +3,9 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commandGroups.CommandGroups;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.lib.Utils;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
@@ -101,5 +104,9 @@ public class ShootingManager {
                         * HoodConstants.MASS.in(Kilograms)
                         * HoodConstants.CM_RADIUS.in(Meters);
         hood.setChassisCompensationTorque(torque);
+    }
+
+    public Command shootToAmp(){
+        return CommandGroups.getInstance().shootAndConvey(RotationsPerSecond.zero().mutableCopy(), RotationsPerSecond.of(40).mutableCopy());
     }
 }

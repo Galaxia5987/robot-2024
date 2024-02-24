@@ -128,6 +128,10 @@ public class CommandGroups {
                 .withName("outtakeShooter");
     }
 
+    public Command shootAndConvey(MutableMeasure<Velocity<Angle>> topVelocity, MutableMeasure<Velocity<Angle>> bottomVelocity) {
+        return shooter.setVelocity(topVelocity, bottomVelocity).alongWith(conveyor.setVelocity(bottomVelocity));
+    }
+
     public Command shootAndConvey(MutableMeasure<Velocity<Angle>> velocity) {
         return shooter.setVelocity(velocity).alongWith(conveyor.setVelocity(velocity));
     }

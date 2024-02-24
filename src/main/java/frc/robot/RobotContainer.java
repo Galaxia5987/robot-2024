@@ -7,6 +7,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -17,6 +18,7 @@ import frc.robot.subsystems.elevator.*;
 import frc.robot.subsystems.gripper.*;
 import frc.robot.subsystems.hood.*;
 import frc.robot.subsystems.intake.*;
+import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.shooter.*;
 import frc.robot.subsystems.swerve.SwerveDrive;
 
@@ -29,8 +31,10 @@ public class RobotContainer {
     private final Hood hood;
     private final Shooter shooter;
     private final SwerveDrive swerveDrive;
+//    private final LEDs leds;
     private final CommandXboxController xboxController = new CommandXboxController(0);
     private final CommandXboxController driveController = new CommandXboxController(1);
+    private final CommandXboxController testController = new CommandXboxController(2);
     private final CommandGroups commandGroups;
     private final SendableChooser<Command> autoChooser;
 
@@ -77,6 +81,10 @@ public class RobotContainer {
         elevator = Elevator.getInstance();
         hood = Hood.getInstance();
         shooter = Shooter.getInstance();
+
+//        leds = new LEDs(8, 24);
+//        leds.setPrimary(Color.kBlue);
+//        leds.setSecondary(Color.kYellow);
 
         Gripper.initialize(gripperIO, () -> Units.Meters.of(0));
         gripper = Gripper.getInstance();
@@ -130,26 +138,38 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        driveController.b().onTrue(Commands.runOnce(swerveDrive::resetGyro));
+//        testController.a().onTrue(leds.solid(Color.kGreen, 1, 7));
+//        testController.b().onTrue(leds.blink(1, 8, 15));
+//        testController.x().onTrue(leds.rainbow(1, 24));
+//        testController.y().onTrue(leds.fade(5, 1, 25));
+//        testController.leftBumper().onTrue(leds.solid(1, 5));
 
-        driveController
-                .a()
-                .whileTrue(
-                        Commands.parallel(
-                                        hood.setAngle(Units.Degrees.of(109).mutableCopy()),
-                                        commandGroups.shootAndConvey(
-                                                Units.RotationsPerSecond.of(60).mutableCopy()))
-                                .until(() -> shooter.atSetpoint() && hood.atSetpoint())
-                                .andThen(
-                                        gripper.setRollerPower(0.7)
-                                                .alongWith(intake.setCenterRollerSpeed(0.5))))
-                .onFalse(
-                        Commands.parallel(
+        driveController.b().onTrue(Commands.runOnce(swerveDrive::resetGyro));
+        driveController.y().whileTrue(ShootingManager.getInstance().shootToAmp())
+                        .onFalse(Commands.parallel(
                                 hood.setAngle(Units.Degrees.of(114).mutableCopy()),
-                                conveyor.stop(),
-                                shooter.stop(),
-                                intake.setCenterRollerSpeed(0),
-                                gripper.setRollerPower(0)));
+                                shooter.setVelocity(Units.RotationsPerSecond.zero().mutableCopy()),
+                                conveyor.stop()));
+
+
+//        driveController
+//                .a()
+//                .whileTrue(
+//                        Commands.parallel(
+//                                        hood.setAngle(Units.Degrees.of(109).mutableCopy()),
+//                                        commandGroups.shootAndConvey(
+//                                                Units.RotationsPerSecond.of(60).mutableCopy()))
+//                                .until(() -> shooter.atSetpoint() && hood.atSetpoint())
+//                                .andThen(
+//                                        gripper.setRollerPower(0.7)
+//                                                .alongWith(intake.setCenterRollerSpeed(0.5))))
+//                .onFalse(
+//                        Commands.parallel(
+//                                hood.setAngle(Units.Degrees.of(114).mutableCopy()),
+//                                conveyor.stop(),
+//                                shooter.stop(),
+//                                intake.setCenterRollerSpeed(0),
+//                                gripper.setRollerPower(0)));
 
         driveController
                 .rightTrigger()
@@ -189,7 +209,7 @@ public class RobotContainer {
                                         .andThen(gripper.setRollerPower(0))))
                 .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
         driveController.rightBumper().whileTrue(intake.outtake()).onFalse(intake.stop());
-        driveController
+        xboxController
                 .x()
                 .whileTrue(intake.setAngle(Units.Degrees.of(-130).mutableCopy()))
                 .onFalse(intake.reset(Units.Degrees.of(0)));
@@ -208,9 +228,9 @@ public class RobotContainer {
                 .whileTrue(intake.setAngle(IntakeConstants.IntakePose.DOWN))
                 .onFalse(intake.setAngle(IntakeConstants.IntakePose.UP));
 
-        xboxController.a().whileTrue(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
-        xboxController.x().whileTrue(elevator.setHeight(Units.Meters.of(0.2).mutableCopy()));
-        xboxController.y().whileTrue(elevator.setHeight(Units.Meters.of(0.48).mutableCopy()));
+//        xboxController.a().whileTrue(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
+//        xboxController.x().whileTrue(elevator.setHeight(Units.Meters.of(0.2).mutableCopy()));
+//        xboxController.y().whileTrue(elevator.setHeight(Units.Meters.of(0.48).mutableCopy()));
     }
 
     /**
