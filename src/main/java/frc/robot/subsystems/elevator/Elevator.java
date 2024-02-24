@@ -75,6 +75,14 @@ public class Elevator extends SubsystemBase {
                 inputs.stopperSetpoint, ElevatorConstants.STOPPER_TOLERANCE.in(Units.Value));
     }
 
+    public Command lock(){
+        return Commands.runOnce(io::closeStopper);
+    }
+
+    public Command unlock(){
+        return Commands.runOnce(io::openStopper);
+    }
+
     public Command setHeight(MutableMeasure<Distance> height) {
         return Commands.sequence(
                         runOnce(() -> inputs.heightSetpoint.mut_replace(height)),
