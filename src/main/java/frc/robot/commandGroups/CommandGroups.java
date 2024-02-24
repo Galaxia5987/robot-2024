@@ -129,8 +129,11 @@ public class CommandGroups {
                 .withName("outtakeShooter");
     }
 
-    public Command shootAndConvey(MutableMeasure<Velocity<Angle>> topVelocity, MutableMeasure<Velocity<Angle>> bottomVelocity) {
-        return shooter.setVelocity(topVelocity, bottomVelocity).alongWith(conveyor.setVelocity(bottomVelocity));
+    public Command shootAndConvey(
+            MutableMeasure<Velocity<Angle>> topVelocity,
+            MutableMeasure<Velocity<Angle>> bottomVelocity) {
+        return shooter.setVelocity(topVelocity, bottomVelocity)
+                .alongWith(conveyor.setVelocity(bottomVelocity));
     }
 
     public Command shootAndConvey(MutableMeasure<Velocity<Angle>> velocity) {
@@ -161,10 +164,7 @@ public class CommandGroups {
     }
 
     public Command shootAndIntake() {
-        return Commands.sequence(
-                feedShooter(),
-                intake.intake()
-        );
+        return Commands.sequence(feedShooter(), intake.intake());
     }
 
     public Command allBits() {

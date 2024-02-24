@@ -4,10 +4,8 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.lib.PoseEstimation;
-import frc.robot.lib.Utils;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodConstants;
@@ -17,6 +15,7 @@ import frc.robot.subsystems.swerve.SwerveDrive;
 import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 public class ShootingManager {
 
@@ -40,7 +39,7 @@ public class ShootingManager {
     private Measure<Distance> maxWarmupDistance =
             Meters.of(100.0); // Arbitrary number larger than possible
 
-    @Setter private Measure<Distance> maxShootingDistance = Meters.of(2.5);
+    @Setter private Measure<Distance> maxShootingDistance = Meters.of(3);
 
     private boolean isShooting = false;
 
@@ -60,14 +59,16 @@ public class ShootingManager {
 
     @AutoLogOutput
     public boolean readyToShoot() {
-        return poseEstimation.getDistanceToSpeaker() < maxShootingDistance.in(Meters)
+        double distanceToSpeaker = poseEstimation.getDistanceToSpeaker();
+        Logger.recordOutput("ShootingManager/distanceToSpeaker", distanceToSpeaker);
+        return distanceToSpeaker < maxShootingDistance.in(Meters)
                 && hood.atSetpoint()
                 && shooter.atSetpoint();
-//                && Utils.epsilonEquals(
-//                PoseEstimation.getInstance()
-//                        .getEstimatedPose()
-//                        .getRotation()
-//                        .getDegrees(), swerveCommandedAngle.in(Degrees), 7);
+        //                && Utils.epsilonEquals(
+        //                PoseEstimation.getInstance()
+        //                        .getEstimatedPose()
+        //                        .getRotation()
+        //                        .getDegrees(), swerveCommandedAngle.in(Degrees), 7);
     }
 
     public void updateCommandedState() {
@@ -113,8 +114,11 @@ public class ShootingManager {
         hood.setChassisCompensationTorque(torque);
     }
 
-    public Command shootToAmp(){
-        return CommandGroups.getInstance().shootAndConvey(RotationsPerSecond.zero().mutableCopy(), RotationsPerSecond.of(40).mutableCopy());
+    public Command shootToAmp() {
+        return CommandGroups.getInstance()
+                .shootAndConvey(
+                        RotationsPerSecond.zero().mutableCopy(),
+                        RotationsPerSecond.of(40).mutableCopy());
     }
 
     public void setShooting(boolean shooting) {
