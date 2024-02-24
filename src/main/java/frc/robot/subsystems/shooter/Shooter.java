@@ -59,10 +59,11 @@ public class Shooter extends SubsystemBase {
 
     public Command stop() {
         return run(() -> {
-            topRollerInputs.velocitySetpoint.mut_replace(ShooterConstants.STOP_POWER);
-            bottomRollerInputs.velocitySetpoint.mut_replace(ShooterConstants.STOP_POWER);
-            io.stop();
-        }).withName("Stop Shooter");
+                    topRollerInputs.velocitySetpoint.mut_replace(ShooterConstants.STOP_POWER);
+                    bottomRollerInputs.velocitySetpoint.mut_replace(ShooterConstants.STOP_POWER);
+                    io.stop();
+                })
+                .withName("Stop Shooter");
     }
 
     @AutoLogOutput

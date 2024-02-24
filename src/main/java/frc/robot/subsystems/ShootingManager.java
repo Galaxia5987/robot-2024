@@ -36,9 +36,7 @@ public class ShootingManager {
     private Measure<Distance> maxWarmupDistance =
             Meters.of(100.0); // Arbitrary number larger than possible
 
-    @Setter
-    private Measure<Distance> maxShootingDistance =
-            Meters.of(2.5);
+    @Setter private Measure<Distance> maxShootingDistance = Meters.of(2.5);
 
     private ShootingManager() {
         poseEstimation = PoseEstimation.getInstance();
