@@ -33,8 +33,12 @@ public class ShootingManager {
     private final MutableMeasure<Angle> swerveCommandedAngle = Rotations.zero().mutableCopy();
 
     @Setter
-    private Measure<Distance> minDistance =
+    private Measure<Distance> maxWarmupDistance =
             Meters.of(100.0); // Arbitrary number larger than possible
+
+    @Setter
+    private Measure<Distance> maxShootingDistance =
+            Meters.of(2.5);
 
     private ShootingManager() {
         poseEstimation = PoseEstimation.getInstance();
@@ -51,7 +55,8 @@ public class ShootingManager {
     }
 
     public boolean readyToShoot() {
-        return hood.atSetpoint()
+        return poseEstimation.getDistanceToSpeaker() < maxShootingDistance.in(Meters)
+                && hood.atSetpoint()
                 && shooter.atSetpoint()
                 && Utils.epsilonEquals(
                         swerveDrive.getYaw().getDegrees(), swerveCommandedAngle.in(Degrees), 3);
@@ -60,7 +65,7 @@ public class ShootingManager {
     public void updateCommandedState() {
         double distanceToTarget = poseEstimation.getDistanceToSpeaker();
 
-        if (distanceToTarget < minDistance.in(Meters)) {
+        if (distanceToTarget < maxWarmupDistance.in(Meters)) {
             shooterCommandedVelocity.mut_replace(
                     ShooterConstants.VELOCITY_BY_DISTANCE.getInterpolated(
                                     new InterpolatingDouble(distanceToTarget))
@@ -90,7 +95,7 @@ public class ShootingManager {
                         * radialVelocity
                         * (HoodConstants.AXIS_DISTANCE_TO_CENTER.in(Meters)
                                 - Math.cos(hoodAngle) * HoodConstants.CM_RADIUS.in(Meters));
-        double effectiveAcceleration = swerveDrive.getAcceleration() + radialAcceleration;
+        double effectiveAcceleration = swerveDrive.getAcceleration() - radialAcceleration;
 
         double theta = hoodAngle - Math.PI;
         if (theta < 0) {
@@ -101,6 +106,6 @@ public class ShootingManager {
                 tangentialAcceleration
                         * HoodConstants.MASS.in(Kilograms)
                         * HoodConstants.CM_RADIUS.in(Meters);
-        hood.setChassisCompensationTorque(-torque);
+        hood.setChassisCompensationTorque(torque);
     }
 }
