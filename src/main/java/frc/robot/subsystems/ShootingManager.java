@@ -88,11 +88,11 @@ public class ShootingManager {
     }
 
     public void updateHoodChassisCompensation() {
-        double radialVelocity = swerveDrive.getCurrentSpeeds().omegaRadiansPerSecond;
+        double rotationalVelocity = swerveDrive.getCurrentSpeeds().omegaRadiansPerSecond;
         double hoodAngle = hood.getAngle().in(Radians);
         double radialAcceleration =
-                radialVelocity
-                        * radialVelocity
+                rotationalVelocity
+                        * rotationalVelocity
                         * (HoodConstants.AXIS_DISTANCE_TO_CENTER.in(Meters)
                                 - Math.cos(hoodAngle) * HoodConstants.CM_RADIUS.in(Meters));
         double effectiveAcceleration = swerveDrive.getAcceleration() - radialAcceleration;
