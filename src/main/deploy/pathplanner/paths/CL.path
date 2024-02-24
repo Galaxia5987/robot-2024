@@ -1,0 +1,99 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.2069872572793579,
+        "y": 4.139730672623739
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.2069872572793585,
+        "y": 4.139730672623739
+      },
+      "isLocked": false,
+      "linkedName": "C"
+    },
+    {
+      "anchor": {
+        "x": 2.4114851648506717,
+        "y": 4.139730672623739
+      },
+      "prevControl": {
+        "x": 1.4114851648506717,
+        "y": 4.139730672623739
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "CL"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "intake",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "score and stop intake",
+      "waypointRelativePos": 1.0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "score"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "stopIntake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -6.632514615138477,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "CL34",
+  "previewStartingState": {
+    "rotation": -45.41820994149706,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

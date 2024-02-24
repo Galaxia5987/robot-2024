@@ -1,0 +1,70 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.7947301034551182,
+        "y": 6.903746733702119
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.0245068479958848,
+        "y": 6.903746733702119
+      },
+      "isLocked": false,
+      "linkedName": "A0"
+    },
+    {
+      "anchor": {
+        "x": 2.473615939598292,
+        "y": 6.903746733702119
+      },
+      "prevControl": {
+        "x": 2.2856167849740285,
+        "y": 6.893302336222993
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "AH"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "intake",
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 13.736268305622547,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "AH123",
+  "previewStartingState": {
+    "rotation": 47.231174608031246,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

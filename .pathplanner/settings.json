@@ -3,8 +3,14 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
+    "AH123",
+    "Center line",
+    "D345",
+    "Lower",
+    "Middle",
     "New Folder",
-    "D345"
+    "CL34",
+    "Upper"
   ],
   "autoFolders": [],
   "defaultMaxVel": 4.0,
