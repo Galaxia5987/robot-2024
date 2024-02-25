@@ -69,10 +69,12 @@ public class Shooter extends SubsystemBase {
 
     @AutoLogOutput
     public boolean atSetpoint() {
-        return Utils.epsilonEquals(topRollerInputs.velocity.in(Units.RotationsPerSecond),
-                topRollerInputs.velocitySetpoint.in(Units.RotationsPerSecond),
-                1) &&
-                Utils.epsilonEquals(bottomRollerInputs.velocity.in(Units.RotationsPerSecond),
+        return Utils.epsilonEquals(
+                        topRollerInputs.velocity.in(Units.RotationsPerSecond),
+                        topRollerInputs.velocitySetpoint.in(Units.RotationsPerSecond),
+                        1)
+                && Utils.epsilonEquals(
+                        bottomRollerInputs.velocity.in(Units.RotationsPerSecond),
                         bottomRollerInputs.velocitySetpoint.in(Units.RotationsPerSecond),
                         1);
     }

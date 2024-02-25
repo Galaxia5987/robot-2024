@@ -10,10 +10,12 @@ import frc.robot.lib.PoseEstimation;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
 import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.conveyor.Conveyor;
+import frc.robot.subsystems.conveyor.ConveyorConstants;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperConstants;
 import frc.robot.subsystems.hood.Hood;
+import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
@@ -129,8 +131,11 @@ public class CommandGroups {
                 .withName("outtakeShooter");
     }
 
-    public Command shootAndConvey(MutableMeasure<Velocity<Angle>> topVelocity, MutableMeasure<Velocity<Angle>> bottomVelocity) {
-        return shooter.setVelocity(topVelocity, bottomVelocity).alongWith(conveyor.setVelocity(bottomVelocity));
+    public Command shootAndConvey(
+            MutableMeasure<Velocity<Angle>> topVelocity,
+            MutableMeasure<Velocity<Angle>> bottomVelocity) {
+        return shooter.setVelocity(topVelocity, bottomVelocity)
+                .alongWith(conveyor.setVelocity(bottomVelocity));
     }
 
     public Command shootAndConvey(MutableMeasure<Velocity<Angle>> velocity) {
@@ -161,10 +166,17 @@ public class CommandGroups {
     }
 
     public Command shootAndIntake() {
-        return Commands.sequence(
-                feedShooter(),
-                intake.intake()
-        );
+        return Commands.parallel(gripper.setRollerPower(0.7), intake.intake());
+    }
+
+    public Command shootToAmp() {
+        return shooter.setVelocity(
+                        ShooterConstants.TOP_AMP_VELOCITY, ShooterConstants.BOTTOM_VELOCITY)
+                .alongWith(hood.setAngle(HoodConstants.AMP_ANGLE))
+                .until(shooter::atSetpoint)
+                .andThen(gripper.setRollerPower(GripperConstants.INTAKE_POWER).withTimeout(1))
+                .andThen(gripper.setRollerPower(0))
+                .alongWith(conveyor.setVelocity(ConveyorConstants.AMP_VELOCITY));
     }
 
     public Command allBits() {

@@ -10,7 +10,6 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
-import frc.robot.Constants;
 import frc.robot.Ports;
 
 public class ConveyorIOReal implements ConveyorIO {
@@ -23,8 +22,8 @@ public class ConveyorIOReal implements ConveyorIO {
     public ConveyorIOReal() {
         roller.restoreFactoryDefaults();
         roller.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        roller.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE.in(Units.Volts));
         roller.setInverted(true);
+        roller.setSmartCurrentLimit(40);
         roller.getPIDController().setP(KP.get());
         roller.getPIDController().setI(KI.get());
         roller.getPIDController().setD(KD.get());

@@ -1,5 +1,7 @@
 package frc.robot.subsystems.conveyor;
 
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
 import edu.wpi.first.units.*;
 import frc.robot.Constants;
 import frc.robot.lib.webconstants.LoggedTunableNumber;
@@ -12,6 +14,8 @@ public class ConveyorConstants {
             Units.Value.of(0.05).mutableCopy();
     public static final MutableMeasure<Velocity<Angle>> STOP_VELOCITY =
             Units.RotationsPerSecond.of(0).mutableCopy();
+    public static final MutableMeasure<Velocity<Angle>> AMP_VELOCITY =
+            RotationsPerSecond.of(70).mutableCopy();
     public static final double VELOCITY_CONVERSION_FACTOR = 1 / 60.0;
     public static final double GEAR_RATIO = 30;
     public static LoggedTunableNumber KP = new LoggedTunableNumber("Conveyor/kP");
