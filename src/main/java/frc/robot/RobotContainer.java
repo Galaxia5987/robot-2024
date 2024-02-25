@@ -111,7 +111,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("intake", commandGroups.intake());
         NamedCommands.registerCommand("stopIntake", intake.stop());
         NamedCommands.registerCommand("score", commandGroups.feedShooter());
-        NamedCommands.registerCommand("finishScore", gripper.setRollerPower(0));
+        NamedCommands.registerCommand("finishScore", gripper.setRollerPower(0).withTimeout(0.25));
         NamedCommands.registerCommand("prepareShoot", prepare());
         NamedCommands.registerCommand("shootAndIntake", commandGroups.shootAndIntake());
 
