@@ -23,7 +23,6 @@ public class ConveyorIOReal implements ConveyorIO {
         roller.restoreFactoryDefaults();
         roller.setIdleMode(CANSparkMax.IdleMode.kCoast);
         roller.setInverted(true);
-        roller.setSmartCurrentLimit(40);
         roller.getPIDController().setP(KP.get());
         roller.getPIDController().setI(KI.get());
         roller.getPIDController().setD(KD.get());
