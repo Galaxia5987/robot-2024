@@ -33,13 +33,13 @@ public class Constants {
                     -0.289_36,
                     0.341_15,
                     0.2,
-                    new Rotation3d(0, -Math.toRadians(31.92), Math.toRadians(170)));
+                    new Rotation3d(0, -Math.toRadians(31.92), Math.toRadians(180)));
     public static final Transform3d BACK_RIGHT_CAMERA_POSE =
             new Transform3d(
                     -0.346_52,
                     -0.285_32,
                     0.2,
-                    new Rotation3d(0, -Math.toRadians(31.92), -Math.toRadians(90)));
+                    new Rotation3d(0, -Math.toRadians(31.92), -Math.toRadians(100)));
     public static final Transform3d FRONT_LEFT_CAMERA_POSE =
             new Transform3d(0.061, 0.2848, 0.55, new Rotation3d(0, -Math.toRadians(10.0), 0));
     public static final Transform3d FRONT_RIGHT_CAMERA_POSE =
