@@ -10,9 +10,9 @@ public class SwerveConstants {
     public static final CurrentLimitsConfigs TALON_FX_CURRENT_LIMIT_CONFIGS =
             new CurrentLimitsConfigs()
                     .withSupplyCurrentLimit(50)
-                    .withStatorCurrentLimit(50)
-                    .withStatorCurrentLimitEnable(true)
-                    .withSupplyCurrentLimitEnable(true);
+                    .withStatorCurrentLimit(80)
+                    .withStatorCurrentLimitEnable(false)
+                    .withSupplyCurrentLimitEnable(false);
 
     public static final double VOLT_COMP_SATURATION = 12;
     public static final double NEUTRAL_DEADBAND = 0.0;
@@ -133,14 +133,14 @@ public class SwerveConstants {
                 ANGLE_KV.initDefault(1.327_55);
                 ANGLE_KA.initDefault(0.197_637_5);
 
-                ROTATION_KP.initDefault(3.0);
+                ROTATION_KP.initDefault(1.5);
                 ROTATION_KI.initDefault(0.0);
                 ROTATION_KD.initDefault(0.2);
                 ROTATION_KDIETER.initDefault(0.0);
 
                 ROBOT_WIDTH = 0.585;
                 ROBOT_LENGTH = 0.585;
-                WHEEL_DIAMETER = 0.102;
+                WHEEL_DIAMETER = 0.099;
                 DRIVE_REDUCTION = (1 / 2.0) * (24.0 / 22.0) * (15.0 / 45.0);
                 ANGLE_REDUCTION = (14.0 / 72.0) * 0.5;
 

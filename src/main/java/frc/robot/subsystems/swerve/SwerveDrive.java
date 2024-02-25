@@ -24,7 +24,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 import lombok.Getter;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -189,6 +188,16 @@ public class SwerveDrive extends SubsystemBase {
      * @param fieldOriented Should the drive be field oriented.
      */
     public void drive(ChassisSpeeds chassisSpeeds, boolean fieldOriented) {
+        double magnitude =
+                Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
+        Rotation2d angle =
+                new Rotation2d(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
+        angle = angle.minus(Rotation2d.fromRadians(0.075 * chassisSpeeds.omegaRadiansPerSecond));
+        chassisSpeeds =
+                new ChassisSpeeds(
+                        angle.getCos() * magnitude,
+                        angle.getSin() * magnitude,
+                        chassisSpeeds.omegaRadiansPerSecond);
         loggerInputs.desiredSpeeds = chassisSpeeds;
 
         ChassisSpeeds fieldOrientedChassisSpeeds =

@@ -61,11 +61,11 @@ public class ModuleIOTalonFX implements ModuleIO {
         angleMotor.setPosition(0);
 
         BaseStatusSignal.setUpdateFrequencyForAll(
-                100,
+                200,
                 driveMotor.getVelocity(),
                 driveMotor.getPosition(),
                 angleMotor.getPosition(),
-                angleMotor.getSupplyVoltage());
+                angleMotor.getMotorVoltage());
 
         driveMotor.setNeutralMode(NeutralModeValue.Brake);
         angleMotor.setNeutralMode(NeutralModeValue.Brake);

@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.scoreStates.ScoreStateConstants;
-import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 import java.util.Optional;
@@ -46,6 +45,7 @@ public class PoseEstimation {
                                             target.getBestCameraToTarget()
                                                     .getTranslation()
                                                     .getNorm());
+            distances = distances.filter((distance) -> distance < 3);
             var ambiguities = distances.map((d) -> d * d);
             double stddev =
                     multiplier * Utils.averageAmbiguity(ambiguities.collect(Collectors.toList()));
@@ -54,12 +54,7 @@ public class PoseEstimation {
                     .addVisionMeasurement(
                             result.estimatedPose.toPose2d(),
                             result.timestampSeconds,
-                            VecBuilder.fill(
-                                    stddev,
-                                    stddev,
-                                    stddev
-                                            * (SwerveConstants.MAX_X_Y_VELOCITY
-                                                    / SwerveConstants.MAX_OMEGA_VELOCITY)));
+                            VecBuilder.fill(stddev, stddev, 1_000_000));
         }
     }
 

@@ -1,13 +1,11 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.units.*;
@@ -23,6 +21,8 @@ import org.photonvision.simulation.SimCameraProperties;
 public class Constants {
 
     public static final int CONFIG_TIMEOUT = 100; // [ms]
+
+    public static final double LOOP_TIME = 0.02;
 
     public static Mode CURRENT_MODE = Mode.REAL;
 
@@ -75,10 +75,10 @@ public class Constants {
     }
 
     public static final double[] SWERVE_OFFSETS = {
-        0.794_376_719_859_418,
-        0.780_963_919_524_097_9,
-        0.484_072_612_101_815_3,
-        0.609_018_215_225_455_4
+        0.791_147_194_778_679_9,
+        0.781_006_969_525_174_2,
+        0.485_464_112_136_602_8,
+        0.609_238_365_230_959_1
     };
 
     public static void initSwerve() {
@@ -109,12 +109,14 @@ public class Constants {
         SwerveDrive swerveDrive = SwerveDrive.getInstance();
         AutoBuilder.configureHolonomic(
                 () -> swerveDrive.getEstimator().getEstimatedPosition(),
-                (pose)->{},
+                (pose) -> {
+                    swerveDrive.resetGyro(pose.getRotation());
+                },
                 swerveDrive::getCurrentSpeeds,
                 (speeds) -> swerveDrive.drive(speeds, false),
                 new HolonomicPathFollowerConfig(
-                        new PIDConstants(5, 0, 0),
-                        new PIDConstants(5, 0, 0),
+                        new PIDConstants(5.5, 0, 0.15),
+                        new PIDConstants(6, 0, 0),
                         SwerveConstants.MAX_X_Y_VELOCITY,
                         Constants.ROBOT_LENGTH.in(Units.Meters) / Math.sqrt(2),
                         new ReplanningConfig()),

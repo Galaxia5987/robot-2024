@@ -92,9 +92,7 @@ public class Gripper extends SubsystemBase {
     }
 
     public Command setWristPosition(MutableMeasure<Angle> angle) {
-        return Commands.runOnce(() -> io.setAngle(angle))
-                .until(this::atSetpoint)
-                .withName("set wrist position");
+        return Commands.runOnce(() -> io.setAngle(angle)).withName("set wrist position");
     }
 
     public Command scoreTrap() {
