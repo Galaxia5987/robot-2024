@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.4009020939657093,
-        "y": 6.620085829245293
+        "x": 2.488649917917414,
+        "y": 6.629835587462149
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.692095274926892,
-        "y": 6.610336071028437
+        "x": 4.779843098878597,
+        "y": 6.620085829245292
       },
       "isLocked": false,
       "linkedName": "AH"
@@ -72,7 +72,7 @@
     },
     {
       "name": "stop intake",
-      "waypointRelativePos": 1.45,
+      "waypointRelativePos": 1.7,
       "command": {
         "type": "parallel",
         "data": {
@@ -107,7 +107,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 2.5,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

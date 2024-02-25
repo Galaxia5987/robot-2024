@@ -28,6 +28,24 @@
                     {
                       "type": "path",
                       "data": {
+                        "pathName": "A0"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "score"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "finishScore"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
                         "pathName": "AH"
                       }
                     },
@@ -44,21 +62,39 @@
                       }
                     },
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "stopIntake"
-                      }
-                    },
-                    {
                       "type": "path",
                       "data": {
                         "pathName": "A1"
                       }
                     },
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "score"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "finishScore"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "A2"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "score"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "finishScore"
                       }
                     }
                   ]

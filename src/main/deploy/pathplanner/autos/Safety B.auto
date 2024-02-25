@@ -32,6 +32,12 @@
                       }
                     },
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "finishScore"
+                      }
+                    },
+                    {
                       "type": "race",
                       "data": {
                         "commands": [
@@ -66,6 +72,12 @@
                       "type": "named",
                       "data": {
                         "name": "score"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "finishScore"
                       }
                     }
                   ]

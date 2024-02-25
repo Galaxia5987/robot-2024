@@ -3,37 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2069872572793579,
-        "y": 4.139730672623739
+        "x": 0.7336934388833163,
+        "y": 6.67858437854643
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2069872572793585,
-        "y": 4.139730672623739
+        "x": 0.72563112663969,
+        "y": 6.6679163527937515
       },
       "isLocked": false,
-      "linkedName": "C"
+      "linkedName": "A"
     },
     {
       "anchor": {
-        "x": 2.4114851648506717,
-        "y": 4.139730672623739
+        "x": 1.9719127324251322,
+        "y": 6.347092599177344
       },
       "prevControl": {
-        "x": 1.4114851648506717,
-        "y": 4.139730672623739
+        "x": 1.4844248215823268,
+        "y": 7.40981624481466
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "CL"
+      "linkedName": "A0"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "IntakeShootAndStopIntake",
-      "waypointRelativePos": 1.0,
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "shootAndIntake"
+                "name": "score"
               }
             }
           ]
@@ -57,13 +57,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -6.632514615138477,
+    "rotation": 43.28412155126616,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "CL34",
+  "folder": "AH123",
   "previewStartingState": {
-    "rotation": -45.41820994149706,
+    "rotation": 59.03624346792651,
     "velocity": 0
   },
   "useDefaultConstraints": true

@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.3560654093318372,
-      "y": 6.903746733702119
-    },
-    "rotation": 42.80576052629581
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -26,15 +20,9 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "score"
-                      }
-                    },
-                    {
                       "type": "path",
                       "data": {
-                        "pathName": "AH"
+                        "pathName": "A0"
                       }
                     },
                     {
@@ -52,7 +40,44 @@
                     {
                       "type": "path",
                       "data": {
+                        "pathName": "AH"
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "score"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "stopIntake"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "finishScore"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
                         "pathName": "A1"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "score"
                       }
                     }
                   ]

@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.4009020939657093,
-        "y": 6.620085829245293
+        "x": 2.488649917917414,
+        "y": 6.629835587462149
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.461110555349551,
-        "y": 6.919938232086177
+        "x": 5.548858379301256,
+        "y": 6.929687990303033
       },
       "isLocked": false,
       "linkedName": "AH"
     },
     {
       "anchor": {
-        "x": 7.85,
-        "y": 7.46
+        "x": 7.9077377527963995,
+        "y": 7.472564688721588
       },
       "prevControl": {
-        "x": 7.645229203247874,
-        "y": 7.473262734878608
+        "x": 7.702966956044274,
+        "y": 7.485827423600196
       },
       "nextControl": {
-        "x": 7.975422038104028,
-        "y": 7.451876579738458
+        "x": 8.033159790900427,
+        "y": 7.464441268460046
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "center note line #1"
     },
     {
       "anchor": {
-        "x": 2.47,
-        "y": 6.9
+        "x": 2.488649917917414,
+        "y": 6.629835587462149
       },
       "prevControl": {
-        "x": 5.413266916959444,
-        "y": 7.234934866168204
+        "x": 5.431916834876858,
+        "y": 6.9647704536303525
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "A1"
+      "linkedName": "AH"
     }
   ],
   "rotationTargets": [
@@ -72,7 +72,7 @@
     },
     {
       "name": "stop intake",
-      "waypointRelativePos": 1.45,
+      "waypointRelativePos": 1.7,
       "command": {
         "type": "parallel",
         "data": {
@@ -107,7 +107,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 2.5,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
