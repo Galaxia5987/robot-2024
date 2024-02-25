@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.scoreStates.ScoreStateConstants;
+import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 import java.util.Optional;
@@ -54,21 +55,22 @@ public class PoseEstimation {
                     .addVisionMeasurement(
                             result.estimatedPose.toPose2d(),
                             result.timestampSeconds,
-                            VecBuilder.fill(stddev, stddev, 1_000_000));
+                            VecBuilder.fill(stddev, stddev,
+                                    10 * stddev * SwerveConstants.MAX_OMEGA_VELOCITY / SwerveConstants.MAX_X_Y_VELOCITY));
         }
     }
 
-    @AutoLogOutput(key = "EstimatedRobotPose")
+    @AutoLogOutput(key = "Robot/EstimatedRobotPose")
     public Pose2d getEstimatedPose() {
         return swerveDrive.getEstimator().getEstimatedPosition();
     }
 
-    @AutoLogOutput(key = "DistanceToSpeaker")
+    @AutoLogOutput(key = "Shooter/DistanceToSpeaker")
     public double getDistanceToSpeaker() {
         return getPoseRelativeToSpeaker().getNorm();
     }
 
-    @AutoLogOutput(key = "ToSpeaker")
+    @AutoLogOutput(key = "Robot/ToSpeaker")
     public Translation2d getPoseRelativeToSpeaker() {
         Optional<DriverStation.Alliance> allianceColor = DriverStation.getAlliance();
         if (allianceColor.isPresent() && (allianceColor.get() == DriverStation.Alliance.Red)) {
