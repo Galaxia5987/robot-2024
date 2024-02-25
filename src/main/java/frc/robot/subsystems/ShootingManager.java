@@ -54,7 +54,7 @@ public class ShootingManager {
         return INSTANCE;
     }
 
-    @AutoLogOutput(key = "ReadyToShoot")
+    @AutoLogOutput(key = "Robot/ReadyToShoot")
     public boolean readyToShoot() {
         return poseEstimation.getDistanceToSpeaker() < maxShootingDistance.in(Meters)
                 && hood.atSetpoint()
@@ -114,7 +114,7 @@ public class ShootingManager {
         isShooting = shooting;
     }
 
-    @AutoLogOutput
+    @AutoLogOutput(key = "Robot/isShooting")
     public boolean isShooting() {
         return isShooting;
     }
