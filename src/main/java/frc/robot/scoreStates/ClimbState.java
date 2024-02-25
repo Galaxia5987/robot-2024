@@ -10,7 +10,7 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.Set;
 
-public class ClimbState implements ScoreState {
+public class ClimbState implements ScoreState { // TODO: fix class
     private static Elevator elevator;
 
     public ClimbState() {

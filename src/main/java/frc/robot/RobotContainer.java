@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
+import frc.robot.scoreStates.*;
 import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.conveyor.ConveyorIO;
@@ -50,6 +51,11 @@ public class RobotContainer {
     private final CommandXboxController testController = new CommandXboxController(2);
     private final CommandGroups commandGroups;
     private final SendableChooser<Command> autoChooser;
+    private final ScoreState ampState = new AmpState();
+    private final ScoreState shootingState = new ShootState();
+    private final ScoreState climbState = new ClimbState();
+    private final StateManager stateManager;
+
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
@@ -102,6 +108,8 @@ public class RobotContainer {
         Gripper.initialize(gripperIO, () -> Units.Meters.of(0));
         gripper = Gripper.getInstance();
         commandGroups = CommandGroups.getInstance();
+
+        stateManager = StateManager.getINSTANCE(shootingState);
 
         // Configure the button bindings and default commands
         configureDefaultCommands();
@@ -218,7 +226,7 @@ public class RobotContainer {
                                                 () -> -driveController.getLeftY(),
                                                 () -> -driveController.getLeftX(),
                                                 0.1))
-                                .until(ShootingManager.getInstance()::readyToShoot)
+                                .until(readyToShoot)
                                 .alongWith(commandGroups.feedShooter()))
                 .onFalse(
                         Commands.parallel(

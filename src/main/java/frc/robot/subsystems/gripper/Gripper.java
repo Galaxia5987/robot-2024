@@ -105,6 +105,10 @@ public class Gripper extends SubsystemBase {
         return run(() -> io.setAngleMotorPower(power.getAsDouble())).withName("set wrist power");
     }
 
+    public Command stopGripper() {
+        return setRollerPower(0);
+    }
+
     @Override
     public void periodic() {
         gripperHeight = carriageHeight.plus(GripperConstants.GRIPPER_POSITION_z);
