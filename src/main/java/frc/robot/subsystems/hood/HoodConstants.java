@@ -54,10 +54,10 @@ public class HoodConstants {
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                kP.initDefault(570);
+                kP.initDefault(870);
                 kI.initDefault(1);
-                kD.initDefault(59);
-                kS.initDefault(1.0);
+                kD.initDefault(100);
+                kS.initDefault(1.5);
                 kV.initDefault(0);
                 kA.initDefault(0.0);
                 kG.initDefault(25.0);
