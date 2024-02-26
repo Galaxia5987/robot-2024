@@ -55,8 +55,13 @@ public class PoseEstimation {
                     .addVisionMeasurement(
                             result.estimatedPose.toPose2d(),
                             result.timestampSeconds,
-                            VecBuilder.fill(stddev, stddev,
-                                    10 * stddev * SwerveConstants.MAX_OMEGA_VELOCITY / SwerveConstants.MAX_X_Y_VELOCITY));
+                            VecBuilder.fill(
+                                    stddev,
+                                    stddev,
+                                    10
+                                            * stddev
+                                            * SwerveConstants.MAX_OMEGA_VELOCITY
+                                            / SwerveConstants.MAX_X_Y_VELOCITY));
         }
     }
 
