@@ -105,15 +105,30 @@ public class RobotContainer {
         configureButtonBindings();
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("autoList", autoChooser);
-        NamedCommands.registerCommand("intake", commandGroups.intake());
-        NamedCommands.registerCommand("stopIntake", intake.stop(false));
-        NamedCommands.registerCommand("retractIntake", intake.stop());
-        NamedCommands.registerCommand("score", commandGroups.feedShooter());
-        NamedCommands.registerCommand("finishScore", gripper.setRollerPower(0).withTimeout(0.25));
+        NamedCommands.registerCommand(
+                "intake",
+                commandGroups.intake().raceWith(Commands.print("I'm intaking").repeatedly()));
+        NamedCommands.registerCommand(
+                "stopIntake",
+                intake.stop(false)
+                        .withTimeout(0.1)
+                        .raceWith(Commands.print("I'm not intaking").repeatedly()));
+        NamedCommands.registerCommand(
+                "retractIntake",
+                intake.stop().raceWith(Commands.print("I'm not intaking").repeatedly()));
+        NamedCommands.registerCommand(
+                "score",
+                commandGroups.feedShooter().raceWith(Commands.print("I'm shooting").repeatedly()));
+        NamedCommands.registerCommand(
+                "finishScore",
+                gripper.setRollerPower(0)
+                        .withTimeout(0.25)
+                        .raceWith(Commands.print("I stopped scoring")));
         NamedCommands.registerCommand("prepareShoot", prepare());
         NamedCommands.registerCommand("shootAndIntake", commandGroups.shootAndIntake());
-        NamedCommands.registerCommand("adjustToTarget", Commands.runOnce(() -> ShootingManager.getInstance().setShooting(true)));
-        NamedCommands.registerCommand("followPathRotation", Commands.runOnce(() -> ShootingManager.getInstance().setShooting(false)));
+        NamedCommands.registerCommand(
+                "adjustToTarget",
+                Commands.runOnce(() -> ShootingManager.getInstance().setShooting(true)));
 
         PPHolonomicDriveController.setRotationTargetOverride(
                 () -> {
@@ -143,9 +158,9 @@ public class RobotContainer {
     private void configureDefaultCommands() {
         swerveDrive.setDefaultCommand(
                 swerveDrive.driveCommand(
-                        () -> -driveController.getLeftY(),
-                        () -> -driveController.getLeftX(),
-                        () -> 0.6 * -driveController.getRightX(),
+                        () -> 0.6 * -driveController.getLeftY(),
+                        () -> 0.6 * -driveController.getLeftX(),
+                        () -> 0.6 * -driveController.getRightX(), // 0.6
                         0.1,
                         () -> true));
 
@@ -157,9 +172,9 @@ public class RobotContainer {
                                                 + xboxController.getRightTriggerAxis(),
                                         0.15)));
 
-        gripper.setDefaultCommand(
-                gripper.setWristPower(
-                        () -> MathUtil.applyDeadband(-xboxController.getLeftY(), 0.15)));
+        //        gripper.setDefaultCommand(
+        //                gripper.setWristPower(
+        //                        () -> MathUtil.applyDeadband(-xboxController.getLeftY(), 0.15)));
     }
 
     private void configureButtonBindings() {
@@ -247,28 +262,25 @@ public class RobotContainer {
                 .onFalse(intake.reset(Units.Degrees.of(0)));
 
         xboxController
-                .rightBumper()
-                .whileTrue(gripper.setRollerPower(0.4))
-                .onFalse(gripper.setRollerPower(0));
-        xboxController
                 .leftBumper()
-                .whileTrue(gripper.setRollerPower(-0.4))
-                .onFalse(gripper.setRollerPower(0));
-
-        xboxController
-                .b()
-                .whileTrue(intake.setAngle(IntakeConstants.IntakePose.DOWN))
-                .onFalse(intake.setAngle(IntakeConstants.IntakePose.UP));
+                .whileTrue(gripper.setRollerAndWrist(0, Units.Degrees.of(95).mutableCopy()))
+                .onFalse(
+                        gripper.setRollerPower(-0.4)
+                                .withTimeout(3)
+                                .andThen(gripper.setRollerPower(0)));
 
         xboxController.a().onTrue(elevator.unlock());
         xboxController.y().onTrue(elevator.lock());
 
-        //
-        // xboxController.a().whileTrue(elevator.setHeight(Units.Meters.of(0).mutableCopy()));
-        //
-        // xboxController.x().whileTrue(elevator.setHeight(Units.Meters.of(0.2).mutableCopy()));
-        //
-        // xboxController.y().whileTrue(elevator.setHeight(Units.Meters.of(0.48).mutableCopy()));
+        xboxController
+                .rightBumper()
+                .onTrue(
+                        Commands.runOnce(
+                                () ->
+                                        ShootingManager.getInstance()
+                                                .setShooting(
+                                                        !ShootingManager.getInstance()
+                                                                .isShooting())));
     }
 
     /**
@@ -277,6 +289,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new PathPlannerAuto("I cant do this");
+        return new PathPlannerAuto("AH123");
     }
 }
