@@ -34,7 +34,7 @@ public class ShootingManager {
 
     @Setter
     private Measure<Distance> maxWarmupDistance =
-            Meters.of(100.0); // Arbitrary number larger than possible
+            Meters.of(9.0); // Arbitrary number larger than possible
 
     @Setter private Measure<Distance> maxShootingDistance = Meters.of(10.5);
 
