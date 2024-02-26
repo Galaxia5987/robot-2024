@@ -79,9 +79,7 @@ public class CommandGroups {
     }
 
     public Command feedShooter() {
-        return feedWithWait(ShootingManager.getInstance()::readyToShoot)
-                .alongWith(Commands.runOnce(() -> ShootingManager.getInstance().setShooting(true)))
-                .withName("feedShooter");
+        return feedWithWait(ShootingManager.getInstance()::readyToShoot).withName("feedShooter");
     }
 
     public Command intake() {
