@@ -9,10 +9,10 @@ public class SwerveConstants {
     public static final double NEO_550_CURRENT_LIMIT = 20;
     public static final CurrentLimitsConfigs TALON_FX_CURRENT_LIMIT_CONFIGS =
             new CurrentLimitsConfigs()
-                    .withSupplyCurrentLimit(50)
+                    .withSupplyCurrentLimit(40)
                     .withStatorCurrentLimit(80)
-                    .withStatorCurrentLimitEnable(false)
-                    .withSupplyCurrentLimitEnable(false);
+                    .withStatorCurrentLimitEnable(true)
+                    .withSupplyCurrentLimitEnable(true);
 
     public static final double VOLT_COMP_SATURATION = 12;
     public static final double NEUTRAL_DEADBAND = 0.0;
