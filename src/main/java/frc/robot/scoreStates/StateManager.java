@@ -14,14 +14,14 @@ public class StateManager {
         currentState = initializedState;
     }
 
-    public static StateManager getINSTANCE(ScoreState initializedState) {
+    public static StateManager getInstance(ScoreState initializedState) {
         if (INSTANCE == null) {
             INSTANCE = new StateManager(initializedState);
         }
         return INSTANCE;
     }
 
-    public static StateManager getINSTANCE() {
+    public static StateManager getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new StateManager();
         }
