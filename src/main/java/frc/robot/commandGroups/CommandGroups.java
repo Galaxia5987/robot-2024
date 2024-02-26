@@ -140,6 +140,18 @@ public class CommandGroups {
         return shooter.setVelocity(velocity).alongWith(conveyor.setVelocity(velocity));
     }
 
+    public Command stopHoodShooterConveyorGripper() {
+        return Commands.parallel(
+                hood.setAngle(Units.Degrees.of(114).mutableCopy()),
+                shooter.setVelocity(Units.RotationsPerSecond.zero().mutableCopy()),
+                conveyor.stop(),
+                gripper.setRollerPower(0));
+    }
+
+    public Command stopAllSubsystems() {
+        return stopHoodShooterConveyorGripper().alongWith(intake.stop());
+    }
+
     public Command grillevatorBit() {
         return Commands.sequence(
                 elevator.setHeight(CommandGroupsConstants.MAX_HEIGHT),
