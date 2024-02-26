@@ -72,7 +72,7 @@
     },
     {
       "name": "stop intake",
-      "waypointRelativePos": 1.55,
+      "waypointRelativePos": 1.45,
       "command": {
         "type": "parallel",
         "data": {
@@ -80,24 +80,7 @@
             {
               "type": "named",
               "data": {
-                "name": "stopIntake"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "score",
-      "waypointRelativePos": 2.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "score"
+                "name": "retractIntake"
               }
             }
           ]

@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.488649917917414,
-        "y": 6.629835587462149
+        "x": 2.4691504014837022,
+        "y": 6.737082927847566
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.548858379301256,
-        "y": 6.929687990303033
+        "x": 5.529358862867544,
+        "y": 7.03693533068845
       },
       "isLocked": false,
       "linkedName": "AH"
     },
     {
       "anchor": {
-        "x": 7.9077377527963995,
-        "y": 7.472564688721588
+        "x": 7.831517420754557,
+        "y": 7.234320596907227
       },
       "prevControl": {
-        "x": 7.702966956044274,
-        "y": 7.485827423600196
+        "x": 7.626746624002432,
+        "y": 7.247583331785835
       },
       "nextControl": {
-        "x": 8.033159790900427,
-        "y": 7.464441268460046
+        "x": 7.956939458858587,
+        "y": 7.226197176645685
       },
       "isLocked": false,
       "linkedName": "center note line #1"
     },
     {
       "anchor": {
-        "x": 2.488649917917414,
-        "y": 6.629835587462149
+        "x": 2.4691504014837022,
+        "y": 6.737082927847566
       },
       "prevControl": {
-        "x": 5.431916834876858,
-        "y": 6.9647704536303525
+        "x": 5.412417318443144,
+        "y": 7.072017794015769
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,7 +47,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1,
-      "rotationDegrees": 0,
+      "rotationDegrees": 22.13367771637568,
       "rotateFast": false
     }
   ],
@@ -65,12 +65,6 @@
               "data": {
                 "name": "intake"
               }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "followPathRotation"
-              }
             }
           ]
         }
@@ -78,7 +72,7 @@
     },
     {
       "name": "stop intake",
-      "waypointRelativePos": 1.7,
+      "waypointRelativePos": 1.75,
       "command": {
         "type": "parallel",
         "data": {
@@ -87,29 +81,6 @@
               "type": "named",
               "data": {
                 "name": "adjustToTarget"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "stopIntake"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "score",
-      "waypointRelativePos": 2.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "score"
               }
             }
           ]

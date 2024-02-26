@@ -6,84 +6,9 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "prepareShoot"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "A0"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "score"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "finishScore"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "AH"
-                      }
-                    },
-                    {
-                      "type": "parallel",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "score"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "stopIntake"
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "finishScore"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "A1"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "score"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
+            "pathName": "New Path"
           }
         }
       ]
