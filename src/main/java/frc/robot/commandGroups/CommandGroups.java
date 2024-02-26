@@ -6,9 +6,6 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.lib.PoseEstimation;
-import frc.robot.lib.math.interpolation.InterpolatingDouble;
-import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.gripper.Gripper;
@@ -76,15 +73,8 @@ public class CommandGroups {
                 .withName("feedWithWait");
     }
 
-    public Command feedShooter() {
-        return feedWithWait(ShootingManager.getInstance()::readyToShoot)
-                .alongWith(Commands.runOnce(() -> ShootingManager.getInstance().setShooting(true)))
-                .withName("feedShooter");
-    }
-
     public Command intake() {
         return Commands.repeatingSequence(
-                        // retractGrillevator(),
                         Commands.parallel(
                                 intake.intake(),
                                 gripper.setRollerPower(0.3)
@@ -92,26 +82,7 @@ public class CommandGroups {
                                         .andThen(
                                                 gripper.setRollerPower(
                                                         0)))) // TODO: replace null with leds
-                // mode
                 .withName("intake");
-    }
-
-    public Command setShooter() {
-        return Commands.repeatingSequence(
-                shooter.setVelocity(ShootingManager.getInstance().getShooterCommandedVelocity())
-                        .until(shooter::atSetpoint));
-    }
-
-    public Command setScoringSystems() {
-        return Commands.parallel(setHood(), setShooter());
-    }
-
-    public Command setHood() {
-        var distanceToSpeaker =
-                new InterpolatingDouble(PoseEstimation.getInstance().getDistanceToSpeaker());
-        return Commands.repeatingSequence(
-                hood.setAngle(ShootingManager.getInstance().getHoodCommandedAngle())
-                        .until(hood::atSetpoint));
     }
 
     public Command outtakeGripper() {
@@ -127,13 +98,6 @@ public class CommandGroups {
                         Commands.parallel(
                                 feed(), shooter.setVelocity(ShooterConstants.OUTTAKE_POWER)))
                 .withName("outtakeShooter");
-    }
-
-    public Command shootAndConvey(
-            MutableMeasure<Velocity<Angle>> topVelocity,
-            MutableMeasure<Velocity<Angle>> bottomVelocity) {
-        return shooter.setVelocity(topVelocity, bottomVelocity)
-                .alongWith(conveyor.setVelocity(bottomVelocity));
     }
 
     public Command shootAndConvey(MutableMeasure<Velocity<Angle>> velocity) {
@@ -173,10 +137,6 @@ public class CommandGroups {
                                 Commands.waitSeconds(3),
                                 shooter.stop(),
                                 hood.setAngle(Units.Degrees.of(114).mutableCopy())));
-    }
-
-    public Command shootAndIntake() {
-        return Commands.parallel(gripper.setRollerPower(0.7), intake.intake());
     }
 
     public Command allBits() {
