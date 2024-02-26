@@ -55,13 +55,13 @@ public class HoodConstants {
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 kP.initDefault(870);
-                kI.initDefault(1);
-                kD.initDefault(100);
+                kI.initDefault(3);
+                kD.initDefault(210);
                 kS.initDefault(1.5);
                 kV.initDefault(0);
                 kA.initDefault(0.0);
                 kG.initDefault(25.0);
-                ABSOLUTE_ENCODER_OFFSET.initDefault((283.3 - 33.48) / 360.0);
+                ABSOLUTE_ENCODER_OFFSET.initDefault((283.17 - 33.48) / 360.0);
             case SIM:
             case REPLAY:
                 kP.initDefault(10);
