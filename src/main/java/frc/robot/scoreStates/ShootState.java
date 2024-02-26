@@ -2,6 +2,8 @@ package frc.robot.scoreStates;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -9,8 +11,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
-import frc.robot.subsystems.conveyor.Conveyor;
-import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.shooter.Shooter;
@@ -24,8 +24,6 @@ import org.littletonrobotics.junction.AutoLogOutput;
 public class ShootState implements ScoreState {
     private final Shooter shooter;
     private final Hood hood;
-    private final Conveyor conveyor;
-    private final Gripper gripper;
     private final PoseEstimation poseEstimation;
     private final CommandGroups commandGroups;
     private final SwerveDrive swerveDrive;
@@ -43,13 +41,9 @@ public class ShootState implements ScoreState {
 
     @Setter private Measure<Distance> maxShootingDistance = Meters.of(10.5);
 
-    @Setter @Getter @AutoLogOutput boolean isShooting = true;
-
     public ShootState() {
         shooter = Shooter.getInstance();
         hood = Hood.getInstance();
-        conveyor = Conveyor.getInstance();
-        gripper = Gripper.getInstance();
         poseEstimation = PoseEstimation.getInstance();
         commandGroups = CommandGroups.getInstance();
         swerveDrive = SwerveDrive.getInstance();
@@ -60,6 +54,31 @@ public class ShootState implements ScoreState {
         return poseEstimation.getDistanceToSpeaker() < maxShootingDistance.in(Meters)
                 && hood.atSetpoint()
                 && shooter.atSetpoint();
+    }
+
+    private Command swerveControllerAdjustment(Optional<CommandXboxController> driveController) {
+        return swerveDrive.driveAndAdjust(
+                getSwerveAngle(),
+                () ->
+                        driveController
+                                .map(commandXboxController -> -commandXboxController.getLeftY())
+                                .orElseThrow(),
+                () ->
+                        -driveController
+                                .map(commandXboxController -> -commandXboxController.getLeftX())
+                                .orElseThrow(),
+                0.1);
+    }
+
+    private Command overrideAutoRotation() {
+        return Commands.runOnce(
+                () ->
+                        PPHolonomicDriveController.setRotationTargetOverride(
+                                () -> Optional.of(new Rotation2d(getSwerveAngle()))));
+    }
+
+    public Command feedShooter() {
+        return commandGroups.feedWithWait(this::readyToShoot).withName("feedShooter");
     }
 
     @Override
@@ -94,27 +113,20 @@ public class ShootState implements ScoreState {
                 });
     }
 
-    @Override
-    public Command score(Optional<CommandXboxController> driveController) {
+    public Command prepareSubsytems() {
         return Commands.parallel(
-                        hood.setAngle(getHoodAngle()),
-                        commandGroups.shootAndConvey(getShooterVelocity()),
-                        swerveDrive.driveAndAdjust(
-                                getSwerveAngle(),
-                                () ->
-                                        driveController
-                                                .map(
-                                                        commandXboxController ->
-                                                                -commandXboxController.getLeftY())
-                                                .orElseThrow(),
-                                () ->
-                                        -driveController
-                                                .map(
-                                                        commandXboxController ->
-                                                                -commandXboxController.getLeftX())
-                                                .orElseThrow(),
-                                0.1))
+                hood.setAngle(getHoodAngle()), commandGroups.shootAndConvey(getShooterVelocity()));
+    }
+
+    @Override
+    public Command score(Optional<CommandXboxController> driveController, boolean isAuto) {
+        return Commands.parallel(
+                        prepareSubsytems(),
+                        Commands.either(
+                                overrideAutoRotation(),
+                                swerveControllerAdjustment(driveController),
+                                () -> isAuto))
                 .until(this::readyToShoot)
-                .alongWith(commandGroups.feedShooter());
+                .alongWith(feedShooter());
     }
 }
