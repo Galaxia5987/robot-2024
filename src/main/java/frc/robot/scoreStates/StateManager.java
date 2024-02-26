@@ -1,12 +1,14 @@
 package frc.robot.scoreStates;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import lombok.Getter;
+
 public class StateManager {
     private static StateManager INSTANCE;
-    private static ScoreState currentState;
+    @Getter private ScoreState currentState;
 
-    private StateManager(){
-
-    }
+    private StateManager() {}
 
     private StateManager(ScoreState initializedState) {
         currentState = initializedState;
@@ -26,15 +28,11 @@ public class StateManager {
         return INSTANCE;
     }
 
-    public static boolean isState(ScoreState isState) {
+    public boolean isState(ScoreState isState) {
         return currentState == isState;
     }
 
-    public static void setCurrentState(ScoreState currentState) {
-        StateManager.currentState = currentState;
-    }
-
-    public static ScoreState getCurrentState() {
-        return currentState;
+    public Command setCurrentState(ScoreState state) {
+        return Commands.runOnce(() -> currentState = state);
     }
 }
