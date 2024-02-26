@@ -28,10 +28,7 @@ import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOReal;
 import frc.robot.subsystems.hood.HoodIOSim;
 import frc.robot.subsystems.intake.*;
-import frc.robot.subsystems.shooter.Shooter;
-import frc.robot.subsystems.shooter.ShooterIO;
-import frc.robot.subsystems.shooter.ShooterIOReal;
-import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.shooter.*;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.Optional;
 
@@ -109,11 +106,14 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("autoList", autoChooser);
         NamedCommands.registerCommand("intake", commandGroups.intake());
-        NamedCommands.registerCommand("stopIntake", intake.stop());
+        NamedCommands.registerCommand("stopIntake", intake.stop(false));
+        NamedCommands.registerCommand("retractIntake", intake.stop());
         NamedCommands.registerCommand("score", commandGroups.feedShooter());
         NamedCommands.registerCommand("finishScore", gripper.setRollerPower(0).withTimeout(0.25));
         NamedCommands.registerCommand("prepareShoot", prepare());
         NamedCommands.registerCommand("shootAndIntake", commandGroups.shootAndIntake());
+        NamedCommands.registerCommand("adjustToTarget", Commands.runOnce(() -> ShootingManager.getInstance().setShooting(true)));
+        NamedCommands.registerCommand("followPathRotation", Commands.runOnce(() -> ShootingManager.getInstance().setShooting(false)));
 
         PPHolonomicDriveController.setRotationTargetOverride(
                 () -> {

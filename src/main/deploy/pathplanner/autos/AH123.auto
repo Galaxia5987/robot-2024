@@ -20,6 +20,12 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "adjustToTarget"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "A0"
@@ -44,9 +50,22 @@
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "parallel",
                       "data": {
-                        "name": "score"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "score"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "stopIntake"
+                            }
+                          }
+                        ]
                       }
                     },
                     {

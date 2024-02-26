@@ -65,6 +65,12 @@
               "data": {
                 "name": "intake"
               }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathRotation"
+              }
             }
           ]
         }
@@ -77,6 +83,12 @@
         "type": "parallel",
         "data": {
           "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "adjustToTarget"
+              }
+            },
             {
               "type": "named",
               "data": {

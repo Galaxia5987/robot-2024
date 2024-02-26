@@ -87,8 +87,12 @@ public class Intake extends SubsystemBase {
     }
 
     public Command stop() {
+        return stop(true);
+    }
+
+    public Command stop(boolean retract) {
         return Commands.parallel(
-                        setAngle(IntakeConstants.IntakePose.UP),
+                        retract ? setAngle(IntakeConstants.IntakePose.UP) : Commands.none(),
                         setRollerSpeed(0),
                         setCenterRollerSpeed(0))
                 .withName("stopped");
