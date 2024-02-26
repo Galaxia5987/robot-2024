@@ -116,6 +116,11 @@ public class Robot extends LoggedRobot {
                 .processVisionMeasurements(Constants.VISION_MEASUREMENT_MULTIPLIER);
         ShootingManager.getInstance().updateCommandedState();
         CommandScheduler.getInstance().run();
+
+        Logger.recordOutput(
+                "Robot/DistanceToSpeaker", PoseEstimation.getInstance().getDistanceToSpeaker());
+        Logger.recordOutput("Robot/IsShooting", ShootingManager.getInstance().isShooting());
+        Logger.recordOutput("Robot/ReadyToShoot", ShootingManager.getInstance().readyToShoot());
     }
 
     /**
