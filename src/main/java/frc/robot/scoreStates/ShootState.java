@@ -1,14 +1,14 @@
 package frc.robot.scoreStates;
 
+import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.*;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.lib.PoseEstimation;
-import frc.robot.lib.Utils;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
-import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.hood.Hood;
@@ -16,11 +16,10 @@ import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
-
-import static edu.wpi.first.units.Units.*;
 
 public class ShootState implements ScoreState {
     private final Shooter shooter;
@@ -28,12 +27,16 @@ public class ShootState implements ScoreState {
     private final Conveyor conveyor;
     private final Gripper gripper;
     private final PoseEstimation poseEstimation;
+    private final CommandGroups commandGroups;
+    private final SwerveDrive swerveDrive;
+
     @Getter
     private final MutableMeasure<Velocity<Angle>> shooterVelocity =
             RotationsPerSecond.zero().mutableCopy();
+
     @Getter private final MutableMeasure<Angle> hoodAngle = Degrees.zero().mutableCopy();
-    @Getter
-    private final MutableMeasure<Angle> swerveAngle = Rotations.zero().mutableCopy();
+    @Getter private final MutableMeasure<Angle> swerveAngle = Rotations.zero().mutableCopy();
+
     @Setter
     private Measure<Distance> maxWarmupDistance =
             Meters.of(100.0); // Arbitrary number larger than possible
@@ -48,6 +51,8 @@ public class ShootState implements ScoreState {
         conveyor = Conveyor.getInstance();
         gripper = Gripper.getInstance();
         poseEstimation = PoseEstimation.getInstance();
+        commandGroups = CommandGroups.getInstance();
+        swerveDrive = SwerveDrive.getInstance();
     }
 
     @AutoLogOutput(key = "ReadyToShoot")
@@ -57,50 +62,59 @@ public class ShootState implements ScoreState {
                 && shooter.atSetpoint();
     }
 
-    public Command setShooter() {
-        return shooter.setVelocity(getShooterVelocity())
-                .until(shooter::atSetpoint);
-    }
+    @Override
+    public Command calculateTargets() {
+        return Commands.runOnce(
+                () -> {
+                    double distanceToTarget = poseEstimation.getDistanceToSpeaker();
 
-    public Command setHood() {
-        return hood.setAngle(getHoodAngle())
-                .until(hood::atSetpoint);
+                    if (distanceToTarget < maxWarmupDistance.in(Meters)) {
+                        shooterVelocity.mut_replace(
+                                ShooterConstants.VELOCITY_BY_DISTANCE.getInterpolated(
+                                                new InterpolatingDouble(distanceToTarget))
+                                        .value,
+                                RotationsPerSecond);
+
+                        hoodAngle.mut_replace(
+                                HoodConstants.ANGLE_BY_DISTANCE.getInterpolated(
+                                                new InterpolatingDouble(distanceToTarget))
+                                        .value,
+                                Degrees);
+                    } else {
+                        shooterVelocity.mut_replace(0, RotationsPerSecond);
+                        hoodAngle.mut_replace(114, Degrees);
+                    }
+
+                    var toSpeaker = poseEstimation.getPoseRelativeToSpeaker();
+                    swerveAngle
+                            .mut_replace(
+                                    Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI,
+                                    Radians)
+                            .mut_plus(-2, Degrees);
+                });
     }
 
     @Override
-    public Command updateState(){
-        double distanceToTarget = poseEstimation.getDistanceToSpeaker();
-
-        if (distanceToTarget < maxWarmupDistance.in(Meters)) {
-            shooterVelocity.mut_replace(
-                    ShooterConstants.VELOCITY_BY_DISTANCE.getInterpolated(
-                            new InterpolatingDouble(distanceToTarget))
-                            .value,
-                    RotationsPerSecond);
-
-            hoodAngle.mut_replace(
-                    HoodConstants.ANGLE_BY_DISTANCE.getInterpolated(
-                            new InterpolatingDouble(distanceToTarget))
-                            .value,
-                    Degrees);
-        } else {
-            shooterVelocity.mut_replace(0, RotationsPerSecond);
-            hoodAngle.mut_replace(114, Degrees);
-        }
-
-        var toSpeaker = poseEstimation.getPoseRelativeToSpeaker();
-        swerveAngle
-                .mut_replace(Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI, Radians)
-                .mut_plus(-2, Degrees);
-    }
-
-    @Override
-    public Command score() { //TODO:
-        return Commands.repeatingSequence(
-                Commands.parallel(
-                                .andThen(() -> SwerveDrive.getInstance().lock()),
-                        setShooter(),
-                        setHood(),
-                        CommandGroups.getInstance().feedShooter()));
+    public Command score(Optional<CommandXboxController> driveController) {
+        return Commands.parallel(
+                        hood.setAngle(getHoodAngle()),
+                        commandGroups.shootAndConvey(getShooterVelocity()),
+                        swerveDrive.driveAndAdjust(
+                                getSwerveAngle(),
+                                () ->
+                                        driveController
+                                                .map(
+                                                        commandXboxController ->
+                                                                -commandXboxController.getLeftY())
+                                                .orElseThrow(),
+                                () ->
+                                        -driveController
+                                                .map(
+                                                        commandXboxController ->
+                                                                -commandXboxController.getLeftX())
+                                                .orElseThrow(),
+                                0.1))
+                .until(this::readyToShoot)
+                .alongWith(commandGroups.feedShooter());
     }
 }
