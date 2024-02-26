@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.scoreStates.LocalADStarAK;
 import frc.robot.scoreStates.StateManager;
-import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.conveyor.ConveyorConstants;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.gripper.GripperConstants;
@@ -27,8 +26,6 @@ import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
-
-import javax.swing.plaf.nimbus.State;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -117,7 +114,7 @@ public class Robot extends LoggedRobot {
     public void robotPeriodic() {
         PoseEstimation.getInstance()
                 .processVisionMeasurements(Constants.VISION_MEASUREMENT_MULTIPLIER);
-        StateManager.getINSTANCE().;
+        StateManager.getINSTANCE().getCurrentState().calculateTargets();
         CommandScheduler.getInstance().run();
     }
 
