@@ -111,12 +111,13 @@ public class Constants {
                 () -> swerveDrive.getEstimator().getEstimatedPosition(),
                 (pose) -> {
                     swerveDrive.resetGyro(pose.getRotation());
+                    swerveDrive.resetPose(swerveDrive.getBotPose());
                 },
                 swerveDrive::getCurrentSpeeds,
                 (speeds) -> swerveDrive.drive(speeds, false),
                 new HolonomicPathFollowerConfig(
                         new PIDConstants(5.5, 0, 0.15),
-                        new PIDConstants(6, 0, 0),
+                        new PIDConstants(3, 0, 0.4),
                         SwerveConstants.MAX_X_Y_VELOCITY,
                         Constants.ROBOT_LENGTH.in(Units.Meters) / Math.sqrt(2),
                         new ReplanningConfig()),
