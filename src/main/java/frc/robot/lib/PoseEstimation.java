@@ -9,6 +9,7 @@ import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -39,15 +40,18 @@ public class PoseEstimation {
             if (result == null) {
                 continue;
             }
-            Stream<Double> distances =
-                    result.targetsUsed.stream()
-                            .map(
-                                    (target) ->
-                                            target.getBestCameraToTarget()
-                                                    .getTranslation()
-                                                    .getNorm());
-            distances = distances.filter((distance) -> distance < 3);
-            var ambiguities = distances.map((d) -> d * d);
+            Supplier<Stream<Double>> distances =
+                    () ->
+                            result.targetsUsed.stream()
+                                    .map(
+                                            (target) ->
+                                                    target.getBestCameraToTarget()
+                                                            .getTranslation()
+                                                            .getNorm());
+            if (distances.get().anyMatch((distance) -> distance > 2.8)) {
+                continue;
+            }
+            var ambiguities = distances.get().map((d) -> d * d);
             double stddev =
                     multiplier * Utils.averageAmbiguity(ambiguities.collect(Collectors.toList()));
             swerveDrive
@@ -58,8 +62,7 @@ public class PoseEstimation {
                             VecBuilder.fill(
                                     stddev,
                                     stddev,
-                                    10
-                                            * stddev
+                                    stddev
                                             * SwerveConstants.MAX_OMEGA_VELOCITY
                                             / SwerveConstants.MAX_X_Y_VELOCITY));
         }
