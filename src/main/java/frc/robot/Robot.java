@@ -114,7 +114,7 @@ public class Robot extends LoggedRobot {
     public void robotPeriodic() {
         PoseEstimation.getInstance()
                 .processVisionMeasurements(Constants.VISION_MEASUREMENT_MULTIPLIER);
-        StateManager.getINSTANCE().getCurrentState().calculateTargets();
+        StateManager.getInstance().getCurrentState().calculateTargets();
         CommandScheduler.getInstance().run();
     }
 
