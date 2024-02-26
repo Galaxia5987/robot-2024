@@ -16,7 +16,7 @@ public class ElevatorConstants { // TODO: check real values
     public static final double MECHANISM_WIDTH = 0.8; // [m]
     public static final double MECHANISM_HEIGHT = 2; // [m]
     public static final double GEAR_RATIO = 12.0;
-    public static final double DRUM_RADIUS = 0.0195; // [m]
+    public static final double DRUM_RADIUS = 0.0125; // [m]
     public static final double CIRCUMFERENCE = DRUM_RADIUS * (2 * Math.PI);
 
     public static final MutableMeasure<Angle> OPEN_POSITION = Units.Degrees.of(0).mutableCopy();
