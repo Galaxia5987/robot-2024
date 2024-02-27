@@ -22,6 +22,8 @@ public class Constants {
 
     public static final int CONFIG_TIMEOUT = 100; // [ms]
 
+    public static final double LOOP_TIME = 0.02;
+
     public static Mode CURRENT_MODE = Mode.REAL;
 
     public static double VISION_MEASUREMENT_MULTIPLIER = 1;
@@ -73,10 +75,10 @@ public class Constants {
     }
 
     public static final double[] SWERVE_OFFSETS = {
-        0.794_376_719_859_418,
-        0.780_963_919_524_097_9,
-        0.484_072_612_101_815_3,
-        0.609_018_215_225_455_4
+        0.791_147_194_778_679_9,
+        0.781_006_969_525_174_2,
+        0.485_464_112_136_602_8,
+        0.609_238_365_230_959_1
     };
 
     public static void initSwerve() {
@@ -107,12 +109,15 @@ public class Constants {
         SwerveDrive swerveDrive = SwerveDrive.getInstance();
         AutoBuilder.configureHolonomic(
                 () -> swerveDrive.getEstimator().getEstimatedPosition(),
-                swerveDrive::resetPose,
+                (pose) -> {
+                    swerveDrive.resetGyro(pose.getRotation());
+                    swerveDrive.resetPose(swerveDrive.getBotPose());
+                },
                 swerveDrive::getCurrentSpeeds,
                 (speeds) -> swerveDrive.drive(speeds, false),
                 new HolonomicPathFollowerConfig(
-                        new PIDConstants(5, 0, 0),
-                        new PIDConstants(5, 0, 0),
+                        new PIDConstants(5.5, 0, 0.15),
+                        new PIDConstants(3, 0, 0.4),
                         SwerveConstants.MAX_X_Y_VELOCITY,
                         Constants.ROBOT_LENGTH.in(Units.Meters) / Math.sqrt(2),
                         new ReplanningConfig()),
@@ -137,10 +142,6 @@ public class Constants {
                                         AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()));
                 leftOpi =
                         new VisionModule(
-                                new PhotonVisionIOReal(
-                                        new PhotonCamera("Front_left_camera"),
-                                        FRONT_LEFT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()),
                                 new PhotonVisionIOReal(
                                         new PhotonCamera("Back_left_camera"),
                                         BACK_LEFT_CAMERA_POSE,

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.lib.Utils;
 import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -30,6 +31,7 @@ public class Hood extends SubsystemBase {
                     new MechanismLigament2d(
                             "Hood", HoodConstants.HOOD_LENGTH.in(Units.Meters), 45));
     private final Timer timer = new Timer();
+    private final Timer encoderTimer = new Timer();
 
     @Setter private double chassisCompensationTorque;
 
@@ -43,6 +45,9 @@ public class Hood extends SubsystemBase {
 
         timer.start();
         timer.reset();
+
+        encoderTimer.start();
+        encoderTimer.reset();
     }
 
     /**
@@ -64,8 +69,8 @@ public class Hood extends SubsystemBase {
 
     @AutoLogOutput
     public boolean atSetpoint() {
-        return inputs.angle.isNear(
-                inputs.angleSetpoint, HoodConstants.POSITION_TOLERANCE.in(Units.Value));
+        return Utils.epsilonEquals(
+                inputs.angle.in(Units.Degrees), inputs.angleSetpoint.in(Units.Degrees), 0.5);
     }
 
     public Command setAngle(MutableMeasure<Angle> angle) {
@@ -100,8 +105,10 @@ public class Hood extends SubsystemBase {
     /** Updates the state of the hood. */
     @Override
     public void periodic() {
-        io.updateInternalEncoder();
         io.updateInputs();
+        if (encoderTimer.advanceIfElapsed(2)) {
+            io.updateInternalEncoder();
+        }
         if (timer.advanceIfElapsed(0.1)) {
             Logger.processInputs("Hood", inputs);
         }

@@ -27,7 +27,15 @@ public class HoodIOReal implements HoodIO {
 
     @Override
     public void setAngle(MutableMeasure<Angle> angle) {
-        motor.setControl(positionControl.withPosition(angle.in(Units.Rotations)));
+        motor.setControl(
+                positionControl
+                        .withPosition(angle.in(Units.Rotations))
+                        .withFeedForward(
+                                Math.signum(
+                                                inputs.angleSetpoint
+                                                        .minus(inputs.angle)
+                                                        .in(Units.Degrees))
+                                        * HoodConstants.kS.get()));
     }
 
     @Override

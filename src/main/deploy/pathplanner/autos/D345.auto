@@ -32,6 +32,12 @@
                       }
                     },
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "finishScore"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "D3"
@@ -41,6 +47,12 @@
                       "type": "named",
                       "data": {
                         "name": "score"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "finishScore"
                       }
                     },
                     {
@@ -56,9 +68,21 @@
                       }
                     },
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "finishScore"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "D5"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "finishScore"
                       }
                     }
                   ]

@@ -3,12 +3,18 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
+    "AH123",
+    "Center line",
+    "D345",
+    "Lower",
+    "Middle",
     "New Folder",
-    "D345"
+    "CL34",
+    "Upper"
   ],
   "autoFolders": [],
   "defaultMaxVel": 4.0,
-  "defaultMaxAccel": 2.5,
+  "defaultMaxAccel": 2.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 4.5

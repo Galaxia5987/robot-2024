@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.3186789318946823,
-      "y": 5.567111941824834
-    },
-    "rotation": 0.0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -28,6 +22,18 @@
                     {
                       "type": "named",
                       "data": {
+                        "name": "adjustToTarget"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "A0"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
                         "name": "score"
                       }
                     },
@@ -38,34 +44,58 @@
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "path",
+                      "data": {
+                        "pathName": "AH"
+                      }
+                    },
+                    {
+                      "type": "parallel",
                       "data": {
                         "commands": [
                           {
-                            "type": "path",
+                            "type": "named",
                             "data": {
-                              "pathName": "BM"
+                              "name": "score"
                             }
                           },
                           {
                             "type": "named",
                             "data": {
-                              "name": "intake"
+                              "name": "stopIntake"
                             }
                           }
                         ]
                       }
                     },
                     {
-                      "type": "wait",
+                      "type": "named",
                       "data": {
-                        "waitTime": 0.3
+                        "name": "finishScore"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "A1"
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "stopIntake"
+                        "name": "score"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "finishScore"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "A2"
                       }
                     },
                     {

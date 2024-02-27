@@ -74,27 +74,25 @@ public class Gripper extends SubsystemBase {
                 < GripperConstants.GRIPPER_OUTTAKE_MIN_HEIGHT.in(Units.Meters);
     }
 
-    public Command setRollerAndWrist(MutableMeasure<Angle> wristAngle, double rollerPower) {
+    public Command setRollerAndWrist(double rollerPower, MutableMeasure<Angle> wristAngle) {
         return setRollerPower(rollerPower).raceWith(setWristPosition(wristAngle));
     }
 
     public Command intake() {
         return setRollerAndWrist(
-                        GripperConstants.INTAKE_ANGLE.mutableCopy(), GripperConstants.INTAKE_POWER)
+                        GripperConstants.INTAKE_POWER, GripperConstants.INTAKE_ANGLE.mutableCopy())
                 .withName("intake");
     }
 
     public Command outtake() {
         return setRollerAndWrist(
-                        GripperConstants.OUTTAKE_ANGLE.mutableCopy(),
-                        GripperConstants.OUTTAKE_POWER)
+                        GripperConstants.OUTTAKE_POWER,
+                        GripperConstants.OUTTAKE_ANGLE.mutableCopy())
                 .withName("outtake");
     }
 
     public Command setWristPosition(MutableMeasure<Angle> angle) {
-        return Commands.runOnce(() -> io.setAngle(angle))
-                .until(this::atSetpoint)
-                .withName("set wrist position");
+        return Commands.runOnce(() -> io.setAngle(angle)).withName("set wrist position");
     }
 
     public Command scoreTrap() {

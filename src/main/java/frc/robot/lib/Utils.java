@@ -5,6 +5,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
+import frc.robot.Constants;
 import java.util.Comparator;
 import java.util.List;
 
@@ -73,5 +74,32 @@ public class Utils {
         return new Rotation2d(
                 destinationTranslation.getX() - currentTranslation.getX(),
                 destinationTranslation.getY() - currentTranslation.getY());
+    }
+
+    /** Logical inverse of the above. */
+    public static ChassisSpeeds log(final ChassisSpeeds speeds) {
+        var transform =
+                new Pose2d(
+                        speeds.vxMetersPerSecond * Constants.LOOP_TIME,
+                        speeds.vyMetersPerSecond * Constants.LOOP_TIME,
+                        new Rotation2d(speeds.omegaRadiansPerSecond * Constants.LOOP_TIME));
+        final double dtheta = transform.getRotation().getRadians();
+        final double half_dtheta = 0.5 * dtheta;
+        final double cos_minus_one = transform.getRotation().getCos() - 1.0;
+        double halftheta_by_tan_of_halfdtheta;
+        if (Math.abs(cos_minus_one) < EPSILON) {
+            halftheta_by_tan_of_halfdtheta = 1.0 - 1.0 / 12.0 * dtheta * dtheta;
+        } else {
+            halftheta_by_tan_of_halfdtheta =
+                    -(half_dtheta * transform.getRotation().getSin()) / cos_minus_one;
+        }
+        final Translation2d translation_part =
+                transform
+                        .getTranslation()
+                        .rotateBy(new Rotation2d(halftheta_by_tan_of_halfdtheta, -half_dtheta));
+        return new ChassisSpeeds(
+                translation_part.getX() / Constants.LOOP_TIME,
+                translation_part.getY() / Constants.LOOP_TIME,
+                dtheta / Constants.LOOP_TIME);
     }
 }

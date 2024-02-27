@@ -10,10 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Voltage;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,7 +24,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 import lombok.Getter;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -192,6 +188,16 @@ public class SwerveDrive extends SubsystemBase {
      * @param fieldOriented Should the drive be field oriented.
      */
     public void drive(ChassisSpeeds chassisSpeeds, boolean fieldOriented) {
+        double magnitude =
+                Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
+        Rotation2d angle =
+                new Rotation2d(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
+        angle = angle.minus(Rotation2d.fromRadians(0.075 * chassisSpeeds.omegaRadiansPerSecond));
+        chassisSpeeds =
+                new ChassisSpeeds(
+                        angle.getCos() * magnitude,
+                        angle.getSin() * magnitude,
+                        chassisSpeeds.omegaRadiansPerSecond);
         loggerInputs.desiredSpeeds = chassisSpeeds;
 
         ChassisSpeeds fieldOrientedChassisSpeeds =
@@ -244,7 +250,7 @@ public class SwerveDrive extends SubsystemBase {
                                 fieldOriented.getAsBoolean()));
     }
 
-    public Command turnCommand(Supplier<Rotation2d> rotation, double turnTolerance) {
+    public Command turnCommand(MutableMeasure<Angle> rotation, double turnTolerance) {
         DieterController turnController =
                 new DieterController(
                         SwerveConstants.ROTATION_KP.get(),
@@ -262,7 +268,7 @@ public class SwerveDrive extends SubsystemBase {
                                                 .getEstimatedPosition()
                                                 .getRotation()
                                                 .getRotations(),
-                                        rotation.get().getRotations()),
+                                        rotation.in(edu.wpi.first.units.Units.Rotations)),
                                 false))
                 .until(turnController::atSetpoint);
     }

@@ -9,6 +9,7 @@ import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -39,14 +40,18 @@ public class PoseEstimation {
             if (result == null) {
                 continue;
             }
-            Stream<Double> distances =
-                    result.targetsUsed.stream()
-                            .map(
-                                    (target) ->
-                                            target.getBestCameraToTarget()
-                                                    .getTranslation()
-                                                    .getNorm());
-            var ambiguities = distances.map((d) -> d * d);
+            Supplier<Stream<Double>> distances =
+                    () ->
+                            result.targetsUsed.stream()
+                                    .map(
+                                            (target) ->
+                                                    target.getBestCameraToTarget()
+                                                            .getTranslation()
+                                                            .getNorm());
+            if (distances.get().anyMatch((distance) -> distance > 2.8)) {
+                continue;
+            }
+            var ambiguities = distances.get().map((d) -> d * d);
             double stddev =
                     multiplier * Utils.averageAmbiguity(ambiguities.collect(Collectors.toList()));
             swerveDrive
@@ -58,22 +63,22 @@ public class PoseEstimation {
                                     stddev,
                                     stddev,
                                     stddev
-                                            * (SwerveConstants.MAX_X_Y_VELOCITY
-                                                    / SwerveConstants.MAX_OMEGA_VELOCITY)));
+                                            * SwerveConstants.MAX_OMEGA_VELOCITY
+                                            / SwerveConstants.MAX_X_Y_VELOCITY));
         }
     }
 
-    @AutoLogOutput(key = "EstimatedRobotPose")
+    @AutoLogOutput(key = "Robot/EstimatedRobotPose")
     public Pose2d getEstimatedPose() {
         return swerveDrive.getEstimator().getEstimatedPosition();
     }
 
-    @AutoLogOutput(key = "DistanceToSpeaker")
+    @AutoLogOutput(key = "Shooter/DistanceToSpeaker")
     public double getDistanceToSpeaker() {
         return getPoseRelativeToSpeaker().getNorm();
     }
 
-    @AutoLogOutput(key = "ToSpeaker")
+    @AutoLogOutput(key = "Robot/ToSpeaker")
     public Translation2d getPoseRelativeToSpeaker() {
         Optional<DriverStation.Alliance> allianceColor = DriverStation.getAlliance();
         if (allianceColor.isPresent() && (allianceColor.get() == DriverStation.Alliance.Red)) {

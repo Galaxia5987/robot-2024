@@ -80,11 +80,11 @@ public class AmpState implements ScoreState {
                         elevator.setHeight(CommandGroupsConstants.MAX_HEIGHT),
                         Commands.either(
                                 gripper.setRollerAndWrist(
-                                        CommandGroupsConstants.WRIST_ANGLE_AMP_FORWARD,
-                                        GripperConstants.AMP_POWER_NORMAL),
+                                        GripperConstants.AMP_POWER_NORMAL,
+                                        CommandGroupsConstants.WRIST_ANGLE_AMP_FORWARD),
                                 gripper.setRollerAndWrist(
-                                        CommandGroupsConstants.WRIST_ANGLE_AMP_BACKWARDS,
-                                        GripperConstants.AMP_POWER_REVERSE),
+                                        GripperConstants.AMP_POWER_REVERSE,
+                                        CommandGroupsConstants.WRIST_ANGLE_AMP_BACKWARDS),
                                 () -> isAmpingForward)));
     }
 

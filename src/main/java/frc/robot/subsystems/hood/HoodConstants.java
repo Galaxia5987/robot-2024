@@ -18,6 +18,7 @@ public class HoodConstants {
     public static Measure<Distance> HOOD_LENGTH = Units.Meters.of(0.4);
     public static Measure<Dimensionless> POSITION_TOLERANCE = Units.Percent.of(0.5);
     public static Measure<Velocity<Angle>> MAX_VELOCITY = Units.RotationsPerSecond.of(1);
+    public static final MutableMeasure<Angle> AMP_ANGLE = Units.Degrees.of(108).mutableCopy();
     public static Measure<Velocity<Velocity<Angle>>> MAX_ACCELERATION =
             Units.RotationsPerSecond.per(Units.Second).of(4);
     public static final double GEAR_RATIO = 26.33;
@@ -53,14 +54,14 @@ public class HoodConstants {
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                kP.initDefault(570);
-                kI.initDefault(1);
-                kD.initDefault(59);
-                kS.initDefault(0.0);
+                kP.initDefault(870);
+                kI.initDefault(3);
+                kD.initDefault(210);
+                kS.initDefault(1.5);
                 kV.initDefault(0);
                 kA.initDefault(0.0);
                 kG.initDefault(25.0);
-                ABSOLUTE_ENCODER_OFFSET.initDefault((283.3 - 33.48) / 360.0);
+                ABSOLUTE_ENCODER_OFFSET.initDefault((283.17 - 33.48) / 360.0);
             case SIM:
             case REPLAY:
                 kP.initDefault(10);

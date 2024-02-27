@@ -3,60 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0138839138077134,
-        "y": 3.344528170537823
+        "x": 2.47,
+        "y": 6.37
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.4288766013429455,
-        "y": 1.3448277608805934
+        "x": 4.536099143457196,
+        "y": 3.62691005667047
       },
       "isLocked": false,
-      "linkedName": "D0"
+      "linkedName": "A2"
     },
     {
       "anchor": {
-        "x": 7.959636576550149,
-        "y": 2.4440782784699477
+        "x": 7.860961135027683,
+        "y": 4.092954054853979
       },
       "prevControl": {
-        "x": 6.130226277546571,
-        "y": 1.5904050041718334
+        "x": 7.369806648445206,
+        "y": 4.209895599278378
       },
       "nextControl": {
-        "x": 8.306264318215028,
-        "y": 2.6058281272331203
+        "x": 7.940594157847356,
+        "y": 4.073993811325486
       },
       "isLocked": false,
-      "linkedName": "center note line #4"
+      "linkedName": "center note line #3"
     },
     {
       "anchor": {
-        "x": 2.0138839138077134,
-        "y": 3.344528170537823
+        "x": 2.1542137671169925,
+        "y": 5.063568873576495
       },
       "prevControl": {
-        "x": 4.341020647853261,
-        "y": 0.4794603321400393
+        "x": 5.316079800805683,
+        "y": 4.631135153006649
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "D0"
+      "linkedName": "A3"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.1,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 1.65,
+      "waypointRelativePos": 1,
       "rotationDegrees": 0,
       "rotateFast": false
     }
@@ -64,8 +54,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.65,
+      "name": "intake",
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -81,8 +71,8 @@
       }
     },
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 1.35,
+      "name": "stop intake",
+      "waypointRelativePos": 1.45,
       "command": {
         "type": "parallel",
         "data": {
@@ -90,7 +80,7 @@
             {
               "type": "named",
               "data": {
-                "name": "stopIntake"
+                "name": "retractIntake"
               }
             }
           ]
@@ -106,11 +96,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -44.11859600341781,
+    "rotation": -3.0940580589172537,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "D345",
-  "previewStartingState": null,
+  "folder": "AH123",
+  "previewStartingState": {
+    "rotation": 28.271665156480033,
+    "velocity": 0
+  },
   "useDefaultConstraints": true
 }

@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooter;
 
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -16,9 +18,9 @@ public class ShooterConstants {
     public static final double GEAR_RATIO_TOP = 1.0;
     public static final double GEAR_RATIO_BOTTOM = 1.0;
     public static final MutableMeasure<Dimensionless> SETPOINT_TOLERANCE_TOP =
-            Units.Percent.of(0.03).mutableCopy();
+            Units.Percent.of(5).mutableCopy();
     public static final MutableMeasure<Dimensionless> SETPOINT_TOLERANCE_BOTTOM =
-            Units.Percent.of(0.03).mutableCopy();
+            Units.Percent.of(5).mutableCopy();
     public static final MutableMeasure<Mult<Mult<Mass, Distance>, Distance>> MOMENT_OF_INERTIA_TOP =
             Units.Kilograms.mult(Units.Meters).mult(Units.Meters).of(0.0008).mutableCopy();
     public static final MutableMeasure<Mult<Mult<Mass, Distance>, Distance>>
@@ -27,6 +29,10 @@ public class ShooterConstants {
     public static final MutableMeasure<Distance> SHOOTER_HEIGHT =
             Units.Meters.of(0.4).mutableCopy(); // TODO: add real value
     public static final double MAX_WARMUP_DISTANCE = 12; // [m] //TODO: add real value
+    public static final MutableMeasure<Velocity<Angle>> TOP_AMP_VELOCITY =
+            RotationsPerSecond.of(20).mutableCopy();
+    public static final MutableMeasure<Velocity<Angle>> BOTTOM_VELOCITY =
+            RotationsPerSecond.of(35).mutableCopy();
 
     public static final TalonFXConfiguration topMotorConfiguration = new TalonFXConfiguration();
     public static final TalonFXConfiguration bottomMotorConfiguration = new TalonFXConfiguration();
@@ -73,27 +79,27 @@ public class ShooterConstants {
                 TOP_kI.initDefault(0.0);
                 TOP_kD.initDefault(0.0);
                 TOP_kS.initDefault(0.0);
-                TOP_kV.initDefault(0.1232);
+                TOP_kV.initDefault(0.1292);
                 TOP_kA.initDefault(0.057_19);
                 BOTTOM_kP.initDefault(0.1);
                 BOTTOM_kI.initDefault(0.0);
                 BOTTOM_kD.initDefault(0.0);
                 BOTTOM_kS.initDefault(0.0);
-                BOTTOM_kV.initDefault(0.1232);
+                BOTTOM_kV.initDefault(0.1252);
                 BOTTOM_kA.initDefault(0.057_19);
             case SIM:
             case REPLAY:
-                TOP_kP.initDefault(3.0);
-                TOP_kI.initDefault(0.0);
-                TOP_kD.initDefault(0.0);
+                TOP_kP.initDefault(1.2);
+                TOP_kI.initDefault(0.5);
+                TOP_kD.initDefault(3);
                 TOP_kS.initDefault(0.0);
-                TOP_kV.initDefault(0.112);
+                TOP_kV.initDefault(0);
                 TOP_kA.initDefault(0.0);
-                BOTTOM_kP.initDefault(10.0);
-                BOTTOM_kI.initDefault(0.0);
-                BOTTOM_kD.initDefault(0.0);
+                BOTTOM_kP.initDefault(1.2);
+                BOTTOM_kI.initDefault(0.5);
+                BOTTOM_kD.initDefault(3);
                 BOTTOM_kS.initDefault(0.0);
-                BOTTOM_kV.initDefault(0.112);
+                BOTTOM_kV.initDefault(0);
                 BOTTOM_kA.initDefault(0.0);
         }
         topMotorConfiguration

@@ -1,7 +1,7 @@
 package frc.robot.subsystems.gripper;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
@@ -24,7 +24,7 @@ public class GripperIOReal implements GripperIO {
     private final SparkLimitSwitch reverseLimitSwitch;
     private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(Ports.Gripper.ENCODER_ID);
     private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0);
-    private final VoltageOut powerRequest = new VoltageOut(0).withEnableFOC(true);
+    private final DutyCycleOut powerRequest = new DutyCycleOut(0).withEnableFOC(true);
     private final DigitalInput sensor = new DigitalInput(4);
     private final Timer timer = new Timer();
 

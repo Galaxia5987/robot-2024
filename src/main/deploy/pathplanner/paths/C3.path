@@ -3,100 +3,107 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0138839138077134,
-        "y": 3.344528170537823
+        "x": 2.4114851648506717,
+        "y": 4.139730672623739
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.5143901057032894,
-        "y": 2.7232762157832022
+        "x": 2.341320238196032,
+        "y": 2.4908548962397075
       },
       "isLocked": false,
-      "linkedName": "D0"
+      "linkedName": "CL"
     },
     {
       "anchor": {
-        "x": 5.448310896621795,
-        "y": 3.72
+        "x": 4.773704362223539,
+        "y": 3.613493722713942
       },
       "prevControl": {
-        "x": 4.602407673724489,
-        "y": 3.5132236566251027
+        "x": 3.6861479990766246,
+        "y": 3.028786000591945
       },
       "nextControl": {
-        "x": 6.336335749594577,
-        "y": 3.9370727418377918
+        "x": 5.213717101513713,
+        "y": 3.8500597115796276
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.860961135027683,
-        "y": 4.092954054853979
+        "x": 7.802490362815484,
+        "y": 4.139730672623739
       },
       "prevControl": {
-        "x": 6.99742091791876,
-        "y": 4.01584572399914
+        "x": 6.621380764129049,
+        "y": 4.3619196070300985
       },
       "nextControl": {
-        "x": 8.727491022300038,
-        "y": 4.170329343137714
-      },
-      "isLocked": false,
-      "linkedName": "center note line #3"
-    },
-    {
-      "anchor": {
-        "x": 5.448310896621795,
-        "y": 3.72
-      },
-      "prevControl": {
-        "x": 6.9117035937547815,
-        "y": 4.036541575034715
-      },
-      "nextControl": {
-        "x": 3.984918199488808,
-        "y": 3.403458424965283
+        "x": 7.951893758957851,
+        "y": 4.111625083250423
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.0138839138077134,
-        "y": 3.344528170537823
+        "x": 4.773704362223539,
+        "y": 3.718741112695901
       },
       "prevControl": {
-        "x": 3.455188448838437,
-        "y": 2.65420761610754
+        "x": 5.648265032613916,
+        "y": 4.5433268876354
+      },
+      "nextControl": {
+        "x": 3.545818145767345,
+        "y": 2.561019822894347
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.9203306782681937,
+        "y": 3.613493722713942
+      },
+      "prevControl": {
+        "x": 2.3530143926384723,
+        "y": 3.1340333905739044
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "D0"
+      "linkedName": "C3"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 2.2,
-      "rotationDegrees": 0.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 15.255118703057692,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 3,
-      "rotationDegrees": 13.392497753751098,
+      "waypointRelativePos": 2,
+      "rotationDegrees": 0,
       "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
+      "name": "intake",
+      "waypointRelativePos": 1.45,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop intake",
       "waypointRelativePos": 2.6,
       "command": {
         "type": "parallel",
@@ -113,8 +120,8 @@
       }
     },
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 1.4,
+      "name": "score",
+      "waypointRelativePos": 4.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -122,7 +129,7 @@
             {
               "type": "named",
               "data": {
-                "name": "intake"
+                "name": "score"
               }
             }
           ]
@@ -138,11 +145,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -47.6425452940647,
+    "rotation": -44.999999999999986,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "D345",
-  "previewStartingState": null,
+  "folder": "CL34",
+  "previewStartingState": {
+    "rotation": -1.363927531602984,
+    "velocity": 0
+  },
   "useDefaultConstraints": true
 }

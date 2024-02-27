@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake;
 
 import static frc.robot.subsystems.intake.IntakeConstants.*;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.*;
@@ -34,6 +35,11 @@ public class IntakeIOReal implements IntakeIO {
         spinMotor.setSmartCurrentLimit(SPIN_CURRENT_LIMIT);
         spinMotor.burnFlash();
         centerMotor.burnFlash();
+
+        angleMotor.setPosition(110);
+
+        BaseStatusSignal.setUpdateFrequencyForAll(
+                100, angleMotor.getPosition(), angleMotor.getMotorVoltage());
     }
 
     @Override

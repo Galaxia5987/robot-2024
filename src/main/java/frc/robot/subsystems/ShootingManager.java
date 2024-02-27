@@ -4,7 +4,6 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.units.*;
 import frc.robot.lib.PoseEstimation;
-import frc.robot.lib.Utils;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodConstants;
@@ -13,6 +12,7 @@ import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import lombok.Getter;
 import lombok.Setter;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class ShootingManager {
 
@@ -34,9 +34,11 @@ public class ShootingManager {
 
     @Setter
     private Measure<Distance> maxWarmupDistance =
-            Meters.of(100.0); // Arbitrary number larger than possible
+            Meters.of(9.0); // Arbitrary number larger than possible
 
-    @Setter private Measure<Distance> maxShootingDistance = Meters.of(2.5);
+    @Setter private Measure<Distance> maxShootingDistance = Meters.of(10.5);
+
+    private boolean isShooting = true;
 
     private ShootingManager() {
         poseEstimation = PoseEstimation.getInstance();
@@ -52,12 +54,16 @@ public class ShootingManager {
         return INSTANCE;
     }
 
+    @AutoLogOutput(key = "Robot/ReadyToShoot")
     public boolean readyToShoot() {
         return poseEstimation.getDistanceToSpeaker() < maxShootingDistance.in(Meters)
                 && hood.atSetpoint()
-                && shooter.atSetpoint()
-                && Utils.epsilonEquals(
-                        swerveDrive.getYaw().getDegrees(), swerveCommandedAngle.in(Degrees), 3);
+                && shooter.atSetpoint();
+        //                && Utils.epsilonEquals(
+        //                PoseEstimation.getInstance()
+        //                        .getEstimatedPose()
+        //                        .getRotation()
+        //                        .getDegrees(), swerveCommandedAngle.in(Degrees), 7);
     }
 
     public void updateCommandedState() {
@@ -81,8 +87,9 @@ public class ShootingManager {
         }
 
         var toSpeaker = poseEstimation.getPoseRelativeToSpeaker();
-        swerveCommandedAngle.mut_replace(
-                Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI, Radians);
+        swerveCommandedAngle
+                .mut_replace(Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI, Radians)
+                .mut_plus(-2, Degrees);
     }
 
     public void updateHoodChassisCompensation() {
@@ -101,5 +108,14 @@ public class ShootingManager {
                         * HoodConstants.MASS.in(Kilograms)
                         * HoodConstants.CM_RADIUS.in(Meters);
         hood.setChassisCompensationTorque(torque);
+    }
+
+    public void setShooting(boolean shooting) {
+        isShooting = shooting;
+    }
+
+    @AutoLogOutput(key = "Robot/isShooting")
+    public boolean isShooting() {
+        return isShooting;
     }
 }
