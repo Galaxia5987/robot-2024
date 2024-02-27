@@ -1,1 +1,234 @@
-{"version":1.0,"grid_size":8,"tabs":[{"name":" Driver Dashboard","grid_layout":{"layouts":[],"containers":[{"title":"Driver Camera","x":672.0,"y":0.0,"width":608.0,"height":400.0,"type":"Camera Stream","properties":{"topic":"/CameraPublisher/Front left camera-raw","period":0.06}},{"title":"Field","x":0.0,"y":0.0,"width":672.0,"height":400.0,"type":"Field","properties":{"topic":"/SmartDashboard/Field","period":0.06,"field_game":"Crescendo","robot_width":0.9,"robot_length":0.9,"show_other_objects":true,"show_trajectories":true}},{"title":"ReadyToShoot","x":136.0,"y":400.0,"width":168.0,"height":160.0,"type":"Boolean Box","properties":{"topic":"/AdvantageKit/RealOutputs/Robot/ReadyToShoot","period":0.06,"data_type":"boolean","true_color":4283215696,"false_color":4294198070}},{"title":"State","x":0.0,"y":400.0,"width":136.0,"height":160.0,"type":"Text Display","properties":{"topic":"/AdvantageKit/RealOutputs/RobotContainer/State","period":0.06,"data_type":"string","show_submit_button":false}},{"title":"HasNote","x":304.0,"y":400.0,"width":176.0,"height":160.0,"type":"Boolean Box","properties":{"topic":"/AdvantageKit/Gripper/HasNote","period":0.06,"data_type":"boolean","true_color":4283215696,"false_color":4294198070}},{"title":"autoList","x":480.0,"y":400.0,"width":240.0,"height":160.0,"type":"ComboBox Chooser","properties":{"topic":"/SmartDashboard/autoList","period":0.06,"sort_options":false}},{"title":"bl-cam","x":720.0,"y":480.0,"width":80.0,"height":80.0,"type":"Boolean Box","properties":{"topic":"/AdvantageKit/Back left camera/IsConnected","period":0.06,"data_type":"boolean","true_color":4283215696,"false_color":4294198070}},{"title":"br-cam","x":800.0,"y":480.0,"width":80.0,"height":80.0,"type":"Boolean Box","properties":{"topic":"/AdvantageKit/Back right camera/IsConnected","period":0.06,"data_type":"boolean","true_color":4283215696,"false_color":4294198070}},{"title":"fl-cam","x":720.0,"y":400.0,"width":80.0,"height":80.0,"type":"Boolean Box","properties":{"topic":"/AdvantageKit/Front left camera/IsConnected","period":0.06,"data_type":"boolean","true_color":4283215696,"false_color":4294198070}},{"title":"fr-cam","x":800.0,"y":400.0,"width":80.0,"height":80.0,"type":"Boolean Box","properties":{"topic":"/AdvantageKit/Front right camera/IsConnected","period":0.06,"data_type":"boolean","true_color":4283215696,"false_color":4294198070}},{"title":"fl-drive","x":888.0,"y":400.0,"width":80.0,"height":80.0,"type":"Boolean Box","properties":{"topic":"/AdvantageKit/module_1/EncoderConnected","period":0.06,"data_type":"boolean","true_color":4283215696,"false_color":4294198070}},{"title":"fr-drive","x":968.0,"y":400.0,"width":80.0,"height":80.0,"type":"Boolean Box","properties":{"topic":"/AdvantageKit/module_2/EncoderConnected","period":0.06,"data_type":"boolean","true_color":4283215696,"false_color":4294198070}},{"title":"bl-drive","x":888.0,"y":480.0,"width":80.0,"height":80.0,"type":"Boolean Box","properties":{"topic":"/AdvantageKit/module_3/EncoderConnected","period":0.06,"data_type":"boolean","true_color":4283215696,"false_color":4294198070}},{"title":"br-drive","x":968.0,"y":480.0,"width":80.0,"height":80.0,"type":"Boolean Box","properties":{"topic":"/AdvantageKit/module_4/EncoderConnected","period":0.06,"data_type":"boolean","true_color":4283215696,"false_color":4294198070}},{"title":"DistanceToSpeaker","x":1048.0,"y":400.0,"width":224.0,"height":160.0,"type":"Text Display","properties":{"topic":"/AdvantageKit/RealOutputs/Robot/DistanceToSpeaker","period":0.06,"data_type":"double","show_submit_button":false}}]}}]}
+{
+  "version": 1.0,
+  "grid_size": 8,
+  "tabs": [
+    {
+      "name": " Driver Dashboard",
+      "grid_layout": {
+        "layouts": [],
+        "containers": [
+          {
+            "title": "Driver Camera",
+            "x": 672.0,
+            "y": 0.0,
+            "width": 608.0,
+            "height": 400.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/Front left camera-raw",
+              "period": 0.06
+            }
+          },
+          {
+            "title": "Field",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 672.0,
+            "height": 400.0,
+            "type": "Field",
+            "properties": {
+              "topic": "/SmartDashboard/Field",
+              "period": 0.06,
+              "field_game": "Crescendo",
+              "robot_width": 0.9,
+              "robot_length": 0.9,
+              "show_other_objects": true,
+              "show_trajectories": true
+            }
+          },
+          {
+            "title": "ReadyToShoot",
+            "x": 136.0,
+            "y": 400.0,
+            "width": 168.0,
+            "height": 160.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/Robot/ReadyToShoot",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070
+            }
+          },
+          {
+            "title": "State",
+            "x": 0.0,
+            "y": 400.0,
+            "width": 136.0,
+            "height": 160.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/RobotContainer/State",
+              "period": 0.06,
+              "data_type": "string",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "HasNote",
+            "x": 304.0,
+            "y": 400.0,
+            "width": 176.0,
+            "height": 160.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/Gripper/HasNote",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070
+            }
+          },
+          {
+            "title": "autoList",
+            "x": 480.0,
+            "y": 400.0,
+            "width": 240.0,
+            "height": 160.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/autoList",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "bl-cam",
+            "x": 720.0,
+            "y": 480.0,
+            "width": 80.0,
+            "height": 80.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/Back left camera/IsConnected",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070
+            }
+          },
+          {
+            "title": "br-cam",
+            "x": 800.0,
+            "y": 480.0,
+            "width": 80.0,
+            "height": 80.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/Back right camera/IsConnected",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070
+            }
+          },
+          {
+            "title": "fl-cam",
+            "x": 720.0,
+            "y": 400.0,
+            "width": 80.0,
+            "height": 80.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/Front left camera/IsConnected",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070
+            }
+          },
+          {
+            "title": "fr-cam",
+            "x": 800.0,
+            "y": 400.0,
+            "width": 80.0,
+            "height": 80.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/Front right camera/IsConnected",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070
+            }
+          },
+          {
+            "title": "fl-drive",
+            "x": 888.0,
+            "y": 400.0,
+            "width": 80.0,
+            "height": 80.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/module_1/EncoderConnected",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070
+            }
+          },
+          {
+            "title": "fr-drive",
+            "x": 968.0,
+            "y": 400.0,
+            "width": 80.0,
+            "height": 80.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/module_2/EncoderConnected",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070
+            }
+          },
+          {
+            "title": "bl-drive",
+            "x": 888.0,
+            "y": 480.0,
+            "width": 80.0,
+            "height": 80.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/module_3/EncoderConnected",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070
+            }
+          },
+          {
+            "title": "br-drive",
+            "x": 968.0,
+            "y": 480.0,
+            "width": 80.0,
+            "height": 80.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/module_4/EncoderConnected",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070
+            }
+          },
+          {
+            "title": "DistanceToSpeaker",
+            "x": 1048.0,
+            "y": 400.0,
+            "width": 224.0,
+            "height": 160.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/Robot/DistanceToSpeaker",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
