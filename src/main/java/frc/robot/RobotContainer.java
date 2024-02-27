@@ -111,7 +111,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "stopIntake",
                 intake.stop(false)
-                        .withTimeout(0.1)
+                        .withTimeout(0.05)
                         .raceWith(Commands.print("I'm not intaking").repeatedly()));
         NamedCommands.registerCommand(
                 "retractIntake",
@@ -122,13 +122,16 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "finishScore",
                 gripper.setRollerPower(0)
-                        .withTimeout(0.25)
-                        .raceWith(Commands.print("I stopped scoring")));
+                        .withTimeout(0.05)
+                        .raceWith(Commands.print("I stopped scoring").repeatedly()));
+        NamedCommands.registerCommand("followPathRotation", Commands.runOnce(() -> ShootingManager.getInstance().setShooting(false)));
         NamedCommands.registerCommand("prepareShoot", prepare());
         NamedCommands.registerCommand("shootAndIntake", commandGroups.shootAndIntake());
-        NamedCommands.registerCommand(
+        NamedCommands.
+                registerCommand(
                 "adjustToTarget",
                 Commands.runOnce(() -> ShootingManager.getInstance().setShooting(true)));
+        NamedCommands.registerCommand("print", Commands.print("You son of a bish").repeatedly());
 
         PPHolonomicDriveController.setRotationTargetOverride(
                 () -> {
@@ -158,8 +161,8 @@ public class RobotContainer {
     private void configureDefaultCommands() {
         swerveDrive.setDefaultCommand(
                 swerveDrive.driveCommand(
-                        () -> 0.6 * -driveController.getLeftY(),
-                        () -> 0.6 * -driveController.getLeftX(),
+                        () -> -driveController.getLeftY(),
+                        () -> -driveController.getLeftX(),
                         () -> 0.6 * -driveController.getRightX(), // 0.6
                         0.1,
                         () -> true));
@@ -289,6 +292,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new PathPlannerAuto("AH123");
+        return new PathPlannerAuto("D345");
     }
 }
