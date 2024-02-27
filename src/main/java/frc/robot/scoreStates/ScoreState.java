@@ -23,4 +23,10 @@ public interface ScoreState {
     default Command finalizeScore() {
         return Commands.none();
     }
+
+    enum State {
+        SHOOT,
+        AMP,
+        CLIMB
+    }
 }

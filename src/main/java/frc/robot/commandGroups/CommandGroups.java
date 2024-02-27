@@ -7,9 +7,10 @@ import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.leds.LEDs;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
+import frc.robot.scoreStates.ScoreState;
 import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.conveyor.ConveyorConstants;
@@ -19,10 +20,13 @@ import frc.robot.subsystems.gripper.GripperConstants;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeConstants;
+import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 public class CommandGroups {
     private static CommandGroups INSTANCE;
@@ -33,6 +37,7 @@ public class CommandGroups {
     private final Hood hood;
     private final Conveyor conveyor;
     private final LEDs leds;
+    private final SwerveDrive swerveDrive;
     private boolean override;
 
     private CommandGroups() {
@@ -43,6 +48,7 @@ public class CommandGroups {
         shooter = Shooter.getInstance();
         hood = Hood.getInstance();
         conveyor = Conveyor.getInstance();
+        swerveDrive = SwerveDrive.getInstance();
 
         leds.setPrimary(Color.kAliceBlue);
         leds.setSecondary(Color.kOrangeRed);
@@ -176,10 +182,54 @@ public class CommandGroups {
         return shooter.setVelocity(
                         ShooterConstants.TOP_AMP_VELOCITY, ShooterConstants.BOTTOM_VELOCITY)
                 .alongWith(hood.setAngle(HoodConstants.AMP_ANGLE))
-                .until(shooter::atSetpoint)
+                .until(() -> shooter.atSetpoint() && hood.atSetpoint())
                 .andThen(gripper.setRollerPower(GripperConstants.INTAKE_POWER).withTimeout(1))
                 .andThen(gripper.setRollerPower(0))
                 .alongWith(conveyor.setVelocity(ConveyorConstants.AMP_VELOCITY));
+    }
+
+    public Command shootToSpeaker(CommandXboxController driveController) {
+        return Commands.parallel(
+                hood.setAngle(ShootingManager.getInstance().getHoodCommandedAngle()),
+                shootAndConvey(ShootingManager.getInstance().getShooterCommandedVelocity()),
+                swerveDrive.driveAndAdjust(
+                        ShootingManager.getInstance().getSwerveCommandedAngle(),
+                        () -> -driveController.getLeftY(),
+                        () -> -driveController.getLeftX(),
+                        0.1));
+    }
+
+    public Command stopShooting() {
+        return Commands.parallel(
+                hood.setAngle(Units.Degrees.of(114).mutableCopy()),
+                shooter.setVelocity(Units.RotationsPerSecond.zero().mutableCopy()),
+                conveyor.stop(),
+                gripper.setRollerPower(0));
+    }
+
+    public Command setClimbState(Supplier<ScoreState.State> stateSupplier) {
+        return Commands.either(
+                Commands.sequence(
+                        elevator.unlock()
+                                .andThen(elevator.manualElevator(() -> 0.3).withTimeout(0.5))
+                                .andThen(
+                                        gripper.setWristPosition(
+                                                Units.Degrees.of(-30).mutableCopy())),
+                        intake.setAngle(IntakeConstants.IntakePose.UP)
+                                .alongWith(hood.setAngle(Units.Degrees.of(114).mutableCopy()))),
+                Commands.sequence(
+                        intake.setAngle(IntakeConstants.IntakePose.DOWN)
+                                .withTimeout(0.5)
+                                .alongWith(
+                                        hood.setAngle(Units.Degrees.of(33.48).mutableCopy())
+                                                .withTimeout(0.5)),
+                        elevator.unlock()
+                                .andThen(elevator.manualElevator(() -> 0.3).withTimeout(0.5))
+                                .andThen(
+                                        gripper.setWristPosition(
+                                                        Units.Degrees.of(-30).mutableCopy())
+                                                .withTimeout(1))),
+                () -> stateSupplier.get() == ScoreState.State.CLIMB);
     }
 
     public Command allBits() {
