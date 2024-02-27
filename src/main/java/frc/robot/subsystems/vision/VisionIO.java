@@ -19,6 +19,7 @@ public interface VisionIO {
 
     @AutoLog
     class VisionInputs {
-        Pose3d poseFieldOriented = new Pose3d();
+        public Pose3d poseFieldOriented = new Pose3d();
+        public boolean isConnected = false;
     }
 }

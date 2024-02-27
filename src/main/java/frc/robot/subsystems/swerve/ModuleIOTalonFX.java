@@ -90,6 +90,8 @@ public class ModuleIOTalonFX implements ModuleIO {
                 Units.rpsToMetersPerSecond(
                         inputs.driveMotorPosition, SwerveConstants.WHEEL_DIAMETER / 2);
         inputs.moduleState = getModuleState();
+
+        inputs.encoderConnected = encoder.isConnected();
     }
 
     @Override

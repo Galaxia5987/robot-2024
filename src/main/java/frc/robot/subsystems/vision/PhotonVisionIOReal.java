@@ -37,6 +37,8 @@ public class PhotonVisionIOReal implements VisionIO {
 
     @Override
     public void updateInputs(VisionInputs inputs) {
+        inputs.isConnected = camera.isConnected();
+
         var latestResult = camera.getLatestResult();
 
         if (latestResult != null) {
