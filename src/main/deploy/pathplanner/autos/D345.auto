@@ -16,6 +16,12 @@
                 }
               },
               {
+                "type": "named",
+                "data": {
+                  "name": "adjustToTarget"
+                }
+              },
+              {
                 "type": "sequential",
                 "data": {
                   "commands": [

@@ -72,7 +72,7 @@
     },
     {
       "name": "stop intake",
-      "waypointRelativePos": 1.75,
+      "waypointRelativePos": 1.65,
       "command": {
         "type": "parallel",
         "data": {
