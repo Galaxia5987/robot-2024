@@ -2,7 +2,6 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -117,25 +116,11 @@ public class RobotContainer {
         configureButtonBindings();
         autoChooser = AutoBuilder.buildAutoChooser("Safety B");
         SmartDashboard.putData("autoList", autoChooser);
-        NamedCommands.registerCommand(
-                "intake",
-                commandGroups.intake().raceWith(Commands.print("I'm intaking").repeatedly()));
-        NamedCommands.registerCommand(
-                "stopIntake",
-                intake.stop(false)
-                        .withTimeout(0.05)
-                        .raceWith(Commands.print("I'm not intaking").repeatedly()));
-        NamedCommands.registerCommand(
-                "retractIntake",
-                intake.stop().raceWith(Commands.print("I'm not intaking").repeatedly()));
-        NamedCommands.registerCommand(
-                "score",
-                commandGroups.feedShooter().raceWith(Commands.print("I'm shooting").repeatedly()));
-        NamedCommands.registerCommand(
-                "finishScore",
-                gripper.setRollerPower(0)
-                        .withTimeout(0.05)
-                        .raceWith(Commands.print("I stopped scoring").repeatedly()));
+        NamedCommands.registerCommand("intake", commandGroups.intake());
+        NamedCommands.registerCommand("stopIntake", intake.stop(false).withTimeout(0.05));
+        NamedCommands.registerCommand("retractIntake", intake.stop());
+        NamedCommands.registerCommand("score", commandGroups.feedShooter());
+        NamedCommands.registerCommand("finishScore", gripper.setRollerPower(0).withTimeout(0.05));
         NamedCommands.registerCommand(
                 "followPathRotation",
                 Commands.runOnce(() -> ShootingManager.getInstance().setShooting(false)));
@@ -144,7 +129,6 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "adjustToTarget",
                 Commands.runOnce(() -> ShootingManager.getInstance().setShooting(true)));
-        NamedCommands.registerCommand("print", Commands.print("You son of a bish").repeatedly());
 
         PPHolonomicDriveController.setRotationTargetOverride(
                 () -> {
@@ -196,10 +180,11 @@ public class RobotContainer {
                 .rightTrigger()
                 .whileTrue(
                         Commands.either(
-                                        commandGroups.shootToSpeaker(driveController)
-                                                .alongWith(commandGroups.feedShooter()),
-                                        commandGroups.shootToAmp(),
-                                        () -> state == ScoreState.State.SHOOT))
+                                commandGroups
+                                        .shootToSpeaker(driveController)
+                                        .alongWith(commandGroups.feedShooter()),
+                                commandGroups.shootToAmp(),
+                                () -> state == ScoreState.State.SHOOT))
                 .onFalse(commandGroups.stopShooting());
 
         driveController
@@ -236,6 +221,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new PathPlannerAuto("D345");
+        return autoChooser.getSelected();
     }
 }
