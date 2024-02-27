@@ -124,11 +124,12 @@ public class RobotContainer {
                 gripper.setRollerPower(0)
                         .withTimeout(0.05)
                         .raceWith(Commands.print("I stopped scoring").repeatedly()));
-        NamedCommands.registerCommand("followPathRotation", Commands.runOnce(() -> ShootingManager.getInstance().setShooting(false)));
+        NamedCommands.registerCommand(
+                "followPathRotation",
+                Commands.runOnce(() -> ShootingManager.getInstance().setShooting(false)));
         NamedCommands.registerCommand("prepareShoot", prepare());
         NamedCommands.registerCommand("shootAndIntake", commandGroups.shootAndIntake());
-        NamedCommands.
-                registerCommand(
+        NamedCommands.registerCommand(
                 "adjustToTarget",
                 Commands.runOnce(() -> ShootingManager.getInstance().setShooting(true)));
         NamedCommands.registerCommand("print", Commands.print("You son of a bish").repeatedly());

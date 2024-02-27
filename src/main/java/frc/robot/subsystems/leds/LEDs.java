@@ -7,47 +7,40 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.function.IntSupplier;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.function.IntSupplier;
 
 public class LEDs extends SubsystemBase {
     private final AddressableLED ledStrip;
     private final AddressableLEDBuffer ledBuffer;
 
     /**
-     * -- SETTER --
-     *  Sets the primary color of the LEDs that will be used in the solid and percentage modes and as
-     *  the first color in the blink and fade modes.
+     * -- SETTER -- Sets the primary color of the LEDs that will be used in the solid and percentage
+     * modes and as the first color in the blink and fade modes.
      *
      * @param primary Color to set the primary.
      */
-    @Getter
-    @Setter
-    private Color primary = Color.kBlack;
+    @Getter @Setter private Color primary = Color.kBlack;
+
     /**
-     * -- SETTER --
-     *  Sets the secondary color of the LEDs that will be used as the second color in the blink and
-     *  fade modes.
+     * -- SETTER -- Sets the secondary color of the LEDs that will be used as the second color in
+     * the blink and fade modes.
      *
      * @param secondary Color to set the secondary.
      */
-    @Getter
-    @Setter
-    private Color secondary = Color.kBlack;
+    @Getter @Setter private Color secondary = Color.kBlack;
+
     private Color currentColor = primary;
     private Color fadeColor = primary;
 
     /**
-     * -- SETTER --
-     *  Sets the duration for the fade effect.
+     * -- SETTER -- Sets the duration for the fade effect.
      *
      * @param duration Duration of the fade effect. [sec]
      */
-    @Getter
-    @Setter
-    private double fadeTime = 1;
+    @Getter @Setter private double fadeTime = 1;
+
     private final Timer timer = new Timer();
 
     private int rainbowFirstPixelHue = 0;
