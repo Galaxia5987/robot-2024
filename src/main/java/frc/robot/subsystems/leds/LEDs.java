@@ -7,19 +7,50 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.function.IntSupplier;
 
 public class LEDs extends SubsystemBase {
     private final AddressableLED ledStrip;
-    private AddressableLEDBuffer ledBuffer;
+    private final AddressableLEDBuffer ledBuffer;
 
+    /**
+     * -- SETTER --
+     *  Sets the primary color of the LEDs that will be used in the solid and percentage modes and as
+     *  the first color in the blink and fade modes.
+     *
+     * @param primary Color to set the primary.
+     */
+    @Getter
+    @Setter
     private Color primary = Color.kBlack;
+    /**
+     * -- SETTER --
+     *  Sets the secondary color of the LEDs that will be used as the second color in the blink and
+     *  fade modes.
+     *
+     * @param secondary Color to set the secondary.
+     */
+    @Getter
+    @Setter
     private Color secondary = Color.kBlack;
     private Color currentColor = primary;
     private Color fadeColor = primary;
 
+    /**
+     * -- SETTER --
+     *  Sets the duration for the fade effect.
+     *
+     * @param duration Duration of the fade effect. [sec]
+     */
+    @Getter
+    @Setter
     private double fadeTime = 1;
     private final Timer timer = new Timer();
+
+    private int rainbowFirstPixelHue = 0;
 
     public LEDs(int port, int length) {
         ledStrip = new AddressableLED(port);
@@ -34,7 +65,7 @@ public class LEDs extends SubsystemBase {
     }
 
     private void setSolidColor(Color color, int start, int end) {
-        for (int i = start - 1; i < end; i++) {
+        for (int i = start; i < end; i++) {
             ledBuffer.setLED(i, color);
         }
         ledStrip.setData(ledBuffer);
@@ -58,54 +89,24 @@ public class LEDs extends SubsystemBase {
     }
 
     private void setRainbow(int start, int end) {
-        int rainbowHue = 0;
-        for (int i = start - 1; i < end; i++) {
-            ledBuffer.setHSV(i, rainbowHue, 255, 180);
-            rainbowHue += (180 / (end - start + 1));
+        if (timer.advanceIfElapsed(0.05)) {
+            for (var i = 0; i < ledBuffer.getLength(); i++) {
+
+                // Calculate the hue - hue is easier for rainbows because the color
+                // shape is a circle so only one value needs to precess
+
+                final var hue = (rainbowFirstPixelHue + (i * 180 / ledBuffer.getLength())) % 180;
+
+                // Set the value
+
+                ledBuffer.setHSV(i, hue, 255, 128);
+            }
+            rainbowFirstPixelHue += 15;
+            // Check bounds
+            rainbowFirstPixelHue %= 180;
             ledStrip.setData(ledBuffer);
-            rainbowHue %= 180;
         }
-    }
-
-    public Color getPrimary() {
-        return primary;
-    }
-
-    /**
-     * Sets the primary color of the LEDs that will be used in the solid and percentage modes and as
-     * the first color in the blink and fade modes.
-     *
-     * @param primary Color to set the primary.
-     */
-    public void setPrimary(Color primary) {
-        this.primary = primary;
-    }
-
-    public Color getSecondary() {
-        return secondary;
-    }
-
-    /**
-     * Sets the secondary color of the LEDs that will be used as the second color in the blink and
-     * fade modes.
-     *
-     * @param secondary Color to set the secondary.
-     */
-    public void setSecondary(Color secondary) {
-        this.secondary = secondary;
-    }
-
-    public double getFadeTime() {
-        return fadeTime;
-    }
-
-    /**
-     * Sets the duration for the fade effect.
-     *
-     * @param duration Duration of the fade effect. [sec]
-     */
-    public void setFadeTime(double duration) {
-        this.fadeTime = duration;
+        // Increase by to make the rainbow "move"z
     }
 
     /**
@@ -117,11 +118,15 @@ public class LEDs extends SubsystemBase {
      * @return A command that sets the LEDs to a solid color.
      */
     public Command solid(Color optionalColor, int start, int end) {
-        return this.run(() -> setSolidColor(optionalColor, start, end));
+        return this.runOnce(() -> setSolidColor(optionalColor, start, end));
     }
 
-    public Command solid(int start, int end) {
+    public Command solidPrimary(int start, int end) {
         return solid(primary, start, end);
+    }
+
+    public Command solidSecondary(int start, int end) {
+        return solid(secondary, start, end);
     }
 
     /**
@@ -133,7 +138,7 @@ public class LEDs extends SubsystemBase {
      * @return A command that sets a segment to a percentage of the segment length.
      */
     public Command percentage(IntSupplier percentage, int start, int end) {
-        return this.run(
+        return this.runOnce(
                 () -> {
                     setSolidColor(primary, start, (end - start + 1) * percentage.getAsInt() / 100);
                 });
@@ -148,7 +153,7 @@ public class LEDs extends SubsystemBase {
      * @return A command that sets a segment to blink between the primary and secondary colors.
      */
     public Command blink(double blinkTime, int start, int end) {
-        return this.run(
+        return this.runOnce(
                 () -> {
                     currentColor = currentColor == primary ? secondary : primary;
 
@@ -168,7 +173,7 @@ public class LEDs extends SubsystemBase {
      * @return A command that sets a segment to fade between the primary and secondary colors.
      */
     public Command fade(double fadeTime, int start, int end) {
-        return this.run(
+        return this.runOnce(
                 () -> {
                     setFadeTime(fadeTime);
                     updateFade(primary, secondary);
@@ -188,6 +193,6 @@ public class LEDs extends SubsystemBase {
      * @return A command that sets a segment to a rainbow pattern.
      */
     public Command rainbow(int start, int end) {
-        return this.run(() -> setRainbow(start, end));
+        return this.runOnce(() -> setRainbow(start, end));
     }
 }
