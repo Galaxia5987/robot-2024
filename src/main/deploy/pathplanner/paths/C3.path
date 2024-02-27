@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.4114851648506717,
-        "y": 4.139730672623739
+        "x": 2.4213939522026635,
+        "y": 4.3344249538371855
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.341320238196032,
-        "y": 2.4908548962397075
+        "x": 2.3512290255480237,
+        "y": 2.685549177453154
       },
       "isLocked": false,
       "linkedName": "CL"
@@ -73,7 +73,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "C3"
+      "linkedName": "C Score"
     }
   ],
   "rotationTargets": [
@@ -87,7 +87,7 @@
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 1.45,
+      "waypointRelativePos": 1.15,
       "command": {
         "type": "parallel",
         "data": {
@@ -96,6 +96,12 @@
               "type": "named",
               "data": {
                 "name": "intake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathRotation"
               }
             }
           ]
@@ -114,22 +120,11 @@
               "data": {
                 "name": "stopIntake"
               }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "score",
-      "waypointRelativePos": 4.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
+            },
             {
               "type": "named",
               "data": {
-                "name": "score"
+                "name": "adjustToTarget"
               }
             }
           ]

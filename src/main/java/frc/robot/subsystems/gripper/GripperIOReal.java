@@ -26,7 +26,7 @@ public class GripperIOReal implements GripperIO {
     private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0);
     private final DutyCycleOut powerRequest = new DutyCycleOut(0).withEnableFOC(true);
     private final Timer timer = new Timer();
-    private final Debouncer debouncer = new Debouncer(0.2);
+    private final Debouncer debouncer = new Debouncer(0.0);
 
     public GripperIOReal() {
         angleMotor = new TalonFX(Ports.Gripper.ANGLE_ID);

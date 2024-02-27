@@ -79,7 +79,7 @@ public class ShooterConstants {
                 TOP_kI.initDefault(0.0);
                 TOP_kD.initDefault(0.0);
                 TOP_kS.initDefault(0.0);
-                TOP_kV.initDefault(0.1292);
+                TOP_kV.initDefault(0.1272);
                 TOP_kA.initDefault(0.057_19);
                 BOTTOM_kP.initDefault(0.1);
                 BOTTOM_kI.initDefault(0.0);

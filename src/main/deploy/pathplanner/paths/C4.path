@@ -12,7 +12,7 @@
         "y": 1.1811095986864348
       },
       "isLocked": false,
-      "linkedName": "C3"
+      "linkedName": "C Score"
     },
     {
       "anchor": {
@@ -46,7 +46,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1,
+      "waypointRelativePos": 1.05,
       "rotationDegrees": 0,
       "rotateFast": false
     }
@@ -55,7 +55,7 @@
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0.6,
+      "waypointRelativePos": 0.4,
       "command": {
         "type": "parallel",
         "data": {
@@ -64,6 +64,12 @@
               "type": "named",
               "data": {
                 "name": "intake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathRotation"
               }
             }
           ]
@@ -80,24 +86,7 @@
             {
               "type": "named",
               "data": {
-                "name": "stopIntake"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "score",
-      "waypointRelativePos": 2.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "score"
+                "name": "adjustToTarget"
               }
             }
           ]

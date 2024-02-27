@@ -199,6 +199,8 @@ public class RobotContainer {
                 .whileTrue(intake.outtake().alongWith(gripper.setRollerPower(-0.7)))
                 .onFalse(intake.stop().alongWith(gripper.setRollerPower(0)));
 
+        xboxController.start().onTrue(elevator.lock());
+        xboxController.back().onTrue(elevator.unlock());
         xboxController
                 .leftBumper()
                 .whileTrue(gripper.setRollerPower(-0.4))

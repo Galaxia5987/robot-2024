@@ -59,11 +59,6 @@ public class ShootingManager {
         return poseEstimation.getDistanceToSpeaker() < maxShootingDistance.in(Meters)
                 && hood.atSetpoint()
                 && shooter.atSetpoint();
-        //                && Utils.epsilonEquals(
-        //                PoseEstimation.getInstance()
-        //                        .getEstimatedPose()
-        //                        .getRotation()
-        //                        .getDegrees(), swerveCommandedAngle.in(Degrees), 7);
     }
 
     public void updateCommandedState() {

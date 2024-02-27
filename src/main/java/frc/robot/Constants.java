@@ -6,6 +6,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.units.*;
@@ -27,7 +28,7 @@ public class Constants {
 
     public static Mode CURRENT_MODE = Mode.REAL;
 
-    public static double VISION_MEASUREMENT_MULTIPLIER = 1;
+    public static double VISION_MEASUREMENT_MULTIPLIER = 0.5;
 
     public static final Transform3d BACK_LEFT_CAMERA_POSE =
             new Transform3d(
@@ -112,7 +113,13 @@ public class Constants {
                 () -> swerveDrive.getEstimator().getEstimatedPosition(),
                 (pose) -> {
                     swerveDrive.resetGyro(
-                            PoseEstimation.getInstance().getEstimatedPose().getRotation());
+                            PoseEstimation.getInstance()
+                                    .getEstimatedPose()
+                                    .getRotation()
+                                    .minus(
+                                            ScoreState.isRed()
+                                                    ? Rotation2d.fromDegrees(180)
+                                                    : new Rotation2d()));
                 },
                 swerveDrive::getCurrentSpeeds,
                 (speeds) -> swerveDrive.drive(speeds, false),
