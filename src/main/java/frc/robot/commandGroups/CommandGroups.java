@@ -95,15 +95,12 @@ public class CommandGroups {
     }
 
     public Command intake() {
-        return Commands.repeatingSequence(
-                        // retractGrillevator(),
-                        Commands.parallel(
-                                intake.intake(),
-                                gripper.setRollerPower(0.3)
-                                        .until(gripper::hasNote)
-                                        .andThen(gripper.setRollerPower(0))
-                                        .alongWith(leds.solidSecondary(1, 60))))
-                // mode
+        return Commands.parallel(
+                        intake.intake(),
+                        gripper.setRollerPower(0.3)
+                                .until(gripper::hasNote)
+                                .andThen(gripper.setRollerPower(0))
+                                .alongWith(leds.solidSecondary(1, 60)))
                 .withName("intake");
     }
 
