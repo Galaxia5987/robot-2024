@@ -30,18 +30,14 @@ import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOReal;
 import frc.robot.subsystems.hood.HoodIOSim;
-import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeIO;
-import frc.robot.subsystems.intake.IntakeIOReal;
-import frc.robot.subsystems.intake.IntakeIOSim;
+import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOReal;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.swerve.SwerveDrive;
-import org.littletonrobotics.junction.AutoLogOutput;
-
 import java.util.Optional;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
@@ -59,8 +55,7 @@ public class RobotContainer {
     private final CommandGroups commandGroups;
     private final SendableChooser<Command> autoChooser;
 
-    @AutoLogOutput
-    private ScoreState.State state = ScoreState.State.SHOOT;
+    @AutoLogOutput private ScoreState.State state = ScoreState.State.SHOOT;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
@@ -117,8 +112,6 @@ public class RobotContainer {
         // Configure the button bindings and default commands
         configureDefaultCommands();
         configureButtonBindings();
-        autoChooser = AutoBuilder.buildAutoChooser("Safety B");
-        SmartDashboard.putData("autoList", autoChooser);
         NamedCommands.registerCommand("intake", commandGroups.intake());
         NamedCommands.registerCommand("stopIntake", intake.stop(false).withTimeout(0.05));
         NamedCommands.registerCommand("retractIntake", intake.stop());
@@ -142,6 +135,8 @@ public class RobotContainer {
                     }
                     return Optional.empty();
                 });
+        autoChooser = AutoBuilder.buildAutoChooser("Safety B");
+        SmartDashboard.putData("autoList", autoChooser);
     }
 
     public static RobotContainer getInstance() {
@@ -174,6 +169,10 @@ public class RobotContainer {
                                         -xboxController.getLeftTriggerAxis()
                                                 + xboxController.getRightTriggerAxis(),
                                         0.15)));
+
+        gripper.setDefaultCommand(
+                gripper.setWristPower(
+                        () -> MathUtil.applyDeadband(-xboxController.getRightY(), 0.15) * 0.6));
     }
 
     private void configureButtonBindings() {
@@ -202,20 +201,21 @@ public class RobotContainer {
 
         xboxController
                 .leftBumper()
-                .whileTrue(gripper.setRollerAndWrist(0, Units.Degrees.of(95).mutableCopy()))
-                .onFalse(
-                        gripper.setRollerPower(-0.4)
-                                .withTimeout(3)
-                                .andThen(gripper.setRollerPower(0)));
+                .whileTrue(gripper.setRollerPower(-0.4))
+                .onFalse(gripper.setRollerPower(0));
 
-        xboxController.a().onTrue(Commands.runOnce(() -> state = ScoreState.State.SHOOT).andThen());
-        xboxController.b().onTrue(Commands.runOnce(() -> state = ScoreState.State.AMP));
+        xboxController.b().onTrue(Commands.runOnce(() -> state = ScoreState.State.SHOOT));
+        xboxController.a().onTrue(Commands.runOnce(() -> state = ScoreState.State.AMP));
         xboxController
                 .y()
                 .onTrue(
                         commandGroups
                                 .setClimbState(() -> state)
                                 .andThen(Commands.runOnce(() -> state = ScoreState.State.CLIMB)));
+        xboxController
+                .x()
+                .onTrue(intake.setAngle(Units.Degrees.of(-130).mutableCopy()))
+                .onFalse(intake.reset(Units.Degrees.zero().mutableCopy()));
     }
 
     /**

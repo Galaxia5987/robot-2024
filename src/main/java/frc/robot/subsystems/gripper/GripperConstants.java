@@ -50,12 +50,12 @@ public class GripperConstants {
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                KP.initDefault(2);
+                KP.initDefault(0);
                 KI.initDefault(0);
                 KD.initDefault(0);
-                KV.initDefault(3.2);
-                KA.initDefault(0.01);
-                KG.initDefault(0.65);
+                KV.initDefault(9);
+                KA.initDefault(0.0);
+                KG.initDefault(0.4);
 
                 ABSOLUTE_ENCODER_OFFSET.initDefault(-0.682_385 + 83 / 360.0);
                 break;

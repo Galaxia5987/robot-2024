@@ -86,7 +86,7 @@ public class CommandGroups {
 
     public Command feedWithWait(BooleanSupplier otherReady) {
         return Commands.waitUntil(otherReady)
-                .andThen(gripper.setRollerPower(GripperConstants.INTAKE_POWER).withTimeout(0.2))
+                .andThen(gripper.setRollerPower(GripperConstants.INTAKE_POWER).withTimeout(0.4))
                 .withName("feedWithWait");
     }
 
@@ -179,8 +179,8 @@ public class CommandGroups {
         return shooter.setVelocity(
                         ShooterConstants.TOP_AMP_VELOCITY, ShooterConstants.BOTTOM_VELOCITY)
                 .alongWith(hood.setAngle(HoodConstants.AMP_ANGLE))
+                .until(shooter::atSetpoint)
                 .andThen(gripper.setRollerPower(GripperConstants.INTAKE_POWER).withTimeout(0.5))
-                .until(() -> shooter.atSetpoint() && hood.atSetpoint())
                 .andThen(gripper.setRollerPower(0))
                 .alongWith(conveyor.setVelocity(ConveyorConstants.AMP_VELOCITY));
     }
@@ -205,28 +205,16 @@ public class CommandGroups {
     }
 
     public Command setClimbState(Supplier<ScoreState.State> stateSupplier) {
-        return Commands.either(
-                Commands.sequence(
-                        elevator.unlock()
-                                .andThen(elevator.manualElevator(() -> 0.3).withTimeout(0.5))
-                                .andThen(
-                                        gripper.setWristPosition(
-                                                Units.Degrees.of(-30).mutableCopy())),
-                        intake.setAngle(IntakeConstants.IntakePose.UP)
-                                .alongWith(hood.setAngle(Units.Degrees.of(114).mutableCopy()))),
-                Commands.sequence(
-                        intake.setAngle(IntakeConstants.IntakePose.DOWN)
-                                .withTimeout(0.5)
-                                .alongWith(
-                                        hood.setAngle(Units.Degrees.of(33.48).mutableCopy())
-                                                .withTimeout(0.5)),
-                        elevator.unlock()
-                                .andThen(elevator.manualElevator(() -> 0.3).withTimeout(0.5))
-                                .andThen(
-                                        gripper.setWristPosition(
-                                                        Units.Degrees.of(-30).mutableCopy())
-                                                .withTimeout(1))),
-                () -> stateSupplier.get() == ScoreState.State.CLIMB);
+        return Commands.sequence(
+                intake.setAngle(IntakeConstants.IntakePose.DOWN)
+                        .withTimeout(0.25)
+                        .alongWith(
+                                hood.setAngle(Units.Degrees.of(33.48).mutableCopy())
+                                        .withTimeout(0.25)),
+                elevator.manualElevator(() -> -0.1).withTimeout(0.11),
+                elevator.unlock(),
+                elevator.manualElevator(() -> 0.3).withTimeout(1),
+                gripper.setWristPosition(Units.Degrees.of(-30).mutableCopy()).withTimeout(1));
     }
 
     public Command allBits() {

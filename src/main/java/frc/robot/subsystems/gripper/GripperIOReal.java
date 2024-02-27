@@ -7,11 +7,11 @@ import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkLimitSwitch;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
@@ -25,8 +25,8 @@ public class GripperIOReal implements GripperIO {
     private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(Ports.Gripper.ENCODER_ID);
     private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0);
     private final DutyCycleOut powerRequest = new DutyCycleOut(0).withEnableFOC(true);
-    private final DigitalInput sensor = new DigitalInput(4);
     private final Timer timer = new Timer();
+    private final Debouncer debouncer = new Debouncer(0.2);
 
     public GripperIOReal() {
         angleMotor = new TalonFX(Ports.Gripper.ANGLE_ID);
@@ -73,7 +73,8 @@ public class GripperIOReal implements GripperIO {
     }
 
     public boolean hasNote() {
-        return forwardLimitSwitch.isPressed() || reverseLimitSwitch.isPressed();
+        return debouncer.calculate(
+                forwardLimitSwitch.isPressed() || reverseLimitSwitch.isPressed());
     }
 
     @Override

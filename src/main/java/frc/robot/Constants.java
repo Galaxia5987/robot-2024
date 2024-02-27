@@ -9,6 +9,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.units.*;
+import frc.robot.lib.PoseEstimation;
 import frc.robot.scoreStates.ScoreState;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.vision.PhotonVisionIOReal;
@@ -110,8 +111,8 @@ public class Constants {
         AutoBuilder.configureHolonomic(
                 () -> swerveDrive.getEstimator().getEstimatedPosition(),
                 (pose) -> {
-                    swerveDrive.resetGyro(pose.getRotation());
-                    swerveDrive.resetPose(swerveDrive.getBotPose());
+                    swerveDrive.resetGyro(
+                            PoseEstimation.getInstance().getEstimatedPose().getRotation());
                 },
                 swerveDrive::getCurrentSpeeds,
                 (speeds) -> swerveDrive.drive(speeds, false),
