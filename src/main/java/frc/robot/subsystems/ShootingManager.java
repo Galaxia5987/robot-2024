@@ -38,7 +38,7 @@ public class ShootingManager {
 
     @Setter private Measure<Distance> maxShootingDistance = Meters.of(10.5);
 
-    private boolean isShooting = true;
+    private boolean isShooting = false;
 
     private ShootingManager() {
         poseEstimation = PoseEstimation.getInstance();
