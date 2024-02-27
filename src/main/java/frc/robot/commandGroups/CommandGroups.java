@@ -3,8 +3,10 @@ package frc.robot.commandGroups;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.leds.LEDs;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
 import frc.robot.subsystems.ShootingManager;
@@ -26,9 +28,11 @@ public class CommandGroups {
     private final Shooter shooter;
     private final Hood hood;
     private final Conveyor conveyor;
+    private final LEDs leds;
     private boolean override;
 
     private CommandGroups() {
+        leds = new LEDs(0, 60);
         intake = Intake.getInstance();
         gripper = Gripper.getInstance();
         elevator = Elevator.getInstance();
@@ -36,6 +40,8 @@ public class CommandGroups {
         hood = Hood.getInstance();
         conveyor = Conveyor.getInstance();
 
+        leds.setPrimary(Color.kAliceBlue);
+        leds.setSecondary(Color.kOrangeRed);
         override = false;
     }
 
@@ -86,9 +92,8 @@ public class CommandGroups {
                                 intake.intake(),
                                 gripper.setRollerPower(0.3)
                                         .until(gripper::hasNote)
-                                        .andThen(
-                                                gripper.setRollerPower(
-                                                        0)))) // TODO: replace null with leds
+                                        .andThen(gripper.setRollerPower(0))
+                                        .alongWith(leds.solidSecondary(1, 60))))
                 // mode
                 .withName("intake");
     }
