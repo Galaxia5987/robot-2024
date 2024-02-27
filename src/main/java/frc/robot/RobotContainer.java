@@ -39,6 +39,8 @@ import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOReal;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.swerve.SwerveDrive;
+import org.littletonrobotics.junction.AutoLogOutput;
+
 import java.util.Optional;
 
 public class RobotContainer {
@@ -57,6 +59,7 @@ public class RobotContainer {
     private final CommandGroups commandGroups;
     private final SendableChooser<Command> autoChooser;
 
+    @AutoLogOutput
     private ScoreState.State state = ScoreState.State.SHOOT;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
