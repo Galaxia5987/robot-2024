@@ -32,7 +32,7 @@ public class ShooterConstants {
     public static final MutableMeasure<Velocity<Angle>> TOP_AMP_VELOCITY =
             RotationsPerSecond.of(15).mutableCopy();
     public static final MutableMeasure<Velocity<Angle>> BOTTOM_VELOCITY =
-            RotationsPerSecond.of(30).mutableCopy();
+            RotationsPerSecond.of(25).mutableCopy();
 
     public static final TalonFXConfiguration topMotorConfiguration = new TalonFXConfiguration();
     public static final TalonFXConfiguration bottomMotorConfiguration = new TalonFXConfiguration();
