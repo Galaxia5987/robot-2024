@@ -18,7 +18,7 @@ public class HoodConstants {
     public static Measure<Distance> HOOD_LENGTH = Units.Meters.of(0.4);
     public static Measure<Dimensionless> POSITION_TOLERANCE = Units.Percent.of(0.5);
     public static Measure<Velocity<Angle>> MAX_VELOCITY = Units.RotationsPerSecond.of(1);
-    public static final MutableMeasure<Angle> AMP_ANGLE = Units.Degrees.of(108).mutableCopy();
+    public static final MutableMeasure<Angle> AMP_ANGLE = Units.Degrees.of(103).mutableCopy();
     public static Measure<Velocity<Velocity<Angle>>> MAX_ACCELERATION =
             Units.RotationsPerSecond.per(Units.Second).of(4);
     public static final double GEAR_RATIO = 26.33;
