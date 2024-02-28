@@ -25,7 +25,6 @@ import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
-
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
@@ -222,7 +221,7 @@ public class CommandGroups {
         return Commands.sequence(
                 intakeBit(),
                 shooterBit(),
-//                grillevatorBit(),
+                //                grillevatorBit(),
                 SwerveDrive.getInstance().checkSwerve());
     }
 }

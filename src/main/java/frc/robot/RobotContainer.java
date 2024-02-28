@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.scoreStates.ScoreState;
 import frc.robot.subsystems.ShootingManager;
@@ -209,6 +208,10 @@ public class RobotContainer {
                 .leftBumper()
                 .whileTrue(gripper.setRollerPower(-0.4))
                 .onFalse(gripper.setRollerPower(0));
+        xboxController
+                .rightBumper()
+                .whileTrue(gripper.setRollerPower(0.4))
+                .onFalse(gripper.setRollerPower(0));
 
         xboxController.b().onTrue(Commands.runOnce(() -> state = ScoreState.State.SHOOT));
         xboxController.a().onTrue(Commands.runOnce(() -> state = ScoreState.State.AMP));
@@ -222,6 +225,11 @@ public class RobotContainer {
                 .x()
                 .onTrue(intake.setAngle(Units.Degrees.of(-130).mutableCopy()))
                 .onFalse(intake.reset(Units.Degrees.zero().mutableCopy()));
+
+        xboxController
+                .leftStick()
+                .whileTrue(Commands.runOnce(() -> ShootingManager.getInstance().setLockShoot(true)))
+                .onFalse(Commands.runOnce(() -> ShootingManager.getInstance().setLockShoot(false)));
 
         joystick.button(Joystick.ButtonType.kTrigger.value).whileTrue(commandGroups.allBits());
     }

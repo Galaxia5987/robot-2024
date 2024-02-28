@@ -36,6 +36,8 @@ public class ShootingManager {
     private Measure<Distance> maxWarmupDistance =
             Meters.of(9.0); // Arbitrary number larger than possible
 
+    @Setter private boolean lockShoot = false;
+
     @Setter private Measure<Distance> maxShootingDistance = Meters.of(10.5);
 
     private boolean isShooting = false;
@@ -58,7 +60,8 @@ public class ShootingManager {
     public boolean readyToShoot() {
         return poseEstimation.getDistanceToSpeaker() < maxShootingDistance.in(Meters)
                 && hood.atSetpoint()
-                && shooter.atSetpoint();
+                && shooter.atSetpoint()
+                && !lockShoot;
     }
 
     public void updateCommandedState() {

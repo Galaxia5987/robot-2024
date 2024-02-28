@@ -30,9 +30,9 @@ public class ShooterConstants {
             Units.Meters.of(0.4).mutableCopy(); // TODO: add real value
     public static final double MAX_WARMUP_DISTANCE = 12; // [m] //TODO: add real value
     public static final MutableMeasure<Velocity<Angle>> TOP_AMP_VELOCITY =
-            RotationsPerSecond.of(20).mutableCopy();
+            RotationsPerSecond.of(15).mutableCopy();
     public static final MutableMeasure<Velocity<Angle>> BOTTOM_VELOCITY =
-            RotationsPerSecond.of(35).mutableCopy();
+            RotationsPerSecond.of(30).mutableCopy();
 
     public static final TalonFXConfiguration topMotorConfiguration = new TalonFXConfiguration();
     public static final TalonFXConfiguration bottomMotorConfiguration = new TalonFXConfiguration();
