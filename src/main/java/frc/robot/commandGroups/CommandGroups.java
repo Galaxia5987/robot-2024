@@ -25,6 +25,7 @@ import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
+
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
@@ -150,6 +151,7 @@ public class CommandGroups {
 
     public Command grillevatorBit() {
         return Commands.sequence(
+                elevator.manualElevator(() -> -0.1).withTimeout(0.11),
                 elevator.setHeight(CommandGroupsConstants.MAX_HEIGHT),
                 gripper.setRollerAndWrist(0.3, CommandGroupsConstants.WRIST_ANGLE_AMP_FORWARD),
                 Commands.waitSeconds(3),
@@ -165,10 +167,9 @@ public class CommandGroups {
                         shooter.setVelocity(Units.RotationsPerSecond.of(55).mutableCopy()),
                         hood.setAngle(Units.Degrees.of(70).mutableCopy()))
                 .andThen(
-                        Commands.sequence(
-                                Commands.waitSeconds(3),
-                                shooter.stop(),
-                                hood.setAngle(Units.Degrees.of(114).mutableCopy())));
+                        Commands.waitSeconds(3),
+                        shooter.stop(),
+                        hood.setAngle(Units.Degrees.of(114).mutableCopy()));
     }
 
     public Command shootAndIntake() {
@@ -221,7 +222,7 @@ public class CommandGroups {
         return Commands.sequence(
                 intakeBit(),
                 shooterBit(),
-                grillevatorBit(),
+//                grillevatorBit(),
                 SwerveDrive.getInstance().checkSwerve());
     }
 }
