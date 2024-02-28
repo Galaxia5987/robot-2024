@@ -31,7 +31,7 @@ public class ShooterConstants {
     public static final double MAX_WARMUP_DISTANCE = 12; // [m] //TODO: add real value
     public static final MutableMeasure<Velocity<Angle>> TOP_AMP_VELOCITY =
             RotationsPerSecond.of(15).mutableCopy();
-    public static final MutableMeasure<Velocity<Angle>> BOTTOM_VELOCITY =
+    public static final MutableMeasure<Velocity<Angle>> BOTTOM_AMP_VELOCITY =
             RotationsPerSecond.of(25).mutableCopy();
 
     public static final TalonFXConfiguration topMotorConfiguration = new TalonFXConfiguration();

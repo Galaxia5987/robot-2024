@@ -135,7 +135,7 @@ public class ShootState implements ScoreState {
                                 .andThen(() -> SwerveDrive.getInstance().lock()),
                         setShooter(),
                         setHood(),
-                        CommandGroups.getInstance().feedShooter()));
+                        CommandGroups.getInstance().feedShooter(() -> false)));
     }
 
     @Override
