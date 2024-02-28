@@ -181,7 +181,7 @@ public class CommandGroups {
 
     public Command shootToAmp() {
         return shooter.setVelocity(
-                        ShooterConstants.TOP_AMP_VELOCITY, ShooterConstants.BOTTOM_VELOCITY)
+                        ShooterConstants.TOP_AMP_VELOCITY, ShooterConstants.BOTTOM_AMP_VELOCITY)
                 .alongWith(hood.setAngle(HoodConstants.AMP_ANGLE))
                 .until(shooter::atSetpoint)
                 .andThen(gripper.setRollerPower(GripperConstants.INTAKE_POWER).withTimeout(0.5))
