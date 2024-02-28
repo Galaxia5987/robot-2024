@@ -182,6 +182,28 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         driveController.b().onTrue(Commands.runOnce(swerveDrive::resetGyro));
+        driveController
+                .y()
+                .whileTrue(
+                        commandGroups
+                                .shootAndConvey(Units.RotationsPerSecond.of(50).mutableCopy())
+                                .alongWith(
+                                        hood.setAngle(Units.Degrees.of(107).mutableCopy()),
+                                        commandGroups.feedWithWait(
+                                                () ->
+                                                        (shooter.atSetpoint()
+                                                                        && hood.getAngle()
+                                                                                        .minus(
+                                                                                                Units
+                                                                                                        .Degrees
+                                                                                                        .of(
+                                                                                                                107))
+                                                                                        .in(
+                                                                                                Units
+                                                                                                        .Degrees)
+                                                                                < 2)
+                                                                || isForceShooting)))
+                .onFalse(commandGroups.stopShooting());
 
         driveController
                 .rightTrigger()
@@ -189,7 +211,8 @@ public class RobotContainer {
                         Commands.either(
                                 commandGroups
                                         .shootToSpeaker(driveController)
-                                        .alongWith(commandGroups.feedShooter()),
+                                        .alongWith(
+                                                commandGroups.feedShooter(() -> isForceShooting)),
                                 commandGroups.shootToAmp(),
                                 () -> state == ScoreState.State.SHOOT))
                 .onFalse(commandGroups.stopShooting());
@@ -221,11 +244,11 @@ public class RobotContainer {
                 .y()
                 .onTrue(
                         commandGroups
-                                .setClimbState(() -> state)
-                                .andThen(Commands.runOnce(() -> state = ScoreState.State.CLIMB)));
+                                .shootAndConvey(Units.RotationsPerSecond.of(50).mutableCopy())
+                                .alongWith(hood.setAngle(Units.Degrees.of(107).mutableCopy())));
         xboxController
                 .x()
-                .onTrue(intake.setAngle(Units.Degrees.of(-130).mutableCopy()))
+                .onTrue(intake.setAngle(Units.Degrees.of(-140).mutableCopy()))
                 .onFalse(intake.reset(Units.Degrees.zero().mutableCopy()));
 
         xboxController
