@@ -6,11 +6,14 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.scoreStates.ScoreState;
 import frc.robot.subsystems.ShootingManager;
@@ -52,6 +55,7 @@ public class RobotContainer {
     private final CommandXboxController xboxController = new CommandXboxController(0);
     private final CommandXboxController driveController = new CommandXboxController(1);
     private final CommandXboxController testController = new CommandXboxController(2);
+    private final CommandJoystick joystick = new CommandJoystick(3);
     private final CommandGroups commandGroups;
     private final SendableChooser<Command> autoChooser;
 
@@ -218,6 +222,8 @@ public class RobotContainer {
                 .x()
                 .onTrue(intake.setAngle(Units.Degrees.of(-130).mutableCopy()))
                 .onFalse(intake.reset(Units.Degrees.zero().mutableCopy()));
+
+        joystick.button(Joystick.ButtonType.kTrigger.value).whileTrue(commandGroups.allBits());
     }
 
     /**
