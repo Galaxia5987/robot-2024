@@ -40,18 +40,14 @@ public class PoseEstimation {
             if (result == null) {
                 continue;
             }
-            Supplier<Stream<Double>> distances =
-                    () ->
-                            result.targetsUsed.stream()
+            Stream<Double> distances =
+                    result.targetsUsed.stream()
                                     .map(
                                             (target) ->
                                                     target.getBestCameraToTarget()
                                                             .getTranslation()
                                                             .getNorm());
-            if (distances.get().anyMatch((distance) -> distance > 2.8)) {
-                continue;
-            }
-            var ambiguities = distances.get().map((d) -> d * d);
+            var ambiguities = distances.map((d) -> d * d);
             double stddev =
                     multiplier * Utils.averageAmbiguity(ambiguities.collect(Collectors.toList()));
             swerveDrive
