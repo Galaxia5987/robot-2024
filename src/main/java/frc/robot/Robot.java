@@ -140,6 +140,8 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void autonomousInit() {
+        Constants.VISION_MEASUREMENT_MULTIPLIER = Constants.AUTO_VISION_MEASUREMENT_MULTIPLIER;
+
         // Make sure command is compiled beforehand, otherwise there will be a delay.
         autonomousCommand = robotContainer.getAutonomousCommand();
 
@@ -156,6 +158,8 @@ public class Robot extends LoggedRobot {
     /** This function is called once when teleop is enabled. */
     @Override
     public void teleopInit() {
+        Constants.VISION_MEASUREMENT_MULTIPLIER = Constants.TELEOP_VISION_MEASUREMENT_MULTIPLIER;
+
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
