@@ -90,8 +90,12 @@ public class CommandGroups {
                 .withName("feedWithWait");
     }
 
-    public Command feedShooter() {
-        return feedWithWait(ShootingManager.getInstance()::readyToShoot).withName("feedShooter");
+    public Command feedShooter(BooleanSupplier isForceShooting) {
+        return feedWithWait(
+                        () ->
+                                ShootingManager.getInstance().readyToShoot()
+                                        || isForceShooting.getAsBoolean())
+                .withName("feedShooter");
     }
 
     public Command intake() {

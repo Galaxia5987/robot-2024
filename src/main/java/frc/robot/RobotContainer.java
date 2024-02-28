@@ -39,6 +39,7 @@ import frc.robot.subsystems.shooter.ShooterIOReal;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.Optional;
+import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 public class RobotContainer {
@@ -57,6 +58,7 @@ public class RobotContainer {
     private final CommandJoystick joystick = new CommandJoystick(3);
     private final CommandGroups commandGroups;
     private final SendableChooser<Command> autoChooser;
+    @Setter private boolean isForceShooting = false;
 
     @AutoLogOutput private ScoreState.State state = ScoreState.State.SHOOT;
 
@@ -118,7 +120,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("intake", commandGroups.intake());
         NamedCommands.registerCommand("stopIntake", intake.stop(false).withTimeout(0.05));
         NamedCommands.registerCommand("retractIntake", intake.stop());
-        NamedCommands.registerCommand("score", commandGroups.feedShooter());
+        NamedCommands.registerCommand("score", commandGroups.feedShooter(() -> isForceShooting));
         NamedCommands.registerCommand("finishScore", gripper.setRollerPower(0).withTimeout(0.05));
         NamedCommands.registerCommand(
                 "followPathRotation",
@@ -210,8 +212,8 @@ public class RobotContainer {
                 .onFalse(gripper.setRollerPower(0));
         xboxController
                 .rightBumper()
-                .whileTrue(gripper.setRollerPower(0.4))
-                .onFalse(gripper.setRollerPower(0));
+                .whileTrue(Commands.runOnce(() -> setForceShooting(true)))
+                .onFalse(Commands.runOnce(() -> setForceShooting(false)));
 
         xboxController.b().onTrue(Commands.runOnce(() -> state = ScoreState.State.SHOOT));
         xboxController.a().onTrue(Commands.runOnce(() -> state = ScoreState.State.AMP));
