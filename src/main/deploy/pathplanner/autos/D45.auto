@@ -1,0 +1,93 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "prepareShoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "adjustToTarget"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "D0"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "score"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "finishScore"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "D4"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "score"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "finishScore"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "D5"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "score"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "finishScore"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
