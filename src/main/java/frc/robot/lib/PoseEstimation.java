@@ -9,7 +9,6 @@ import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -42,11 +41,11 @@ public class PoseEstimation {
             }
             Stream<Double> distances =
                     result.targetsUsed.stream()
-                                    .map(
-                                            (target) ->
-                                                    target.getBestCameraToTarget()
-                                                            .getTranslation()
-                                                            .getNorm());
+                            .map(
+                                    (target) ->
+                                            target.getBestCameraToTarget()
+                                                    .getTranslation()
+                                                    .getNorm());
             var ambiguities = distances.map((d) -> d * d);
             double stddev =
                     multiplier * Utils.averageAmbiguity(ambiguities.collect(Collectors.toList()));
