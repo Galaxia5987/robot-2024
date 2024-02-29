@@ -70,14 +70,21 @@ public class ShootState implements ScoreState {
                 0.1);
     }
 
-    private Command overrideAutoRotation() {
+    @Override
+    public Command overrideAutoRotation() {
         return Commands.runOnce(
                 () ->
                         PPHolonomicDriveController.setRotationTargetOverride(
-                                () -> Optional.of(new Rotation2d(getSwerveAngle()))));
+                                () -> {
+                                    if (StateManager.getInstance().isAdjustToTarget()) {
+                                        return Optional.of(new Rotation2d(getSwerveAngle()));
+                                    }
+                                    return Optional.empty();
+                                }));
     }
 
-    public Command feedShooter() {
+    @Override
+    public Command feed() {
         return commandGroups.feedWithWait(this::readyToShoot).withName("feedShooter");
     }
 
@@ -119,12 +126,10 @@ public class ShootState implements ScoreState {
     }
 
     @Override
-    public Command score(Optional<CommandXboxController> driveController, boolean isAuto) {
-        return Commands.either(
-                        overrideAutoRotation(),
-                        swerveControllerAdjustment(driveController).alongWith(prepareSubsystems()),
-                        () -> isAuto)
+    public Command score(Optional<CommandXboxController> driveController) {
+        return swerveControllerAdjustment(driveController)
+                .alongWith(prepareSubsystems())
                 .until(this::readyToShoot)
-                .alongWith(feedShooter());
+                .alongWith(feed());
     }
 }

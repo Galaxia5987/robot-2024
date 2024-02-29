@@ -21,7 +21,7 @@ public class ClimbState implements ScoreState { // TODO: fix class
     }
 
     @Override
-    public Command score(Optional<CommandXboxController> driveController, boolean isAuto) {
+    public Command score(Optional<CommandXboxController> driveController) {
         return Commands.sequence(
                 Commands.runOnce(() -> SwerveDrive.getInstance().lock()),
                 elevator.setHeight(CommandGroupsConstants.END_CLIMB_HEIGHT));

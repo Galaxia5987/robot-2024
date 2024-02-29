@@ -23,7 +23,15 @@ public interface ScoreState {
         return Commands.none();
     }
 
-    Command score(Optional<CommandXboxController> driveController, boolean isAuto);
+    default Command overrideAutoRotation() {
+        return Commands.none();
+    }
+
+    default Command feed() {
+        return Commands.none();
+    }
+
+    Command score(Optional<CommandXboxController> driveController);
 
     default MutableMeasure<Angle> getSwerveAngle() {
         return Units.Degrees.of(0).mutableCopy();

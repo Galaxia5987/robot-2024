@@ -30,7 +30,7 @@ public class AmpState implements ScoreState {
     }
 
     @Override
-    public Command score(Optional<CommandXboxController> driveController, boolean isAuto) {
+    public Command score(Optional<CommandXboxController> driveController) {
         return Commands.sequence(
                         shooter.setVelocity(
                                         ShooterConstants.TOP_AMP_VELOCITY,

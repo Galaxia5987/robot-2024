@@ -3,10 +3,12 @@ package frc.robot.scoreStates;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import lombok.Getter;
+import lombok.Setter;
 
 public class StateManager {
     private static StateManager INSTANCE;
     @Getter private ScoreState currentState;
+    @Getter @Setter private boolean adjustToTarget;
 
     private StateManager() {}
 

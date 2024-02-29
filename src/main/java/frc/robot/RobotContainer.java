@@ -109,13 +109,19 @@ public class RobotContainer {
         configureDefaultCommands();
         configureButtonBindings();
         NamedCommands.registerCommand("intake", commandGroups.intake());
-        NamedCommands.registerCommand("stopIntake", intake.stop());
-        NamedCommands.registerCommand(
-                "score", stateManager.getCurrentState().score(Optional.empty(), true)); //
+        NamedCommands.registerCommand("stopIntake", intake.stop(false).withTimeout(0.05));
+        NamedCommands.registerCommand("retractIntake", intake.stop());
+        NamedCommands.registerCommand("score", stateManager.getCurrentState().feed());
         //         scoreShooter
         NamedCommands.registerCommand("finishScore", gripper.stopGripper());
         NamedCommands.registerCommand(
                 "prepareShoot", stateManager.getCurrentState().prepareSubsystems());
+        NamedCommands.registerCommand(
+                "adjustToTarget", Commands.runOnce(() -> stateManager.setAdjustToTarget(true)));
+        NamedCommands.registerCommand(
+                "followPathRotation",
+                Commands.runOnce(() -> stateManager.setAdjustToTarget(false)));
+        stateManager.getCurrentState().overrideAutoRotation();
         autoChooser = AutoBuilder.buildAutoChooser("Safety B");
     }
 
@@ -155,16 +161,12 @@ public class RobotContainer {
                 .whileTrue(
                         stateManager
                                 .setCurrentState(ampState)
-                                .andThen(
-                                        stateManager
-                                                .getCurrentState()
-                                                .score(Optional.empty(), false)))
+                                .andThen(stateManager.getCurrentState().score(Optional.empty())))
                 .onFalse(Commands.parallel(commandGroups.stopHoodShooterConveyorGripper()));
 
         driveController
                 .rightTrigger()
-                .whileTrue(
-                        stateManager.getCurrentState().score(Optional.of(driveController), false))
+                .whileTrue(stateManager.getCurrentState().score(Optional.of(driveController)))
                 .onFalse(commandGroups.stopAllSubsystems());
 
         driveController
