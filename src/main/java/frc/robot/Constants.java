@@ -148,17 +148,20 @@ public class Constants {
                                 new PhotonVisionIOReal(
                                         new PhotonCamera("Front_right_camera"),
                                         FRONT_RIGHT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()),
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                                        false),
                                 new PhotonVisionIOReal(
                                         new PhotonCamera("Back_right_camera"),
                                         BACK_RIGHT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()));
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                                        false));
                 leftOpi =
                         new VisionModule(
                                 new PhotonVisionIOReal(
                                         new PhotonCamera("Back_left_camera"),
                                         BACK_LEFT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()));
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                                        true));
                 break;
             default:
                 rightOpi =
