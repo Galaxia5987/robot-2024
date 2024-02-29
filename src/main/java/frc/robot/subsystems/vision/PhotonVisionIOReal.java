@@ -2,6 +2,7 @@ package frc.robot.subsystems.vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.wpilibj.DriverStation;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -11,7 +12,8 @@ public class PhotonVisionIOReal implements VisionIO {
     private final PhotonCamera camera;
     private final PhotonPoseEstimator estimator;
     private final Transform3d robotToCamera;
-    private EstimatedRobotPose result;
+    private VisionResult result;
+    private VisionResult lastResult;
 
     public PhotonVisionIOReal(
             PhotonCamera camera, Transform3d robotToCamera, AprilTagFieldLayout field) {
@@ -46,18 +48,31 @@ public class PhotonVisionIOReal implements VisionIO {
             if (estimatedPose.isPresent()) {
                 inputs.poseFieldOriented = estimatedPose.get().estimatedPose;
 
-                result = estimatedPose.get();
+                result = new VisionResult(estimatedPose.get(), true);
+                double distanceTraveled =
+                        result.getEstimatedRobotPose().estimatedPose
+                                .minus(lastResult.getEstimatedRobotPose().estimatedPose)
+                                .getTranslation()
+                                .getNorm();
+                if ((DriverStation.isEnabled()
+                        && distanceTraveled > 0.3) ||
+                        (result.getEstimatedRobotPose().estimatedPose.getZ() > 0.2) ||
+                        (VisionConstants.outOfBounds(result.getEstimatedRobotPose().estimatedPose))) { // TODO: filter field bounds
+                    result.setUseForEstimation(false);
+                }
             } else {
-                result = null;
+                result.setUseForEstimation(false);
             }
         } else {
-            result = null;
+            result.setUseForEstimation(false);
         }
+
+        lastResult = result;
     }
 
     @Override
     public EstimatedRobotPose getLatestResult() {
-        return result;
+        return result.getEstimatedRobotPose();
     }
 
     @Override
