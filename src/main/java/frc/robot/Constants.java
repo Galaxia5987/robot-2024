@@ -17,6 +17,7 @@ import frc.robot.subsystems.vision.PhotonVisionIOReal;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionModule;
 import frc.robot.subsystems.vision.VisionSimIO;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.photonvision.PhotonCamera;
 import org.photonvision.simulation.SimCameraProperties;
 
@@ -29,7 +30,9 @@ public class Constants {
     public static Mode CURRENT_MODE = Mode.REAL;
 
     public static final double AUTO_VISION_MEASUREMENT_MULTIPLIER = 0.5;
-    public static final double TELEOP_VISION_MEASUREMENT_MULTIPLIER = 0.005;
+    public static final double TELEOP_VISION_MEASUREMENT_MULTIPLIER = 0.05;
+
+    @AutoLogOutput
     public static double VISION_MEASUREMENT_MULTIPLIER = AUTO_VISION_MEASUREMENT_MULTIPLIER;
 
     public static final Transform3d BACK_LEFT_CAMERA_POSE =
