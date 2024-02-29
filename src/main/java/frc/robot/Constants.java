@@ -6,15 +6,18 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.units.*;
+import frc.robot.lib.PoseEstimation;
 import frc.robot.scoreStates.ScoreState;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.vision.PhotonVisionIOReal;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionModule;
 import frc.robot.subsystems.vision.VisionSimIO;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.photonvision.PhotonCamera;
 import org.photonvision.simulation.SimCameraProperties;
 
@@ -26,20 +29,24 @@ public class Constants {
 
     public static Mode CURRENT_MODE = Mode.REAL;
 
-    public static double VISION_MEASUREMENT_MULTIPLIER = 1;
+    public static final double AUTO_VISION_MEASUREMENT_MULTIPLIER = 0.5;
+    public static final double TELEOP_VISION_MEASUREMENT_MULTIPLIER = 0.5;
+
+    @AutoLogOutput
+    public static double VISION_MEASUREMENT_MULTIPLIER = AUTO_VISION_MEASUREMENT_MULTIPLIER;
 
     public static final Transform3d BACK_LEFT_CAMERA_POSE =
             new Transform3d(
                     -0.289_36,
                     0.341_15,
                     0.2,
-                    new Rotation3d(0, -Math.toRadians(31.92), Math.toRadians(170)));
+                    new Rotation3d(0, -Math.toRadians(31.92), Math.toRadians(180)));
     public static final Transform3d BACK_RIGHT_CAMERA_POSE =
             new Transform3d(
                     -0.346_52,
                     -0.285_32,
                     0.2,
-                    new Rotation3d(0, -Math.toRadians(31.92), -Math.toRadians(90)));
+                    new Rotation3d(0, -Math.toRadians(31.92), -Math.toRadians(100)));
     public static final Transform3d FRONT_LEFT_CAMERA_POSE =
             new Transform3d(0.061, 0.2848, 0.55, new Rotation3d(0, -Math.toRadians(10.0), 0));
     public static final Transform3d FRONT_RIGHT_CAMERA_POSE =
@@ -75,10 +82,10 @@ public class Constants {
     }
 
     public static final double[] SWERVE_OFFSETS = {
-        0.791_147_194_778_679_9,
-        0.781_006_969_525_174_2,
-        0.485_464_112_136_602_8,
-        0.609_238_365_230_959_1
+        0.790_611_619_765_290_5,
+        0.783_162_919_579_073,
+        0.483_375_612_084_390_3,
+        0.606_702_240_167_556
     };
 
     public static void initSwerve() {
@@ -110,13 +117,20 @@ public class Constants {
         AutoBuilder.configureHolonomic(
                 () -> swerveDrive.getEstimator().getEstimatedPosition(),
                 (pose) -> {
-                    swerveDrive.resetGyro(pose.getRotation());
+                    swerveDrive.resetGyro(
+                            PoseEstimation.getInstance()
+                                    .getEstimatedPose()
+                                    .getRotation()
+                                    .minus(
+                                            ScoreState.isRed()
+                                                    ? Rotation2d.fromDegrees(180)
+                                                    : new Rotation2d()));
                 },
                 swerveDrive::getCurrentSpeeds,
                 (speeds) -> swerveDrive.drive(speeds, false),
                 new HolonomicPathFollowerConfig(
                         new PIDConstants(5.5, 0, 0.15),
-                        new PIDConstants(6, 0, 0),
+                        new PIDConstants(3, 0, 0.4),
                         SwerveConstants.MAX_X_Y_VELOCITY,
                         Constants.ROBOT_LENGTH.in(Units.Meters) / Math.sqrt(2),
                         new ReplanningConfig()),

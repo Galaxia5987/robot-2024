@@ -11,6 +11,7 @@ public class GyroIOReal implements GyroIO {
 
     public GyroIOReal() {
         this.gyro = new AHRS(SPI.Port.kMXP);
+        gyro.reset();
     }
 
     @Override

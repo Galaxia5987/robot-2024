@@ -5,10 +5,12 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.scoreStates.*;
@@ -20,7 +22,10 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOReal;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
-import frc.robot.subsystems.gripper.*;
+import frc.robot.subsystems.gripper.Gripper;
+import frc.robot.subsystems.gripper.GripperIO;
+import frc.robot.subsystems.gripper.GripperIOReal;
+import frc.robot.subsystems.gripper.GripperIOSim;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOReal;
@@ -32,6 +37,8 @@ import frc.robot.subsystems.shooter.ShooterIOReal;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.Optional;
+import lombok.Setter;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
@@ -50,6 +57,8 @@ public class RobotContainer {
     private final ScoreState shootState = new ShootState();
     private final ScoreState climbState = new ClimbState();
     private final StateManager stateManager;
+
+    @AutoLogOutput private ScoreState.State state = ScoreState.State.SHOOT;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
@@ -104,8 +113,6 @@ public class RobotContainer {
         // Configure the button bindings and default commands
         configureDefaultCommands();
         configureButtonBindings();
-        autoChooser = AutoBuilder.buildAutoChooser();
-        SmartDashboard.putData("autoList", autoChooser);
         NamedCommands.registerCommand("intake", commandGroups.intake());
         NamedCommands.registerCommand("stopIntake", intake.stop());
         NamedCommands.registerCommand(
@@ -123,12 +130,19 @@ public class RobotContainer {
         return INSTANCE;
     }
 
+    private Command prepare() {
+        return Commands.parallel(
+                hood.setAngle(ShootingManager.getInstance().getHoodCommandedAngle()),
+                commandGroups.shootAndConvey(
+                        ShootingManager.getInstance().getShooterCommandedVelocity()));
+    }
+
     private void configureDefaultCommands() {
         swerveDrive.setDefaultCommand(
                 swerveDrive.driveCommand(
                         () -> -driveController.getLeftY(),
                         () -> -driveController.getLeftX(),
-                        () -> 0.6 * -driveController.getRightX(),
+                        () -> 0.6 * -driveController.getRightX(), // 0.6
                         0.1,
                         () -> true));
 
@@ -142,7 +156,7 @@ public class RobotContainer {
 
         gripper.setDefaultCommand(
                 gripper.setWristPower(
-                        () -> MathUtil.applyDeadband(-xboxController.getLeftY(), 0.15)));
+                        () -> MathUtil.applyDeadband(-xboxController.getRightY(), 0.15) * 0.6));
     }
 
     private void configureButtonBindings() {
@@ -166,12 +180,7 @@ public class RobotContainer {
 
         driveController
                 .leftTrigger()
-                .whileTrue(
-                        Commands.parallel(
-                                intake.intake(),
-                                gripper.setRollerPower(0.3)
-                                        .until(gripper::hasNote)
-                                        .andThen(gripper.setRollerPower(0))))
+                .whileTrue(commandGroups.intake())
                 .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
 
         driveController
@@ -184,6 +193,8 @@ public class RobotContainer {
                 .whileTrue(intake.setAngle(Units.Degrees.of(-130).mutableCopy()))
                 .onFalse(intake.reset(Units.Degrees.of(0)));
 
+        xboxController.start().onTrue(elevator.lock());
+        xboxController.back().onTrue(elevator.unlock());
         xboxController
                 .rightBumper()
                 .whileTrue(gripper.setRollerPower(0.4))
@@ -193,11 +204,18 @@ public class RobotContainer {
                 .leftBumper()
                 .whileTrue(gripper.setRollerPower(-0.4))
                 .onFalse(gripper.setRollerPower(0));
-
         xboxController
-                .b()
-                .whileTrue(intake.setAngle(IntakeConstants.IntakePose.DOWN))
-                .onFalse(intake.setAngle(IntakeConstants.IntakePose.UP));
+                .rightBumper()
+                .whileTrue(Commands.runOnce(() -> setForceShooting(true)))
+                .onFalse(Commands.runOnce(() -> setForceShooting(false)));
+
+        xboxController.b().onTrue(Commands.runOnce(() -> state = ScoreState.State.SHOOT));
+        xboxController.a().onTrue(Commands.runOnce(() -> state = ScoreState.State.AMP));
+        xboxController.y().onTrue(commandGroups.shootToSpeaker());
+        xboxController
+                .x()
+                .onTrue(intake.setAngle(Units.Degrees.of(-140).mutableCopy()))
+                .onFalse(intake.reset(Units.Degrees.zero().mutableCopy()));
 
         xboxController.a().onTrue(elevator.unlock());
         xboxController.y().onTrue(elevator.lock());
@@ -209,6 +227,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new PathPlannerAuto("I cant do this");
+        return autoChooser.getSelected();
     }
 }

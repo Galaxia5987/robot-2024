@@ -1,17 +1,17 @@
 package frc.robot.subsystems.gripper;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkLimitSwitch;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
@@ -24,9 +24,9 @@ public class GripperIOReal implements GripperIO {
     private final SparkLimitSwitch reverseLimitSwitch;
     private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(Ports.Gripper.ENCODER_ID);
     private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0);
-    private final VoltageOut powerRequest = new VoltageOut(0).withEnableFOC(true);
-    private final DigitalInput sensor = new DigitalInput(4);
+    private final DutyCycleOut powerRequest = new DutyCycleOut(0).withEnableFOC(true);
     private final Timer timer = new Timer();
+    private final Debouncer debouncer = new Debouncer(0.0);
 
     public GripperIOReal() {
         angleMotor = new TalonFX(Ports.Gripper.ANGLE_ID);
@@ -73,7 +73,8 @@ public class GripperIOReal implements GripperIO {
     }
 
     public boolean hasNote() {
-        return forwardLimitSwitch.isPressed() || reverseLimitSwitch.isPressed();
+        return debouncer.calculate(
+                forwardLimitSwitch.isPressed() || reverseLimitSwitch.isPressed());
     }
 
     @Override

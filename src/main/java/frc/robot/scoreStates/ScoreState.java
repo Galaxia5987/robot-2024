@@ -28,4 +28,10 @@ public interface ScoreState {
     default MutableMeasure<Angle> getSwerveAngle() {
         return Units.Degrees.of(0).mutableCopy();
     }
+
+    enum State {
+        SHOOT,
+        AMP,
+        CLIMB
+    }
 }

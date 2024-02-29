@@ -64,7 +64,7 @@ public class IntakeConstants {
     public enum IntakePose {
         UP(Degrees.of(110).mutableCopy()),
         DOWN(Degrees.zero().mutableCopy());
-        final MutableMeasure<Angle> intakePose;
+        public final MutableMeasure<Angle> intakePose;
 
         IntakePose(MutableMeasure<Angle> intakePose) {
             this.intakePose = intakePose;

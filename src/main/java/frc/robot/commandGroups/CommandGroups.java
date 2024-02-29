@@ -4,18 +4,24 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.lib.PoseEstimation;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperConstants;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeConstants;
+import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 public class CommandGroups {
     private static CommandGroups INSTANCE;
@@ -25,16 +31,22 @@ public class CommandGroups {
     private final Shooter shooter;
     private final Hood hood;
     private final Conveyor conveyor;
+    private final LEDs leds;
+    private final SwerveDrive swerveDrive;
     private boolean override;
 
     private CommandGroups() {
+        leds = new LEDs(0, 60);
         intake = Intake.getInstance();
         gripper = Gripper.getInstance();
         elevator = Elevator.getInstance();
         shooter = Shooter.getInstance();
         hood = Hood.getInstance();
         conveyor = Conveyor.getInstance();
+        swerveDrive = SwerveDrive.getInstance();
 
+        leds.setPrimary(Color.kAliceBlue);
+        leds.setSecondary(Color.kOrangeRed);
         override = false;
     }
 
@@ -69,19 +81,17 @@ public class CommandGroups {
 
     public Command feedWithWait(BooleanSupplier otherReady) {
         return Commands.waitUntil(otherReady)
-                .andThen(gripper.setRollerPower(GripperConstants.INTAKE_POWER).withTimeout(1))
+                .andThen(gripper.setRollerPower(GripperConstants.INTAKE_POWER).withTimeout(0.4))
                 .withName("feedWithWait");
     }
 
     public Command intake() {
-        return Commands.repeatingSequence(
-                        Commands.parallel(
-                                intake.intake(),
-                                gripper.setRollerPower(0.3)
-                                        .until(gripper::hasNote)
-                                        .andThen(
-                                                gripper.setRollerPower(
-                                                        0)))) // TODO: replace null with leds
+        return Commands.parallel(
+                        intake.intake(),
+                        gripper.setRollerPower(0.3)
+                                .until(gripper::hasNote)
+                                .andThen(gripper.setRollerPower(0))
+                                .alongWith(leds.solidSecondary(1, 60)))
                 .withName("intake");
     }
 
@@ -118,6 +128,7 @@ public class CommandGroups {
 
     public Command grillevatorBit() {
         return Commands.sequence(
+                elevator.manualElevator(() -> -0.1).withTimeout(0.11),
                 elevator.setHeight(CommandGroupsConstants.MAX_HEIGHT),
                 gripper.setRollerAndWrist(0.3, CommandGroupsConstants.WRIST_ANGLE_AMP_FORWARD),
                 Commands.waitSeconds(3),
@@ -125,25 +136,32 @@ public class CommandGroups {
     }
 
     public Command intakeBit() {
-        return Commands.sequence(intake.intake(), Commands.waitSeconds(3), intake.stop());
+        return Commands.sequence(intake().withTimeout(3), intake.stop());
     }
 
     public Command shooterBit() {
-        return Commands.parallel(
-                        shooter.setVelocity(Units.RotationsPerSecond.of(55).mutableCopy()),
-                        hood.setAngle(Units.Degrees.of(70).mutableCopy()))
+        return shootToAmp()
                 .andThen(
-                        Commands.sequence(
-                                Commands.waitSeconds(3),
-                                shooter.stop(),
-                                hood.setAngle(Units.Degrees.of(114).mutableCopy())));
+                        Commands.waitSeconds(3),
+                        shooter.stop(),
+                        conveyor.stop(),
+                        hood.setAngle(Units.Degrees.of(114).mutableCopy()));
     }
 
     public Command allBits() {
         return Commands.sequence(
-                intakeBit(),
-                shooterBit(),
-                grillevatorBit(),
-                SwerveDrive.getInstance().checkSwerve());
+                intake.setAngle(IntakeConstants.IntakePose.DOWN)
+                        .withTimeout(0.25)
+                        .alongWith(
+                                hood.setAngle(Units.Degrees.of(33.48).mutableCopy())
+                                        .withTimeout(0.25)),
+                elevator.manualElevator(() -> -0.1).withTimeout(0.11),
+                elevator.unlock(),
+                elevator.manualElevator(() -> 0.3).withTimeout(1),
+                gripper.setWristPosition(Units.Degrees.of(-30).mutableCopy()).withTimeout(1));
+    }
+
+    public Command allBits() {
+        return Commands.sequence(intakeBit(), shooterBit().withTimeout(3));
     }
 }

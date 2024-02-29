@@ -4,12 +4,11 @@
   "holonomicMode": true,
   "pathFolders": [
     "AH123",
+    "CL34",
     "Center line",
     "D345",
     "Lower",
     "Middle",
-    "New Folder",
-    "CL34",
     "Upper"
   ],
   "autoFolders": [],

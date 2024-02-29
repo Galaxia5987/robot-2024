@@ -16,6 +16,12 @@
                 }
               },
               {
+                "type": "named",
+                "data": {
+                  "name": "adjustToTarget"
+                }
+              },
+              {
                 "type": "sequential",
                 "data": {
                   "commands": [
@@ -77,6 +83,12 @@
                       "type": "path",
                       "data": {
                         "pathName": "D5"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "score"
                       }
                     },
                     {

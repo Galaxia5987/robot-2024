@@ -79,7 +79,7 @@ public class ShooterConstants {
                 TOP_kI.initDefault(0.0);
                 TOP_kD.initDefault(0.0);
                 TOP_kS.initDefault(0.0);
-                TOP_kV.initDefault(0.1292);
+                TOP_kV.initDefault(0.1272);
                 TOP_kA.initDefault(0.057_19);
                 BOTTOM_kP.initDefault(0.1);
                 BOTTOM_kI.initDefault(0.0);
@@ -89,17 +89,17 @@ public class ShooterConstants {
                 BOTTOM_kA.initDefault(0.057_19);
             case SIM:
             case REPLAY:
-                TOP_kP.initDefault(3.0);
-                TOP_kI.initDefault(0.0);
-                TOP_kD.initDefault(0.0);
+                TOP_kP.initDefault(1.2);
+                TOP_kI.initDefault(0.5);
+                TOP_kD.initDefault(3);
                 TOP_kS.initDefault(0.0);
-                TOP_kV.initDefault(0.112);
+                TOP_kV.initDefault(0);
                 TOP_kA.initDefault(0.0);
-                BOTTOM_kP.initDefault(10.0);
-                BOTTOM_kI.initDefault(0.0);
-                BOTTOM_kD.initDefault(0.0);
+                BOTTOM_kP.initDefault(1.2);
+                BOTTOM_kI.initDefault(0.5);
+                BOTTOM_kD.initDefault(3);
                 BOTTOM_kS.initDefault(0.0);
-                BOTTOM_kV.initDefault(0.112);
+                BOTTOM_kV.initDefault(0);
                 BOTTOM_kA.initDefault(0.0);
         }
         topMotorConfiguration

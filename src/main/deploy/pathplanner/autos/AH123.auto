@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.3560654093318372,
-      "y": 6.903746733702119
-    },
-    "rotation": 0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -25,6 +19,12 @@
                 "type": "sequential",
                 "data": {
                   "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "adjustToTarget"
+                      }
+                    },
                     {
                       "type": "path",
                       "data": {
@@ -50,9 +50,28 @@
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "wait",
                       "data": {
-                        "name": "score"
+                        "waitTime": 0.2
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "score"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "stopIntake"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
