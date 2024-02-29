@@ -162,16 +162,15 @@ public class CommandGroups {
     }
 
     public Command intakeBit() {
-        return Commands.sequence(intake.intake(), Commands.waitSeconds(3), intake.stop());
+        return Commands.sequence(intake().withTimeout(3), intake.stop());
     }
 
     public Command shooterBit() {
-        return Commands.parallel(
-                        shooter.setVelocity(Units.RotationsPerSecond.of(55).mutableCopy()),
-                        hood.setAngle(Units.Degrees.of(70).mutableCopy()))
+        return shootToAmp()
                 .andThen(
                         Commands.waitSeconds(3),
                         shooter.stop(),
+                        conveyor.stop(),
                         hood.setAngle(Units.Degrees.of(114).mutableCopy()));
     }
 
@@ -198,6 +197,12 @@ public class CommandGroups {
                         () -> -driveController.getLeftY(),
                         () -> -driveController.getLeftX(),
                         0.1));
+    }
+
+    public Command shootToSpeaker() {
+        return Commands.parallel(
+                hood.setAngle(ShootingManager.getInstance().getHoodCommandedAngle()),
+                shootAndConvey(ShootingManager.getInstance().getShooterCommandedVelocity()));
     }
 
     public Command stopShooting() {
