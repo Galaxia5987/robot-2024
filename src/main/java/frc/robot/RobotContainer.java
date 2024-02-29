@@ -240,12 +240,7 @@ public class RobotContainer {
 
         xboxController.b().onTrue(Commands.runOnce(() -> state = ScoreState.State.SHOOT));
         xboxController.a().onTrue(Commands.runOnce(() -> state = ScoreState.State.AMP));
-        xboxController
-                .y()
-                .onTrue(
-                        commandGroups
-                                .shootAndConvey(Units.RotationsPerSecond.of(50).mutableCopy())
-                                .alongWith(hood.setAngle(Units.Degrees.of(107).mutableCopy())));
+        xboxController.y().onTrue(commandGroups.shootToSpeaker());
         xboxController
                 .x()
                 .onTrue(intake.setAngle(Units.Degrees.of(-140).mutableCopy()))
@@ -256,7 +251,7 @@ public class RobotContainer {
                 .whileTrue(Commands.runOnce(() -> ShootingManager.getInstance().setLockShoot(true)))
                 .onFalse(Commands.runOnce(() -> ShootingManager.getInstance().setLockShoot(false)));
 
-        joystick.button(Joystick.ButtonType.kTrigger.value).whileTrue(commandGroups.allBits());
+        joystick.button(Joystick.ButtonType.kTrigger.value).onTrue(commandGroups.allBits());
     }
 
     /**
