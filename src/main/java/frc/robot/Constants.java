@@ -30,7 +30,7 @@ public class Constants {
     public static Mode CURRENT_MODE = Mode.REAL;
 
     public static final double AUTO_VISION_MEASUREMENT_MULTIPLIER = 0.5;
-    public static final double TELEOP_VISION_MEASUREMENT_MULTIPLIER = 0.05;
+    public static final double TELEOP_VISION_MEASUREMENT_MULTIPLIER = 0.5;
 
     @AutoLogOutput
     public static double VISION_MEASUREMENT_MULTIPLIER = AUTO_VISION_MEASUREMENT_MULTIPLIER;
