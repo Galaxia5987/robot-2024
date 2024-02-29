@@ -70,7 +70,9 @@ public class Hood extends SubsystemBase {
     @AutoLogOutput
     public boolean atSetpoint() {
         return Utils.epsilonEquals(
-                inputs.angle.in(Units.Degrees), inputs.angleSetpoint.in(Units.Degrees), 0.5);
+                inputs.angle.in(Units.Degrees),
+                inputs.angleSetpoint.in(Units.Degrees),
+                1.0);
     }
 
     public Command setAngle(MutableMeasure<Angle> angle) {
