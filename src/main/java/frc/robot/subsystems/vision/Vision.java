@@ -4,6 +4,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Vision extends SubsystemBase {
 
     private static Vision INSTANCE = null;
@@ -26,6 +30,12 @@ public class Vision extends SubsystemBase {
 
     public EstimatedRobotPose[] getResults() {
         return results;
+    }
+
+    public List<VisionIO.ScoreParameters> getScoreParameters() {
+        List<VisionIO.ScoreParameters> params = new ArrayList<>();
+        Arrays.stream(modules).forEach((module) -> params.addAll(module.getScoreParameters()));
+        return params;
     }
 
     @Override
