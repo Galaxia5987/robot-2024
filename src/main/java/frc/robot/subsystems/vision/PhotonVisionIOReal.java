@@ -57,7 +57,7 @@ public class PhotonVisionIOReal implements VisionIO {
                 if ((DriverStation.isEnabled()
                         && distanceTraveled > 0.3) ||
                         (result.getEstimatedRobotPose().estimatedPose.getZ() > 0.2) ||
-                        (VisionConstants.outOfBounds(result.getEstimatedRobotPose().estimatedPose))) { // TODO: filter field bounds
+                        (VisionConstants.outOfBounds(result.getEstimatedRobotPose().estimatedPose))) {
                     result.setUseForEstimation(false);
                 }
             } else {
