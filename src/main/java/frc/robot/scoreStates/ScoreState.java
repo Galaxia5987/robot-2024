@@ -19,7 +19,7 @@ public interface ScoreState {
         return Commands.none();
     }
 
-    default Command prepareSubsytems() {
+    default Command prepareSubsystems() {
         return Commands.none();
     }
 
@@ -27,11 +27,5 @@ public interface ScoreState {
 
     default MutableMeasure<Angle> getSwerveAngle() {
         return Units.Degrees.of(0).mutableCopy();
-    }
-
-    enum State {
-        SHOOT,
-        AMP,
-        CLIMB
     }
 }

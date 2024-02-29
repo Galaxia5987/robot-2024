@@ -2,15 +2,11 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.scoreStates.*;
@@ -37,8 +33,6 @@ import frc.robot.subsystems.shooter.ShooterIOReal;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.Optional;
-import lombok.Setter;
-import org.littletonrobotics.junction.AutoLogOutput;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
@@ -53,12 +47,10 @@ public class RobotContainer {
     private final CommandXboxController driveController = new CommandXboxController(1);
     private final CommandGroups commandGroups;
     private final SendableChooser<Command> autoChooser;
-    private final ScoreState ampState = new AmpState();
-    private final ScoreState shootState = new ShootState();
-    private final ScoreState climbState = new ClimbState();
+    private final ScoreState ampState;
+    private final ScoreState shootState;
+    private final ScoreState climbState;
     private final StateManager stateManager;
-
-    @AutoLogOutput private ScoreState.State state = ScoreState.State.SHOOT;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
@@ -108,6 +100,9 @@ public class RobotContainer {
         gripper = Gripper.getInstance();
         commandGroups = CommandGroups.getInstance();
 
+        ampState = new AmpState();
+        shootState = new ShootState();
+        climbState = new ClimbState();
         stateManager = StateManager.getInstance(shootState);
 
         // Configure the button bindings and default commands
@@ -116,11 +111,12 @@ public class RobotContainer {
         NamedCommands.registerCommand("intake", commandGroups.intake());
         NamedCommands.registerCommand("stopIntake", intake.stop());
         NamedCommands.registerCommand(
-                "score",
-                stateManager.getCurrentState().score(Optional.empty(), true)); // scoreShooter
-        NamedCommands.registerCommand("finishScore", gripper.setRollerPower(0));
+                "score", stateManager.getCurrentState().score(Optional.empty(), true)); //
+        //         scoreShooter
+        NamedCommands.registerCommand("finishScore", gripper.stopGripper());
         NamedCommands.registerCommand(
-                "prepareShoot", stateManager.getCurrentState().prepareSubsytems());
+                "prepareShoot", stateManager.getCurrentState().prepareSubsystems());
+                autoChooser = AutoBuilder.buildAutoChooser("Safety B");
     }
 
     public static RobotContainer getInstance() {
@@ -128,13 +124,6 @@ public class RobotContainer {
             INSTANCE = new RobotContainer();
         }
         return INSTANCE;
-    }
-
-    private Command prepare() {
-        return Commands.parallel(
-                hood.setAngle(ShootingManager.getInstance().getHoodCommandedAngle()),
-                commandGroups.shootAndConvey(
-                        ShootingManager.getInstance().getShooterCommandedVelocity()));
     }
 
     private void configureDefaultCommands() {
@@ -204,14 +193,7 @@ public class RobotContainer {
                 .leftBumper()
                 .whileTrue(gripper.setRollerPower(-0.4))
                 .onFalse(gripper.setRollerPower(0));
-        xboxController
-                .rightBumper()
-                .whileTrue(Commands.runOnce(() -> setForceShooting(true)))
-                .onFalse(Commands.runOnce(() -> setForceShooting(false)));
-
-        xboxController.b().onTrue(Commands.runOnce(() -> state = ScoreState.State.SHOOT));
-        xboxController.a().onTrue(Commands.runOnce(() -> state = ScoreState.State.AMP));
-        xboxController.y().onTrue(commandGroups.shootToSpeaker());
+        // TODO: make force shoot
         xboxController
                 .x()
                 .onTrue(intake.setAngle(Units.Degrees.of(-140).mutableCopy()))

@@ -122,8 +122,7 @@ public class Robot extends LoggedRobot {
 
         Logger.recordOutput(
                 "Robot/DistanceToSpeaker", PoseEstimation.getInstance().getDistanceToSpeaker());
-        Logger.recordOutput("Robot/IsShooting", ShootingManager.getInstance().isShooting());
-        Logger.recordOutput("Robot/ReadyToShoot", ShootingManager.getInstance().readyToShoot());
+        // TODO: log readyToShoot
         field2d.setRobotPose(PoseEstimation.getInstance().getEstimatedPose());
         SmartDashboard.putData("Field", field2d);
     }

@@ -43,10 +43,10 @@ public class ShootState implements ScoreState {
 
     public ShootState() {
         shooter = Shooter.getInstance();
-        hood = Hood.getInstance();
         poseEstimation = PoseEstimation.getInstance();
         commandGroups = CommandGroups.getInstance();
         swerveDrive = SwerveDrive.getInstance();
+        hood = Hood.getInstance();
     }
 
     @AutoLogOutput(key = "ReadyToShoot")
@@ -113,19 +113,17 @@ public class ShootState implements ScoreState {
                 });
     }
 
-    public Command prepareSubsytems() {
+    public Command prepareSubsystems() {
         return Commands.parallel(
                 hood.setAngle(getHoodAngle()), commandGroups.shootAndConvey(getShooterVelocity()));
     }
 
     @Override
     public Command score(Optional<CommandXboxController> driveController, boolean isAuto) {
-        return Commands.parallel(
-                        prepareSubsytems(),
-                        Commands.either(
-                                overrideAutoRotation(),
-                                swerveControllerAdjustment(driveController),
-                                () -> isAuto))
+        return Commands.either(
+                        overrideAutoRotation(),
+                        swerveControllerAdjustment(driveController).alongWith(prepareSubsystems()),
+                        () -> isAuto)
                 .until(this::readyToShoot)
                 .alongWith(feedShooter());
     }

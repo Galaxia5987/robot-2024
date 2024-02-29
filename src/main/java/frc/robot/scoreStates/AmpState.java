@@ -2,6 +2,7 @@ package frc.robot.scoreStates;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.conveyor.ConveyorConstants;
@@ -11,6 +12,7 @@ import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
+import java.util.Optional;
 
 public class AmpState implements ScoreState {
     private CommandGroups commandGroups;
@@ -28,7 +30,7 @@ public class AmpState implements ScoreState {
     }
 
     @Override
-    public Command score() {
+    public Command score(Optional<CommandXboxController> driveController, boolean isAuto) {
         return Commands.sequence(
                         shooter.setVelocity(
                                         ShooterConstants.TOP_AMP_VELOCITY,
