@@ -5,12 +5,8 @@ import lombok.Setter;
 import org.photonvision.EstimatedRobotPose;
 
 public class VisionResult {
-    @Setter
-    @Getter
-    private EstimatedRobotPose estimatedRobotPose;
-    @Setter
-    @Getter
-    private boolean useForEstimation;
+    @Setter @Getter private EstimatedRobotPose estimatedRobotPose;
+    @Setter @Getter private boolean useForEstimation;
 
     public VisionResult(EstimatedRobotPose pose, boolean useForEstimation) {
         this.estimatedRobotPose = pose;
