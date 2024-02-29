@@ -227,10 +227,6 @@ public class CommandGroups {
     }
 
     public Command allBits() {
-        return Commands.sequence(
-                intakeBit(),
-                shooterBit(),
-                //                grillevatorBit(),
-                SwerveDrive.getInstance().checkSwerve());
+        return Commands.sequence(intakeBit(), shooterBit().withTimeout(3));
     }
 }
