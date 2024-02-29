@@ -1,8 +1,10 @@
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.DriverStation;
+import java.util.ArrayList;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -12,8 +14,22 @@ public class PhotonVisionIOReal implements VisionIO {
     private final PhotonCamera camera;
     private final PhotonPoseEstimator estimator;
     private final Transform3d robotToCamera;
-    private VisionResult result;
-    private VisionResult lastResult;
+    private VisionResult result =
+            new VisionResult(
+                    new EstimatedRobotPose(
+                            new Pose3d(),
+                            0,
+                            new ArrayList<>(),
+                            PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR),
+                    false);
+    private VisionResult lastResult =
+            new VisionResult(
+                    new EstimatedRobotPose(
+                            new Pose3d(),
+                            0,
+                            new ArrayList<>(),
+                            PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR),
+                    false);
 
     public PhotonVisionIOReal(
             PhotonCamera camera, Transform3d robotToCamera, AprilTagFieldLayout field) {
@@ -50,14 +66,15 @@ public class PhotonVisionIOReal implements VisionIO {
 
                 result = new VisionResult(estimatedPose.get(), true);
                 double distanceTraveled =
-                        result.getEstimatedRobotPose().estimatedPose
+                        result.getEstimatedRobotPose()
+                                .estimatedPose
                                 .minus(lastResult.getEstimatedRobotPose().estimatedPose)
                                 .getTranslation()
                                 .getNorm();
-                if ((DriverStation.isEnabled()
-                        && distanceTraveled > 0.3) ||
-                        (result.getEstimatedRobotPose().estimatedPose.getZ() > 0.2) ||
-                        (VisionConstants.outOfBounds(result.getEstimatedRobotPose().estimatedPose))) {
+                if ((DriverStation.isEnabled() && distanceTraveled > 0.3)
+                        || (result.getEstimatedRobotPose().estimatedPose.getZ() > 0.2)
+                        || (VisionConstants.outOfBounds(
+                                result.getEstimatedRobotPose().estimatedPose))) {
                     result.setUseForEstimation(false);
                 }
             } else {
