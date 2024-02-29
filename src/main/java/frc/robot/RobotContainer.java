@@ -116,7 +116,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("finishScore", gripper.stopGripper());
         NamedCommands.registerCommand(
                 "prepareShoot", stateManager.getCurrentState().prepareSubsystems());
-                autoChooser = AutoBuilder.buildAutoChooser("Safety B");
+        autoChooser = AutoBuilder.buildAutoChooser("Safety B");
     }
 
     public static RobotContainer getInstance() {
