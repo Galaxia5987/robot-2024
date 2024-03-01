@@ -10,7 +10,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.*;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.lib.controllers.DieterController;
 import frc.robot.lib.math.differential.Derivative;
+import frc.robot.scoreStates.ScoreState;
 import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -141,7 +145,12 @@ public class SwerveDrive extends SubsystemBase {
 
     public void resetPose(Pose2d pose) {
         botPose = pose;
-        resetGyro(pose.getRotation());
+        resetGyro(
+                pose.getRotation()
+                        .minus(
+                                ScoreState.isRed()
+                                        ? Rotation2d.fromDegrees(180)
+                                        : new Rotation2d()));
         estimator.resetPosition(getOdometryYaw(), modulePositions, pose);
     }
 
@@ -188,16 +197,6 @@ public class SwerveDrive extends SubsystemBase {
      * @param fieldOriented Should the drive be field oriented.
      */
     public void drive(ChassisSpeeds chassisSpeeds, boolean fieldOriented) {
-        double magnitude =
-                Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
-        Rotation2d angle =
-                new Rotation2d(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
-        angle = angle.minus(Rotation2d.fromRadians(0.075 * chassisSpeeds.omegaRadiansPerSecond));
-        chassisSpeeds =
-                new ChassisSpeeds(
-                        angle.getCos() * magnitude,
-                        angle.getSin() * magnitude,
-                        chassisSpeeds.omegaRadiansPerSecond);
         loggerInputs.desiredSpeeds = chassisSpeeds;
 
         ChassisSpeeds fieldOrientedChassisSpeeds =
@@ -291,10 +290,7 @@ public class SwerveDrive extends SubsystemBase {
                                 MathUtil.applyDeadband(xJoystick.getAsDouble(), deadband),
                                 MathUtil.applyDeadband(yJoystick.getAsDouble(), deadband),
                                 turnController.calculate(
-                                        estimator
-                                                .getEstimatedPosition()
-                                                .getRotation()
-                                                .getRotations(),
+                                        getOdometryYaw().getRotations(),
                                         rotation.in(edu.wpi.first.units.Units.Rotations)),
                                 true));
     }
