@@ -5,17 +5,21 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.DriverStation;
-import java.util.ArrayList;
-import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+
+import java.util.ArrayList;
+import java.util.Optional;
 
 public class PhotonVisionIOReal implements VisionIO {
 
     private final PhotonCamera camera;
     private final PhotonPoseEstimator estimator;
+    private final PhotonPoseEstimator simpleEstimator;
     private final Transform3d robotToCamera;
+    private final AprilTagFieldLayout field;
+    private final boolean calculateScoreParams;
     private VisionResult result =
             new VisionResult(
                     new EstimatedRobotPose(
@@ -32,9 +36,7 @@ public class PhotonVisionIOReal implements VisionIO {
                             new ArrayList<>(),
                             PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR),
                     false);
-    private final AprilTagFieldLayout field;
     private Optional<ScoreParameters> scoreParameters = Optional.empty();
-    private final boolean calculateScoreParams;
 
     public PhotonVisionIOReal(
             PhotonCamera camera,
@@ -46,16 +48,18 @@ public class PhotonVisionIOReal implements VisionIO {
         this.field = field;
         this.calculateScoreParams = calculateScoreParams;
         camera.setPipelineIndex(0);
-        try {
-            estimator =
-                    new PhotonPoseEstimator(
-                            field,
-                            PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                            camera,
-                            robotToCamera);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        estimator =
+                new PhotonPoseEstimator(
+                        field,
+                        PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                        camera,
+                        robotToCamera);
+
+        simpleEstimator = new PhotonPoseEstimator(
+                field,
+                PhotonPoseEstimator.PoseStrategy.AVERAGE_BEST_TARGETS,
+                camera,
+                robotToCamera);
     }
 
     @Override
@@ -89,22 +93,12 @@ public class PhotonVisionIOReal implements VisionIO {
                                             VisionConstants.getSpeakerTag2()
                                                     == tag.getFiducialId());
             inputs.seesSpeaker = seesTag1 && seesTag2;
-            if (inputs.seesSpeaker) {
-                var translationToTag1 = tags.get(0).getBestCameraToTarget().plus(robotToCamera);
-                var translationToTag2 = tags.get(1).getBestCameraToTarget().plus(robotToCamera);
-                var robot1 =
-                        field.getTagPose(VisionConstants.getSpeakerTag1())
-                                .get()
-                                .plus(translationToTag1)
-                                .plus(robotToCamera);
-                var robot2 =
-                        field.getTagPose(VisionConstants.getSpeakerTag2())
-                                .get()
-                                .plus(translationToTag2)
-                                .plus(robotToCamera);
-                var robotPose = robot1.plus(robot2.minus(robot1).div(2.0));
+
+            var robotPose = simpleEstimator.update(latestResult);
+            if (inputs.seesSpeaker && robotPose.isPresent()) {
+
                 var toSpeaker =
-                        robotPose
+                        robotPose.get().estimatedPose
                                 .getTranslation()
                                 .toTranslation2d()
                                 .minus(VisionConstants.getSpeakerPose());
@@ -133,7 +127,7 @@ public class PhotonVisionIOReal implements VisionIO {
             if ((DriverStation.isEnabled() && distanceTraveled > 0.3)
                     || (result.getEstimatedRobotPose().estimatedPose.getZ() > 0.2)
                     || (VisionConstants.outOfBounds(
-                            result.getEstimatedRobotPose().estimatedPose))) {
+                    result.getEstimatedRobotPose().estimatedPose))) {
                 result.setUseForEstimation(false);
             }
         } else {
