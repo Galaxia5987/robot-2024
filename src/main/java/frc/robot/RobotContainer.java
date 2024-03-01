@@ -169,7 +169,7 @@ public class RobotContainer {
                 swerveDrive.driveCommand(
                         () -> -driveController.getLeftY(),
                         () -> -driveController.getLeftX(),
-                        () -> 0.6 * -driveController.getRightX(), // 0.6
+                        () -> 0.5 * -driveController.getRightX(), // 0.6
                         0.1,
                         () -> true));
 
