@@ -75,18 +75,20 @@ public class ShooterConstants {
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                TOP_kP.initDefault(0.1);
+                TOP_kP.initDefault(0.4);
                 TOP_kI.initDefault(0.0);
                 TOP_kD.initDefault(0.0);
                 TOP_kS.initDefault(0.0);
                 TOP_kV.initDefault(0.1272);
-                TOP_kA.initDefault(0.057_19);
-                BOTTOM_kP.initDefault(0.1);
+                TOP_kA.initDefault(0);
+                //                TOP_kA.initDefault(0.057_19);
+                BOTTOM_kP.initDefault(0.3);
                 BOTTOM_kI.initDefault(0.0);
                 BOTTOM_kD.initDefault(0.0);
                 BOTTOM_kS.initDefault(0.0);
-                BOTTOM_kV.initDefault(0.1252);
-                BOTTOM_kA.initDefault(0.057_19);
+                BOTTOM_kV.initDefault(0.1242);
+                BOTTOM_kA.initDefault(0);
+                //                BOTTOM_kA.initDefault(0.057_19);
             case SIM:
             case REPLAY:
                 TOP_kP.initDefault(1.2);
@@ -116,7 +118,7 @@ public class ShooterConstants {
                 .CurrentLimits
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimitEnable(true)
-                .withStatorCurrentLimit(CURRENT_LIMIT_TOP)
+                .withStatorCurrentLimit(2 * CURRENT_LIMIT_TOP)
                 .withSupplyCurrentLimit(CURRENT_LIMIT_TOP);
 
         bottomMotorConfiguration
@@ -133,7 +135,7 @@ public class ShooterConstants {
                 .CurrentLimits
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimitEnable(true)
-                .withStatorCurrentLimit(CURRENT_LIMIT_BOTTOM)
+                .withStatorCurrentLimit(2 * CURRENT_LIMIT_BOTTOM)
                 .withSupplyCurrentLimit(CURRENT_LIMIT_BOTTOM);
     }
 

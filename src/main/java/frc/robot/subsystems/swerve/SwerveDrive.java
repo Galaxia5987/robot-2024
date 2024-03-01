@@ -112,6 +112,7 @@ public class SwerveDrive extends SubsystemBase {
         return loggerInputs.yaw;
     }
 
+    @AutoLogOutput
     public Rotation2d getOdometryYaw() {
         var alliance = DriverStation.getAlliance();
         if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
@@ -290,8 +291,7 @@ public class SwerveDrive extends SubsystemBase {
                                 MathUtil.applyDeadband(xJoystick.getAsDouble(), deadband),
                                 MathUtil.applyDeadband(yJoystick.getAsDouble(), deadband),
                                 turnController.calculate(
-                                        getOdometryYaw().getRotations(),
-                                        rotation.in(edu.wpi.first.units.Units.Rotations)),
+                                        rotation.in(edu.wpi.first.units.Units.Rotations), 0),
                                 true));
     }
 

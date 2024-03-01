@@ -19,7 +19,7 @@ public interface HoodIO {
 
     @AutoLog
     class HoodInputs {
-        public MutableMeasure<Angle> angle = MutableMeasure.zero(Rotations);
+        public MutableMeasure<Angle> internalAngle = MutableMeasure.zero(Rotations);
         public MutableMeasure<Angle> angleSetpoint = MutableMeasure.zero(Rotations);
         public MutableMeasure<Voltage> voltage = MutableMeasure.zero(Volts);
         public MutableMeasure<Angle> absoluteEncoderAngle = MutableMeasure.zero(Rotations);

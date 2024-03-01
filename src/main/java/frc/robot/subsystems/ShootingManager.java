@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.*;
 import frc.robot.lib.PoseEstimation;
+import frc.robot.lib.Utils;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodConstants;
@@ -66,6 +67,7 @@ public class ShootingManager {
         return poseEstimation.getDistanceToSpeaker() < maxShootingDistance.in(Meters)
                 && hood.atSetpoint()
                 && shooter.atSetpoint()
+                && Utils.epsilonEquals(swerveCommandedAngle.in(Degrees), 0, 2)
                 && !lockShoot;
     }
 
@@ -127,7 +129,9 @@ public class ShootingManager {
                             .reduce(new Rotation2d(), Rotation2d::plus)
                             .div(scoreParameters.size());
 
-            swerveCommandedAngle.mut_replace(yawToTarget.getRotations(), Rotations);
+            swerveCommandedAngle
+                    .mut_replace(yawToTarget.getRotations(), Rotations)
+                    .mut_minus(-6.5, Degrees);
         }
     }
 

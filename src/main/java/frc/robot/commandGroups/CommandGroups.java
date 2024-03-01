@@ -86,6 +86,7 @@ public class CommandGroups {
 
     public Command feedWithWait(BooleanSupplier otherReady) {
         return Commands.waitUntil(otherReady)
+                .andThen(Commands.waitSeconds(0.05))
                 .andThen(gripper.setRollerPower(GripperConstants.INTAKE_POWER).withTimeout(0.4))
                 .withName("feedWithWait");
     }
@@ -208,7 +209,7 @@ public class CommandGroups {
     public Command stopShooting() {
         return Commands.parallel(
                 hood.setAngle(Units.Degrees.of(114).mutableCopy()),
-                shooter.setVelocity(Units.RotationsPerSecond.zero().mutableCopy()),
+                shooter.stop(),
                 conveyor.stop(),
                 gripper.setRollerPower(0));
     }

@@ -64,13 +64,15 @@ public class Hood extends SubsystemBase {
     }
 
     public MutableMeasure<Angle> getAngle() {
-        return inputs.angle;
+        return inputs.internalAngle;
     }
 
     @AutoLogOutput
     public boolean atSetpoint() {
         return Utils.epsilonEquals(
-                inputs.angle.in(Units.Degrees), inputs.angleSetpoint.in(Units.Degrees), 1.0);
+                inputs.absoluteEncoderAngle.in(Units.Degrees),
+                inputs.angleSetpoint.in(Units.Degrees),
+                1.0);
     }
 
     public Command setAngle(MutableMeasure<Angle> angle) {
@@ -113,6 +115,6 @@ public class Hood extends SubsystemBase {
             Logger.processInputs("Hood", inputs);
         }
 
-        hood.setAngle(inputs.angle.in(Units.Degrees));
+        hood.setAngle(inputs.internalAngle.in(Units.Degrees));
     }
 }

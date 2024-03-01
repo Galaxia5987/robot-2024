@@ -2,9 +2,7 @@ package frc.robot.subsystems.vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.filter.LinearFilter;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -37,7 +35,9 @@ public class PhotonVisionIOReal implements VisionIO {
                             PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR),
                     false);
     private Optional<ScoreParameters> scoreParameters = Optional.empty();
-    private final LinearFilter distanceFilter = LinearFilter.movingAverage(20);
+    private final LinearFilter xFilter = LinearFilter.movingAverage(20);
+    private final LinearFilter yFilter = LinearFilter.movingAverage(20);
+    private final LinearFilter yawFilter = LinearFilter.movingAverage(20);
 
     public PhotonVisionIOReal(
             PhotonCamera camera,
@@ -90,16 +90,55 @@ public class PhotonVisionIOReal implements VisionIO {
                                 .getTranslation()
                                 .toTranslation2d()
                                 .minus(VisionConstants.getSpeakerPose());
-                inputs.distanceToSpeaker = distanceFilter.calculate(toSpeaker.getNorm());
-                inputs.yawToSpeaker =
-                        new Rotation2d(
-                                Math.IEEEremainder(
-                                        Math.atan2(toSpeaker.getY(), toSpeaker.getX()),
-                                        2 * Math.PI));
-                System.out.println(toSpeaker.getY());
-                scoreParameters =
-                        Optional.of(
-                                new ScoreParameters(inputs.distanceToSpeaker, inputs.yawToSpeaker));
+                toSpeaker =
+                        new Translation2d(
+                                xFilter.calculate(toSpeaker.getX()),
+                                yFilter.calculate(toSpeaker.getY()));
+                inputs.distanceToSpeaker = toSpeaker.getNorm();
+                //                var centerTag =
+                //                        latestResult.getTargets().stream()
+                //                                .filter(
+                //                                        (target) ->
+                //                                                target.getFiducialId()
+                //                                                        ==
+                // VisionConstants.getSpeakerTag1())
+                //                                .toList();
+                //                if (centerTag.size() != 0) {
+                //                    var translation =
+                //                            centerTag
+                //                                    .get(0)
+                //                                    .getBestCameraToTarget()
+                //                                    .plus(new Transform3d(0, -0.341, 0, new
+                // Rotation3d()))
+                //                                    .getTranslation()
+                //                                    .toTranslation2d();
+                //                    System.out.println(translation.getY());
+                //                    scoreParameters =
+                //                            Optional.of(
+                //                                    new ScoreParameters(
+                //                                            inputs.distanceToSpeaker,
+                //                                            new Rotation2d(translation.getX(),
+                // translation.getY())
+                //                                                    .unaryMinus()));
+                //                } else {
+                //                    scoreParameters = Optional.empty();
+                //                }
+                var centerTag =
+                        latestResult.getTargets().stream()
+                                .filter(
+                                        (target) ->
+                                                target.getFiducialId()
+                                                        == VisionConstants.getSpeakerTag1())
+                                .toList();
+                if (centerTag.size() != 0) {
+                    var yaw = centerTag.get(0).getYaw();
+                    scoreParameters =
+                            Optional.of(
+                                    new ScoreParameters(
+                                            inputs.distanceToSpeaker, Rotation2d.fromDegrees(yaw)));
+                } else {
+                    scoreParameters = Optional.empty(); //TODO: make the rotation gyro based
+                }
             } else {
                 scoreParameters = Optional.empty();
             }
