@@ -97,34 +97,38 @@ public class ShootingManager {
 
     public void updateCommandedStateSimple() {
         var scoreParameters = vision.getScoreParameters();
-        double distanceToTarget = scoreParameters.stream()
-                .mapToDouble(VisionIO.ScoreParameters::distanceToSpeaker)
-                .reduce(0, Double::sum) / scoreParameters.size();
+        if (scoreParameters.size() > 0) {
+            double distanceToTarget =
+                    scoreParameters.stream()
+                                    .mapToDouble(VisionIO.ScoreParameters::distanceToSpeaker)
+                                    .reduce(0, Double::sum)
+                            / scoreParameters.size();
 
-        if (distanceToTarget < maxWarmupDistance.in(Meters)) {
-            shooterCommandedVelocity.mut_replace(
-                    ShooterConstants.VELOCITY_BY_DISTANCE.getInterpolated(
-                            new InterpolatingDouble(distanceToTarget))
-                            .value,
-                    RotationsPerSecond);
+            if (distanceToTarget < maxWarmupDistance.in(Meters)) {
+                shooterCommandedVelocity.mut_replace(
+                        ShooterConstants.VELOCITY_BY_DISTANCE.getInterpolated(
+                                        new InterpolatingDouble(distanceToTarget))
+                                .value,
+                        RotationsPerSecond);
 
-            hoodCommandedAngle.mut_replace(
-                    HoodConstants.ANGLE_BY_DISTANCE.getInterpolated(
-                            new InterpolatingDouble(distanceToTarget))
-                            .value,
-                    Degrees);
-        } else {
-            shooterCommandedVelocity.mut_replace(0, RotationsPerSecond);
-            hoodCommandedAngle.mut_replace(114, Degrees);
+                hoodCommandedAngle.mut_replace(
+                        HoodConstants.ANGLE_BY_DISTANCE.getInterpolated(
+                                        new InterpolatingDouble(distanceToTarget))
+                                .value,
+                        Degrees);
+            } else {
+                shooterCommandedVelocity.mut_replace(0, RotationsPerSecond);
+                hoodCommandedAngle.mut_replace(114, Degrees);
+            }
+
+            Rotation2d yawToTarget =
+                    scoreParameters.stream()
+                            .map(VisionIO.ScoreParameters::yaw)
+                            .reduce(new Rotation2d(), Rotation2d::plus)
+                            .div(scoreParameters.size());
+
+            swerveCommandedAngle.mut_replace(yawToTarget.getRotations(), Rotations);
         }
-
-        Rotation2d yawToTarget = scoreParameters.stream()
-                .map(VisionIO.ScoreParameters::yaw)
-                .reduce(new Rotation2d(), Rotation2d::plus).div(scoreParameters.size());
-
-        var currentSwerveRotation = swerveDrive.getYaw();
-        swerveCommandedAngle.mut_replace(
-                currentSwerveRotation.plus(yawToTarget).getRotations(), Rotations);
     }
 
     public void updateHoodChassisCompensation() {
