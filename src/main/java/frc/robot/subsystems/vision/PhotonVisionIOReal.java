@@ -137,7 +137,7 @@ public class PhotonVisionIOReal implements VisionIO {
                                     new ScoreParameters(
                                             inputs.distanceToSpeaker, Rotation2d.fromDegrees(yaw)));
                 } else {
-                    scoreParameters = Optional.empty(); //TODO: make the rotation gyro based
+                    scoreParameters = Optional.empty(); // TODO: make the rotation gyro based
                 }
             } else {
                 scoreParameters = Optional.empty();
