@@ -6,11 +6,9 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.units.*;
-import frc.robot.lib.PoseEstimation;
 import frc.robot.scoreStates.ScoreState;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.vision.PhotonVisionIOReal;
@@ -30,10 +28,11 @@ public class Constants {
     public static Mode CURRENT_MODE = Mode.REAL;
 
     public static final double AUTO_VISION_MEASUREMENT_MULTIPLIER = 0.5;
+    public static final double AUTO_START_VISION_MEASUREMENT_MULTIPLIER = 1_000_000_000;
     public static final double TELEOP_VISION_MEASUREMENT_MULTIPLIER = 0.5;
 
     @AutoLogOutput
-    public static double VISION_MEASUREMENT_MULTIPLIER = AUTO_VISION_MEASUREMENT_MULTIPLIER;
+    static double VISION_MEASUREMENT_MULTIPLIER = AUTO_START_VISION_MEASUREMENT_MULTIPLIER;
 
     public static final Transform3d BACK_LEFT_CAMERA_POSE =
             new Transform3d(
@@ -117,14 +116,7 @@ public class Constants {
         AutoBuilder.configureHolonomic(
                 () -> swerveDrive.getEstimator().getEstimatedPosition(),
                 (pose) -> {
-                    swerveDrive.resetGyro(
-                            PoseEstimation.getInstance()
-                                    .getEstimatedPose()
-                                    .getRotation()
-                                    .minus(
-                                            ScoreState.isRed()
-                                                    ? Rotation2d.fromDegrees(180)
-                                                    : new Rotation2d()));
+                    swerveDrive.resetPose(pose);
                 },
                 swerveDrive::getCurrentSpeeds,
                 (speeds) -> swerveDrive.drive(speeds, false),

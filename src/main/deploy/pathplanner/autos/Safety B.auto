@@ -40,6 +40,12 @@
                     {
                       "type": "named",
                       "data": {
+                        "name": "setVisionMeasurementAuto"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
                         "name": "stopIntake"
                       }
                     },
