@@ -21,6 +21,7 @@ import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveConstants;
+import frc.robot.subsystems.vision.VisionConstants;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -117,7 +118,7 @@ public class Robot extends LoggedRobot {
     public void robotPeriodic() {
         PoseEstimation.getInstance()
                 .processVisionMeasurements(Constants.VISION_MEASUREMENT_MULTIPLIER);
-        ShootingManager.getInstance().updateCommandedState();
+        ShootingManager.getInstance().updateCommandedStateSimple();
         CommandScheduler.getInstance().run();
 
         Logger.recordOutput(
@@ -125,6 +126,7 @@ public class Robot extends LoggedRobot {
         Logger.recordOutput("Robot/IsShooting", ShootingManager.getInstance().isShooting());
         Logger.recordOutput("Robot/ReadyToShoot", ShootingManager.getInstance().readyToShoot());
         field2d.setRobotPose(PoseEstimation.getInstance().getEstimatedPose());
+        Logger.recordOutput("Robot/SpeakerPose", VisionConstants.getSpeakerPose());
         SmartDashboard.putData("Field", field2d);
     }
 

@@ -1,8 +1,6 @@
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.geometry.Transform3d;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +25,7 @@ public class VisionModule {
         return Arrays.stream(ios)
                 .map(VisionIO::getScoreParameters)
                 .filter(Optional::isPresent)
-                .map(Optional::get).toList();
+                .map(Optional::get)
+                .toList();
     }
 }

@@ -1,16 +1,16 @@
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.DriverStation;
+import java.util.ArrayList;
+import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
-
-import java.util.ArrayList;
-import java.util.Optional;
 
 public class PhotonVisionIOReal implements VisionIO {
 
@@ -37,6 +37,7 @@ public class PhotonVisionIOReal implements VisionIO {
                             PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR),
                     false);
     private Optional<ScoreParameters> scoreParameters = Optional.empty();
+    private final LinearFilter distanceFilter = LinearFilter.movingAverage(20);
 
     public PhotonVisionIOReal(
             PhotonCamera camera,
@@ -55,11 +56,12 @@ public class PhotonVisionIOReal implements VisionIO {
                         camera,
                         robotToCamera);
 
-        simpleEstimator = new PhotonPoseEstimator(
-                field,
-                PhotonPoseEstimator.PoseStrategy.AVERAGE_BEST_TARGETS,
-                camera,
-                robotToCamera);
+        simpleEstimator =
+                new PhotonPoseEstimator(
+                        field,
+                        PhotonPoseEstimator.PoseStrategy.AVERAGE_BEST_TARGETS,
+                        camera,
+                        robotToCamera);
     }
 
     @Override
@@ -79,32 +81,22 @@ public class PhotonVisionIOReal implements VisionIO {
         var latestResult = camera.getLatestResult();
 
         if (calculateScoreParams) {
-            var tags = latestResult.getTargets();
-            boolean seesTag1 =
-                    tags.stream()
-                            .anyMatch(
-                                    (tag) ->
-                                            VisionConstants.getSpeakerTag1()
-                                                    == tag.getFiducialId());
-            boolean seesTag2 =
-                    tags.stream()
-                            .anyMatch(
-                                    (tag) ->
-                                            VisionConstants.getSpeakerTag2()
-                                                    == tag.getFiducialId());
-            inputs.seesSpeaker = seesTag1 && seesTag2;
-
             var robotPose = simpleEstimator.update(latestResult);
-            if (inputs.seesSpeaker && robotPose.isPresent()) {
-
+            if (robotPose.isPresent()) {
                 var toSpeaker =
-                        robotPose.get().estimatedPose
+                        robotPose
+                                .get()
+                                .estimatedPose
                                 .getTranslation()
                                 .toTranslation2d()
                                 .minus(VisionConstants.getSpeakerPose());
-                inputs.distanceToSpeaker = toSpeaker.getNorm();
-                inputs.yawToSpeaker = new Rotation2d(toSpeaker.getX(), toSpeaker.getY());
-
+                inputs.distanceToSpeaker = distanceFilter.calculate(toSpeaker.getNorm());
+                inputs.yawToSpeaker =
+                        new Rotation2d(
+                                Math.IEEEremainder(
+                                        Math.atan2(toSpeaker.getY(), toSpeaker.getX()),
+                                        2 * Math.PI));
+                System.out.println(toSpeaker.getY());
                 scoreParameters =
                         Optional.of(
                                 new ScoreParameters(inputs.distanceToSpeaker, inputs.yawToSpeaker));
@@ -127,7 +119,7 @@ public class PhotonVisionIOReal implements VisionIO {
             if ((DriverStation.isEnabled() && distanceTraveled > 0.3)
                     || (result.getEstimatedRobotPose().estimatedPose.getZ() > 0.2)
                     || (VisionConstants.outOfBounds(
-                    result.getEstimatedRobotPose().estimatedPose))) {
+                            result.getEstimatedRobotPose().estimatedPose))) {
                 result.setUseForEstimation(false);
             }
         } else {
