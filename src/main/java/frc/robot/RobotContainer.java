@@ -130,6 +130,12 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "adjustToTarget",
                 Commands.runOnce(() -> ShootingManager.getInstance().setShooting(true)));
+        NamedCommands.registerCommand(
+                "setVisionMeasurementAuto",
+                Commands.runOnce(
+                        () ->
+                                Constants.VISION_MEASUREMENT_MULTIPLIER =
+                                        Constants.AUTO_VISION_MEASUREMENT_MULTIPLIER));
 
         PPHolonomicDriveController.setRotationTargetOverride(
                 () -> {
