@@ -10,11 +10,11 @@ public class VisionConstants {
     public static final double FIELD_LENGTH = 16.54;
     public static final double FIELD_WIDTH = 8.23;
 
-    public static final int SPEAKER1_BLUE = 3; // TODO: Find real values
-    public static final int SPEAKER2_BLUE = 4;
+    public static final int SPEAKER1_BLUE = 7;
+    public static final int SPEAKER2_BLUE = 8;
 
-    public static final int SPEAKER1_RED = 7; // TODO: Find real values
-    public static final int SPEAKER2_RED = 8;
+    public static final int SPEAKER1_RED = 3;
+    public static final int SPEAKER2_RED = 4;
 
     public static final double DISTANCE_BETWEEN_SPEAKER_TAGS = 0.5;
 
