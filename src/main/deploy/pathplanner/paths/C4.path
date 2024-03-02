@@ -86,6 +86,12 @@
             {
               "type": "named",
               "data": {
+                "name": "stopIntake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
                 "name": "adjustToTarget"
               }
             }
