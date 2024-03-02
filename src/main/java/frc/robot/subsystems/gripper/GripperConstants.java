@@ -16,29 +16,14 @@ public class GripperConstants {
     public static final double OUTTAKE_POWER = -0.5; // TODO: replace with actual value
     public static final double AMP_POWER_NORMAL = 0.7; // TODO: replace with actual value
     public static final double AMP_POWER_REVERSE = -0.4; // TODO: replace with actual value
-    public static final double TRAP_POWER = 0; // TODO: replace with actual value
-    public static final MutableMeasure<Dimensionless> TOLERANCE =
-            Units.Percent.of(0.07).mutableCopy();
-    public static final MutableMeasure<Distance> GRIPPER_OUTTAKE_MIN_HEIGHT =
-            Units.Meters.of(0).mutableCopy(); // TODO: replace with actual value
-    public static final MutableMeasure<Distance> GRIPPER_LENGTH =
-            Units.Meters.of(0.534_35).mutableCopy();
     public static final MutableMeasure<Distance> GRIPPER_POSITION_X =
             Units.Meters.of(0).mutableCopy();
     public static final MutableMeasure<Distance> GRIPPER_POSITION_Y =
             Units.Meters.of(0).mutableCopy();
     public static final MutableMeasure<Distance> GRIPPER_POSITION_z =
             Units.Meters.of(0.6461).mutableCopy();
-    public static final Measure<Angle> INTAKE_ANGLE = Units.Degrees.of(-85.78);
-    public static final Measure<Angle> OUTTAKE_ANGLE = Units.Degrees.of(-80);
-    public static final double ANGLE_MOTOR_GEAR_RATIO = 58.5;
-    public static final InvertedValue ANGLE_INVERTED_VALUE = InvertedValue.Clockwise_Positive;
     public static final boolean ROLLER_INVERTED_VALUE = true;
     public static final int CURRENT_LIMIT = 40;
-    public static final MutableMeasure<Angle> WRIST_TRAP_ANGLE =
-            Units.Degrees.of(120).mutableCopy(); // TODO: replace with actual value
-    public static final LoggedTunableNumber ABSOLUTE_ENCODER_OFFSET =
-            new LoggedTunableNumber("Gripper/EncoderOffset");
 
     public static final LoggedTunableNumber KP = new LoggedTunableNumber("Gripper/kP");
     public static final LoggedTunableNumber KI = new LoggedTunableNumber("Gripper/kI");
@@ -57,7 +42,6 @@ public class GripperConstants {
                 KA.initDefault(0.0);
                 KG.initDefault(0.4);
 
-                ABSOLUTE_ENCODER_OFFSET.initDefault(-0.682_385 + 83 / 360.0);
                 break;
             case SIM:
             case REPLAY:

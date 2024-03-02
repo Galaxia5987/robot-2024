@@ -8,9 +8,5 @@ public interface GripperIO {
 
     void setRollerMotorPower(double power);
 
-    void setAngleMotorPower(double power);
-
-    void setAngle(MutableMeasure<Angle> angle);
-
     void updateInputs();
 }
