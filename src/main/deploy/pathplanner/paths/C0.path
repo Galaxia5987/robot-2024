@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.92,
-        "y": 4.21
+        "x": 0.7417791758660457,
+        "y": 4.410523436431489
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4317754764771617,
-        "y": 4.032445242854863
+        "x": 1.2535546523432073,
+        "y": 4.232968679286352
       },
       "isLocked": false,
       "linkedName": "C"
@@ -32,7 +32,7 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
+      "name": "adjustToTarget",
       "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
@@ -41,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "adjust"
+                "name": "adjustToTarget"
               }
             }
           ]
@@ -63,7 +63,7 @@
   "reversed": false,
   "folder": "CL34",
   "previewStartingState": {
-    "rotation": -58.495733280795825,
+    "rotation": -60.57254359681024,
     "velocity": 0
   },
   "useDefaultConstraints": true
