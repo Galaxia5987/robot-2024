@@ -63,6 +63,11 @@ public class IntakeIOReal implements IntakeIO {
     }
 
     @Override
+    public void setAnglePower(double power) {
+        angleMotor.set(power);
+    }
+
+    @Override
     public void updateInputs() {
         inputs.currentAngle.mut_replace((angleMotor.getPosition().getValue()), Units.Degrees);
         inputs.angleMotorVoltage.mut_replace(

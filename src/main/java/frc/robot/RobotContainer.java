@@ -252,7 +252,7 @@ public class RobotContainer {
         xboxController.y().onTrue(commandGroups.shootToSpeaker());
         xboxController
                 .x()
-                .onTrue(intake.setAngle(Units.Degrees.of(-140).mutableCopy()))
+                .onTrue(intake.setAnglePower(-0.3))
                 .onFalse(intake.reset(Units.Degrees.zero().mutableCopy()));
 
         xboxController

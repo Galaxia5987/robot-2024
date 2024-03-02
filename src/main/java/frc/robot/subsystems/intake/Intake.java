@@ -102,6 +102,10 @@ public class Intake extends SubsystemBase {
         return runOnce(() -> io.reset(angle));
     }
 
+    public Command setAnglePower(double power){
+        return Commands.runOnce(()-> io.setAnglePower(power));
+    }
+
     @Override
     public void periodic() {
         io.updateInputs();
