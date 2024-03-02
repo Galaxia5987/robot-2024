@@ -1,4 +1,4 @@
-package frc.robot.subsystems.elevator;
+package frc.robot.subsystems.climb;
 
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -9,7 +9,7 @@ import edu.wpi.first.units.*;
 import frc.robot.Constants;
 import frc.robot.lib.webconstants.LoggedTunableNumber;
 
-public class ElevatorConstants { // TODO: check real values
+public class ClimbConstants { // TODO: check real values
     public static final TalonFXConfiguration MAIN_MOTOR_CONFIGURATION = new TalonFXConfiguration();
     public static final TalonFXConfiguration AUX_MOTOR_CONFIGURATION = new TalonFXConfiguration();
 
@@ -83,11 +83,11 @@ public class ElevatorConstants { // TODO: check real values
                                 .withSensorToMechanismRatio(GEAR_RATIO / CIRCUMFERENCE))
                 .withSlot0(
                         new Slot0Configs()
-                                .withKP(ElevatorConstants.KP.get())
-                                .withKI(ElevatorConstants.KI.get())
-                                .withKD(ElevatorConstants.KD.get())
-                                .withKV(ElevatorConstants.KV.get())
-                                .withKA(ElevatorConstants.KA.get())
+                                .withKP(ClimbConstants.KP.get())
+                                .withKI(ClimbConstants.KI.get())
+                                .withKD(ClimbConstants.KD.get())
+                                .withKV(ClimbConstants.KV.get())
+                                .withKA(ClimbConstants.KA.get())
                                 .withGravityType(GravityTypeValue.Elevator_Static))
                 .withMotorOutput(
                         new MotorOutputConfigs()

@@ -6,15 +6,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.commandGroups.CommandGroupsConstants;
-import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.Set;
 
 public class ClimbState implements ScoreState {
-    private static Elevator elevator;
+    private static Climb elevator;
 
     public ClimbState() {
-        elevator = Elevator.getInstance();
+        elevator = Climb.getInstance();
     }
 
     @Override

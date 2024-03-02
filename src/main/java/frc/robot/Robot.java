@@ -15,7 +15,7 @@ import frc.robot.lib.PoseEstimation;
 import frc.robot.scoreStates.LocalADStarAK;
 import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.conveyor.ConveyorConstants;
-import frc.robot.subsystems.elevator.ElevatorConstants;
+import frc.robot.subsystems.climb.ClimbConstants;
 import frc.robot.subsystems.gripper.GripperConstants;
 import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.intake.IntakeConstants;
@@ -97,7 +97,7 @@ public class Robot extends LoggedRobot {
         SwerveConstants.initConstants(true, Robot.isReal());
         IntakeConstants.initConstants();
         ConveyorConstants.initConstants();
-        ElevatorConstants.initConstants();
+        ClimbConstants.initConstants();
         GripperConstants.initConstants();
         HoodConstants.initConstants();
         ShooterConstants.initConstants();

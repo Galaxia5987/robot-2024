@@ -1,7 +1,7 @@
-package frc.robot.subsystems.elevator;
+package frc.robot.subsystems.climb;
 
-import static frc.robot.subsystems.elevator.ElevatorConstants.MECHANISM_HEIGHT;
-import static frc.robot.subsystems.elevator.ElevatorConstants.MECHANISM_WIDTH;
+import static frc.robot.subsystems.climb.ClimbConstants.MECHANISM_HEIGHT;
+import static frc.robot.subsystems.climb.ClimbConstants.MECHANISM_WIDTH;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -20,12 +20,12 @@ import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-public class Elevator extends SubsystemBase {
+public class Climb extends SubsystemBase {
 
-    private static Elevator INSTANCE;
+    private static Climb INSTANCE;
 
-    private final ElevatorInputsAutoLogged inputs = ElevatorIO.inputs;
-    private final ElevatorIO io;
+    private final ClimbInputsAutoLogged inputs = ClimbIO.inputs;
+    private final ClimbIO io;
     private final Timer timer = new Timer();
 
     @AutoLogOutput
@@ -38,19 +38,19 @@ public class Elevator extends SubsystemBase {
     private final MechanismLigament2d elevator =
             root.append(new MechanismLigament2d("Elevator", 0, 90));
 
-    private Elevator(ElevatorIO io) {
+    private Climb(ClimbIO io) {
         this.io = io;
 
         timer.start();
         timer.reset();
     }
 
-    public static Elevator getInstance() {
+    public static Climb getInstance() {
         return INSTANCE;
     }
 
-    public static void initialize(ElevatorIO io) {
-        INSTANCE = new Elevator(io);
+    public static void initialize(ClimbIO io) {
+        INSTANCE = new Climb(io);
     }
 
     public MutableMeasure<Distance> getCurrentHeight() {
@@ -67,12 +67,12 @@ public class Elevator extends SubsystemBase {
 
     public boolean atHeightSetpoint() {
         return inputs.heightSetpoint.isNear(
-                inputs.hooksHeight, ElevatorConstants.HEIGHT_TOLERANCE.in(Units.Value));
+                inputs.hooksHeight, ClimbConstants.HEIGHT_TOLERANCE.in(Units.Value));
     }
 
     public boolean stopperAtSetpoint() {
         return inputs.stopperAngle.isNear(
-                inputs.stopperSetpoint, ElevatorConstants.STOPPER_TOLERANCE.in(Units.Value));
+                inputs.stopperSetpoint, ClimbConstants.STOPPER_TOLERANCE.in(Units.Value));
     }
 
     public Command lock() {

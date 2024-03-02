@@ -14,7 +14,7 @@ import frc.robot.scoreStates.ScoreState;
 import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.conveyor.ConveyorConstants;
-import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperConstants;
 import frc.robot.subsystems.hood.Hood;
@@ -32,7 +32,7 @@ public class CommandGroups {
     private static CommandGroups INSTANCE;
     private final Intake intake;
     private final Gripper gripper;
-    private final Elevator elevator;
+    private final Climb elevator;
     private final Shooter shooter;
     private final Hood hood;
     private final Conveyor conveyor;
@@ -44,7 +44,7 @@ public class CommandGroups {
         leds = new LEDs(0, 60);
         intake = Intake.getInstance();
         gripper = Gripper.getInstance();
-        elevator = Elevator.getInstance();
+        elevator = Climb.getInstance();
         shooter = Shooter.getInstance();
         hood = Hood.getInstance();
         conveyor = Conveyor.getInstance();

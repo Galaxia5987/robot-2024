@@ -1,4 +1,4 @@
-package frc.robot.subsystems.elevator;
+package frc.robot.subsystems.climb;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meters;
@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.Servo;
 import frc.robot.Ports;
 import frc.robot.lib.math.differential.BooleanTrigger;
 
-public class ElevatorIOReal implements ElevatorIO {
+public class ClimbIOReal implements ClimbIO {
     private final Servo servo;
     private final TalonFX mainMotor;
     private final TalonFX auxMotor;
@@ -27,16 +27,16 @@ public class ElevatorIOReal implements ElevatorIO {
     private final BooleanTrigger sensorTrigger = new BooleanTrigger();
     private final BooleanTrigger movingWeightTrigger = new BooleanTrigger();
 
-    private double kS = ElevatorConstants.KS_FIRST_STAGE.get();
-    private double kG = ElevatorConstants.KG_FIRST_STAGE.get();
+    private double kS = ClimbConstants.KS_FIRST_STAGE.get();
+    private double kG = ClimbConstants.KG_FIRST_STAGE.get();
 
-    public ElevatorIOReal() {
+    public ClimbIOReal() {
         mainMotor = new TalonFX(Ports.Elevator.MAIN_ID);
         auxMotor = new TalonFX(Ports.Elevator.AUX_ID);
         servo = new Servo(9);
 
-        mainMotor.getConfigurator().apply(ElevatorConstants.MAIN_MOTOR_CONFIGURATION);
-        auxMotor.getConfigurator().apply(ElevatorConstants.AUX_MOTOR_CONFIGURATION);
+        mainMotor.getConfigurator().apply(ClimbConstants.MAIN_MOTOR_CONFIGURATION);
+        auxMotor.getConfigurator().apply(ClimbConstants.AUX_MOTOR_CONFIGURATION);
 
         auxMotor.setControl(new StrictFollower(mainMotor.getDeviceID()));
     }
@@ -57,13 +57,13 @@ public class ElevatorIOReal implements ElevatorIO {
     }
 
     public void openStopper() {
-        inputs.stopperSetpoint = ElevatorConstants.OPEN_POSITION;
-        servo.set(ElevatorConstants.OPEN_POSITION.in(Degrees));
+        inputs.stopperSetpoint = ClimbConstants.OPEN_POSITION;
+        servo.set(ClimbConstants.OPEN_POSITION.in(Degrees));
     }
 
     public void closeStopper() {
-        inputs.stopperSetpoint = ElevatorConstants.LOCKED_POSITION;
-        servo.set(ElevatorConstants.LOCKED_POSITION.in(Degrees));
+        inputs.stopperSetpoint = ClimbConstants.LOCKED_POSITION;
+        servo.set(ClimbConstants.LOCKED_POSITION.in(Degrees));
     }
 
     public void stopMotor() {
@@ -75,26 +75,26 @@ public class ElevatorIOReal implements ElevatorIO {
     }
 
     @Override
-    public void updateInputs(ElevatorInputs inputs) {
+    public void updateInputs(ClimbInputs inputs) {
         inputs.isBottom = !sensor.get();
         sensorTrigger.update(inputs.isBottom);
 
         inputs.hooksHeight.mut_replace(mainMotor.getPosition().getValue(), Meters);
 
         inputs.carriageHeight.mut_replace(
-                inputs.hooksHeight.gt(ElevatorConstants.GRIPPER_TO_HOOKS)
-                        ? inputs.hooksHeight.minus(ElevatorConstants.GRIPPER_TO_HOOKS)
+                inputs.hooksHeight.gt(ClimbConstants.GRIPPER_TO_HOOKS)
+                        ? inputs.hooksHeight.minus(ClimbConstants.GRIPPER_TO_HOOKS)
                         : Meters.zero());
 
         inputs.stopperAngle.mut_replace(servo.getAngle(), Degrees);
 
-        movingWeightTrigger.update(inputs.hooksHeight.gt(ElevatorConstants.GRIPPER_TO_HOOKS));
+        movingWeightTrigger.update(inputs.hooksHeight.gt(ClimbConstants.GRIPPER_TO_HOOKS));
         if (movingWeightTrigger.triggered()) {
-            kG = ElevatorConstants.KG_SECOND_STAGE.get();
-            kS = ElevatorConstants.KS_SECOND_STAGE.get();
+            kG = ClimbConstants.KG_SECOND_STAGE.get();
+            kS = ClimbConstants.KS_SECOND_STAGE.get();
         } else if (movingWeightTrigger.released()) {
-            kG = ElevatorConstants.KG_FIRST_STAGE.get();
-            kS = ElevatorConstants.KS_FIRST_STAGE.get();
+            kG = ClimbConstants.KG_FIRST_STAGE.get();
+            kS = ClimbConstants.KS_FIRST_STAGE.get();
         }
 
         if (sensorTrigger.triggered()) {

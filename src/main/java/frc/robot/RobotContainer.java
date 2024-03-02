@@ -20,10 +20,10 @@ import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.conveyor.ConveyorIO;
 import frc.robot.subsystems.conveyor.ConveyorIOReal;
 import frc.robot.subsystems.conveyor.ConveyorIOSim;
-import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.elevator.ElevatorIO;
-import frc.robot.subsystems.elevator.ElevatorIOReal;
-import frc.robot.subsystems.elevator.ElevatorIOSim;
+import frc.robot.subsystems.climb.Climb;
+import frc.robot.subsystems.climb.ClimbIO;
+import frc.robot.subsystems.climb.ClimbIOReal;
+import frc.robot.subsystems.climb.ClimbIOSim;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperIO;
 import frc.robot.subsystems.gripper.GripperIOReal;
@@ -46,7 +46,7 @@ public class RobotContainer {
     private static RobotContainer INSTANCE = null;
     private final Intake intake;
     private final Conveyor conveyor;
-    private final Elevator elevator;
+    private final Climb elevator;
     private final Gripper gripper;
     private final Hood hood;
     private final Shooter shooter;
@@ -69,7 +69,7 @@ public class RobotContainer {
         ConveyorIO conveyorIO;
         ShooterIO shooterIO;
         GripperIO gripperIO;
-        ElevatorIO elevatorIO;
+        ClimbIO elevatorIO;
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 intakeIO = new IntakeIOReal();
@@ -77,7 +77,7 @@ public class RobotContainer {
                 gripperIO = new GripperIOReal();
                 hoodIO = new HoodIOReal();
                 shooterIO = new ShooterIOReal();
-                elevatorIO = new ElevatorIOReal();
+                elevatorIO = new ClimbIOReal();
                 break;
             case SIM:
             case REPLAY:
@@ -87,12 +87,12 @@ public class RobotContainer {
                 gripperIO = new GripperIOSim();
                 hoodIO = new HoodIOSim();
                 shooterIO = new ShooterIOSim();
-                elevatorIO = new ElevatorIOSim();
+                elevatorIO = new ClimbIOSim();
                 break;
         }
         Intake.initialize(intakeIO);
         Conveyor.initialize(conveyorIO);
-        Elevator.initialize(elevatorIO);
+        Climb.initialize(elevatorIO);
         Gripper.initialize(gripperIO, () -> Units.Meters.of(0));
         Hood.initialize(hoodIO);
         Shooter.initialize(shooterIO);
@@ -102,7 +102,7 @@ public class RobotContainer {
         swerveDrive = SwerveDrive.getInstance();
         intake = Intake.getInstance();
         conveyor = Conveyor.getInstance();
-        elevator = Elevator.getInstance();
+        elevator = Climb.getInstance();
         hood = Hood.getInstance();
         shooter = Shooter.getInstance();
 

@@ -11,14 +11,14 @@ import frc.robot.Constants;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.commandGroups.CommandGroupsConstants;
 import frc.robot.lib.Utils;
-import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.Set;
 
 public class AmpState implements ScoreState {
-    private Elevator elevator;
+    private Climb elevator;
     private Gripper gripper;
     private boolean isAmpingForward = true;
     private boolean hasTimeToTurnGripper;
@@ -28,7 +28,7 @@ public class AmpState implements ScoreState {
     private Rotation2d ampRotation;
 
     public AmpState() {
-        elevator = Elevator.getInstance();
+        elevator = Climb.getInstance();
         gripper = Gripper.getInstance();
     }
 

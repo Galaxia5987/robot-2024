@@ -1,9 +1,9 @@
-package frc.robot.subsystems.elevator;
+package frc.robot.subsystems.climb;
 
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.MutableMeasure;
 
-public interface ElevatorIO {
+public interface ClimbIO {
     ElevatorInputsAutoLogged inputs = new ElevatorInputsAutoLogged();
 
     void setPower(double power);
@@ -16,7 +16,7 @@ public interface ElevatorIO {
 
     void manualReset();
 
-    void updateInputs(ElevatorInputs inputs);
+    void updateInputs(ClimbInputs inputs);
 
     enum ControlMode {
         PERCENT_OUTPUT,
