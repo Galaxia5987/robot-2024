@@ -35,9 +35,7 @@ public class PhotonVisionIOReal implements VisionIO {
                             PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR),
                     false);
     private Optional<ScoreParameters> scoreParameters = Optional.empty();
-    private final LinearFilter xFilter = LinearFilter.movingAverage(20);
-    private final LinearFilter yFilter = LinearFilter.movingAverage(20);
-    private final LinearFilter yawFilter = LinearFilter.movingAverage(20);
+    private final LinearFilter distanceFilter = LinearFilter.movingAverage(10);
 
     public PhotonVisionIOReal(
             PhotonCamera camera,
@@ -90,39 +88,8 @@ public class PhotonVisionIOReal implements VisionIO {
                                 .getTranslation()
                                 .toTranslation2d()
                                 .minus(VisionConstants.getSpeakerPose());
-                toSpeaker =
-                        new Translation2d(
-                                xFilter.calculate(toSpeaker.getX()),
-                                yFilter.calculate(toSpeaker.getY()));
-                inputs.distanceToSpeaker = toSpeaker.getNorm();
-                //                var centerTag =
-                //                        latestResult.getTargets().stream()
-                //                                .filter(
-                //                                        (target) ->
-                //                                                target.getFiducialId()
-                //                                                        ==
-                // VisionConstants.getSpeakerTag1())
-                //                                .toList();
-                //                if (centerTag.size() != 0) {
-                //                    var translation =
-                //                            centerTag
-                //                                    .get(0)
-                //                                    .getBestCameraToTarget()
-                //                                    .plus(new Transform3d(0, -0.341, 0, new
-                // Rotation3d()))
-                //                                    .getTranslation()
-                //                                    .toTranslation2d();
-                //                    System.out.println(translation.getY());
-                //                    scoreParameters =
-                //                            Optional.of(
-                //                                    new ScoreParameters(
-                //                                            inputs.distanceToSpeaker,
-                //                                            new Rotation2d(translation.getX(),
-                // translation.getY())
-                //                                                    .unaryMinus()));
-                //                } else {
-                //                    scoreParameters = Optional.empty();
-                //                }
+                toSpeaker = new Translation2d(toSpeaker.getX(), toSpeaker.getY());
+                inputs.distanceToSpeaker = distanceFilter.calculate(toSpeaker.getNorm());
                 var centerTag =
                         latestResult.getTargets().stream()
                                 .filter(
@@ -132,10 +99,11 @@ public class PhotonVisionIOReal implements VisionIO {
                                 .toList();
                 if (centerTag.size() != 0) {
                     var yaw = centerTag.get(0).getYaw();
+                    inputs.yawToSpeaker = Rotation2d.fromDegrees(yaw);
                     scoreParameters =
                             Optional.of(
                                     new ScoreParameters(
-                                            inputs.distanceToSpeaker, Rotation2d.fromDegrees(yaw)));
+                                            inputs.distanceToSpeaker, inputs.yawToSpeaker));
                 } else {
                     scoreParameters = Optional.empty(); // TODO: make the rotation gyro based
                 }
@@ -155,10 +123,16 @@ public class PhotonVisionIOReal implements VisionIO {
                             .minus(lastResult.getEstimatedRobotPose().estimatedPose)
                             .getTranslation()
                             .getNorm();
-            if ((DriverStation.isEnabled() && distanceTraveled > 0.3)
-                    || (result.getEstimatedRobotPose().estimatedPose.getZ() > 0.2)
-                    || (VisionConstants.outOfBounds(
-                            result.getEstimatedRobotPose().estimatedPose))) {
+            if ((DriverStation.isEnabled() && distanceTraveled > 0.2)
+                    || (result.getEstimatedRobotPose().estimatedPose.getZ() > 0.1)
+                    || (VisionConstants.outOfBounds(result.getEstimatedRobotPose().estimatedPose))
+                    || result.getEstimatedRobotPose().targetsUsed.stream()
+                            .anyMatch(
+                                    (target) ->
+                                            target.getBestCameraToTarget()
+                                                            .getTranslation()
+                                                            .getNorm()
+                                                    > 5.0)) {
                 result.setUseForEstimation(false);
             }
         } else {
@@ -169,8 +143,8 @@ public class PhotonVisionIOReal implements VisionIO {
     }
 
     @Override
-    public EstimatedRobotPose getLatestResult() {
-        return result.getEstimatedRobotPose();
+    public VisionResult getLatestResult() {
+        return result;
     }
 
     @Override

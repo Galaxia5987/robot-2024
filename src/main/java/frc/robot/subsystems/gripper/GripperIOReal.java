@@ -12,7 +12,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Ports;
@@ -22,7 +21,6 @@ public class GripperIOReal implements GripperIO {
     private final CANSparkMax rollerMotor;
     private final SparkLimitSwitch forwardLimitSwitch;
     private final SparkLimitSwitch reverseLimitSwitch;
-    private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(Ports.Gripper.ENCODER_ID);
     private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0);
     private final DutyCycleOut powerRequest = new DutyCycleOut(0).withEnableFOC(true);
     private final Timer timer = new Timer();
@@ -84,8 +82,6 @@ public class GripperIOReal implements GripperIO {
                 rollerMotor.get() * RobotController.getBatteryVoltage(), Units.Volts);
         inputs.currentAngle.mut_replace(angleMotor.getPosition().getValue(), Units.Rotations);
         inputs.hasNote = hasNote();
-        inputs.noOffsetEncoderPosition.mut_replace(
-                -absoluteEncoder.getAbsolutePosition(), Units.Rotations);
         inputs.encoderPosition.mut_replace(
                 inputs.noOffsetEncoderPosition.in(Units.Rotations)
                         - GripperConstants.ABSOLUTE_ENCODER_OFFSET.get(),

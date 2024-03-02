@@ -2,8 +2,10 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.lib.Utils;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
@@ -46,6 +48,7 @@ public class ShootingManager {
     @Setter private Measure<Distance> maxShootingDistance = Meters.of(10.5);
 
     private boolean isShooting = false;
+    private final Debouncer usePoseEstimation = new Debouncer(0.1);
 
     private ShootingManager() {
         poseEstimation = PoseEstimation.getInstance();
@@ -67,7 +70,11 @@ public class ShootingManager {
         return poseEstimation.getDistanceToSpeaker() < maxShootingDistance.in(Meters)
                 && hood.atSetpoint()
                 && shooter.atSetpoint()
-                && Utils.epsilonEquals(swerveCommandedAngle.in(Degrees), 0, 2)
+                && (DriverStation.isAutonomous()
+                        || Utils.epsilonEquals(
+                                swerveCommandedAngle.in(Degrees),
+                                swerveDrive.getOdometryYaw().getDegrees(),
+                                2))
                 && !lockShoot;
     }
 
@@ -130,8 +137,11 @@ public class ShootingManager {
                             .div(scoreParameters.size());
 
             swerveCommandedAngle
-                    .mut_replace(yawToTarget.getRotations(), Rotations)
-                    .mut_minus(-6.5, Degrees);
+                    .mut_replace(
+                            -yawToTarget.getRotations()
+                                    + swerveDrive.getOdometryYaw().getRotations(),
+                            Rotations)
+                    .mut_minus(6.5, Degrees);
         }
     }
 

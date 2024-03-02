@@ -291,7 +291,8 @@ public class SwerveDrive extends SubsystemBase {
                                 MathUtil.applyDeadband(xJoystick.getAsDouble(), deadband),
                                 MathUtil.applyDeadband(yJoystick.getAsDouble(), deadband),
                                 turnController.calculate(
-                                        rotation.in(edu.wpi.first.units.Units.Rotations), 0),
+                                        getOdometryYaw().getRotations(),
+                                        rotation.in(edu.wpi.first.units.Units.Rotations)),
                                 true));
     }
 

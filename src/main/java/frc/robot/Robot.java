@@ -118,7 +118,6 @@ public class Robot extends LoggedRobot {
     public void robotPeriodic() {
         PoseEstimation.getInstance()
                 .processVisionMeasurements(Constants.VISION_MEASUREMENT_MULTIPLIER);
-        ShootingManager.getInstance().updateCommandedStateSimple();
         CommandScheduler.getInstance().run();
 
         Logger.recordOutput(
@@ -142,7 +141,8 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void autonomousInit() {
-        Constants.VISION_MEASUREMENT_MULTIPLIER = Constants.AUTO_VISION_MEASUREMENT_MULTIPLIER;
+        Constants.VISION_MEASUREMENT_MULTIPLIER =
+                Constants.AUTO_START_VISION_MEASUREMENT_MULTIPLIER;
 
         // Make sure command is compiled beforehand, otherwise there will be a delay.
         autonomousCommand = robotContainer.getAutonomousCommand();
@@ -155,7 +155,9 @@ public class Robot extends LoggedRobot {
 
     /** This function is called periodically during autonomous. */
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+        ShootingManager.getInstance().updateCommandedState();
+    }
 
     /** This function is called once when teleop is enabled. */
     @Override
@@ -169,7 +171,9 @@ public class Robot extends LoggedRobot {
 
     /** This function is called periodically during operator control. */
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+        ShootingManager.getInstance().updateCommandedStateSimple();
+    }
 
     /** This function is called once when the robot is disabled. */
     @Override

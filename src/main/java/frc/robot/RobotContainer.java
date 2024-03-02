@@ -6,7 +6,6 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -118,6 +117,10 @@ public class RobotContainer {
         configureDefaultCommands();
         configureButtonBindings();
         NamedCommands.registerCommand("intake", commandGroups.intake());
+        NamedCommands.registerCommand(
+                "print1", Commands.print("CapsLockIsBetter!!!").repeatedly().withTimeout(2));
+        NamedCommands.registerCommand(
+                "print2", Commands.print("GaiaWasRightInPrintOne!!!").repeatedly().withTimeout(2));
         NamedCommands.registerCommand("stopIntake", intake.stop(false).withTimeout(0.05));
         NamedCommands.registerCommand("retractIntake", intake.stop());
         NamedCommands.registerCommand("score", commandGroups.feedShooter(() -> isForceShooting));
@@ -256,8 +259,6 @@ public class RobotContainer {
                 .leftStick()
                 .whileTrue(Commands.runOnce(() -> ShootingManager.getInstance().setLockShoot(true)))
                 .onFalse(Commands.runOnce(() -> ShootingManager.getInstance().setLockShoot(false)));
-
-        joystick.button(Joystick.ButtonType.kTrigger.value).onTrue(commandGroups.allBits());
     }
 
     /**

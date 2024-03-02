@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import java.util.Optional;
 import org.littletonrobotics.junction.AutoLog;
-import org.photonvision.EstimatedRobotPose;
 
 public interface VisionIO {
 
@@ -15,7 +14,7 @@ public interface VisionIO {
 
     void updateInputs(VisionInputs inputs);
 
-    EstimatedRobotPose getLatestResult();
+    VisionResult getLatestResult();
 
     Transform3d getCameraToRobot();
 

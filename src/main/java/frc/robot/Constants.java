@@ -27,7 +27,7 @@ public class Constants {
 
     public static Mode CURRENT_MODE = Mode.REAL;
 
-    public static final double AUTO_VISION_MEASUREMENT_MULTIPLIER = 0.5;
+    public static final double AUTO_VISION_MEASUREMENT_MULTIPLIER = 0.25;
     public static final double AUTO_START_VISION_MEASUREMENT_MULTIPLIER = 1_000_000_000;
     public static final double TELEOP_VISION_MEASUREMENT_MULTIPLIER = 0.5;
 
@@ -115,9 +115,7 @@ public class Constants {
         SwerveDrive swerveDrive = SwerveDrive.getInstance();
         AutoBuilder.configureHolonomic(
                 () -> swerveDrive.getEstimator().getEstimatedPosition(),
-                (pose) -> {
-                    swerveDrive.resetPose(pose);
-                },
+                swerveDrive::resetPose,
                 swerveDrive::getCurrentSpeeds,
                 (speeds) -> swerveDrive.drive(speeds, false),
                 new HolonomicPathFollowerConfig(
@@ -137,11 +135,13 @@ public class Constants {
             case REAL:
                 rightOpi =
                         new VisionModule(
-                                new PhotonVisionIOReal(
-                                        new PhotonCamera("Front_right_camera"),
-                                        FRONT_RIGHT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                                        false),
+                                //                                new PhotonVisionIOReal(
+                                //                                        new
+                                // PhotonCamera("Front_right_camera"),
+                                //                                        FRONT_RIGHT_CAMERA_POSE,
+                                //
+                                // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                                //                                        false),
                                 new PhotonVisionIOReal(
                                         new PhotonCamera("Back_right_camera"),
                                         BACK_RIGHT_CAMERA_POSE,

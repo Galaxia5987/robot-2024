@@ -8,6 +8,7 @@ import frc.robot.scoreStates.ScoreStateConstants;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionResult;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -35,12 +36,12 @@ public class PoseEstimation {
 
     public void processVisionMeasurements(double multiplier) {
         var results = vision.getResults();
-        for (org.photonvision.EstimatedRobotPose result : results) {
-            if (result == null) {
+        for (VisionResult result : results) {
+            if (result == null || !result.isUseForEstimation()) {
                 continue;
             }
             Stream<Double> distances =
-                    result.targetsUsed.stream()
+                    result.getEstimatedRobotPose().targetsUsed.stream()
                             .map(
                                     (target) ->
                                             target.getBestCameraToTarget()
@@ -52,8 +53,8 @@ public class PoseEstimation {
             swerveDrive
                     .getEstimator()
                     .addVisionMeasurement(
-                            result.estimatedPose.toPose2d(),
-                            result.timestampSeconds,
+                            result.getEstimatedRobotPose().estimatedPose.toPose2d(),
+                            result.getEstimatedRobotPose().timestampSeconds,
                             VecBuilder.fill(
                                     stddev,
                                     stddev,
