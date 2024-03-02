@@ -46,7 +46,7 @@ public class RobotContainer {
     private static RobotContainer INSTANCE = null;
     private final Intake intake;
     private final Conveyor conveyor;
-    private final Climb elevator;
+    private final Climb climb;
     private final Gripper gripper;
     private final Hood hood;
     private final Shooter shooter;
@@ -69,7 +69,7 @@ public class RobotContainer {
         ConveyorIO conveyorIO;
         ShooterIO shooterIO;
         GripperIO gripperIO;
-        ClimbIO elevatorIO;
+        ClimbIO climbIO;
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 intakeIO = new IntakeIOReal();
@@ -77,7 +77,7 @@ public class RobotContainer {
                 gripperIO = new GripperIOReal();
                 hoodIO = new HoodIOReal();
                 shooterIO = new ShooterIOReal();
-                elevatorIO = new ClimbIOReal();
+                climbIO = new ClimbIOReal();
                 break;
             case SIM:
             case REPLAY:
@@ -87,12 +87,12 @@ public class RobotContainer {
                 gripperIO = new GripperIOSim();
                 hoodIO = new HoodIOSim();
                 shooterIO = new ShooterIOSim();
-                elevatorIO = new ClimbIOSim();
+                climbIO = new ClimbIOSim();
                 break;
         }
         Intake.initialize(intakeIO);
         Conveyor.initialize(conveyorIO);
-        Climb.initialize(elevatorIO);
+        Climb.initialize(climbIO);
         Gripper.initialize(gripperIO, () -> Units.Meters.of(0));
         Hood.initialize(hoodIO);
         Shooter.initialize(shooterIO);
@@ -102,7 +102,7 @@ public class RobotContainer {
         swerveDrive = SwerveDrive.getInstance();
         intake = Intake.getInstance();
         conveyor = Conveyor.getInstance();
-        elevator = Climb.getInstance();
+        climb = Climb.getInstance();
         hood = Hood.getInstance();
         shooter = Shooter.getInstance();
 
@@ -167,8 +167,8 @@ public class RobotContainer {
                         0.1,
                         () -> true));
 
-        elevator.setDefaultCommand(
-                elevator.manualClimb(
+        climb.setDefaultCommand(
+                climb.manualClimb(
                         () ->
                                 MathUtil.applyDeadband(
                                         -xboxController.getLeftTriggerAxis()
