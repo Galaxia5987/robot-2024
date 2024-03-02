@@ -1,18 +1,9 @@
 package frc.robot.subsystems.climb;
 
-import edu.wpi.first.units.Distance;
-import edu.wpi.first.units.MutableMeasure;
-
 public interface ClimbIO {
-    ElevatorInputsAutoLogged inputs = new ElevatorInputsAutoLogged();
+        ClimbInputsAutoLogged inputs = new ClimbInputsAutoLogged();
 
     void setPower(double power);
-
-    void setHeight(MutableMeasure<Distance> height);
-
-    void openStopper();
-
-    void closeStopper();
 
     void manualReset();
 

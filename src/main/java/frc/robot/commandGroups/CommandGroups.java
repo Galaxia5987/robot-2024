@@ -12,9 +12,9 @@ import frc.robot.lib.PoseEstimation;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
 import frc.robot.scoreStates.ScoreState;
 import frc.robot.subsystems.ShootingManager;
+import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.conveyor.ConveyorConstants;
-import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperConstants;
 import frc.robot.subsystems.hood.Hood;
@@ -66,21 +66,13 @@ public class CommandGroups {
         override = !override;
     }
 
-    public Command retractGrillevator() {
-        return Commands.parallel(
-                        elevator.setHeight(CommandGroupsConstants.MIN_HEIGHT),
-                        gripper.setRollerAndWrist(0, CommandGroupsConstants.WRIST_BASE_ANGLE))
-                .withName("retractGrillevator");
-    }
-
     public Command feed() {
         return conveyor.feed()
                 .alongWith(
                         Commands.waitUntil(conveyor::readyToFeed)
                                 .andThen(
-                                        gripper.setRollerAndWrist(
-                                                GripperConstants.OUTTAKE_POWER,
-                                                GripperConstants.INTAKE_ANGLE.mutableCopy())))
+                                        gripper.setRollerPower(
+                                                GripperConstants.OUTTAKE_POWER)))
                 .withName("feed");
     }
 
@@ -127,17 +119,13 @@ public class CommandGroups {
     }
 
     public Command outtakeGripper() {
-        return elevator.setHeight(CommandGroupsConstants.OUTTAKE_HEIGHT)
-                .onlyIf(gripper::isGripperNearFoldedPosition)
-                .andThen(gripper.outtake())
+        return gripper.outtake()
                 .withName("outtakeGripper");
     }
 
     public Command outtakeShooter() {
-        return retractGrillevator()
-                .andThen(
-                        Commands.parallel(
-                                feed(), shooter.setVelocity(ShooterConstants.OUTTAKE_POWER)))
+        return Commands.parallel(
+                                feed(), shooter.setVelocity(ShooterConstants.OUTTAKE_POWER))
                 .withName("outtakeShooter");
     }
 
@@ -150,15 +138,6 @@ public class CommandGroups {
 
     public Command shootAndConvey(MutableMeasure<Velocity<Angle>> velocity) {
         return shooter.setVelocity(velocity).alongWith(conveyor.setVelocity(velocity));
-    }
-
-    public Command grillevatorBit() {
-        return Commands.sequence(
-                elevator.manualElevator(() -> -0.1).withTimeout(0.11),
-                elevator.setHeight(CommandGroupsConstants.MAX_HEIGHT),
-                gripper.setRollerAndWrist(0.3, CommandGroupsConstants.WRIST_ANGLE_AMP_FORWARD),
-                Commands.waitSeconds(3),
-                retractGrillevator());
     }
 
     public Command intakeBit() {
@@ -211,19 +190,6 @@ public class CommandGroups {
                 shooter.setVelocity(Units.RotationsPerSecond.zero().mutableCopy()),
                 conveyor.stop(),
                 gripper.setRollerPower(0));
-    }
-
-    public Command setClimbState(Supplier<ScoreState.State> stateSupplier) {
-        return Commands.sequence(
-                intake.setAngle(IntakeConstants.IntakePose.DOWN)
-                        .withTimeout(0.25)
-                        .alongWith(
-                                hood.setAngle(Units.Degrees.of(33.48).mutableCopy())
-                                        .withTimeout(0.25)),
-                elevator.manualElevator(() -> -0.1).withTimeout(0.11),
-                elevator.unlock(),
-                elevator.manualElevator(() -> 0.3).withTimeout(1),
-                gripper.setWristPosition(Units.Degrees.of(-30).mutableCopy()).withTimeout(1));
     }
 
     public Command allBits() {

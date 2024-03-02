@@ -21,15 +21,6 @@ public class ClimbConstants { // TODO: check real values
 
     public static final MutableMeasure<Angle> OPEN_POSITION = Units.Degrees.of(0).mutableCopy();
     public static final MutableMeasure<Angle> LOCKED_POSITION = Units.Degrees.of(90).mutableCopy();
-    public static final MutableMeasure<Dimensionless> HEIGHT_TOLERANCE =
-            Units.Percent.of(1).mutableCopy();
-    public static final MutableMeasure<Dimensionless> STOPPER_TOLERANCE =
-            Units.Percent.of(2).mutableCopy();
-
-    public static final MutableMeasure<Mass> HOOKS_MASS =
-            Units.Kilograms.of(1).mutableCopy(); // TODO: Calibrate real value
-    public static final MutableMeasure<Mass> ELEVATOR_MASS =
-            Units.Kilograms.of(5).mutableCopy(); // TODO: Calibrate real value
 
     public static final double MAX_VELOCITY = 1;
     public static final double MAX_ACCELERATION = 3;

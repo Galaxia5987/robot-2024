@@ -1,18 +1,12 @@
 package frc.robot.subsystems.gripper;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkLimitSwitch;
 import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Ports;
@@ -52,7 +46,6 @@ public class GripperIOReal implements GripperIO {
         rollerMotor.set(power);
     }
 
-
     public boolean hasNote() {
         return debouncer.calculate(
                 forwardLimitSwitch.isPressed() || reverseLimitSwitch.isPressed());
@@ -63,6 +56,5 @@ public class GripperIOReal implements GripperIO {
         inputs.rollerMotorVoltage.mut_replace(
                 rollerMotor.get() * RobotController.getBatteryVoltage(), Units.Volts);
         inputs.hasNote = hasNote();
-
     }
 }
