@@ -168,16 +168,12 @@ public class RobotContainer {
                         () -> true));
 
         elevator.setDefaultCommand(
-                elevator.manualElevator(
+                elevator.manualClimb(
                         () ->
                                 MathUtil.applyDeadband(
                                         -xboxController.getLeftTriggerAxis()
                                                 + xboxController.getRightTriggerAxis(),
                                         0.15)));
-
-        gripper.setDefaultCommand(
-                gripper.setWristPower(
-                        () -> MathUtil.applyDeadband(-xboxController.getRightY(), 0.15) * 0.6));
     }
 
     private void configureButtonBindings() {
@@ -227,8 +223,6 @@ public class RobotContainer {
                 .whileTrue(intake.outtake().alongWith(gripper.setRollerPower(-0.7)))
                 .onFalse(intake.stop().alongWith(gripper.setRollerPower(0)));
 
-        xboxController.start().onTrue(elevator.lock());
-        xboxController.back().onTrue(elevator.unlock());
         xboxController
                 .leftBumper()
                 .whileTrue(gripper.setRollerPower(-0.4))

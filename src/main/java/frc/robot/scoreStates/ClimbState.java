@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
-import frc.robot.commandGroups.CommandGroupsConstants;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.Set;
@@ -18,8 +17,13 @@ public class ClimbState implements ScoreState {
     }
 
     @Override
+    public Command calculateTargets() {
+        return ScoreState.super.calculateTargets();
+    }
+
+    @Override
     public Command prepareSubsystems() {
-        return elevator.setHeight(CommandGroupsConstants.START_CLIMB_HEIGHT);
+        return null;
     }
 
     @Override
@@ -41,7 +45,11 @@ public class ClimbState implements ScoreState {
     public Command score() {
         return Commands.sequence(
                 driveToClosestOptimalPoint(),
-                Commands.runOnce(() -> SwerveDrive.getInstance().lock()),
-                elevator.setHeight(CommandGroupsConstants.END_CLIMB_HEIGHT));
+                Commands.runOnce(() -> SwerveDrive.getInstance().lock()));
+    }
+
+    @Override
+    public Command finalizeScore() {
+        return ScoreState.super.finalizeScore();
     }
 }

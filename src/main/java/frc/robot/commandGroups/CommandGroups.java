@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
-import frc.robot.scoreStates.ScoreState;
 import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.conveyor.Conveyor;
@@ -20,13 +19,11 @@ import frc.robot.subsystems.gripper.GripperConstants;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
 
 public class CommandGroups {
     private static CommandGroups INSTANCE;
@@ -70,9 +67,7 @@ public class CommandGroups {
         return conveyor.feed()
                 .alongWith(
                         Commands.waitUntil(conveyor::readyToFeed)
-                                .andThen(
-                                        gripper.setRollerPower(
-                                                GripperConstants.OUTTAKE_POWER)))
+                                .andThen(gripper.setRollerPower(GripperConstants.OUTTAKE_POWER)))
                 .withName("feed");
     }
 
@@ -119,13 +114,11 @@ public class CommandGroups {
     }
 
     public Command outtakeGripper() {
-        return gripper.outtake()
-                .withName("outtakeGripper");
+        return gripper.outtake().withName("outtakeGripper");
     }
 
     public Command outtakeShooter() {
-        return Commands.parallel(
-                                feed(), shooter.setVelocity(ShooterConstants.OUTTAKE_POWER))
+        return Commands.parallel(feed(), shooter.setVelocity(ShooterConstants.OUTTAKE_POWER))
                 .withName("outtakeShooter");
     }
 

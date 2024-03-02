@@ -1,7 +1,7 @@
 package frc.robot.subsystems.climb;
 
 public interface ClimbIO {
-        ClimbInputsAutoLogged inputs = new ClimbInputsAutoLogged();
+    ClimbInputsAutoLogged inputs = new ClimbInputsAutoLogged();
 
     void setPower(double power);
 
