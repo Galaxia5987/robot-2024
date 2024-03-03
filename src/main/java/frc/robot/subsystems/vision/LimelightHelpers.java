@@ -495,10 +495,6 @@ public class LimelightHelpers {
         return getLimelightNTDoubleArray(limelightName, "botpose_wpiblue");
     }
 
-    public static double[] getBotPose(String limelightName) {
-        return getLimelightNTDoubleArray(limelightName, "botpose");
-    }
-
     public static double[] getBotPose_wpiRed(String limelightName) {
         return getLimelightNTDoubleArray(limelightName, "botpose_wpired");
     }
@@ -507,11 +503,11 @@ public class LimelightHelpers {
         return getLimelightNTDoubleArray(limelightName, "botpose_wpiblue");
     }
 
-    public static Pose2d getBotPose() {
+    public static Pose3d getBotPose(String limelightName) {
         if (ScoreState.isRed()) {
-            return getBotPose2d_wpiRed("limelight");
+            return getBotPose3d_wpiRed(limelightName);
         }
-        return getBotPose2d_wpiBlue("limelight");
+        return getBotPose3d_wpiBlue(limelightName);
     }
 
     public static double[] getBotPose_TargetSpace(String limelightName) {
@@ -606,18 +602,6 @@ public class LimelightHelpers {
     public static Pose2d getBotPose2d_wpiRed(String limelightName) {
 
         double[] result = getBotPose_wpiRed(limelightName);
-        return toPose2D(result);
-    }
-
-    /**
-     * Gets the Pose2d for easy use with Odometry vision pose estimator (addVisionMeasurement)
-     *
-     * @param limelightName
-     * @return
-     */
-    public static Pose2d getBotPose2d(String limelightName) {
-
-        double[] result = getBotPose(limelightName);
         return toPose2D(result);
     }
 
