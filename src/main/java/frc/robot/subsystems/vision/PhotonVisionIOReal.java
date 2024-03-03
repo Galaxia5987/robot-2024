@@ -78,18 +78,18 @@ public class PhotonVisionIOReal implements VisionIO {
 
         var latestResult = camera.getLatestResult();
 
-        if (calculateScoreParams) {
-            var robotPose = simpleEstimator.update(latestResult);
-            if (robotPose.isPresent()) {
+        var estimatedPose = estimator.update(latestResult);
+        if (estimatedPose.isPresent()) {
+            inputs.poseFieldOriented = estimatedPose.get().estimatedPose;
+            if (calculateScoreParams) {
                 var toSpeaker =
-                        robotPose
-                                .get()
-                                .estimatedPose
+                        inputs.poseFieldOriented
                                 .getTranslation()
                                 .toTranslation2d()
                                 .minus(VisionConstants.getSpeakerPose());
                 toSpeaker = new Translation2d(toSpeaker.getX(), toSpeaker.getY());
                 inputs.distanceToSpeaker = distanceFilter.calculate(toSpeaker.getNorm());
+
                 var centerTag =
                         latestResult.getTargets().stream()
                                 .filter(
@@ -97,24 +97,17 @@ public class PhotonVisionIOReal implements VisionIO {
                                                 target.getFiducialId()
                                                         == VisionConstants.getSpeakerTag1())
                                 .toList();
-                if (centerTag.size() != 0) {
+                if (!centerTag.isEmpty()) {
                     var yaw = centerTag.get(0).getYaw();
                     inputs.yawToSpeaker = Rotation2d.fromDegrees(yaw);
-                    scoreParameters =
-                            Optional.of(
-                                    new ScoreParameters(
-                                            inputs.distanceToSpeaker, inputs.yawToSpeaker));
-                } else {
-                    scoreParameters = Optional.empty(); // TODO: make the rotation gyro based
                 }
+                scoreParameters =
+                        Optional.of(
+                                new ScoreParameters(
+                                        inputs.distanceToSpeaker, inputs.yawToSpeaker));
             } else {
                 scoreParameters = Optional.empty();
             }
-        }
-
-        var estimatedPose = estimator.update(latestResult);
-        if (estimatedPose.isPresent()) {
-            inputs.poseFieldOriented = estimatedPose.get().estimatedPose;
 
             result = new VisionResult(estimatedPose.get(), true);
             double distanceTraveled =
