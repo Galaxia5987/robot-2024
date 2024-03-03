@@ -34,6 +34,12 @@ public class ClimbIOSim implements ClimbIO {
     }
 
     @Override
+    public void openStopper() {}
+
+    @Override
+    public void closeStopper() {}
+
+    @Override
     public void manualReset() {}
 
     @Override

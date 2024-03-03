@@ -7,6 +7,10 @@ public interface ClimbIO {
 
     void manualReset();
 
+    void openStopper();
+
+    void closeStopper();
+
     void updateInputs(ClimbInputs inputs);
 
     enum ControlMode {

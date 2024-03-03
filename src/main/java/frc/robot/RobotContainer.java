@@ -227,6 +227,9 @@ public class RobotContainer {
                 .leftBumper()
                 .whileTrue(gripper.setRollerPower(-0.4))
                 .onFalse(gripper.setRollerPower(0));
+
+        xboxController.start().onTrue(climb.lock());
+        xboxController.back().onTrue(climb.unlock());
         xboxController
                 .rightBumper()
                 .whileTrue(Commands.runOnce(() -> setForceShooting(true)))

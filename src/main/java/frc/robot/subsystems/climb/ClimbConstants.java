@@ -13,6 +13,9 @@ public class ClimbConstants { // TODO: check real values
     public static final TalonFXConfiguration MAIN_MOTOR_CONFIGURATION = new TalonFXConfiguration();
     public static final TalonFXConfiguration AUX_MOTOR_CONFIGURATION = new TalonFXConfiguration();
 
+    public static final MutableMeasure<Angle> OPEN_POSITION = Units.Degrees.of(0).mutableCopy();
+    public static final MutableMeasure<Angle> LOCKED_POSITION = Units.Degrees.of(90).mutableCopy();
+
     public static final double MECHANISM_WIDTH = 0.8; // [m]
     public static final double MECHANISM_HEIGHT = 2; // [m]
     public static final double GEAR_RATIO = 12.0;

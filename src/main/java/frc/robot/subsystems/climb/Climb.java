@@ -3,6 +3,7 @@ package frc.robot.subsystems.climb;
 import static frc.robot.subsystems.climb.ClimbConstants.MECHANISM_HEIGHT;
 import static frc.robot.subsystems.climb.ClimbConstants.MECHANISM_WIDTH;
 
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -46,6 +47,19 @@ public class Climb extends SubsystemBase {
 
     public Command manualClimb(DoubleSupplier power) {
         return Commands.parallel(run(() -> io.setPower(power.getAsDouble())));
+    }
+
+    public boolean stopperAtSetpoint() {
+        return inputs.stopperAngle.isNear(
+                inputs.stopperSetpoint, ClimbConstants.STOPPER_TOLERANCE.in(Units.Value));
+    }
+
+    public Command lock() {
+        return Commands.runOnce(io::closeStopper);
+    }
+
+    public Command unlock() {
+        return Commands.runOnce(io::openStopper);
     }
 
     public Command manualReset() {
