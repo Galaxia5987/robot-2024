@@ -14,9 +14,7 @@ public class PhotonVisionIOReal implements VisionIO {
 
     private final PhotonCamera camera;
     private final PhotonPoseEstimator estimator;
-    private final PhotonPoseEstimator simpleEstimator;
     private final Transform3d robotToCamera;
-    private final AprilTagFieldLayout field;
     private final boolean calculateScoreParams;
     private VisionResult result =
             new VisionResult(
@@ -44,20 +42,12 @@ public class PhotonVisionIOReal implements VisionIO {
             boolean calculateScoreParams) {
         this.camera = camera;
         this.robotToCamera = robotToCamera;
-        this.field = field;
         this.calculateScoreParams = calculateScoreParams;
         camera.setPipelineIndex(0);
         estimator =
                 new PhotonPoseEstimator(
                         field,
                         PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                        camera,
-                        robotToCamera);
-
-        simpleEstimator =
-                new PhotonPoseEstimator(
-                        field,
-                        PhotonPoseEstimator.PoseStrategy.AVERAGE_BEST_TARGETS,
                         camera,
                         robotToCamera);
     }
