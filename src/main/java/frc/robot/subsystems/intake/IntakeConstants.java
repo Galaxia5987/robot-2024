@@ -18,7 +18,7 @@ public class IntakeConstants {
     public static final LoggedTunableNumber ANGLE_KG = new LoggedTunableNumber("Intake/Angle/kG");
 
     public static final double ANGLE_GEAR_RATIO = 44.44;
-    public static final double ANGLE_CURRENT_LIMIT = 15;
+    public static final double ANGLE_CURRENT_LIMIT = 25;
     public static final int SPIN_CURRENT_LIMIT = 40;
     public static final int CENTER_CURRENT_LIMIT = 40;
     public static final TalonFXConfiguration ANGLE_CONFIGURATION = new TalonFXConfiguration();

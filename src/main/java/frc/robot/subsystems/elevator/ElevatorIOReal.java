@@ -33,8 +33,7 @@ public class ElevatorIOReal implements ElevatorIO {
     public ElevatorIOReal() {
         mainMotor = new TalonFX(Ports.Elevator.MAIN_ID);
         auxMotor = new TalonFX(Ports.Elevator.AUX_ID);
-        servo = new Servo(9);
-
+        servo = new Servo(Ports.Elevator.ELEVATOR_SERVO_PORT);
         mainMotor.getConfigurator().apply(ElevatorConstants.MAIN_MOTOR_CONFIGURATION);
         auxMotor.getConfigurator().apply(ElevatorConstants.AUX_MOTOR_CONFIGURATION);
 
@@ -58,12 +57,12 @@ public class ElevatorIOReal implements ElevatorIO {
 
     public void openStopper() {
         inputs.stopperSetpoint = ElevatorConstants.OPEN_POSITION;
-        servo.set(ElevatorConstants.OPEN_POSITION.in(Degrees));
+        servo.setAngle(ElevatorConstants.OPEN_POSITION.in(Degrees));
     }
 
     public void closeStopper() {
         inputs.stopperSetpoint = ElevatorConstants.LOCKED_POSITION;
-        servo.set(ElevatorConstants.LOCKED_POSITION.in(Degrees));
+        servo.setAngle(ElevatorConstants.LOCKED_POSITION.in(Degrees));
     }
 
     public void stopMotor() {

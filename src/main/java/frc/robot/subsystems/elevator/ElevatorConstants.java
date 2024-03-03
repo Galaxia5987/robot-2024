@@ -94,10 +94,8 @@ public class ElevatorConstants { // TODO: check real values
                                 .withInverted(InvertedValue.Clockwise_Positive)
                                 .withNeutralMode(NeutralModeValue.Brake))
                 .CurrentLimits
-                .withStatorCurrentLimitEnable(true)
-                .withSupplyCurrentLimitEnable(true)
-                .withStatorCurrentLimit(80)
-                .withSupplyCurrentLimit(50);
+                .withStatorCurrentLimitEnable(false)
+                .withSupplyCurrentLimitEnable(false);
 
         AUX_MOTOR_CONFIGURATION
                 .withFeedback(

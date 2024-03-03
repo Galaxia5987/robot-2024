@@ -73,7 +73,7 @@ public class Intake extends SubsystemBase {
     public Command intake() {
         return Commands.parallel(
                         setAngle(IntakeConstants.IntakePose.DOWN),
-                        setRollerSpeed(0.6),
+                        setRollerSpeed(0.5),
                         setCenterRollerSpeed(0.5))
                 .withName("feeding position activated");
     }
@@ -102,8 +102,8 @@ public class Intake extends SubsystemBase {
         return runOnce(() -> io.reset(angle));
     }
 
-    public Command setAnglePower(double power){
-        return Commands.runOnce(()-> io.setAnglePower(power));
+    public Command setAnglePower(double power) {
+        return Commands.runOnce(() -> io.setAnglePower(power));
     }
 
     @Override

@@ -31,6 +31,7 @@ public final class Ports {
     public static final class Elevator {
         public static final int AUX_ID = 5;
         public static final int MAIN_ID = 4;
+        public static final int ELEVATOR_SERVO_PORT = 9;
     }
 
     public static final class SwerveDrive {

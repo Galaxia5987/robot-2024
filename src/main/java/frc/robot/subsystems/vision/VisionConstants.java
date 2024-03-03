@@ -16,7 +16,8 @@ public class VisionConstants {
     public static final int SPEAKER1_RED = 4;
     public static final int SPEAKER2_RED = 3;
 
-    public static final double DISTANCE_BETWEEN_SPEAKER_TAGS = 0.5;
+    public static final double DISTANCE_BETWEEN_SPEAKER_TAGS = 0.57;
+    public static final double SPEAKER_TAGS_HEIGHT = 1.45;
 
     public static boolean outOfBounds(Pose3d estimatedPose) {
         return estimatedPose.getX() < 0
