@@ -1,7 +1,6 @@
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import java.util.ArrayList;
@@ -33,7 +32,6 @@ public class PhotonVisionIOReal implements VisionIO {
                             PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR),
                     false);
     private Optional<ScoreParameters> scoreParameters = Optional.empty();
-    private final LinearFilter distanceFilter = LinearFilter.movingAverage(10);
 
     public PhotonVisionIOReal(
             PhotonCamera camera,
@@ -78,7 +76,7 @@ public class PhotonVisionIOReal implements VisionIO {
                                 .toTranslation2d()
                                 .minus(VisionConstants.getSpeakerPose());
                 toSpeaker = new Translation2d(toSpeaker.getX(), toSpeaker.getY());
-                inputs.distanceToSpeaker = distanceFilter.calculate(toSpeaker.getNorm());
+                inputs.distanceToSpeaker = toSpeaker.getNorm();
 
                 var centerTag =
                         latestResult.getTargets().stream()
@@ -94,7 +92,8 @@ public class PhotonVisionIOReal implements VisionIO {
                 scoreParameters =
                         Optional.of(
                                 new ScoreParameters(
-                                        inputs.distanceToSpeaker, inputs.yawToSpeaker));
+                                        inputs.distanceToSpeaker,
+                                        Optional.of(inputs.yawToSpeaker)));
             } else {
                 scoreParameters = Optional.empty();
             }

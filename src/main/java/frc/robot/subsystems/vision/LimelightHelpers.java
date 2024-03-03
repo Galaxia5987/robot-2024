@@ -18,7 +18,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import frc.robot.scoreStates.ScoreState;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -432,8 +431,6 @@ public class LimelightHelpers {
         return null;
     }
 
-
-
     public static double getTX(String limelightName) {
         return getLimelightNTDouble(limelightName, "tx");
     }
@@ -501,13 +498,6 @@ public class LimelightHelpers {
 
     public static double[] getBotPose_wpiBlue(String limelightName) {
         return getLimelightNTDoubleArray(limelightName, "botpose_wpiblue");
-    }
-
-    public static Pose3d getBotPose(String limelightName) {
-        if (ScoreState.isRed()) {
-            return getBotPose3d_wpiRed(limelightName);
-        }
-        return getBotPose3d_wpiBlue(limelightName);
     }
 
     public static double[] getBotPose_TargetSpace(String limelightName) {

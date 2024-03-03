@@ -84,9 +84,10 @@ public class CommandGroups {
     }
 
     public Command feedWithWait(BooleanSupplier otherReady) {
-        return Commands.waitUntil(otherReady)
-                .andThen(Commands.waitSeconds(0.05))
-                .andThen(gripper.setRollerPower(GripperConstants.INTAKE_POWER).withTimeout(0.4))
+        return Commands.sequence(
+                        Commands.waitSeconds(0.05),
+                        Commands.waitUntil(otherReady),
+                        gripper.setRollerPower(GripperConstants.INTAKE_POWER).withTimeout(0.4))
                 .withName("feedWithWait");
     }
 

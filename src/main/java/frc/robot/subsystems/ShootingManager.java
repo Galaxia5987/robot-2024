@@ -132,7 +132,8 @@ public class ShootingManager {
 
             Rotation2d yawToTarget =
                     scoreParameters.stream()
-                            .map(VisionIO.ScoreParameters::yaw)
+                            .filter((param) -> param.yaw().isPresent())
+                            .map((param) -> param.yaw().get())
                             .reduce(new Rotation2d(), Rotation2d::plus)
                             .div(scoreParameters.size());
 
@@ -141,7 +142,7 @@ public class ShootingManager {
                             -yawToTarget.getRotations()
                                     + swerveDrive.getOdometryYaw().getRotations(),
                             Rotations)
-                    .mut_minus(8.5, Degrees);
+                    .mut_minus(6.5, Degrees);
         }
     }
 

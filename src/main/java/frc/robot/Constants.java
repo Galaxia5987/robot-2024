@@ -11,10 +11,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.units.*;
 import frc.robot.scoreStates.ScoreState;
 import frc.robot.subsystems.swerve.*;
-import frc.robot.subsystems.vision.PhotonVisionIOReal;
-import frc.robot.subsystems.vision.Vision;
-import frc.robot.subsystems.vision.VisionModule;
-import frc.robot.subsystems.vision.VisionSimIO;
+import frc.robot.subsystems.vision.*;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.photonvision.PhotonCamera;
 import org.photonvision.simulation.SimCameraProperties;
@@ -131,17 +128,12 @@ public class Constants {
     public static void initVision() {
         VisionModule rightOpi;
         VisionModule leftOpi;
+        VisionModule lamelight;
         switch (CURRENT_MODE) {
             case REAL:
+                lamelight = new VisionModule(new LimelightIO("limelight", true));
                 rightOpi =
                         new VisionModule(
-                                //                                new PhotonVisionIOReal(
-                                //                                        new
-                                // PhotonCamera("Front_right_camera"),
-                                //                                        FRONT_RIGHT_CAMERA_POSE,
-                                //
-                                // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                                //                                        false),
                                 new PhotonVisionIOReal(
                                         new PhotonCamera("Back_right_camera"),
                                         BACK_RIGHT_CAMERA_POSE,
@@ -156,6 +148,7 @@ public class Constants {
                                         true));
                 break;
             default:
+                lamelight = new VisionModule();
                 rightOpi =
                         new VisionModule(
                                 new VisionSimIO(
@@ -182,6 +175,6 @@ public class Constants {
                                         SimCameraProperties.PI4_LIFECAM_640_480()));
                 break;
         }
-        Vision.initialize(rightOpi, leftOpi);
+        Vision.initialize(rightOpi, leftOpi, lamelight);
     }
 }
