@@ -112,7 +112,7 @@ public class CommandGroups {
                 hood.setAngle(ShootingManager.getInstance().getHoodCommandedAngle())
                         .until(hood::atSetpoint));
     }
-    
+
     public Command outtakeShooter() {
         return Commands.parallel(feed(), shooter.setVelocity(ShooterConstants.OUTTAKE_POWER))
                 .withName("outtakeShooter");

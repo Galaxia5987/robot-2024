@@ -17,13 +17,8 @@ public class ClimbState implements ScoreState {
     }
 
     @Override
-    public Command calculateTargets() {
-        return ScoreState.super.calculateTargets();
-    }
-
-    @Override
     public Command prepareSubsystems() {
-        return null;
+        return Commands.none();
     }
 
     @Override
@@ -48,8 +43,4 @@ public class ClimbState implements ScoreState {
                 Commands.runOnce(() -> SwerveDrive.getInstance().lock()));
     }
 
-    @Override
-    public Command finalizeScore() {
-        return ScoreState.super.finalizeScore();
-    }
 }

@@ -61,11 +61,11 @@ public class AmpState implements ScoreState {
 
     @Override
     public Command score() {
-        return null;
+      return Commands.none();
     }
 
     @Override
     public Command finalizeScore() {
-        return ScoreState.super.finalizeScore();
+        return Commands.none();
     }
 }
