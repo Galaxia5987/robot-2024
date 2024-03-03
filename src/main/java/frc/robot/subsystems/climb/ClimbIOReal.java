@@ -18,13 +18,6 @@ public class ClimbIOReal implements ClimbIO {
     private final DutyCycleOut powerControl = new DutyCycleOut(0).withEnableFOC(true);
     private final PositionVoltage positionControl = new PositionVoltage(0).withEnableFOC(true);
 
-    private final DigitalInput sensor = new DigitalInput(1);
-    private final BooleanTrigger sensorTrigger = new BooleanTrigger();
-    private final BooleanTrigger movingWeightTrigger = new BooleanTrigger();
-
-    private double kS = ClimbConstants.KS_FIRST_STAGE.get();
-    private double kG = ClimbConstants.KG_FIRST_STAGE.get();
-
     public ClimbIOReal() {
         mainMotor = new TalonFX(Ports.Elevator.MAIN_ID);
         auxMotor = new TalonFX(Ports.Elevator.AUX_ID);
@@ -61,21 +54,6 @@ public class ClimbIOReal implements ClimbIO {
 
     @Override
     public void updateInputs(ClimbInputs inputs) {
-        inputs.isBottom = !sensor.get();
-        sensorTrigger.update(inputs.isBottom);
         inputs.stopperAngle.mut_replace(servo.getAngle(), Units.Degrees);
-
-        if (movingWeightTrigger.triggered()) {
-            kG = ClimbConstants.KG_SECOND_STAGE.get();
-            kS = ClimbConstants.KS_SECOND_STAGE.get();
-        } else if (movingWeightTrigger.released()) {
-            kG = ClimbConstants.KG_FIRST_STAGE.get();
-            kS = ClimbConstants.KS_FIRST_STAGE.get();
-        }
-
-        if (sensorTrigger.triggered()) {
-            mainMotor.setPosition(0);
-            auxMotor.setPosition(0);
-        }
     }
 }
