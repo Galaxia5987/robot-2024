@@ -17,6 +17,8 @@ public interface IntakeIO {
 
     void reset(Measure<Angle> angle);
 
+    void setAnglePower(double power);
+
     void updateInputs();
 
     @AutoLog

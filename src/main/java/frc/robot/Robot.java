@@ -21,6 +21,7 @@ import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveConstants;
+import frc.robot.subsystems.vision.VisionConstants;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -117,7 +118,6 @@ public class Robot extends LoggedRobot {
     public void robotPeriodic() {
         PoseEstimation.getInstance()
                 .processVisionMeasurements(Constants.VISION_MEASUREMENT_MULTIPLIER);
-        ShootingManager.getInstance().updateCommandedState();
         CommandScheduler.getInstance().run();
 
         Logger.recordOutput(
@@ -125,6 +125,7 @@ public class Robot extends LoggedRobot {
         Logger.recordOutput("Robot/IsShooting", ShootingManager.getInstance().isShooting());
         Logger.recordOutput("Robot/ReadyToShoot", ShootingManager.getInstance().readyToShoot());
         field2d.setRobotPose(PoseEstimation.getInstance().getEstimatedPose());
+        Logger.recordOutput("Robot/SpeakerPose", VisionConstants.getSpeakerPose());
         SmartDashboard.putData("Field", field2d);
     }
 
@@ -140,7 +141,8 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void autonomousInit() {
-        Constants.VISION_MEASUREMENT_MULTIPLIER = Constants.AUTO_VISION_MEASUREMENT_MULTIPLIER;
+        Constants.VISION_MEASUREMENT_MULTIPLIER =
+                Constants.AUTO_START_VISION_MEASUREMENT_MULTIPLIER;
 
         // Make sure command is compiled beforehand, otherwise there will be a delay.
         autonomousCommand = robotContainer.getAutonomousCommand();
@@ -153,7 +155,9 @@ public class Robot extends LoggedRobot {
 
     /** This function is called periodically during autonomous. */
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+        ShootingManager.getInstance().updateCommandedState();
+    }
 
     /** This function is called once when teleop is enabled. */
     @Override
@@ -167,7 +171,9 @@ public class Robot extends LoggedRobot {
 
     /** This function is called periodically during operator control. */
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+        ShootingManager.getInstance().updateCommandedStateSimple();
+    }
 
     /** This function is called once when the robot is disabled. */
     @Override

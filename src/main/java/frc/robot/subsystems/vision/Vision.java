@@ -1,19 +1,21 @@
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.littletonrobotics.junction.Logger;
-import org.photonvision.EstimatedRobotPose;
 
 public class Vision extends SubsystemBase {
 
     private static Vision INSTANCE = null;
 
     private final frc.robot.subsystems.vision.VisionModule[] modules;
-    private final EstimatedRobotPose[] results;
+    private final VisionResult[] results;
 
     private Vision(frc.robot.subsystems.vision.VisionModule... modules) {
         this.modules = modules;
-        results = new EstimatedRobotPose[modules.length];
+        results = new VisionResult[modules.length];
     }
 
     public static Vision getInstance() {
@@ -24,8 +26,14 @@ public class Vision extends SubsystemBase {
         INSTANCE = new Vision(modules);
     }
 
-    public EstimatedRobotPose[] getResults() {
+    public VisionResult[] getResults() {
         return results;
+    }
+
+    public List<VisionIO.ScoreParameters> getScoreParameters() {
+        List<VisionIO.ScoreParameters> params = new ArrayList<>();
+        Arrays.stream(modules).forEach((module) -> params.addAll(module.getScoreParameters()));
+        return params;
     }
 
     @Override

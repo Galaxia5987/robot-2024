@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2069872572793579,
-      "y": 4.139730672623739
+      "x": 0.7417791758660457,
+      "y": 4.410523436431489
     },
-    "rotation": -44.0608090542644
+    "rotation": -58.98377482003554
   },
   "command": {
     "type": "sequential",
@@ -26,9 +26,21 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "adjustToTarget"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "C0"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "setVisionMeasurementAuto"
                       }
                     },
                     {

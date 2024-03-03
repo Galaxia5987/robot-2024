@@ -46,7 +46,7 @@ public class HoodIOSim implements HoodIO {
     public void updateInputs() {
         motor.update(Timer.getFPGATimestamp());
 
-        inputs.angle.mut_replace(motor.getPosition(), Units.Rotations);
+        inputs.internalAngle.mut_replace(motor.getPosition(), Units.Rotations);
         inputs.voltage.mut_replace(motor.getAppliedVoltage(), Units.Volts);
     }
 }

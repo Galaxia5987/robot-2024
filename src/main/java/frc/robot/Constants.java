@@ -6,11 +6,9 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.units.*;
-import frc.robot.lib.PoseEstimation;
 import frc.robot.scoreStates.ScoreState;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.vision.PhotonVisionIOReal;
@@ -29,11 +27,12 @@ public class Constants {
 
     public static Mode CURRENT_MODE = Mode.REAL;
 
-    public static final double AUTO_VISION_MEASUREMENT_MULTIPLIER = 0.5;
+    public static final double AUTO_VISION_MEASUREMENT_MULTIPLIER = 0.25;
+    public static final double AUTO_START_VISION_MEASUREMENT_MULTIPLIER = 1_000_000_000;
     public static final double TELEOP_VISION_MEASUREMENT_MULTIPLIER = 0.5;
 
     @AutoLogOutput
-    public static double VISION_MEASUREMENT_MULTIPLIER = AUTO_VISION_MEASUREMENT_MULTIPLIER;
+    static double VISION_MEASUREMENT_MULTIPLIER = AUTO_START_VISION_MEASUREMENT_MULTIPLIER;
 
     public static final Transform3d BACK_LEFT_CAMERA_POSE =
             new Transform3d(
@@ -82,10 +81,10 @@ public class Constants {
     }
 
     public static final double[] SWERVE_OFFSETS = {
-        0.790_611_619_765_290_5,
-        0.783_162_919_579_073,
-        0.483_375_612_084_390_3,
-        0.606_702_240_167_556
+        0.790_887_844_772_196_1,
+        0.783_107_344_577_683_6,
+        0.524_087_313_102_182_8,
+        0.576_757_314_418_932_9
     };
 
     public static void initSwerve() {
@@ -116,16 +115,7 @@ public class Constants {
         SwerveDrive swerveDrive = SwerveDrive.getInstance();
         AutoBuilder.configureHolonomic(
                 () -> swerveDrive.getEstimator().getEstimatedPosition(),
-                (pose) -> {
-                    swerveDrive.resetGyro(
-                            PoseEstimation.getInstance()
-                                    .getEstimatedPose()
-                                    .getRotation()
-                                    .minus(
-                                            ScoreState.isRed()
-                                                    ? Rotation2d.fromDegrees(180)
-                                                    : new Rotation2d()));
-                },
+                swerveDrive::resetPose,
                 swerveDrive::getCurrentSpeeds,
                 (speeds) -> swerveDrive.drive(speeds, false),
                 new HolonomicPathFollowerConfig(
@@ -145,20 +135,25 @@ public class Constants {
             case REAL:
                 rightOpi =
                         new VisionModule(
-                                new PhotonVisionIOReal(
-                                        new PhotonCamera("Front_right_camera"),
-                                        FRONT_RIGHT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()),
+                                //                                new PhotonVisionIOReal(
+                                //                                        new
+                                // PhotonCamera("Front_right_camera"),
+                                //                                        FRONT_RIGHT_CAMERA_POSE,
+                                //
+                                // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                                //                                        false),
                                 new PhotonVisionIOReal(
                                         new PhotonCamera("Back_right_camera"),
                                         BACK_RIGHT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()));
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                                        false));
                 leftOpi =
                         new VisionModule(
                                 new PhotonVisionIOReal(
                                         new PhotonCamera("Back_left_camera"),
                                         BACK_LEFT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField()));
+                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                                        true));
                 break;
             default:
                 rightOpi =

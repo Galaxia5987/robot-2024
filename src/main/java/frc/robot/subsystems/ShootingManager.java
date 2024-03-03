@@ -2,14 +2,20 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.lib.PoseEstimation;
+import frc.robot.lib.Utils;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIO;
 import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -22,6 +28,7 @@ public class ShootingManager {
     private final SwerveDrive swerveDrive;
     private final Hood hood;
     private final Shooter shooter;
+    private final Vision vision;
 
     @Getter
     private final MutableMeasure<Velocity<Angle>> shooterCommandedVelocity =
@@ -41,12 +48,14 @@ public class ShootingManager {
     @Setter private Measure<Distance> maxShootingDistance = Meters.of(10.5);
 
     private boolean isShooting = false;
+    private final Debouncer usePoseEstimation = new Debouncer(0.1);
 
     private ShootingManager() {
         poseEstimation = PoseEstimation.getInstance();
         swerveDrive = SwerveDrive.getInstance();
         hood = Hood.getInstance();
         shooter = Shooter.getInstance();
+        vision = Vision.getInstance();
     }
 
     public static ShootingManager getInstance() {
@@ -61,6 +70,11 @@ public class ShootingManager {
         return poseEstimation.getDistanceToSpeaker() < maxShootingDistance.in(Meters)
                 && hood.atSetpoint()
                 && shooter.atSetpoint()
+                && (DriverStation.isAutonomous()
+                        || Utils.epsilonEquals(
+                                swerveCommandedAngle.in(Degrees),
+                                swerveDrive.getOdometryYaw().getDegrees(),
+                                2))
                 && !lockShoot;
     }
 
@@ -88,6 +102,47 @@ public class ShootingManager {
         swerveCommandedAngle
                 .mut_replace(Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI, Radians)
                 .mut_plus(-2, Degrees);
+    }
+
+    public void updateCommandedStateSimple() {
+        var scoreParameters = vision.getScoreParameters();
+        if (scoreParameters.size() > 0) {
+            double distanceToTarget =
+                    scoreParameters.stream()
+                                    .mapToDouble(VisionIO.ScoreParameters::distanceToSpeaker)
+                                    .reduce(0, Double::sum)
+                            / scoreParameters.size();
+
+            if (distanceToTarget < maxWarmupDistance.in(Meters)) {
+                shooterCommandedVelocity.mut_replace(
+                        ShooterConstants.VELOCITY_BY_DISTANCE.getInterpolated(
+                                        new InterpolatingDouble(distanceToTarget))
+                                .value,
+                        RotationsPerSecond);
+
+                hoodCommandedAngle.mut_replace(
+                        HoodConstants.ANGLE_BY_DISTANCE.getInterpolated(
+                                        new InterpolatingDouble(distanceToTarget))
+                                .value,
+                        Degrees);
+            } else {
+                shooterCommandedVelocity.mut_replace(0, RotationsPerSecond);
+                hoodCommandedAngle.mut_replace(114, Degrees);
+            }
+
+            Rotation2d yawToTarget =
+                    scoreParameters.stream()
+                            .map(VisionIO.ScoreParameters::yaw)
+                            .reduce(new Rotation2d(), Rotation2d::plus)
+                            .div(scoreParameters.size());
+
+            swerveCommandedAngle
+                    .mut_replace(
+                            -yawToTarget.getRotations()
+                                    + swerveDrive.getOdometryYaw().getRotations(),
+                            Rotations)
+                    .mut_minus(8.5, Degrees);
+        }
     }
 
     public void updateHoodChassisCompensation() {

@@ -31,6 +31,7 @@ public final class Ports {
     public static final class Elevator {
         public static final int AUX_ID = 5;
         public static final int MAIN_ID = 4;
+        public static final int ELEVATOR_SERVO_PORT = 9;
     }
 
     public static final class SwerveDrive {
@@ -58,8 +59,8 @@ public final class Ports {
 
         public static final int FRONT_LEFT_ENCODER_ID = 0;
         public static final int FRONT_RIGHT_ENCODER_ID = 9; // 0
-        public static final int REAR_LEFT_ENCODER_ID = 8;
-        public static final int REAR_RIGHT_ENCODER_ID = 2;
+        public static final int REAR_LEFT_ENCODER_ID = 7;
+        public static final int REAR_RIGHT_ENCODER_ID = 5;
 
         public static final int[] ENCODER_IDS = {
             FRONT_LEFT_ENCODER_ID,

@@ -6,12 +6,13 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.scoreStates.ScoreState;
@@ -33,12 +34,14 @@ import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOReal;
 import frc.robot.subsystems.hood.HoodIOSim;
 import frc.robot.subsystems.intake.*;
+import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOReal;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.Optional;
+import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
 
@@ -51,14 +54,14 @@ public class RobotContainer {
     private final Hood hood;
     private final Shooter shooter;
     private final SwerveDrive swerveDrive;
-    //    private final LEDs leds;
+    private final LEDs leds;
     private final CommandXboxController xboxController = new CommandXboxController(0);
-    private final CommandXboxController driveController = new CommandXboxController(1);
+    private final CommandPS5Controller driveController = new CommandPS5Controller(1);
     private final CommandXboxController testController = new CommandXboxController(2);
     private final CommandJoystick joystick = new CommandJoystick(3);
     private final CommandGroups commandGroups;
     private final SendableChooser<Command> autoChooser;
-    @Setter private boolean isForceShooting = false;
+    @Getter @Setter private boolean isForceShooting = false;
 
     @AutoLogOutput private ScoreState.State state = ScoreState.State.SHOOT;
 
@@ -106,9 +109,9 @@ public class RobotContainer {
         hood = Hood.getInstance();
         shooter = Shooter.getInstance();
 
-        //        leds = new LEDs(8, 24);
-        //        leds.setPrimary(Color.kBlue);
-        //        leds.setSecondary(Color.kYellow);
+        leds = new LEDs(8, 120);
+        leds.setPrimary(Color.kDeepPink);
+        leds.setSecondary(Color.kYellow);
 
         Gripper.initialize(gripperIO, () -> Units.Meters.of(0));
         gripper = Gripper.getInstance();
@@ -118,6 +121,10 @@ public class RobotContainer {
         configureDefaultCommands();
         configureButtonBindings();
         NamedCommands.registerCommand("intake", commandGroups.intake());
+        NamedCommands.registerCommand(
+                "print1", Commands.print("CapsLockIsBetter!!!").repeatedly().withTimeout(2));
+        NamedCommands.registerCommand(
+                "print2", Commands.print("GaiaWasRightInPrintOne!!!").repeatedly().withTimeout(2));
         NamedCommands.registerCommand("stopIntake", intake.stop(false).withTimeout(0.05));
         NamedCommands.registerCommand("retractIntake", intake.stop());
         NamedCommands.registerCommand("score", commandGroups.feedShooter(() -> isForceShooting));
@@ -130,6 +137,12 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "adjustToTarget",
                 Commands.runOnce(() -> ShootingManager.getInstance().setShooting(true)));
+        NamedCommands.registerCommand(
+                "setVisionMeasurementAuto",
+                Commands.runOnce(
+                        () ->
+                                Constants.VISION_MEASUREMENT_MULTIPLIER =
+                                        Constants.AUTO_VISION_MEASUREMENT_MULTIPLIER));
 
         PPHolonomicDriveController.setRotationTargetOverride(
                 () -> {
@@ -163,7 +176,7 @@ public class RobotContainer {
                 swerveDrive.driveCommand(
                         () -> -driveController.getLeftY(),
                         () -> -driveController.getLeftX(),
-                        () -> 0.6 * -driveController.getRightX(), // 0.6
+                        () -> 0.5 * -driveController.getRightX(), // 0.6
                         0.1,
                         () -> true));
 
@@ -181,9 +194,14 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        driveController.b().onTrue(Commands.runOnce(swerveDrive::resetGyro));
+        testController.a().onTrue(leds.solid(new Color("009cbd"), 1, 120));
+        testController.b().whileTrue(leds.blink(2, 1, 120));
+        testController.x().whileTrue(leds.rainbow(1, 120));
+        testController.y().whileTrue(leds.fade(6, 1, 120));
+
+        driveController.triangle().onTrue(Commands.runOnce(swerveDrive::resetGyro));
         driveController
-                .y()
+                .circle()
                 .whileTrue(
                         commandGroups
                                 .shootAndConvey(Units.RotationsPerSecond.of(50).mutableCopy())
@@ -206,24 +224,24 @@ public class RobotContainer {
                 .onFalse(commandGroups.stopShooting());
 
         driveController
-                .rightTrigger()
+                .R2()
                 .whileTrue(
                         Commands.either(
                                 commandGroups
                                         .shootToSpeaker(driveController)
                                         .alongWith(
-                                                commandGroups.feedShooter(() -> isForceShooting)),
+                                                commandGroups.feedShooter(this::isForceShooting)),
                                 commandGroups.shootToAmp(),
                                 () -> state == ScoreState.State.SHOOT))
                 .onFalse(commandGroups.stopShooting());
 
         driveController
-                .leftTrigger()
+                .L2()
                 .whileTrue(commandGroups.intake())
                 .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
 
         driveController
-                .rightBumper()
+                .R1()
                 .whileTrue(intake.outtake().alongWith(gripper.setRollerPower(-0.7)))
                 .onFalse(intake.stop().alongWith(gripper.setRollerPower(0)));
 
@@ -235,23 +253,21 @@ public class RobotContainer {
                 .onFalse(gripper.setRollerPower(0));
         xboxController
                 .rightBumper()
-                .whileTrue(Commands.runOnce(() -> setForceShooting(true)))
-                .onFalse(Commands.runOnce(() -> setForceShooting(false)));
+                .whileTrue(gripper.setRollerPower(0.4))
+                .onFalse(gripper.setRollerPower(0));
 
         xboxController.b().onTrue(Commands.runOnce(() -> state = ScoreState.State.SHOOT));
         xboxController.a().onTrue(Commands.runOnce(() -> state = ScoreState.State.AMP));
         xboxController.y().onTrue(commandGroups.shootToSpeaker());
         xboxController
                 .x()
-                .onTrue(intake.setAngle(Units.Degrees.of(-140).mutableCopy()))
+                .onTrue(intake.setAnglePower(-0.3))
                 .onFalse(intake.reset(Units.Degrees.zero().mutableCopy()));
 
         xboxController
                 .leftStick()
                 .whileTrue(Commands.runOnce(() -> ShootingManager.getInstance().setLockShoot(true)))
                 .onFalse(Commands.runOnce(() -> ShootingManager.getInstance().setLockShoot(false)));
-
-        joystick.button(Joystick.ButtonType.kTrigger.value).onTrue(commandGroups.allBits());
     }
 
     /**

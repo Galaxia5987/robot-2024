@@ -34,6 +34,12 @@
                     {
                       "type": "named",
                       "data": {
+                        "name": "setVisionMeasurementAuto"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
                         "name": "score"
                       }
                     },
@@ -56,22 +62,9 @@
                       }
                     },
                     {
-                      "type": "parallel",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "score"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "stopIntake"
-                            }
-                          }
-                        ]
+                        "name": "score"
                       }
                     },
                     {

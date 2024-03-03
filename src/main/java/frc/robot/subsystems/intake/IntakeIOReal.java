@@ -28,6 +28,7 @@ public class IntakeIOReal implements IntakeIO {
         centerMotor.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE.in(Units.Volts));
         centerMotor.setInverted(false);
         centerMotor.setSmartCurrentLimit(CENTER_CURRENT_LIMIT);
+        centerMotor.setIdleMode(CANSparkBase.IdleMode.kCoast);
         spinMotor.restoreFactoryDefaults();
         spinMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         spinMotor.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE.in(Units.Volts));
@@ -60,6 +61,11 @@ public class IntakeIOReal implements IntakeIO {
     @Override
     public void reset(Measure<Angle> angle) {
         angleMotor.setPosition(angle.in(Units.Degrees));
+    }
+
+    @Override
+    public void setAnglePower(double power) {
+        angleMotor.set(power);
     }
 
     @Override

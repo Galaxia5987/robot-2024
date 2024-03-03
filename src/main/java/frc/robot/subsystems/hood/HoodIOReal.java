@@ -27,25 +27,23 @@ public class HoodIOReal implements HoodIO {
 
     @Override
     public void setAngle(MutableMeasure<Angle> angle) {
-        motor.setControl(
-                positionControl
-                        .withPosition(angle.in(Units.Rotations))
-                        .withFeedForward(
-                                Math.signum(
-                                                inputs.angleSetpoint
-                                                        .minus(inputs.angle)
-                                                        .in(Units.Degrees))
-                                        * HoodConstants.kS.get()));
+        setAngle(angle, 0);
     }
 
     @Override
     public void setAngle(MutableMeasure<Angle> angle, double torqueChassisCompensation) {
-        inputs.angleSetpoint.mut_replace(angle);
+        var error = angle.minus(inputs.absoluteEncoderAngle);
         motor.setControl(
                 positionControl
-                        .withPosition(angle.in(Units.Rotations))
+                        .withPosition(inputs.internalAngle.plus(error).in(Units.Rotations))
                         .withFeedForward(
-                                torqueChassisCompensation * HoodConstants.TORQUE_TO_CURRENT));
+                                Math.signum(
+                                                        inputs.angleSetpoint
+                                                                .minus(inputs.internalAngle)
+                                                                .in(Units.Degrees))
+                                                * HoodConstants.kS.get()
+                                        + torqueChassisCompensation
+                                                * HoodConstants.TORQUE_TO_CURRENT));
     }
 
     private double getEncoderPosition() {
@@ -56,7 +54,7 @@ public class HoodIOReal implements HoodIO {
 
     @Override
     public void updateInputs() {
-        inputs.angle.mut_replace(motor.getPosition().getValue(), Units.Rotations);
+        inputs.internalAngle.mut_replace(motor.getPosition().getValue(), Units.Rotations);
         inputs.absoluteEncoderAngle.mut_replace(getEncoderPosition(), Units.Rotations);
         inputs.voltage.mut_replace(motor.getMotorVoltage().getValue(), Units.Volts);
         inputs.absoluteEncoderAngleNoOffset.mut_replace(

@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake;
 
 import static frc.robot.subsystems.intake.IntakeConstants.*;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.revrobotics.CANSparkBase;
 import edu.wpi.first.math.controller.PIDController;
@@ -45,6 +46,11 @@ public class IntakeIOSim implements IntakeIO {
 
     @Override
     public void reset(Measure<Angle> angle) {}
+
+    @Override
+    public void setAnglePower(double power) {
+        angleMotor.setControl(new DutyCycleOut(power));
+    }
 
     @Override
     public void updateInputs() {

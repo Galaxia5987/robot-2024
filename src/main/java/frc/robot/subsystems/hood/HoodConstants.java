@@ -18,10 +18,10 @@ public class HoodConstants {
     public static Measure<Distance> HOOD_LENGTH = Units.Meters.of(0.4);
     public static Measure<Dimensionless> POSITION_TOLERANCE = Units.Percent.of(0.5);
     public static Measure<Velocity<Angle>> MAX_VELOCITY = Units.RotationsPerSecond.of(1);
-    public static final MutableMeasure<Angle> AMP_ANGLE = Units.Degrees.of(107).mutableCopy();
+    public static final MutableMeasure<Angle> AMP_ANGLE = Units.Degrees.of(114).mutableCopy();
     public static Measure<Velocity<Velocity<Angle>>> MAX_ACCELERATION =
             Units.RotationsPerSecond.per(Units.Second).of(4);
-    public static final double GEAR_RATIO = 26.33;
+    public static final double GEAR_RATIO = 3.0 * (36.0 / 18.0) * (158.0 / 18.0);
     public static final Measure<Mult<Mult<Mass, Distance>, Distance>> MOMENT_OF_INERTIA =
             Units.Kilograms.mult(Units.Meters).mult(Units.Meters).of(0.0003);
     public static final Translation3d ROOT_POSITION = new Translation3d(-0.27, 0, 0.225);
@@ -54,14 +54,14 @@ public class HoodConstants {
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                kP.initDefault(870);
+                kP.initDefault(970);
                 kI.initDefault(3);
                 kD.initDefault(210);
                 kS.initDefault(1.5);
                 kV.initDefault(0);
                 kA.initDefault(0.0);
-                kG.initDefault(25.0);
-                ABSOLUTE_ENCODER_OFFSET.initDefault((336.552 - 33.48) / 360.0);
+                kG.initDefault(20.0);
+                ABSOLUTE_ENCODER_OFFSET.initDefault((274.8 - 33.48) / 360.0);
             case SIM:
             case REPLAY:
                 kP.initDefault(10);

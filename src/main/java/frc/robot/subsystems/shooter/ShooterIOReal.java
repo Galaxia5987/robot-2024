@@ -46,8 +46,11 @@ public class ShooterIOReal implements ShooterIO {
     public void updateInputs() {
         topRollerInputs.velocity.mut_replace(
                 topMotor.getVelocity().getValue(), Units.RotationsPerSecond);
+        topRollerInputs.voltage.mut_replace(topMotor.getMotorVoltage().getValue(), Units.Volts);
 
         bottomRollerInputs.velocity.mut_replace(
                 bottomMotor.getVelocity().getValue(), Units.RotationsPerSecond);
+        bottomRollerInputs.voltage.mut_replace(
+                bottomMotor.getMotorVoltage().getValue(), Units.Volts);
     }
 }
