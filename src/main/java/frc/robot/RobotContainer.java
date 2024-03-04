@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
 import frc.robot.scoreStates.ScoreState;
@@ -55,7 +56,7 @@ public class RobotContainer {
     private final SwerveDrive swerveDrive;
     private final LEDs leds;
     private final CommandXboxController xboxController = new CommandXboxController(0);
-    private final CommandXboxController driveController = new CommandXboxController(1);
+    private final CommandPS5Controller driveController = new CommandPS5Controller(1);
     private final CommandXboxController testController = new CommandXboxController(2);
     private final CommandJoystick joystick = new CommandJoystick(3);
     private final CommandGroups commandGroups;
@@ -198,9 +199,9 @@ public class RobotContainer {
         testController.x().whileTrue(leds.rainbow(1, 120));
         testController.y().whileTrue(leds.fade(6, 1, 120));
 
-        driveController.y().onTrue(Commands.runOnce(swerveDrive::resetGyro));
+        driveController.triangle().onTrue(Commands.runOnce(swerveDrive::resetGyro));
         driveController
-                .b()
+                .circle()
                 .whileTrue(
                         commandGroups
                                 .shootAndConvey(Units.RotationsPerSecond.of(50).mutableCopy())
@@ -223,7 +224,7 @@ public class RobotContainer {
                 .onFalse(commandGroups.stopShooting());
 
         driveController
-                .rightTrigger()
+                .R2()
                 .whileTrue(
                         Commands.either(
                                 commandGroups
@@ -235,12 +236,12 @@ public class RobotContainer {
                 .onFalse(commandGroups.stopShooting());
 
         driveController
-                .leftTrigger()
+                .L2()
                 .whileTrue(commandGroups.intake())
                 .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
 
         driveController
-                .rightBumper()
+                .R1()
                 .whileTrue(intake.outtake().alongWith(gripper.setRollerPower(-0.7)))
                 .onFalse(intake.stop().alongWith(gripper.setRollerPower(0)));
 
