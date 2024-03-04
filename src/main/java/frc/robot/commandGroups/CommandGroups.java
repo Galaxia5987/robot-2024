@@ -103,7 +103,6 @@ public class CommandGroups {
     public Command intake() {
         return Commands.parallel(intake.intake(), gripper.setRollerPower(0.4))
                 .until(gripper::hasNote)
-                .andThen(Commands.runOnce(()-> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(2)))
                 .andThen(Commands.parallel(intake.stop(), gripper.setRollerPower(0)))
                 //                                .alongWith(leds.solidSecondary(1, 60)))
                 .withName("intake");
