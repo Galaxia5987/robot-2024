@@ -142,7 +142,7 @@ public class ShootingManager {
                             -yawToTarget.getRotations()
                                     + swerveDrive.getOdometryYaw().getRotations(),
                             Rotations)
-                    .mut_minus(6.5, Degrees);
+                    .mut_minus(2, Degrees);
         }
     }
 
