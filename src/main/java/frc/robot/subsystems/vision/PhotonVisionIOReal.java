@@ -91,9 +91,7 @@ public class PhotonVisionIOReal implements VisionIO {
                 }
                 scoreParameters =
                         Optional.of(
-                                new ScoreParameters(
-                                        inputs.distanceToSpeaker,
-                                        Optional.of(inputs.yawToSpeaker)));
+                                new ScoreParameters(inputs.distanceToSpeaker, Optional.empty()));
             } else {
                 scoreParameters = Optional.empty();
             }

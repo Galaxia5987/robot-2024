@@ -43,7 +43,11 @@ public class LimelightIO implements VisionIO {
                             .getDistance(VisionConstants.getSpeakerPose());
             inputs.yawToSpeaker = Rotation2d.fromDegrees(LimelightHelpers.getTX(name));
             parameters =
-                    Optional.of(new ScoreParameters(inputs.distanceToSpeaker, Optional.empty()));
+                    Optional.of(
+                            new ScoreParameters(
+                                    inputs.distanceToSpeaker,
+                                    Optional.of(
+                                            Rotation2d.fromDegrees(LimelightHelpers.getTX(name)))));
         } else {
             parameters = Optional.empty();
         }
