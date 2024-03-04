@@ -1,7 +1,7 @@
 package frc.robot.subsystems.elevator;
 
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.Rotations;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -57,12 +57,12 @@ public class ElevatorIOReal implements ElevatorIO {
 
     public void openStopper() {
         inputs.stopperSetpoint = ElevatorConstants.OPEN_POSITION;
-        servo.setAngle(ElevatorConstants.OPEN_POSITION.in(Degrees));
+        servo.set(ElevatorConstants.OPEN_POSITION.in(Rotations));
     }
 
     public void closeStopper() {
         inputs.stopperSetpoint = ElevatorConstants.LOCKED_POSITION;
-        servo.setAngle(ElevatorConstants.LOCKED_POSITION.in(Degrees));
+        servo.set(ElevatorConstants.LOCKED_POSITION.in(Rotations));
     }
 
     public void stopMotor() {

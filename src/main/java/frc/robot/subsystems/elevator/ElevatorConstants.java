@@ -19,8 +19,8 @@ public class ElevatorConstants { // TODO: check real values
     public static final double DRUM_RADIUS = 0.0125; // [m]
     public static final double CIRCUMFERENCE = DRUM_RADIUS * (2 * Math.PI);
 
-    public static final MutableMeasure<Angle> OPEN_POSITION = Units.Degrees.of(179).mutableCopy();
-    public static final MutableMeasure<Angle> LOCKED_POSITION = Units.Degrees.of(170).mutableCopy();
+    public static final MutableMeasure<Angle> OPEN_POSITION = Units.Degrees.of(20).mutableCopy();
+    public static final MutableMeasure<Angle> LOCKED_POSITION = Units.Degrees.of(140).mutableCopy();
     public static final MutableMeasure<Dimensionless> HEIGHT_TOLERANCE =
             Units.Percent.of(1).mutableCopy();
     public static final MutableMeasure<Dimensionless> STOPPER_TOLERANCE =

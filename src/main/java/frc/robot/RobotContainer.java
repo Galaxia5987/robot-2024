@@ -58,6 +58,7 @@ public class RobotContainer {
     private final CommandXboxController xboxController = new CommandXboxController(0);
     private final CommandPS5Controller driveController = new CommandPS5Controller(1);
     private final CommandXboxController testController = new CommandXboxController(2);
+    private final CommandXboxController testController2 = new CommandXboxController(3);
     private final CommandJoystick joystick = new CommandJoystick(3);
     private final CommandGroups commandGroups;
     private final SendableChooser<Command> autoChooser;
