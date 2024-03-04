@@ -6,6 +6,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.lib.PoseEstimation;
@@ -24,6 +25,7 @@ import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
+import frc.robot.subsystems.vision.LimelightHelpers;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
@@ -100,10 +102,27 @@ public class CommandGroups {
     }
 
     public Command intake() {
+        Command blink =
+                new ScheduleCommand(
+                        Commands.repeatingSequence(
+                                        Commands.runOnce(
+                                                () ->
+                                                        LimelightHelpers.setLEDMode_ForceOn(
+                                                                "limelight")),
+                                        Commands.waitSeconds(0.1),
+                                        Commands.runOnce(
+                                                () ->
+                                                        LimelightHelpers.setLEDMode_ForceOff(
+                                                                "limelight")))
+                                .withTimeout(2)
+                                .andThen(
+                                        Commands.runOnce(
+                                                () ->
+                                                        LimelightHelpers.setLEDMode_ForceOff(
+                                                                "limelight"))));
         return Commands.parallel(intake.intake(), gripper.setRollerPower(0.4))
                 .until(gripper::hasNote)
-                .andThen(Commands.parallel(intake.stop(), gripper.setRollerPower(0)))
-                //                                .alongWith(leds.solidSecondary(1, 60)))
+                .andThen(Commands.parallel(blink, intake.stop(), gripper.setRollerPower(0)))
                 .withName("intake");
     }
 
