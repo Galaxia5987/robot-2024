@@ -152,7 +152,7 @@ public class SwerveDrive extends SubsystemBase {
                                 ScoreState.isRed()
                                         ? Rotation2d.fromDegrees(180)
                                         : new Rotation2d()));
-        estimator.resetPosition(getOdometryYaw(), modulePositions, pose);
+        estimator.resetPosition(pose.getRotation(), modulePositions, pose);
     }
 
     public void resetPose() {
