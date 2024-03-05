@@ -269,7 +269,9 @@ public class RobotContainer {
         xboxController.start().onTrue(elevator.lock());
         xboxController.back().onTrue(elevator.unlock());
         xboxController
-                .leftBumper().whileTrue(commandGroups.closeSpeakerWarmup()).onFalse(commandGroups.stopShooting());
+                .leftBumper()
+                .whileTrue(commandGroups.closeSpeakerWarmup())
+                .onFalse(commandGroups.stopShooting());
         xboxController
                 .rightBumper()
                 .whileTrue(gripper.setRollerPower(0.4))

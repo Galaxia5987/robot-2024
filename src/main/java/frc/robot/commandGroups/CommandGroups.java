@@ -234,8 +234,9 @@ public class CommandGroups {
                 shootAndConvey(ShootingManager.getInstance().getShooterCommandedVelocity()));
     }
 
-    public Command closeSpeakerWarmup(){
-        return hood.setAngle(Units.Degrees.of(107).mutableCopy()).alongWith(shootAndConvey(Units.RotationsPerSecond.of(50).mutableCopy()));
+    public Command closeSpeakerWarmup() {
+        return hood.setAngle(Units.Degrees.of(107).mutableCopy())
+                .alongWith(shootAndConvey(Units.RotationsPerSecond.of(50).mutableCopy()));
     }
 
     public Command stopShooting() {
