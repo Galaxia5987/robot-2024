@@ -174,7 +174,7 @@ public class RobotContainer {
                 swerveDrive.driveCommand(
                         () -> -driveController.getLeftY(),
                         () -> -driveController.getLeftX(),
-                        () -> 0.5 * -driveController.getRightX(), // 0.6
+                        () -> 0.4 * -driveController.getRightX(), // 0.6
                         0.1,
                         () -> true));
 
@@ -227,7 +227,7 @@ public class RobotContainer {
                         commandGroups
                                 .shootAndConvey(Units.RotationsPerSecond.of(50).mutableCopy())
                                 .alongWith(
-                                        hood.setAngle(Units.Degrees.of(109).mutableCopy()),
+                                        hood.setAngle(Units.Degrees.of(108).mutableCopy()),
                                         commandGroups.feedWithWait(
                                                 () ->
                                                         (shooter.atSetpoint()
