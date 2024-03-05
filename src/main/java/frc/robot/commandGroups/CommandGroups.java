@@ -112,7 +112,7 @@ public class CommandGroups {
                                         Commands.waitSeconds(0.1),
                                         Commands.runOnce(
                                                 () ->
-                                                         LimelightHelpers.setLEDMode_ForceOff(
+                                                        LimelightHelpers.setLEDMode_ForceOff(
                                                                 "limelight")))
                                 .withTimeout(2)
                                 .andThen(

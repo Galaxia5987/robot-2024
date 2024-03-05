@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
@@ -58,8 +57,6 @@ public class RobotContainer {
     private final CommandXboxController xboxController = new CommandXboxController(0);
     private final CommandPS5Controller driveController = new CommandPS5Controller(1);
     private final CommandXboxController testController = new CommandXboxController(2);
-    private final CommandXboxController testController2 = new CommandXboxController(3);
-    private final CommandJoystick joystick = new CommandJoystick(3);
     private final CommandGroups commandGroups;
     private final SendableChooser<Command> autoChooser;
     @Getter @Setter private boolean isForceShooting = false;
@@ -199,6 +196,7 @@ public class RobotContainer {
         testController.b().whileTrue(leds.blink(2, 1, 120));
         testController.x().whileTrue(leds.rainbow(1, 120));
         testController.y().whileTrue(leds.fade(6, 1, 120));
+        testController.rightBumper().onTrue(commandGroups.allBits());
 
         driveController.triangle().onTrue(Commands.runOnce(swerveDrive::resetGyro));
         driveController
@@ -208,6 +206,28 @@ public class RobotContainer {
                                 .shootAndConvey(Units.RotationsPerSecond.of(50).mutableCopy())
                                 .alongWith(
                                         hood.setAngle(Units.Degrees.of(107).mutableCopy()),
+                                        commandGroups.feedWithWait(
+                                                () ->
+                                                        (shooter.atSetpoint()
+                                                                        && hood.getAngle()
+                                                                                        .minus(
+                                                                                                Units
+                                                                                                        .Degrees
+                                                                                                        .of(
+                                                                                                                107))
+                                                                                        .in(
+                                                                                                Units
+                                                                                                        .Degrees)
+                                                                                < 2)
+                                                                || isForceShooting)))
+                .onFalse(commandGroups.stopShooting());
+        driveController
+                .square()
+                .whileTrue(
+                        commandGroups
+                                .shootAndConvey(Units.RotationsPerSecond.of(50).mutableCopy())
+                                .alongWith(
+                                        hood.setAngle(Units.Degrees.of(109).mutableCopy()),
                                         commandGroups.feedWithWait(
                                                 () ->
                                                         (shooter.atSetpoint()
