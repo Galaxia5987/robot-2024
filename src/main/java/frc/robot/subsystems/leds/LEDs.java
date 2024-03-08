@@ -57,8 +57,8 @@ public class LEDs extends SubsystemBase {
         timer.reset();
     }
 
-    public void setSolidColor(Color color, int start, int end) {
-        for (int i = start; i < end; i++) {
+    public void setSolidColor(Color color) {
+        for (int i = 0; i < ledBuffer.getLength(); i++) {
             ledBuffer.setLED(i, color);
         }
         ledStrip.setData(ledBuffer);
@@ -81,7 +81,7 @@ public class LEDs extends SubsystemBase {
         fadeColor = new Color((int) solution.getX(), (int) solution.getY(), (int) solution.getZ());
     }
 
-    public void setRainbow(int start, int end) {
+    public void setRainbow() {
         if (timer.advanceIfElapsed(0.05)) {
             for (var i = 0; i < ledBuffer.getLength(); i++) {
 
