@@ -12,8 +12,8 @@ public class LEDsDefaultCommand extends Command {
     private final LEDs leds;
     private final Gripper gripper = Gripper.getInstance();
 
-    private Color primaryColor;
-    private Color secondaryColor;
+    private Color primaryColor = Color.kBlue;
+    private Color secondaryColor = Color.kBlack;
     private boolean primary = true;
     private boolean rainbow;
     private double blinkTime;
@@ -23,6 +23,7 @@ public class LEDsDefaultCommand extends Command {
 
     public LEDsDefaultCommand(LEDs leds) {
         this.leds = leds;
+        addRequirements(leds);
     }
 
     @Override
