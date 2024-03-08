@@ -1,0 +1,153 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.4213939522026635,
+        "y": 4.3344249538371855
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.3512290255480237,
+        "y": 2.685549177453154
+      },
+      "isLocked": false,
+      "linkedName": "CL"
+    },
+    {
+      "anchor": {
+        "x": 4.773704362223539,
+        "y": 3.613493722713942
+      },
+      "prevControl": {
+        "x": 3.6861479990766246,
+        "y": 3.028786000591945
+      },
+      "nextControl": {
+        "x": 5.213717101513713,
+        "y": 3.8500597115796276
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.293678213604645,
+        "y": 4.122214464115091
+      },
+      "prevControl": {
+        "x": 7.11256861491821,
+        "y": 4.344403398521447
+      },
+      "nextControl": {
+        "x": 8.443081609747006,
+        "y": 4.094108874741774
+      },
+      "isLocked": false,
+      "linkedName": "center note line #3"
+    },
+    {
+      "anchor": {
+        "x": 4.773704362223539,
+        "y": 3.718741112695901
+      },
+      "prevControl": {
+        "x": 5.648265032613916,
+        "y": 4.5433268876354
+      },
+      "nextControl": {
+        "x": 3.545818145767345,
+        "y": 2.561019822894347
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.9203306782681937,
+        "y": 3.613493722713942
+      },
+      "prevControl": {
+        "x": 2.3530143926384723,
+        "y": 3.1340333905739044
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "C Score"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 2,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "intake",
+      "waypointRelativePos": 1.05,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathRotation"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop intake",
+      "waypointRelativePos": 2.6,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "stopIntake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "adjustToTarget"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -44.999999999999986,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "CL34",
+  "previewStartingState": {
+    "rotation": -1.363927531602984,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

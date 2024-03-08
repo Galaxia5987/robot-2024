@@ -1,0 +1,109 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.47,
+        "y": 6.37
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.536099143457196,
+        "y": 3.62691005667047
+      },
+      "isLocked": false,
+      "linkedName": "A2"
+    },
+    {
+      "anchor": {
+        "x": 8.293678213604645,
+        "y": 4.122214464115091
+      },
+      "prevControl": {
+        "x": 7.802523727022168,
+        "y": 4.23915600853949
+      },
+      "nextControl": {
+        "x": 8.373311236424318,
+        "y": 4.103254220586598
+      },
+      "isLocked": false,
+      "linkedName": "center note line #3"
+    },
+    {
+      "anchor": {
+        "x": 2.1542137671169925,
+        "y": 5.063568873576495
+      },
+      "prevControl": {
+        "x": 5.316079800805683,
+        "y": 4.631135153006649
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "A3"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "intake",
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop intake",
+      "waypointRelativePos": 1.45,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "retractIntake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -3.0940580589172537,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "AH123",
+  "previewStartingState": {
+    "rotation": 28.271665156480033,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

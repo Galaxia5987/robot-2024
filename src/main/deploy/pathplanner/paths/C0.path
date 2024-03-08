@@ -1,0 +1,70 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.7417791758660457,
+        "y": 4.410523436431489
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.2535546523432073,
+        "y": 4.232968679286352
+      },
+      "isLocked": false,
+      "linkedName": "C"
+    },
+    {
+      "anchor": {
+        "x": 1.6067309488308548,
+        "y": 4.1046482092964185
+      },
+      "prevControl": {
+        "x": 1.39784299924834,
+        "y": 4.2613141714833045
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "C0"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "adjustToTarget",
+      "waypointRelativePos": 1.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "adjustToTarget"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -44.999999999999936,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "CL34",
+  "previewStartingState": {
+    "rotation": -60.57254359681024,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

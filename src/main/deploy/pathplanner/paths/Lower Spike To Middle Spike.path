@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.463171542119166,
+        "y": 4.417980133670191
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.3900607597652863,
+        "y": 5.023755187459485
+      },
+      "isLocked": false,
+      "linkedName": "Lower Spike"
+    },
+    {
+      "anchor": {
+        "x": 2.4005051572444116,
+        "y": 5.545975061415772
+      },
+      "prevControl": {
+        "x": 2.3796163622861606,
+        "y": 5.1908655471254965
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Middle Spike"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Lower",
+  "previewStartingState": null,
+  "useDefaultConstraints": false
+}

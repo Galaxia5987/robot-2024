@@ -4,13 +4,24 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.SignalLogger;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.example.ExampleSubsystemConstants;
+import frc.robot.lib.PoseEstimation;
+import frc.robot.scoreStates.LocalADStarAK;
+import frc.robot.subsystems.ShootingManager;
+import frc.robot.subsystems.conveyor.ConveyorConstants;
+import frc.robot.subsystems.elevator.ElevatorConstants;
+import frc.robot.subsystems.gripper.GripperConstants;
+import frc.robot.subsystems.hood.HoodConstants;
+import frc.robot.subsystems.intake.IntakeConstants;
+import frc.robot.subsystems.shooter.ShooterConstants;
+import frc.robot.subsystems.swerve.SwerveConstants;
+import frc.robot.subsystems.vision.VisionConstants;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -26,10 +37,10 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  * project.
  */
 public class Robot extends LoggedRobot {
-
     private final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
     private RobotContainer robotContainer;
     private Command autonomousCommand;
+    private final Field2d field2d = new Field2d();
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -37,6 +48,12 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void robotInit() {
+        if (Robot.isReal()) {
+            Constants.CURRENT_MODE = Constants.Mode.REAL;
+        } else {
+            Constants.CURRENT_MODE = Constants.Mode.SIM;
+        }
+
         // Initialize logger
         Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
         Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -48,7 +65,7 @@ public class Robot extends LoggedRobot {
                 Logger.recordMetadata("GitDirty", "All changes committed");
                 break;
             case 1:
-                Logger.recordMetadata("GitDirty", "Uncomitted changes");
+                Logger.recordMetadata("GitDirty", "Uncommitted changes");
                 break;
             default:
                 Logger.recordMetadata("GitDirty", "Unknown");
@@ -57,9 +74,9 @@ public class Robot extends LoggedRobot {
 
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                LoggedPowerDistribution.getInstance(0, PowerDistribution.ModuleType.kRev);
-                Logger.addDataReceiver(new WPILOGWriter());
+                LoggedPowerDistribution.getInstance();
                 Logger.addDataReceiver(new NT4Publisher());
+                Logger.addDataReceiver(new WPILOGWriter("/home/lvuser/logs"));
                 break;
             case SIM:
                 Logger.addDataReceiver(new NT4Publisher());
@@ -74,9 +91,17 @@ public class Robot extends LoggedRobot {
         }
 
         Logger.start();
-        SignalLogger.enableAutoLogging(true);
 
-        ExampleSubsystemConstants.initConstants();
+        Pathfinding.setPathfinder(new LocalADStarAK());
+
+        SwerveConstants.initConstants(true, Robot.isReal());
+        IntakeConstants.initConstants();
+        ConveyorConstants.initConstants();
+        ElevatorConstants.initConstants();
+        GripperConstants.initConstants();
+        HoodConstants.initConstants();
+        ShooterConstants.initConstants();
+
         robotContainer = RobotContainer.getInstance();
         compressor.enableDigital();
     }
@@ -90,13 +115,23 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void robotPeriodic() {
+        PoseEstimation.getInstance()
+                .processVisionMeasurements(Constants.VISION_MEASUREMENT_MULTIPLIER);
         CommandScheduler.getInstance().run();
+
+        Logger.recordOutput(
+                "Robot/DistanceToSpeaker", PoseEstimation.getInstance().getDistanceToSpeaker());
+        Logger.recordOutput("Robot/IsShooting", ShootingManager.getInstance().isShooting());
+        Logger.recordOutput("Robot/ReadyToShoot", ShootingManager.getInstance().readyToShoot());
+        field2d.setRobotPose(PoseEstimation.getInstance().getEstimatedPose());
+        Logger.recordOutput("Robot/SpeakerPose", VisionConstants.getSpeakerPose());
+        SmartDashboard.putData("Field", field2d);
     }
 
     /**
      * This autonomous (along with the chooser code above) shows how to select between different
      * autonomous modes using the dashboard. The sendable chooser code works with the Java
-     * SmartDashboard. If you prefer the LabVIEW Dashboard, remove all of the chooser code and
+     * SmartDashboard. If you prefer the LabVIEW Dashboard, remove all the chooser code and
      * uncomment the getString line to get the auto name from the text box below the Gyro
      *
      * <p>You can add additional auto modes by adding additional comparisons to the switch structure
@@ -105,6 +140,9 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void autonomousInit() {
+        Constants.VISION_MEASUREMENT_MULTIPLIER =
+                Constants.AUTO_START_VISION_MEASUREMENT_MULTIPLIER;
+
         // Make sure command is compiled beforehand, otherwise there will be a delay.
         autonomousCommand = robotContainer.getAutonomousCommand();
 
@@ -116,11 +154,15 @@ public class Robot extends LoggedRobot {
 
     /** This function is called periodically during autonomous. */
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+        ShootingManager.getInstance().updateCommandedState();
+    }
 
     /** This function is called once when teleop is enabled. */
     @Override
     public void teleopInit() {
+        Constants.VISION_MEASUREMENT_MULTIPLIER = Constants.TELEOP_VISION_MEASUREMENT_MULTIPLIER;
+
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
@@ -128,7 +170,9 @@ public class Robot extends LoggedRobot {
 
     /** This function is called periodically during operator control. */
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+        ShootingManager.getInstance().updateCommandedStateSimple();
+    }
 
     /** This function is called once when the robot is disabled. */
     @Override

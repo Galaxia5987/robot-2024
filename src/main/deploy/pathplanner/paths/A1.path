@@ -1,0 +1,121 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.9914421367304285,
+        "y": 6.9660616244309415
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.0516505981142705,
+        "y": 7.265914027271825
+      },
+      "isLocked": false,
+      "linkedName": "Score AH"
+    },
+    {
+      "anchor": {
+        "x": 8.118015665417921,
+        "y": 7.436381206571257
+      },
+      "prevControl": {
+        "x": 7.913244868665796,
+        "y": 7.449643941449865
+      },
+      "nextControl": {
+        "x": 8.243437703521947,
+        "y": 7.428257786309715
+      },
+      "isLocked": false,
+      "linkedName": "center note line #1"
+    },
+    {
+      "anchor": {
+        "x": 2.9914421367304285,
+        "y": 6.9660616244309415
+      },
+      "prevControl": {
+        "x": 5.934709053689871,
+        "y": 7.300996490599145
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Score AH"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 1.363927531602793,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "intake",
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathRotation"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop intake",
+      "waypointRelativePos": 1.65,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "adjustToTarget"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "stopIntake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 34.12669257634329,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "AH123",
+  "previewStartingState": {
+    "rotation": 14.846897555524825,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
