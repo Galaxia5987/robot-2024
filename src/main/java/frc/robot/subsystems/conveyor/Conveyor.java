@@ -8,6 +8,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -54,7 +55,7 @@ public class Conveyor extends SubsystemBase {
     }
 
     public Command stop() {
-        return setVelocity(STOP_VELOCITY);
+        return runOnce(io::stop);
     }
 
     @Override
