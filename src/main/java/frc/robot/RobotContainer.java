@@ -192,10 +192,6 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        testController.a().onTrue(leds.solid(new Color("#009cbd"), 1, 120));
-        testController.b().whileTrue(leds.blink(2, 1, 120));
-        testController.x().whileTrue(leds.rainbow(1, 120));
-        testController.y().whileTrue(leds.fade(6, 1, 120));
         testController.rightBumper().onTrue(commandGroups.allBits());
 
         driveController.triangle().onTrue(Commands.runOnce(swerveDrive::resetGyro));
