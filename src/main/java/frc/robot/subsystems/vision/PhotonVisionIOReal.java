@@ -5,6 +5,8 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.OptionalDouble;
+
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -33,6 +35,7 @@ public class PhotonVisionIOReal implements VisionIO {
                             PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR),
                     false);
     private Optional<ScoreParameters> scoreParameters = Optional.empty();
+    private OptionalDouble yawToNote = OptionalDouble.empty();
 
     public PhotonVisionIOReal(
             PhotonCamera camera,
@@ -59,6 +62,11 @@ public class PhotonVisionIOReal implements VisionIO {
     }
 
     @Override
+    public OptionalDouble getYawToNote() {
+        return yawToNote;
+    }
+
+    @Override
     public Optional<ScoreParameters> getScoreParameters() {
         return scoreParameters;
     }
@@ -71,6 +79,11 @@ public class PhotonVisionIOReal implements VisionIO {
 
         if (isNoteDetector) {
             inputs.yawNote = (camera.getLatestResult().getBestTarget().getYaw());
+            if (latestResult.hasTargets()) {
+                yawToNote = OptionalDouble.of(inputs.yawNote);
+            } else {
+                yawToNote = OptionalDouble.empty();
+            }
         }
 
         var estimatedPose = estimator.update(latestResult);

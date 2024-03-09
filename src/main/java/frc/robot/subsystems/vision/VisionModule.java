@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalDouble;
 
 public class VisionModule {
     public final VisionIO[] ios;
@@ -27,5 +28,14 @@ public class VisionModule {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .toList();
+    }
+
+    public OptionalDouble getYawToNote() {
+        for (VisionIO io : ios) {
+            if (io.getYawToNote().isPresent()) {
+                return io.getYawToNote();
+            }
+        }
+        return OptionalDouble.empty();
     }
 }
