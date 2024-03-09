@@ -37,15 +37,17 @@ public class LEDsDefaultCommand extends Command {
 
     @Override
     public void execute() {
-        if (noteTimer.hasElapsed(3)) {
+        if (noteTimer.hasElapsed(2)) {
             switch (RobotContainer.getInstance().getState()) {
                 case SHOOT:
                     primaryColor = Color.kBlue;
                     blinkTime = 0.5;
+                    rainbow = false;
                     break;
                 case AMP:
-                    primaryColor = Color.kRed;
+                    primaryColor = Color.kGreen;
                     blinkTime = 0.5;
+                    rainbow = false;
                     break;
                 case CLIMB:
                     rainbow = true;
@@ -53,15 +55,15 @@ public class LEDsDefaultCommand extends Command {
             }
 
             if (gripper.hasNote()) {
-                secondaryColor = Color.kOrange;
+                secondaryColor = Color.kDarkOrange;
             } else {
-                secondaryColor = Color.kBlack;
+                secondaryColor = primaryColor;
             }
 
             noteTrigger.update(gripper.hasNote());
             if (noteTrigger.triggered()) {
                 blinkTime = 0.1;
-                primaryColor = Color.kOrange;
+                primaryColor = Color.kDarkOrange;
                 secondaryColor = Color.kBlack;
 
                 noteTimer.reset();

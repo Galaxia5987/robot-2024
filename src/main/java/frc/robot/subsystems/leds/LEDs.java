@@ -94,7 +94,7 @@ public class LEDs extends SubsystemBase {
 
                 ledBuffer.setHSV(i, hue, 255, 128);
             }
-            rainbowFirstPixelHue += 15;
+            rainbowFirstPixelHue += 8;
             // Check bounds
             rainbowFirstPixelHue %= 180;
             ledStrip.setData(ledBuffer);
