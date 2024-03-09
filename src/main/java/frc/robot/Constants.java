@@ -24,7 +24,7 @@ public class Constants {
     public static final double AUTO_VISION_MEASUREMENT_MULTIPLIER = 0.5;
     public static final double AUTO_START_VISION_MEASUREMENT_MULTIPLIER = 1_000_000_000;
     public static final double TELEOP_VISION_MEASUREMENT_MULTIPLIER = 0.5;
-    public static final Transform3d SPEAKER_RIGHT_CAMERA_1_POSE =
+    public static final Transform3d SPEAKER_RIGHT_CAMERA_POSE =
             new Transform3d(
                     -0.289_36,
                     0.341_15,
@@ -148,7 +148,7 @@ public class Constants {
                 speakerRightCamera = new PhotonVisionIOReal(
                         new PhotonCamera("OV2311_1"),
                         "Speaker_Right_Camera",
-                        SPEAKER_RIGHT_CAMERA_1_POSE,
+                        SPEAKER_RIGHT_CAMERA_POSE,
                         field,
                         true,
                         false);
@@ -175,7 +175,7 @@ public class Constants {
                         SimCameraProperties.LL2_1280_720());
                 speakerRightCamera = new VisionSimIO(
                         new PhotonCamera("Speaker_Right_Camera"),
-                        SPEAKER_RIGHT_CAMERA_1_POSE,
+                        SPEAKER_RIGHT_CAMERA_POSE,
                         field,
                         SimCameraProperties.LL2_1280_720());
                 intakeAprilTagCamera = new VisionSimIO(
