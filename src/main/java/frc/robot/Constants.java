@@ -8,6 +8,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.*;
 import frc.robot.scoreStates.ScoreState;
 import frc.robot.subsystems.swerve.*;
@@ -114,7 +115,14 @@ public class Constants {
                 () -> swerveDrive.getEstimator().getEstimatedPosition(),
                 swerveDrive::resetPose,
                 swerveDrive::getCurrentSpeeds,
-                (speeds) -> swerveDrive.drive(speeds, false),
+                (speeds) -> {
+                    var speedsOffset = new ChassisSpeeds(); //TODO: some claculation PID stuff רבי שלמה רבי שלמה רבי שלמה רבי שלמה אבינו מכלנו שבשמיים
+                    if(distanceFromNote <= 0.2){
+                       speedsOffset = new ChassisSpeeds(0,pidYSpeed,0);
+                    }
+
+                    swerveDrive.drive(speeds.plus(speedsOffset), false);
+                },
                 new HolonomicPathFollowerConfig(
                         new PIDConstants(5.5, 0, 0.15),
                         new PIDConstants(3, 0, 0.4),
