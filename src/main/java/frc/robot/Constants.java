@@ -24,19 +24,19 @@ public class Constants {
     public static final double AUTO_VISION_MEASUREMENT_MULTIPLIER = 0.5;
     public static final double AUTO_START_VISION_MEASUREMENT_MULTIPLIER = 1_000_000_000;
     public static final double TELEOP_VISION_MEASUREMENT_MULTIPLIER = 0.5;
-    public static final Transform3d SPEAKER_RIGHT_CAMERA_POSE =
+    public static final Transform3d SPEAKER_RIGHT_CAMERA_POSE = // TODO: Find real position
             new Transform3d(
                     -0.289_36,
                     0.341_15,
                     0.2,
                     new Rotation3d(0, -Math.toRadians(31.92), Math.toRadians(180)));
-    public static final Transform3d SPEAKER_LEFT_CAMERA_POSE =
+    public static final Transform3d SPEAKER_LEFT_CAMERA_POSE = // TODO: Find real position
             new Transform3d(
                     -0.346_52,
                     -0.285_32,
                     0.2,
                     new Rotation3d(0, -Math.toRadians(31.92), -Math.toRadians(100)));
-    public static final Transform3d INTAKE_APRILTAG_CAMERA_POSE =
+    public static final Transform3d INTAKE_APRILTAG_CAMERA_POSE = // TODO: Find real position
             new Transform3d(0.061, 0.2848, 0.55, new Rotation3d(0, -Math.toRadians(10.0), 0));
     public static final Transform3d FRONT_RIGHT_CAMERA_POSE =
             new Transform3d(0.061, -0.2848, 0.55, new Rotation3d(0, -Math.toRadians(25.0), 0));
