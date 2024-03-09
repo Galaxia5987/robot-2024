@@ -15,6 +15,7 @@ public class PhotonVisionIOReal implements VisionIO {
     private final PhotonPoseEstimator estimator;
     private final Transform3d robotToCamera;
     private final boolean calculateScoreParams;
+    private boolean isNoteDetector;
     private VisionResult result =
             new VisionResult(
                     new EstimatedRobotPose(
@@ -37,10 +38,12 @@ public class PhotonVisionIOReal implements VisionIO {
             PhotonCamera camera,
             Transform3d robotToCamera,
             AprilTagFieldLayout field,
-            boolean calculateScoreParams) {
+            boolean calculateScoreParams,
+            boolean isNoteDetector) {
         this.camera = camera;
         this.robotToCamera = robotToCamera;
         this.calculateScoreParams = calculateScoreParams;
+        this.isNoteDetector = isNoteDetector;
         camera.setPipelineIndex(0);
         estimator =
                 new PhotonPoseEstimator(
@@ -65,6 +68,10 @@ public class PhotonVisionIOReal implements VisionIO {
         inputs.isConnected = camera.isConnected();
 
         var latestResult = camera.getLatestResult();
+
+        if (isNoteDetector) {
+            inputs.yawNote = (camera.getLatestResult().getBestTarget().getYaw());
+        }
 
         var estimatedPose = estimator.update(latestResult);
         if (estimatedPose.isPresent()) {

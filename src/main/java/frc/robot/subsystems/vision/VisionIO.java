@@ -31,5 +31,6 @@ public interface VisionIO {
         public boolean seesSpeaker = false;
         public double distanceToSpeaker;
         public Rotation2d yawToSpeaker;
+        public double yawNote = 0;
     }
 }

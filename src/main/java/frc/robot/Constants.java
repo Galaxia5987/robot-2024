@@ -138,6 +138,7 @@ public class Constants {
                                         new PhotonCamera("Back_right_camera"),
                                         BACK_RIGHT_CAMERA_POSE,
                                         AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
+                                        false,
                                         false));
                 leftOpi =
                         new VisionModule(
@@ -145,7 +146,8 @@ public class Constants {
                                         new PhotonCamera("Back_left_camera"),
                                         BACK_LEFT_CAMERA_POSE,
                                         AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                                        true));
+                                        true,
+                                        false));
                 break;
             default:
                 lamelight = new VisionModule();
