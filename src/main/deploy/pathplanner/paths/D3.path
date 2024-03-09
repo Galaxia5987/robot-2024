@@ -113,6 +113,12 @@
               "data": {
                 "name": "adjustToTarget"
               }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathSpeeds"
+              }
             }
           ]
         }
@@ -129,6 +135,12 @@
               "type": "named",
               "data": {
                 "name": "intake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "useNoteDetection"
               }
             }
           ]
@@ -158,7 +170,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "D345",
+  "folder": null,
   "previewStartingState": null,
   "useDefaultConstraints": true
 }

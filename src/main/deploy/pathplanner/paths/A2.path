@@ -71,6 +71,12 @@
               "data": {
                 "name": "followPathRotation"
               }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "useNoteDetection"
+              }
             }
           ]
         }
@@ -94,6 +100,12 @@
               "data": {
                 "name": "stopIntake"
               }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathSpeeds"
+              }
             }
           ]
         }
@@ -112,7 +124,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "AH123",
+  "folder": null,
   "previewStartingState": {
     "rotation": 34.230301561891984,
     "velocity": 0

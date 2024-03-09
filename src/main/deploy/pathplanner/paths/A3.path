@@ -65,6 +65,12 @@
               "data": {
                 "name": "intake"
               }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "useNoteDetection"
+              }
             }
           ]
         }
@@ -81,6 +87,12 @@
               "type": "named",
               "data": {
                 "name": "retractIntake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathSpeeds"
               }
             }
           ]
@@ -100,7 +112,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "AH123",
+  "folder": null,
   "previewStartingState": {
     "rotation": 28.271665156480033,
     "velocity": 0

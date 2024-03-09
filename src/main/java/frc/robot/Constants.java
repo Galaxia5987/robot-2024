@@ -106,11 +106,12 @@ public class Constants {
                 swerveDrive::getCurrentSpeeds,
                 (speeds) -> {
                     //fixes diversion from note during autonomous
-                    var vyOffset = new ChassisSpeeds();
-                    if(Vision.getInstance().getYawToNote().isPresent()){
-                         new ChassisSpeeds(0,SwerveConstants.vyOffsetControllerAutonomous.calculate(Vision.getInstance().getYawToNote().getAsDouble(), 0), 0);
-                    }
-                    swerveDrive.drive(speeds.plus(vyOffset), false);
+
+                        if(Vision.getInstance().getYawToNote().isPresent()&&RobotContainer.getInstance().isIntaking){
+                            speeds.vyMetersPerSecond = SwerveConstants.vyOffsetControllerAutonomous.calculate(Vision.getInstance().getYawToNote().getAsDouble(), 0 );
+                        }
+
+                    swerveDrive.drive(speeds, false);
                 },
                 new HolonomicPathFollowerConfig(
                         new PIDConstants(5.5, 0, 0.15),
@@ -148,7 +149,7 @@ public class Constants {
                                         false));
                 driverCameraDes =
                         new VisionModule(
-                                new PhotonCamera("driverCameroDes"),
+                                new PhotonCamera("driver_Camero_Des"),
                                 DRIVER_CAM_POSE,
                                 AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
                                 true,

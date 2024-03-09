@@ -71,6 +71,12 @@
               "data": {
                 "name": "followPathRotation"
               }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "useNoteDetection"
+              }
             }
           ]
         }
@@ -94,6 +100,12 @@
               "data": {
                 "name": "adjustToTarget"
               }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathSpeeds"
+              }
             }
           ]
         }
@@ -112,7 +124,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "D345",
+  "folder": null,
   "previewStartingState": null,
   "useDefaultConstraints": true
 }
