@@ -32,6 +32,8 @@ public class HoodConstants {
     public static final LoggedTunableNumber ABSOLUTE_ENCODER_OFFSET =
             new LoggedTunableNumber("Hood/EncoderOffset");
 
+    public static final int ENCODER_TICKS_PER_REVOLUTION = 4096;
+
     public static final LoggedTunableNumber kP = new LoggedTunableNumber("Hood/kP");
     public static final LoggedTunableNumber kI = new LoggedTunableNumber("Hood/kI");
     public static final LoggedTunableNumber kD = new LoggedTunableNumber("Hood/kD");

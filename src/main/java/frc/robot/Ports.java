@@ -9,7 +9,7 @@ public final class Ports {
 
     public static final class Hood {
         public static final int MOTOR_ID = 9;
-        public static final int ENCODER_ID = 6;
+        public static final int ENCODER_ID = 21;
     }
 
     public static final class Conveyor {
