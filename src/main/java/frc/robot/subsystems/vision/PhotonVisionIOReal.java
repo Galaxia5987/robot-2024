@@ -36,14 +36,17 @@ public class PhotonVisionIOReal implements VisionIO {
                     false);
     private Optional<ScoreParameters> scoreParameters = Optional.empty();
     private OptionalDouble yawToNote = OptionalDouble.empty();
+    private final String name;
 
     public PhotonVisionIOReal(
             PhotonCamera camera,
+            String name,
             Transform3d robotToCamera,
             AprilTagFieldLayout field,
             boolean calculateScoreParams,
             boolean isNoteDetector) {
         this.camera = camera;
+        this.name = name;
         this.robotToCamera = robotToCamera;
         this.calculateScoreParams = calculateScoreParams;
         this.isNoteDetector = isNoteDetector;
@@ -154,6 +157,6 @@ public class PhotonVisionIOReal implements VisionIO {
 
     @Override
     public String getName() {
-        return camera.getName();
+        return name;
     }
 }
