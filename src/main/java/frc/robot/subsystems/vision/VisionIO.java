@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import java.util.Optional;
 import java.util.OptionalDouble;
-
 import org.littletonrobotics.junction.AutoLog;
 
 public interface VisionIO {

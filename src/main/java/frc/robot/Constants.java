@@ -40,11 +40,12 @@ public class Constants {
             new Transform3d(0.061, 0.2848, 0.55, new Rotation3d(0, -Math.toRadians(10.0), 0));
     public static final Transform3d FRONT_RIGHT_CAMERA_POSE =
             new Transform3d(0.061, -0.2848, 0.55, new Rotation3d(0, -Math.toRadians(25.0), 0));
-    public static final Transform3d DRIVER_CAMERA_POSE = new Transform3d(
-            0.0, // TODO: Find real value
-            0.0,
-            0.53,
-            new Rotation3d(0, Math.toRadians(20), 0));
+    public static final Transform3d DRIVER_CAMERA_POSE =
+            new Transform3d(
+                    0.0, // TODO: Find real value
+                    0.0,
+                    0.53,
+                    new Rotation3d(0, Math.toRadians(20), 0));
     public static final Measure<Voltage> NOMINAL_VOLTAGE = Units.Volts.of(12);
     public static final Measure<Distance> ROBOT_LENGTH = Units.Meters.of(0.584);
     public static final Measure<Velocity<Distance>> MAX_VELOCITY = Units.MetersPerSecond.of(4);
@@ -138,56 +139,64 @@ public class Constants {
         var field = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
         switch (CURRENT_MODE) {
             case REAL:
-                speakerLeftCamera = new PhotonVisionIOReal(
-                        new PhotonCamera("OV2311_0"),
-                        "Speaker_Left_Camera",
-                        SPEAKER_LEFT_CAMERA_POSE,
-                        field,
-                        true,
-                        false);
-                speakerRightCamera = new PhotonVisionIOReal(
-                        new PhotonCamera("OV2311_1"),
-                        "Speaker_Right_Camera",
-                        SPEAKER_RIGHT_CAMERA_POSE,
-                        field,
-                        true,
-                        false);
-                intakeAprilTagCamera = new PhotonVisionIOReal(
-                        new PhotonCamera("OV2311_2"),
-                        "Intake_AprilTag_Camera",
-                        INTAKE_APRILTAG_CAMERA_POSE,
-                        field,
-                        false,
-                        false);
-                driverCamera = new PhotonVisionIOReal(
-                        new PhotonCamera("Driver_Camera"),
-                        "Driver_Camera",
-                        DRIVER_CAMERA_POSE,
-                        field,
-                        false,
-                        true);
+                speakerLeftCamera =
+                        new PhotonVisionIOReal(
+                                new PhotonCamera("OV2311_0"),
+                                "Speaker_Left_Camera",
+                                SPEAKER_LEFT_CAMERA_POSE,
+                                field,
+                                true,
+                                false);
+                speakerRightCamera =
+                        new PhotonVisionIOReal(
+                                new PhotonCamera("OV2311_1"),
+                                "Speaker_Right_Camera",
+                                SPEAKER_RIGHT_CAMERA_POSE,
+                                field,
+                                true,
+                                false);
+                intakeAprilTagCamera =
+                        new PhotonVisionIOReal(
+                                new PhotonCamera("OV2311_2"),
+                                "Intake_AprilTag_Camera",
+                                INTAKE_APRILTAG_CAMERA_POSE,
+                                field,
+                                false,
+                                false);
+                driverCamera =
+                        new PhotonVisionIOReal(
+                                new PhotonCamera("Driver_Camera"),
+                                "Driver_Camera",
+                                DRIVER_CAMERA_POSE,
+                                field,
+                                false,
+                                true);
                 break;
             default:
-                speakerLeftCamera = new VisionSimIO(
-                        new PhotonCamera("Speaker_Left_Camera"),
-                        SPEAKER_LEFT_CAMERA_POSE,
-                        field,
-                        SimCameraProperties.LL2_1280_720());
-                speakerRightCamera = new VisionSimIO(
-                        new PhotonCamera("Speaker_Right_Camera"),
-                        SPEAKER_RIGHT_CAMERA_POSE,
-                        field,
-                        SimCameraProperties.LL2_1280_720());
-                intakeAprilTagCamera = new VisionSimIO(
-                        new PhotonCamera("Intake_AprilTag_Camera"),
-                        INTAKE_APRILTAG_CAMERA_POSE,
-                        field,
-                        SimCameraProperties.LL2_1280_720());
-                driverCamera = new VisionSimIO(
-                        new PhotonCamera("Driver_Camera"),
-                        DRIVER_CAMERA_POSE,
-                        field,
-                        SimCameraProperties.LL2_1280_720());
+                speakerLeftCamera =
+                        new VisionSimIO(
+                                new PhotonCamera("Speaker_Left_Camera"),
+                                SPEAKER_LEFT_CAMERA_POSE,
+                                field,
+                                SimCameraProperties.LL2_1280_720());
+                speakerRightCamera =
+                        new VisionSimIO(
+                                new PhotonCamera("Speaker_Right_Camera"),
+                                SPEAKER_RIGHT_CAMERA_POSE,
+                                field,
+                                SimCameraProperties.LL2_1280_720());
+                intakeAprilTagCamera =
+                        new VisionSimIO(
+                                new PhotonCamera("Intake_AprilTag_Camera"),
+                                INTAKE_APRILTAG_CAMERA_POSE,
+                                field,
+                                SimCameraProperties.LL2_1280_720());
+                driverCamera =
+                        new VisionSimIO(
+                                new PhotonCamera("Driver_Camera"),
+                                DRIVER_CAMERA_POSE,
+                                field,
+                                SimCameraProperties.LL2_1280_720());
                 break;
         }
         rightOpi = new VisionModule(driverCamera, intakeAprilTagCamera);
