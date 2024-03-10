@@ -5,6 +5,8 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.OptionalDouble;
+
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -15,6 +17,7 @@ public class PhotonVisionIOReal implements VisionIO {
     private final PhotonPoseEstimator estimator;
     private final Transform3d robotToCamera;
     private final boolean calculateScoreParams;
+    private boolean isNoteDetector;
     private VisionResult result =
             new VisionResult(
                     new EstimatedRobotPose(
@@ -32,15 +35,21 @@ public class PhotonVisionIOReal implements VisionIO {
                             PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR),
                     false);
     private Optional<ScoreParameters> scoreParameters = Optional.empty();
+    private OptionalDouble yawToNote = OptionalDouble.empty();
+    private final String name;
 
     public PhotonVisionIOReal(
             PhotonCamera camera,
+            String name,
             Transform3d robotToCamera,
             AprilTagFieldLayout field,
-            boolean calculateScoreParams) {
+            boolean calculateScoreParams,
+            boolean isNoteDetector) {
         this.camera = camera;
+        this.name = name;
         this.robotToCamera = robotToCamera;
         this.calculateScoreParams = calculateScoreParams;
+        this.isNoteDetector = isNoteDetector;
         camera.setPipelineIndex(0);
         estimator =
                 new PhotonPoseEstimator(
@@ -56,6 +65,11 @@ public class PhotonVisionIOReal implements VisionIO {
     }
 
     @Override
+    public OptionalDouble getYawToNote() {
+        return yawToNote;
+    }
+
+    @Override
     public Optional<ScoreParameters> getScoreParameters() {
         return scoreParameters;
     }
@@ -65,6 +79,15 @@ public class PhotonVisionIOReal implements VisionIO {
         inputs.isConnected = camera.isConnected();
 
         var latestResult = camera.getLatestResult();
+
+        if (isNoteDetector) {
+            inputs.yawNote = (camera.getLatestResult().getBestTarget().getYaw());
+            if (latestResult.hasTargets()) {
+                yawToNote = OptionalDouble.of(inputs.yawNote);
+            } else {
+                yawToNote = OptionalDouble.empty();
+            }
+        }
 
         var estimatedPose = estimator.update(latestResult);
         if (estimatedPose.isPresent()) {
@@ -134,6 +157,6 @@ public class PhotonVisionIOReal implements VisionIO {
 
     @Override
     public String getName() {
-        return camera.getName();
+        return name;
     }
 }

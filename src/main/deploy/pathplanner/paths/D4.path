@@ -81,6 +81,12 @@
               "data": {
                 "name": "followPathRotation"
               }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "useNoteDetection"
+              }
             }
           ]
         }
@@ -103,6 +109,12 @@
               "type": "named",
               "data": {
                 "name": "adjustToTarget"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathSpeeds"
               }
             }
           ]

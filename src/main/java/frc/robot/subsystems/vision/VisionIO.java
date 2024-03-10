@@ -4,6 +4,8 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import java.util.Optional;
+import java.util.OptionalDouble;
+
 import org.littletonrobotics.junction.AutoLog;
 
 public interface VisionIO {
@@ -24,6 +26,10 @@ public interface VisionIO {
         return Optional.empty();
     }
 
+    default OptionalDouble getYawToNote() {
+        return OptionalDouble.empty();
+    }
+
     @AutoLog
     class VisionInputs {
         public Pose3d poseFieldOriented = new Pose3d();
@@ -31,5 +37,6 @@ public interface VisionIO {
         public boolean seesSpeaker = false;
         public double distanceToSpeaker;
         public Rotation2d yawToSpeaker;
+        public double yawNote = 0;
     }
 }

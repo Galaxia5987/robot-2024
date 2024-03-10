@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.OptionalDouble;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
@@ -34,6 +36,15 @@ public class Vision extends SubsystemBase {
         List<VisionIO.ScoreParameters> params = new ArrayList<>();
         Arrays.stream(modules).forEach((module) -> params.addAll(module.getScoreParameters()));
         return params;
+    }
+
+    public OptionalDouble getYawToNote() {
+        for (VisionModule module : modules) {
+            if (module.getYawToNote().isPresent()) {
+                return module.getYawToNote();
+            }
+        }
+        return OptionalDouble.empty();
     }
 
     @Override

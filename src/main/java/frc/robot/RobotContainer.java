@@ -62,7 +62,8 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
     @Getter @Setter private boolean isForceShooting = false;
 
-    @Getter @AutoLogOutput private ScoreState.State state = ScoreState.State.SHOOT;
+    @AutoLogOutput private ScoreState.State state = ScoreState.State.SHOOT;
+    public boolean isIntaking = false;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
@@ -130,7 +131,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("finishScore", gripper.setRollerPower(0).withTimeout(0.05));
         NamedCommands.registerCommand(
                 "followPathRotation",
-                Commands.runOnce(() -> ShootingManager.getInstance().setShooting(false)));
+                        Commands.runOnce(() -> ShootingManager.getInstance().setShooting(false)));
+        NamedCommands.registerCommand("followPathSpeeds", Commands.runOnce(()->setIntaking(false)));
+        NamedCommands.registerCommand("useNoteDetection", Commands.runOnce(()->setIntaking(true)));
+
         NamedCommands.registerCommand("prepareShoot", prepare());
         NamedCommands.registerCommand("shootAndIntake", commandGroups.shootAndIntake());
         NamedCommands.registerCommand(
@@ -154,6 +158,10 @@ public class RobotContainer {
                 });
         autoChooser = AutoBuilder.buildAutoChooser("Safety B");
         SmartDashboard.putData("autoList", autoChooser);
+    }
+
+    private void setIntaking(boolean isIntaking) {
+        this.isIntaking = isIntaking;
     }
 
     public static RobotContainer getInstance() {

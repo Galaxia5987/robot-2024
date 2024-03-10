@@ -65,6 +65,12 @@
               "data": {
                 "name": "intake"
               }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "useNoteDetection"
+              }
             }
           ]
         }
@@ -81,6 +87,12 @@
               "type": "named",
               "data": {
                 "name": "retractIntake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathSpeeds"
               }
             }
           ]
