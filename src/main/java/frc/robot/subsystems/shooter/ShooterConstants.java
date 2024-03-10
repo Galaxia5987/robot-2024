@@ -46,7 +46,7 @@ public class ShooterConstants {
     public static final InterpolatingDoubleMap VELOCITY_BY_DISTANCE =
             ShootingCSV.parse(
                     Filesystem.getDeployDirectory()
-                            + "/shootdata/distance-to-velocity.csv"); // Velocity | Distance
+                            + "/shootdata/distance-to-shooter-velocity.csv"); // Velocity | Distance
     public static final InterpolatingDoubleMap FLIGHT_TIME_BY_DISTANCE =
             ShootingCSV.parse(
                     Filesystem.getDeployDirectory()
@@ -79,14 +79,14 @@ public class ShooterConstants {
                 TOP_kI.initDefault(0.0);
                 TOP_kD.initDefault(0.0);
                 TOP_kS.initDefault(0.0);
-                TOP_kV.initDefault(0.1272);
+                TOP_kV.initDefault(0.1282);
                 TOP_kA.initDefault(0);
                 //                TOP_kA.initDefault(0.057_19);
                 BOTTOM_kP.initDefault(0.3);
                 BOTTOM_kI.initDefault(0.0);
                 BOTTOM_kD.initDefault(0.0);
                 BOTTOM_kS.initDefault(0.0);
-                BOTTOM_kV.initDefault(0.1242);
+                BOTTOM_kV.initDefault(0.1232);
                 BOTTOM_kA.initDefault(0);
                 //                BOTTOM_kA.initDefault(0.057_19);
             case SIM:

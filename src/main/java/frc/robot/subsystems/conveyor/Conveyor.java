@@ -9,6 +9,7 @@ import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.lib.Utils;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -48,9 +49,11 @@ public class Conveyor extends SubsystemBase {
     }
 
     @AutoLogOutput
-    public boolean readyToFeed() {
-        return inputs.velocitySetpoint.isNear(
-                inputs.currentVelocity, SETPOINT_TOLERANCE.in(Units.Value));
+    public boolean atSetpoint() {
+        return Utils.epsilonEquals(
+                inputs.currentVelocity.in(Units.RotationsPerSecond),
+                inputs.velocitySetpoint.in(Units.RotationsPerSecond),
+                1);
     }
 
     public Command stop() {

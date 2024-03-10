@@ -69,17 +69,6 @@ public class CommandGroups {
                 .withName("retractGrillevator");
     }
 
-    public Command feed() {
-        return conveyor.feed()
-                .alongWith(
-                        Commands.waitUntil(conveyor::readyToFeed)
-                                .andThen(
-                                        gripper.setRollerAndWrist(
-                                                GripperConstants.OUTTAKE_POWER,
-                                                GripperConstants.INTAKE_ANGLE.mutableCopy())))
-                .withName("feed");
-    }
-
     public Command feedWithWait(BooleanSupplier otherReady) {
         return Commands.sequence(
                         Commands.waitSeconds(0.05),
@@ -146,14 +135,6 @@ public class CommandGroups {
                 .withName("outtakeGripper");
     }
 
-    public Command outtakeShooter() {
-        return retractGrillevator()
-                .andThen(
-                        Commands.parallel(
-                                feed(), shooter.setVelocity(ShooterConstants.OUTTAKE_POWER)))
-                .withName("outtakeShooter");
-    }
-
     public Command shootAndConvey(
             MutableMeasure<Velocity<Angle>> topVelocity,
             MutableMeasure<Velocity<Angle>> bottomVelocity) {
@@ -161,8 +142,15 @@ public class CommandGroups {
                 .alongWith(conveyor.setVelocity(bottomVelocity));
     }
 
-    public Command shootAndConvey(MutableMeasure<Velocity<Angle>> velocity) {
-        return shooter.setVelocity(velocity).alongWith(conveyor.setVelocity(velocity));
+    public Command shootAndConvey(
+            MutableMeasure<Velocity<Angle>> velocity, boolean useConveyorMap) {
+        return shooter.setVelocity(velocity)
+                .alongWith(
+                        conveyor.setVelocity(
+                                useConveyorMap
+                                        ? Units.RotationsPerSecond.of(50).mutableCopy()
+                                        : ShootingManager.getInstance()
+                                                .getConveyorCommandedVelocity()));
     }
 
     public Command grillevatorBit() {
@@ -204,7 +192,7 @@ public class CommandGroups {
     public Command shootToSpeaker(CommandXboxController driveController) {
         return Commands.parallel(
                 hood.setAngle(ShootingManager.getInstance().getHoodCommandedAngle()),
-                shootAndConvey(ShootingManager.getInstance().getShooterCommandedVelocity()),
+                shootAndConvey(ShootingManager.getInstance().getShooterCommandedVelocity(), true),
                 swerveDrive.driveAndAdjust(
                         ShootingManager.getInstance().getSwerveCommandedAngle(),
                         () -> -driveController.getLeftY(),
@@ -215,7 +203,7 @@ public class CommandGroups {
     public Command shootToSpeaker(CommandPS5Controller driveController) {
         return Commands.parallel(
                 hood.setAngle(ShootingManager.getInstance().getHoodCommandedAngle()),
-                shootAndConvey(ShootingManager.getInstance().getShooterCommandedVelocity()),
+                shootAndConvey(ShootingManager.getInstance().getShooterCommandedVelocity(), true),
                 swerveDrive.driveAndAdjust(
                         ShootingManager.getInstance().getSwerveCommandedAngle(),
                         () -> -driveController.getLeftY(),
@@ -226,12 +214,12 @@ public class CommandGroups {
     public Command shootToSpeaker() {
         return Commands.parallel(
                 hood.setAngle(ShootingManager.getInstance().getHoodCommandedAngle()),
-                shootAndConvey(ShootingManager.getInstance().getShooterCommandedVelocity()));
+                shootAndConvey(ShootingManager.getInstance().getShooterCommandedVelocity(), true));
     }
 
     public Command closeSpeakerWarmup() {
         return hood.setAngle(Units.Degrees.of(107).mutableCopy())
-                .alongWith(shootAndConvey(Units.RotationsPerSecond.of(50).mutableCopy()));
+                .alongWith(shootAndConvey(Units.RotationsPerSecond.of(50).mutableCopy(), false));
     }
 
     public Command stopShooting() {

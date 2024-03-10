@@ -6,7 +6,10 @@ import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.Constants;
+import frc.robot.lib.ShootingCSV;
+import frc.robot.lib.math.interpolation.InterpolatingDoubleMap;
 import frc.robot.lib.webconstants.LoggedTunableNumber;
 
 public class ConveyorConstants {
@@ -30,15 +33,20 @@ public class ConveyorConstants {
 
     public static final TalonFXConfiguration MOTOR_CONFIG = new TalonFXConfiguration();
 
+    public static final InterpolatingDoubleMap VELOCITY_BY_DISTANCE =
+            ShootingCSV.parse(
+                    Filesystem.getDeployDirectory()
+                            + "/shootdata/distance-to-conveyor-velocity.csv");
+
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                KP.initDefault(0.003);
+                KP.initDefault(1.0);
                 KI.initDefault(0.0);
                 KD.initDefault(0.0);
-                KS.initDefault(0.07);
-                KV.initDefault(0.1315);
-                KA.initDefault(0.002);
+                KS.initDefault(0.0);
+                KV.initDefault(0.1425);
+                KA.initDefault(0.0);
 
                 MOTOR_CONFIG
                         .withSlot0(
@@ -58,7 +66,7 @@ public class ConveyorConstants {
                         .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(GEAR_RATIO))
                         .withMotorOutput(
                                 new MotorOutputConfigs()
-                                        .withInverted(InvertedValue.CounterClockwise_Positive)
+                                        .withInverted(InvertedValue.Clockwise_Positive)
                                         .withNeutralMode(NeutralModeValue.Coast));
                 break;
             case SIM:

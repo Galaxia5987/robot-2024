@@ -42,7 +42,7 @@ public class HoodIOReal implements HoodIO {
                         .withFeedForward(
                                 Math.signum(
                                                         inputs.angleSetpoint
-                                                                .minus(inputs.internalAngle)
+                                                                .minus(inputs.absoluteEncoderAngle)
                                                                 .in(Units.Degrees))
                                                 * HoodConstants.kS.get()
                                         + torqueChassisCompensation

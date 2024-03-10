@@ -24,28 +24,23 @@ public class Constants {
     public static final double AUTO_VISION_MEASUREMENT_MULTIPLIER = 0.5;
     public static final double AUTO_START_VISION_MEASUREMENT_MULTIPLIER = 1_000_000_000;
     public static final double TELEOP_VISION_MEASUREMENT_MULTIPLIER = 0.5;
-    public static final Transform3d SPEAKER_RIGHT_CAMERA_POSE = // TODO: Find real position
+    public static final Transform3d SPEAKER_RIGHT_CAMERA_POSE =
             new Transform3d(
-                    -0.289_36,
-                    0.341_15,
-                    0.2,
-                    new Rotation3d(0, -Math.toRadians(31.92), Math.toRadians(180)));
-    public static final Transform3d SPEAKER_LEFT_CAMERA_POSE = // TODO: Find real position
+                    -0.065_833,
+                    -0.040_05,
+                    0.608_178,
+                    new Rotation3d(0, -Math.toRadians(25), Math.toRadians(180)));
+    public static final Transform3d SPEAKER_LEFT_CAMERA_POSE =
             new Transform3d(
-                    -0.346_52,
-                    -0.285_32,
-                    0.2,
-                    new Rotation3d(0, -Math.toRadians(31.92), -Math.toRadians(100)));
-    public static final Transform3d INTAKE_APRILTAG_CAMERA_POSE = // TODO: Find real position
-            new Transform3d(0.061, 0.2848, 0.55, new Rotation3d(0, -Math.toRadians(10.0), 0));
-    public static final Transform3d FRONT_RIGHT_CAMERA_POSE =
-            new Transform3d(0.061, -0.2848, 0.55, new Rotation3d(0, -Math.toRadians(25.0), 0));
+                    -0.065_833,
+                    0.039_95,
+                    0.608_178,
+                    new Rotation3d(0, -Math.toRadians(25), Math.toRadians(180)));
+    public static final Transform3d INTAKE_APRILTAG_CAMERA_POSE =
+            new Transform3d(
+                    -0.012_852, -0.0005, 0.635_282, new Rotation3d(0, -Math.toRadians(25), 0));
     public static final Transform3d DRIVER_CAMERA_POSE =
-            new Transform3d(
-                    0.0, // TODO: Find real value
-                    0.0,
-                    0.53,
-                    new Rotation3d(0, Math.toRadians(20), 0));
+            new Transform3d(0.0, 0.0, 0.53, new Rotation3d(0, Math.toRadians(20), 0));
     public static final Measure<Voltage> NOMINAL_VOLTAGE = Units.Volts.of(12);
     public static final Measure<Distance> ROBOT_LENGTH = Units.Meters.of(0.584);
     public static final Measure<Velocity<Distance>> MAX_VELOCITY = Units.MetersPerSecond.of(4);
@@ -110,8 +105,8 @@ public class Constants {
                 swerveDrive::getCurrentSpeeds,
                 (speeds) -> {
                     // Fixes diversion from note during autonomous
-                    if (Vision.getInstance().getYawToNote().isPresent()
-                            && RobotContainer.getInstance().isIntaking) {
+                    if (RobotContainer.getInstance().isIntaking
+                            && Vision.getInstance().getYawToNote().isPresent()) {
                         speeds.vyMetersPerSecond =
                                 SwerveConstants.vyOffsetControllerAutonomous.calculate(
                                         Vision.getInstance().getYawToNote().getAsDouble(), 0);
@@ -139,13 +134,13 @@ public class Constants {
         var field = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
         switch (CURRENT_MODE) {
             case REAL:
-                speakerLeftCamera =
+                intakeAprilTagCamera =
                         new PhotonVisionIOReal(
                                 new PhotonCamera("OV2311_0"),
-                                "Speaker_Left_Camera",
-                                SPEAKER_LEFT_CAMERA_POSE,
+                                "Intake_AprilTag_Camera",
+                                INTAKE_APRILTAG_CAMERA_POSE,
                                 field,
-                                true,
+                                false,
                                 false);
                 speakerRightCamera =
                         new PhotonVisionIOReal(
@@ -155,22 +150,22 @@ public class Constants {
                                 field,
                                 true,
                                 false);
-                intakeAprilTagCamera =
+                speakerLeftCamera =
                         new PhotonVisionIOReal(
                                 new PhotonCamera("OV2311_2"),
-                                "Intake_AprilTag_Camera",
-                                INTAKE_APRILTAG_CAMERA_POSE,
+                                "Speaker_Left_Camera",
+                                SPEAKER_LEFT_CAMERA_POSE,
                                 field,
-                                false,
+                                true,
                                 false);
-                driverCamera =
-                        new PhotonVisionIOReal(
-                                new PhotonCamera("Driver_Camera"),
-                                "Driver_Camera",
-                                DRIVER_CAMERA_POSE,
-                                field,
-                                false,
-                                true);
+                //                driverCamera =
+                //                        new PhotonVisionIOReal(
+                //                                new PhotonCamera("Driver_Camera"),
+                //                                "Driver_Camera",
+                //                                DRIVER_CAMERA_POSE,
+                //                                field,
+                //                                false,
+                //                                true);
                 break;
             default:
                 speakerLeftCamera =
@@ -199,7 +194,10 @@ public class Constants {
                                 SimCameraProperties.LL2_1280_720());
                 break;
         }
-        rightOpi = new VisionModule(driverCamera, intakeAprilTagCamera);
+        rightOpi =
+                new VisionModule(
+                        //                driverCamera,
+                        intakeAprilTagCamera);
         leftOpi = new VisionModule(speakerLeftCamera, speakerRightCamera);
         Vision.initialize(rightOpi, leftOpi);
     }

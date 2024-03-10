@@ -142,7 +142,7 @@ public class SwerveConstants {
 
                 ROBOT_WIDTH = 0.585;
                 ROBOT_LENGTH = 0.585;
-                WHEEL_DIAMETER = 0.102;
+                WHEEL_DIAMETER = 0.098_54;
                 DRIVE_REDUCTION = (1 / 2.0) * (24.0 / 22.0) * (15.0 / 45.0);
                 ANGLE_REDUCTION = (14.0 / 72.0) * 0.5;
 

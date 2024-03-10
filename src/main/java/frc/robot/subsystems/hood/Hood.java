@@ -72,7 +72,14 @@ public class Hood extends SubsystemBase {
         return Utils.epsilonEquals(
                 inputs.absoluteEncoderAngle.in(Units.Degrees),
                 inputs.angleSetpoint.in(Units.Degrees),
-                1.0);
+                0.5);
+    }
+
+    public boolean atSetpointFast() {
+        return Utils.epsilonEquals(
+                inputs.absoluteEncoderAngle.in(Units.Degrees),
+                inputs.angleSetpoint.in(Units.Degrees),
+                2.0);
     }
 
     public Command setAngle(MutableMeasure<Angle> angle) {

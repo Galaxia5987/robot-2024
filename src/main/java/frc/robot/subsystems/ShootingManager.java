@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.lib.Utils;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
+import frc.robot.subsystems.conveyor.Conveyor;
+import frc.robot.subsystems.conveyor.ConveyorConstants;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.shooter.Shooter;
@@ -28,10 +30,15 @@ public class ShootingManager {
     private final SwerveDrive swerveDrive;
     private final Hood hood;
     private final Shooter shooter;
+    private final Conveyor conveyor;
     private final Vision vision;
 
     @Getter
     private final MutableMeasure<Velocity<Angle>> shooterCommandedVelocity =
+            RotationsPerSecond.zero().mutableCopy();
+
+    @Getter
+    private final MutableMeasure<Velocity<Angle>> conveyorCommandedVelocity =
             RotationsPerSecond.zero().mutableCopy();
 
     @Getter private final MutableMeasure<Angle> hoodCommandedAngle = Degrees.zero().mutableCopy();
@@ -50,11 +57,14 @@ public class ShootingManager {
     private boolean isShooting = false;
     private final Debouncer usePoseEstimation = new Debouncer(0.1);
 
+    @Getter private double distanceToSpeaker = 0;
+
     private ShootingManager() {
         poseEstimation = PoseEstimation.getInstance();
         swerveDrive = SwerveDrive.getInstance();
         hood = Hood.getInstance();
         shooter = Shooter.getInstance();
+        conveyor = Conveyor.getInstance();
         vision = Vision.getInstance();
     }
 
@@ -70,6 +80,7 @@ public class ShootingManager {
         return poseEstimation.getDistanceToSpeaker() < maxShootingDistance.in(Meters)
                 && hood.atSetpoint()
                 && shooter.atSetpoint()
+                && conveyor.atSetpoint()
                 && (DriverStation.isAutonomous()
                         || Utils.epsilonEquals(
                                 swerveCommandedAngle.in(Degrees),
@@ -79,18 +90,24 @@ public class ShootingManager {
     }
 
     public void updateCommandedState() {
-        double distanceToTarget = poseEstimation.getDistanceToSpeaker();
+        distanceToSpeaker = poseEstimation.getDistanceToSpeaker();
 
-        if (distanceToTarget < maxWarmupDistance.in(Meters)) {
+        if (distanceToSpeaker < maxWarmupDistance.in(Meters)) {
             shooterCommandedVelocity.mut_replace(
                     ShooterConstants.VELOCITY_BY_DISTANCE.getInterpolated(
-                                    new InterpolatingDouble(distanceToTarget))
+                                    new InterpolatingDouble(distanceToSpeaker))
+                            .value,
+                    RotationsPerSecond);
+
+            conveyorCommandedVelocity.mut_replace(
+                    ConveyorConstants.VELOCITY_BY_DISTANCE.getInterpolated(
+                                    new InterpolatingDouble(distanceToSpeaker))
                             .value,
                     RotationsPerSecond);
 
             hoodCommandedAngle.mut_replace(
                     HoodConstants.ANGLE_BY_DISTANCE.getInterpolated(
-                                    new InterpolatingDouble(distanceToTarget))
+                                    new InterpolatingDouble(distanceToSpeaker))
                             .value,
                     Degrees);
         } else {
@@ -107,22 +124,28 @@ public class ShootingManager {
     public void updateCommandedStateSimple() {
         var scoreParameters = vision.getScoreParameters();
         if (scoreParameters.size() > 0) {
-            double distanceToTarget =
+            distanceToSpeaker =
                     scoreParameters.stream()
                                     .mapToDouble(VisionIO.ScoreParameters::distanceToSpeaker)
                                     .reduce(0, Double::sum)
                             / scoreParameters.size();
 
-            if (distanceToTarget < maxWarmupDistance.in(Meters)) {
+            if (distanceToSpeaker < maxWarmupDistance.in(Meters)) {
                 shooterCommandedVelocity.mut_replace(
                         ShooterConstants.VELOCITY_BY_DISTANCE.getInterpolated(
-                                        new InterpolatingDouble(distanceToTarget))
+                                        new InterpolatingDouble(distanceToSpeaker))
+                                .value,
+                        RotationsPerSecond);
+
+                conveyorCommandedVelocity.mut_replace(
+                        ConveyorConstants.VELOCITY_BY_DISTANCE.getInterpolated(
+                                        new InterpolatingDouble(distanceToSpeaker))
                                 .value,
                         RotationsPerSecond);
 
                 hoodCommandedAngle.mut_replace(
                         HoodConstants.ANGLE_BY_DISTANCE.getInterpolated(
-                                        new InterpolatingDouble(distanceToTarget))
+                                        new InterpolatingDouble(distanceToSpeaker))
                                 .value,
                         Degrees);
             } else {
@@ -132,14 +155,13 @@ public class ShootingManager {
 
             Rotation2d yawToTarget =
                     scoreParameters.stream()
-                            .filter((param) -> param.yaw().isPresent())
-                            .map((param) -> param.yaw().get())
+                            .map(VisionIO.ScoreParameters::yaw)
                             .reduce(new Rotation2d(), Rotation2d::plus)
                             .div(scoreParameters.size());
 
             swerveCommandedAngle
                     .mut_replace(
-                            -yawToTarget.getRotations()
+                            yawToTarget.getRotations()
                                     + swerveDrive.getOdometryYaw().getRotations(),
                             Rotations)
                     .mut_minus(2, Degrees);

@@ -36,6 +36,9 @@ public class PoseEstimation {
 
     public void processVisionMeasurements(double multiplier) {
         var results = vision.getResults();
+        if (results == null) {
+            return;
+        }
         for (VisionResult result : results) {
             if (result == null || !result.isUseForEstimation()) {
                 continue;

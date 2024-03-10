@@ -5,7 +5,10 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -64,6 +67,10 @@ public class RobotContainer {
 
     @Getter @AutoLogOutput private ScoreState.State state = ScoreState.State.SHOOT;
     public boolean isIntaking = false;
+
+    public final MutableMeasure<Angle> hoodTuningAngle = Units.Degrees.of(115).mutableCopy();
+    public final MutableMeasure<Velocity<Angle>> shooterTuningVelocity =
+            Units.RotationsPerSecond.of(50).mutableCopy();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
@@ -177,7 +184,7 @@ public class RobotContainer {
         return Commands.parallel(
                 hood.setAngle(ShootingManager.getInstance().getHoodCommandedAngle()),
                 commandGroups.shootAndConvey(
-                        ShootingManager.getInstance().getShooterCommandedVelocity()));
+                        ShootingManager.getInstance().getShooterCommandedVelocity(), true));
     }
 
     private void configureDefaultCommands() {
@@ -201,7 +208,7 @@ public class RobotContainer {
                 gripper.setWristPower(
                         () -> MathUtil.applyDeadband(-xboxController.getRightY(), 0.15) * 0.6));
 
-        leds.setDefaultCommand(new LEDsDefaultCommand(leds));
+        leds.setDefaultCommand(new LEDsDefaultCommand(leds).ignoringDisable(true));
     }
 
     private void configureButtonBindings() {
@@ -212,29 +219,30 @@ public class RobotContainer {
                 .circle()
                 .whileTrue(
                         commandGroups
-                                .shootAndConvey(Units.RotationsPerSecond.of(50).mutableCopy())
+                                .shootAndConvey(shooterTuningVelocity, false)
                                 .alongWith(
-                                        hood.setAngle(Units.Degrees.of(107).mutableCopy()),
+                                        hood.setAngle(hoodTuningAngle),
                                         commandGroups.feedWithWait(
                                                 () ->
                                                         (shooter.atSetpoint()
-                                                                        && hood.getAngle()
-                                                                                        .minus(
-                                                                                                Units
-                                                                                                        .Degrees
-                                                                                                        .of(
-                                                                                                                107))
-                                                                                        .in(
-                                                                                                Units
-                                                                                                        .Degrees)
-                                                                                < 2)
+                                                                        && conveyor.atSetpoint()
+                                                                        && hood.atSetpoint())
                                                                 || isForceShooting)))
                 .onFalse(commandGroups.stopShooting());
+        driveController
+                .circle()
+                .whileTrue(
+                        swerveDrive.driveAndAdjust(
+                                ShootingManager.getInstance().getSwerveCommandedAngle(),
+                                () -> -driveController.getLeftY(),
+                                () -> -driveController.getLeftX(),
+                                0.1));
         driveController
                 .square()
                 .whileTrue(
                         commandGroups
-                                .shootAndConvey(Units.RotationsPerSecond.of(50).mutableCopy())
+                                .shootAndConvey(
+                                        Units.RotationsPerSecond.of(50).mutableCopy(), false)
                                 .alongWith(
                                         hood.setAngle(Units.Degrees.of(108).mutableCopy()),
                                         commandGroups.feedWithWait(

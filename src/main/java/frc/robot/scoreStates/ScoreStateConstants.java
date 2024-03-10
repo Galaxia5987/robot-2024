@@ -33,7 +33,7 @@ public class ScoreStateConstants {
                     .collect(Collectors.toList());
     public static final Translation2d AMP_POSE_BLUE = new Translation2d(1.87, 7.64);
     public static final Translation2d AMP_POSE_RED = new Translation2d(14.67, 7.64);
-    public static final Translation2d SPEAKER_POSE_BLUE = new Translation2d(0.234_81, 5.547_944_2);
+    public static final Translation2d SPEAKER_POSE_BLUE = new Translation2d(0, 5.547_944_2);
     public static final Translation2d SPEAKER_POSE_RED =
             GeometryUtil.flipFieldPosition(SPEAKER_POSE_BLUE);
     public static final Rotation2d AMP_ROTATION_NORMAL = new Rotation2d(Math.toRadians(90));

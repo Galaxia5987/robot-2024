@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -104,6 +105,12 @@ public class Robot extends LoggedRobot {
 
         robotContainer = RobotContainer.getInstance();
         compressor.enableDigital();
+
+        SmartDashboard.putNumber(
+                "Hood Tuning Angle", robotContainer.hoodTuningAngle.in(Units.Degrees));
+        SmartDashboard.putNumber(
+                "Shooter Tuning Velocity",
+                robotContainer.shooterTuningVelocity.in(Units.RotationsPerSecond));
     }
 
     /**
@@ -120,12 +127,22 @@ public class Robot extends LoggedRobot {
         CommandScheduler.getInstance().run();
 
         Logger.recordOutput(
-                "Robot/DistanceToSpeaker", PoseEstimation.getInstance().getDistanceToSpeaker());
+                "Robot/DistanceToSpeaker", ShootingManager.getInstance().getDistanceToSpeaker());
         Logger.recordOutput("Robot/IsShooting", ShootingManager.getInstance().isShooting());
         Logger.recordOutput("Robot/ReadyToShoot", ShootingManager.getInstance().readyToShoot());
         field2d.setRobotPose(PoseEstimation.getInstance().getEstimatedPose());
         Logger.recordOutput("Robot/SpeakerPose", VisionConstants.getSpeakerPose());
         SmartDashboard.putData("Field", field2d);
+
+        robotContainer.hoodTuningAngle.mut_replace(
+                SmartDashboard.getNumber(
+                        "Hood Tuning Angle", robotContainer.hoodTuningAngle.in(Units.Degrees)),
+                Units.Degrees);
+        robotContainer.shooterTuningVelocity.mut_replace(
+                SmartDashboard.getNumber(
+                        "Shooter Tuning Velocity",
+                        robotContainer.shooterTuningVelocity.in(Units.RotationsPerSecond)),
+                Units.RotationsPerSecond);
     }
 
     /**

@@ -3,6 +3,7 @@ package frc.robot.subsystems.vision;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.OptionalDouble;
@@ -97,23 +98,13 @@ public class PhotonVisionIOReal implements VisionIO {
                                 .getTranslation()
                                 .toTranslation2d()
                                 .minus(VisionConstants.getSpeakerPose());
-                toSpeaker = new Translation2d(toSpeaker.getX(), toSpeaker.getY());
                 inputs.distanceToSpeaker = toSpeaker.getNorm();
-
-                var centerTag =
-                        latestResult.getTargets().stream()
-                                .filter(
-                                        (target) ->
-                                                target.getFiducialId()
-                                                        == VisionConstants.getSpeakerTag1())
-                                .toList();
-                if (!centerTag.isEmpty()) {
-                    var yaw = centerTag.get(0).getYaw();
-                    inputs.yawToSpeaker = Rotation2d.fromDegrees(yaw);
-                }
+                inputs.yawToSpeaker =
+                        new Rotation2d(toSpeaker.getX(), toSpeaker.getY())
+                                .minus(SwerveDrive.getInstance().getOdometryYaw());
                 scoreParameters =
                         Optional.of(
-                                new ScoreParameters(inputs.distanceToSpeaker, Optional.empty()));
+                                new ScoreParameters(inputs.distanceToSpeaker, inputs.yawToSpeaker));
             } else {
                 scoreParameters = Optional.empty();
             }
