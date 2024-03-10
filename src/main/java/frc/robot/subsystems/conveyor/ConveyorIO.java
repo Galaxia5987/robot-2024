@@ -11,6 +11,8 @@ public interface ConveyorIO {
 
     void updateInputs();
 
+    void stop();
+
     @AutoLog
     class ConveyorInputs {
         public MutableMeasure<Velocity<Angle>> velocitySetpoint =
