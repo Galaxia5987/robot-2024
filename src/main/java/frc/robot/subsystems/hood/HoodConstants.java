@@ -32,6 +32,8 @@ public class HoodConstants {
     public static final LoggedTunableNumber ABSOLUTE_ENCODER_OFFSET =
             new LoggedTunableNumber("Hood/EncoderOffset");
 
+    public static final int ENCODER_TICKS_PER_REVOLUTION = 4096;
+
     public static final LoggedTunableNumber kP = new LoggedTunableNumber("Hood/kP");
     public static final LoggedTunableNumber kI = new LoggedTunableNumber("Hood/kI");
     public static final LoggedTunableNumber kD = new LoggedTunableNumber("Hood/kD");
@@ -61,7 +63,7 @@ public class HoodConstants {
                 kV.initDefault(0);
                 kA.initDefault(0.0);
                 kG.initDefault(20.0);
-                ABSOLUTE_ENCODER_OFFSET.initDefault((274.33 - 33.48) / 360.0);
+                ABSOLUTE_ENCODER_OFFSET.initDefault((214.71 - 33.48) / 360.0);
             case SIM:
             case REPLAY:
                 kP.initDefault(10);
