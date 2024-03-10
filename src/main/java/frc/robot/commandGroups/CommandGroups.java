@@ -37,12 +37,10 @@ public class CommandGroups {
     private final Shooter shooter;
     private final Hood hood;
     private final Conveyor conveyor;
-    //    private final LEDs leds;
     private final SwerveDrive swerveDrive;
     private boolean override;
 
     private CommandGroups() {
-        //        leds = new LEDs(0, 60);
         intake = Intake.getInstance();
         gripper = Gripper.getInstance();
         elevator = Elevator.getInstance();
@@ -50,9 +48,6 @@ public class CommandGroups {
         hood = Hood.getInstance();
         conveyor = Conveyor.getInstance();
         swerveDrive = SwerveDrive.getInstance();
-
-        //        leds.setPrimary(Color.kAliceBlue);
-        //        leds.setSecondary(Color.kOrangeRed);
         override = false;
     }
 

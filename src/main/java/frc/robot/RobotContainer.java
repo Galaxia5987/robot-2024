@@ -34,6 +34,7 @@ import frc.robot.subsystems.hood.HoodIOReal;
 import frc.robot.subsystems.hood.HoodIOSim;
 import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.leds.LEDs;
+import frc.robot.subsystems.leds.LEDsDefaultCommand;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOReal;
@@ -61,7 +62,7 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
     @Getter @Setter private boolean isForceShooting = false;
 
-    @AutoLogOutput private ScoreState.State state = ScoreState.State.SHOOT;
+    @Getter @AutoLogOutput private ScoreState.State state = ScoreState.State.SHOOT;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
@@ -189,13 +190,11 @@ public class RobotContainer {
         gripper.setDefaultCommand(
                 gripper.setWristPower(
                         () -> MathUtil.applyDeadband(-xboxController.getRightY(), 0.15) * 0.6));
+
+        leds.setDefaultCommand(new LEDsDefaultCommand(leds));
     }
 
     private void configureButtonBindings() {
-        testController.a().onTrue(leds.solid(new Color("#009cbd"), 1, 120));
-        testController.b().whileTrue(leds.blink(2, 1, 120));
-        testController.x().whileTrue(leds.rainbow(1, 120));
-        testController.y().whileTrue(leds.fade(6, 1, 120));
         testController.rightBumper().onTrue(commandGroups.allBits());
 
         driveController.triangle().onTrue(Commands.runOnce(swerveDrive::resetGyro));
