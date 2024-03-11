@@ -116,7 +116,7 @@ public class RobotContainer {
         hood = Hood.getInstance();
         shooter = Shooter.getInstance();
 
-        leds = new LEDs(8, 120);
+        leds = new LEDs(9, 58);
         leds.setPrimary(Color.kDeepPink);
         leds.setSecondary(Color.kYellow);
 
