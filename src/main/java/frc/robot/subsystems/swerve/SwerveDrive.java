@@ -52,7 +52,7 @@ public class SwerveDrive extends SubsystemBase {
                     SwerveConstants.WHEEL_POSITIONS[3]);
 
     private final Derivative acceleration = new Derivative();
-    private final LinearFilter accelFilter = LinearFilter.movingAverage(15);
+    private final LinearFilter accelFilter = LinearFilter.movingAverage(1);
     @Getter private final SwerveDrivePoseEstimator estimator;
     private final SwerveDriveInputsAutoLogged loggerInputs = new SwerveDriveInputsAutoLogged();
     @Getter @AutoLogOutput private Pose2d botPose = new Pose2d();

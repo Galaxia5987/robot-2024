@@ -9,7 +9,8 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface VisionIO {
 
-    record ScoreParameters(double distanceToSpeaker, Rotation2d yaw) {}
+    record ScoreParameters(
+            double distanceToSpeaker, Optional<Rotation2d> yaw, Rotation2d alternateYaw) {}
 
     void setPipeLine(int pipeLineIndex);
 

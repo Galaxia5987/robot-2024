@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.lib.Utils;
+import frc.robot.subsystems.ShootingManager;
+import java.util.function.BooleanSupplier;
 import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -83,22 +85,19 @@ public class Hood extends SubsystemBase {
     }
 
     public Command setAngle(MutableMeasure<Angle> angle) {
-        return run(() -> {
-                    inputs.angleSetpoint.mut_replace(angle);
-                    io.setAngle(angle);
-                })
-                .withName("Set hood angle");
+        return setAngle(angle, () -> ShootingManager.getInstance().useChassisCompensation);
     }
 
-    public Command setAngle(MutableMeasure<Angle> angle, boolean useChassisCompensation) {
-        if (useChassisCompensation) {
-            return run(() -> {
-                        inputs.angleSetpoint.mut_replace(angle);
+    public Command setAngle(MutableMeasure<Angle> angle, BooleanSupplier useChassisCompensation) {
+        return run(() -> {
+                    inputs.angleSetpoint.mut_replace(angle);
+                    if (useChassisCompensation.getAsBoolean()) {
                         io.setAngle(angle, chassisCompensationTorque);
-                    })
-                    .withName("Set hood angle");
-        }
-        return setAngle(angle);
+                    } else {
+                        io.setAngle(angle);
+                    }
+                })
+                .withName("Set hood angle");
     }
 
     @AutoLogOutput(key = "Hood/Pose")

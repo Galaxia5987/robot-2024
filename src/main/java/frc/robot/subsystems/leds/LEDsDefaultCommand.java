@@ -1,6 +1,7 @@
 package frc.robot.subsystems.leds;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
@@ -79,5 +80,8 @@ public class LEDsDefaultCommand extends Command {
 
             leds.setSolidColor(primary ? primaryColor : secondaryColor);
         }
+
+        SmartDashboard.putString(
+                "LED Color", (primary ? primaryColor : secondaryColor).toHexString());
     }
 }

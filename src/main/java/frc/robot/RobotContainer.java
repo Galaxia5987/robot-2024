@@ -11,7 +11,6 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
@@ -60,7 +59,7 @@ public class RobotContainer {
     private final LEDs leds;
     private final CommandXboxController xboxController = new CommandXboxController(0);
     private final CommandPS5Controller driveController = new CommandPS5Controller(1);
-    private final CommandXboxController testController = new CommandXboxController(2);
+    //    private final CommandXboxController testController = new CommandXboxController(2);
     private final CommandGroups commandGroups;
     private final SendableChooser<Command> autoChooser;
     @Getter @Setter private boolean isForceShooting = false;
@@ -117,8 +116,6 @@ public class RobotContainer {
         shooter = Shooter.getInstance();
 
         leds = new LEDs(9, 58);
-        leds.setPrimary(Color.kDeepPink);
-        leds.setSecondary(Color.kYellow);
 
         Gripper.initialize(gripperIO, () -> Units.Meters.of(0));
         gripper = Gripper.getInstance();
@@ -212,7 +209,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        testController.rightBumper().onTrue(commandGroups.allBits());
+        //        testController.rightBumper().onTrue(commandGroups.allBits());
 
         driveController.triangle().onTrue(Commands.runOnce(swerveDrive::resetGyro));
         driveController

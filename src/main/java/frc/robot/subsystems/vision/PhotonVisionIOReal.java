@@ -99,12 +99,25 @@ public class PhotonVisionIOReal implements VisionIO {
                                 .toTranslation2d()
                                 .minus(VisionConstants.getSpeakerPose());
                 inputs.distanceToSpeaker = toSpeaker.getNorm();
-                inputs.yawToSpeaker =
-                        new Rotation2d(toSpeaker.getX(), toSpeaker.getY())
-                                .minus(SwerveDrive.getInstance().getOdometryYaw());
+                var centerTag = latestResult.getTargets();
+                centerTag.removeIf(
+                        (target) -> target.getFiducialId() != VisionConstants.getSpeakerTag1());
+                Optional<Rotation2d> yaw;
+                if (!centerTag.isEmpty()) {
+                    inputs.yawToSpeaker = Rotation2d.fromDegrees(-centerTag.get(0).getYaw());
+                    yaw = Optional.of(inputs.yawToSpeaker);
+                } else {
+                    yaw = Optional.empty();
+                }
                 scoreParameters =
                         Optional.of(
-                                new ScoreParameters(inputs.distanceToSpeaker, inputs.yawToSpeaker));
+                                new ScoreParameters(
+                                        inputs.distanceToSpeaker,
+                                        yaw,
+                                        new Rotation2d(toSpeaker.getX(), toSpeaker.getY())
+                                                .minus(
+                                                        SwerveDrive.getInstance()
+                                                                .getOdometryYaw())));
             } else {
                 scoreParameters = Optional.empty();
             }
