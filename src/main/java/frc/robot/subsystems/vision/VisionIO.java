@@ -3,9 +3,13 @@ package frc.robot.subsystems.vision;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import org.littletonrobotics.junction.AutoLog;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 public interface VisionIO {
 
@@ -32,6 +36,7 @@ public interface VisionIO {
     @AutoLog
     class VisionInputs {
         public Pose3d poseFieldOriented = new Pose3d();
+public List<PhotonTrackedTarget> usedTargets = new ArrayList<>();
         public boolean isConnected = false;
         public boolean seesSpeaker = false;
         public double distanceToSpeaker;

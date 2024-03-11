@@ -91,6 +91,7 @@ public class PhotonVisionIOReal implements VisionIO {
         var estimatedPose = estimator.update(latestResult);
         if (estimatedPose.isPresent()) {
             inputs.poseFieldOriented = estimatedPose.get().estimatedPose;
+            inputs.usedTargets = estimatedPose.get().targetsUsed;
             if (calculateScoreParams) {
                 var toSpeaker =
                         inputs.poseFieldOriented
@@ -140,7 +141,6 @@ public class PhotonVisionIOReal implements VisionIO {
         } else {
             result.setUseForEstimation(false);
         }
-
         lastResult = result;
     }
 
