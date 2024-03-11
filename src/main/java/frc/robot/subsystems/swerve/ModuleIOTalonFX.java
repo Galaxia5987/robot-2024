@@ -3,6 +3,7 @@ package frc.robot.subsystems.swerve;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -26,8 +27,8 @@ public class ModuleIOTalonFX implements ModuleIO {
     private final TalonFXConfiguration driveConfig;
     private final TalonFXConfiguration angleConfig;
 
-    private final MotionMagicVoltage angleControlRequest =
-            new MotionMagicVoltage(0).withEnableFOC(true).withSlot(0);
+    private final PositionVoltage angleControlRequest =
+            new PositionVoltage(0).withEnableFOC(true).withSlot(0);
     private final VelocityVoltage velocityControlRequest =
             new VelocityVoltage(0).withEnableFOC(true);
     private final SwerveModuleInputsAutoLogged inputs;

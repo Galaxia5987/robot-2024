@@ -121,12 +121,12 @@ public class SwerveConstants {
         } else {
             if (isWCP) {
                 //                DRIVE_KP.initDefault(0.35747925);
-                DRIVE_KP.initDefault(0.0);
+                DRIVE_KP.initDefault(0.3);
                 DRIVE_KI.initDefault(0.0);
                 DRIVE_KD.initDefault(0.0);
                 DRIVE_KV.initDefault(0.675_205);
                 DRIVE_KS.initDefault(0.248_33);
-                DRIVE_KA.initDefault(0.100_370_75);
+                DRIVE_KA.initDefault(0.05);
 
                 ANGLE_KP.initDefault(28.0);
                 ANGLE_KI.initDefault(0.0);
