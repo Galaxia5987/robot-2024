@@ -49,6 +49,11 @@
       "waypointRelativePos": 1,
       "rotationDegrees": -3.900493742381913,
       "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 0.45,
+      "rotationDegrees": -11.967118138905123,
+      "rotateFast": false
     }
   ],
   "constraintZones": [],
@@ -70,12 +75,6 @@
               "type": "named",
               "data": {
                 "name": "followPathRotation"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "useNoteDetection"
               }
             }
           ]
@@ -110,11 +109,28 @@
           ]
         }
       }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.45,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "useNoteDetection"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 4.5,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
