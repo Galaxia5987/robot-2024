@@ -9,31 +9,26 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.lib.PoseEstimation;
-import frc.robot.lib.math.interpolation.InterpolatingDouble;
-import frc.robot.scoreStates.ScoreState;
 import frc.robot.subsystems.ShootingManager;
+import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.conveyor.ConveyorConstants;
-import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperConstants;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.LimelightHelpers;
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
 
 public class CommandGroups {
     private static CommandGroups INSTANCE;
     private final Intake intake;
     private final Gripper gripper;
-    private final Elevator elevator;
+    private final Climb climb;
     private final Shooter shooter;
     private final Hood hood;
     private final Conveyor conveyor;
@@ -43,7 +38,7 @@ public class CommandGroups {
     private CommandGroups() {
         intake = Intake.getInstance();
         gripper = Gripper.getInstance();
-        elevator = Elevator.getInstance();
+        climb = Climb.getInstance();
         shooter = Shooter.getInstance();
         hood = Hood.getInstance();
         conveyor = Conveyor.getInstance();
@@ -56,17 +51,6 @@ public class CommandGroups {
             INSTANCE = new CommandGroups();
         }
         return INSTANCE;
-    }
-
-    public void toggleOverride() {
-        override = !override;
-    }
-
-    public Command retractGrillevator() {
-        return Commands.parallel(
-                        elevator.setHeight(CommandGroupsConstants.MIN_HEIGHT),
-                        gripper.setRollerAndWrist(0, CommandGroupsConstants.WRIST_BASE_ANGLE))
-                .withName("retractGrillevator");
     }
 
     public Command feedWithWait(BooleanSupplier otherReady) {
@@ -110,31 +94,6 @@ public class CommandGroups {
                 .withName("intake");
     }
 
-    public Command setShooter() {
-        return Commands.repeatingSequence(
-                shooter.setVelocity(ShootingManager.getInstance().getShooterCommandedVelocity())
-                        .until(shooter::atSetpoint));
-    }
-
-    public Command setScoringSystems() {
-        return Commands.parallel(setHood(), setShooter());
-    }
-
-    public Command setHood() {
-        var distanceToSpeaker =
-                new InterpolatingDouble(PoseEstimation.getInstance().getDistanceToSpeaker());
-        return Commands.repeatingSequence(
-                hood.setAngle(ShootingManager.getInstance().getHoodCommandedAngle())
-                        .until(hood::atSetpoint));
-    }
-
-    public Command outtakeGripper() {
-        return elevator.setHeight(CommandGroupsConstants.OUTTAKE_HEIGHT)
-                .onlyIf(gripper::isGripperNearFoldedPosition)
-                .andThen(gripper.outtake())
-                .withName("outtakeGripper");
-    }
-
     public Command shootAndConvey(
             MutableMeasure<Velocity<Angle>> topVelocity,
             MutableMeasure<Velocity<Angle>> bottomVelocity) {
@@ -151,15 +110,6 @@ public class CommandGroups {
                                         ? Units.RotationsPerSecond.of(50).mutableCopy()
                                         : ShootingManager.getInstance()
                                                 .getConveyorCommandedVelocity()));
-    }
-
-    public Command grillevatorBit() {
-        return Commands.sequence(
-                elevator.manualElevator(() -> -0.1).withTimeout(0.11),
-                elevator.setHeight(CommandGroupsConstants.MAX_HEIGHT),
-                gripper.setRollerAndWrist(0.3, CommandGroupsConstants.WRIST_ANGLE_AMP_FORWARD),
-                Commands.waitSeconds(3),
-                retractGrillevator());
     }
 
     public Command intakeBit() {
@@ -228,19 +178,6 @@ public class CommandGroups {
                 shooter.stop(),
                 conveyor.stop(),
                 gripper.setRollerPower(0));
-    }
-
-    public Command setClimbState(Supplier<ScoreState.State> stateSupplier) {
-        return Commands.sequence(
-                intake.setAngle(IntakeConstants.IntakePose.DOWN)
-                        .withTimeout(0.25)
-                        .alongWith(
-                                hood.setAngle(Units.Degrees.of(33.48).mutableCopy())
-                                        .withTimeout(0.25)),
-                elevator.manualElevator(() -> -0.1).withTimeout(0.11),
-                elevator.unlock(),
-                elevator.manualElevator(() -> 0.3).withTimeout(1),
-                gripper.setWristPosition(Units.Degrees.of(-30).mutableCopy()).withTimeout(1));
     }
 
     public Command allBits() {

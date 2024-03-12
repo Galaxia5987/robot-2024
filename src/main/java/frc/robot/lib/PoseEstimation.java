@@ -4,7 +4,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.scoreStates.ScoreStateConstants;
+import frc.robot.Constants;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
@@ -81,9 +81,9 @@ public class PoseEstimation {
     public Translation2d getPoseRelativeToSpeaker() {
         Optional<DriverStation.Alliance> allianceColor = DriverStation.getAlliance();
         if (allianceColor.isPresent() && (allianceColor.get() == DriverStation.Alliance.Red)) {
-            speakerPose = ScoreStateConstants.SPEAKER_POSE_RED;
+            speakerPose = Constants.SPEAKER_POSE_RED;
         } else {
-            speakerPose = ScoreStateConstants.SPEAKER_POSE_BLUE;
+            speakerPose = Constants.SPEAKER_POSE_BLUE;
         }
         return speakerPose.minus(getEstimatedPose().getTranslation());
     }

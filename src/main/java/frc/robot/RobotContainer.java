@@ -16,16 +16,15 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
-import frc.robot.scoreStates.ScoreState;
 import frc.robot.subsystems.ShootingManager;
+import frc.robot.subsystems.climb.Climb;
+import frc.robot.subsystems.climb.ClimbIO;
+import frc.robot.subsystems.climb.ClimbIOReal;
+import frc.robot.subsystems.climb.ClimbIOSim;
 import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.conveyor.ConveyorIO;
 import frc.robot.subsystems.conveyor.ConveyorIOReal;
 import frc.robot.subsystems.conveyor.ConveyorIOSim;
-import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.elevator.ElevatorIO;
-import frc.robot.subsystems.elevator.ElevatorIOReal;
-import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.gripper.GripperIO;
 import frc.robot.subsystems.gripper.GripperIOReal;
@@ -45,13 +44,12 @@ import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.littletonrobotics.junction.AutoLogOutput;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
     private final Intake intake;
     private final Conveyor conveyor;
-    private final Elevator elevator;
+    private final Climb climb;
     private final Gripper gripper;
     private final Hood hood;
     private final Shooter shooter;
@@ -63,8 +61,8 @@ public class RobotContainer {
     private final CommandGroups commandGroups;
     private final SendableChooser<Command> autoChooser;
     @Getter @Setter private boolean isForceShooting = false;
+    @Getter private Constants.State state = Constants.State.SHOOT;
 
-    @Getter @AutoLogOutput private ScoreState.State state = ScoreState.State.SHOOT;
     public boolean isIntaking = false;
 
     public final MutableMeasure<Angle> hoodTuningAngle = Units.Degrees.of(115).mutableCopy();
@@ -78,7 +76,7 @@ public class RobotContainer {
         ConveyorIO conveyorIO;
         ShooterIO shooterIO;
         GripperIO gripperIO;
-        ElevatorIO elevatorIO;
+        ClimbIO climbIO;
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 intakeIO = new IntakeIOReal();
@@ -86,7 +84,7 @@ public class RobotContainer {
                 gripperIO = new GripperIOReal();
                 hoodIO = new HoodIOReal();
                 shooterIO = new ShooterIOReal();
-                elevatorIO = new ElevatorIOReal();
+                climbIO = new ClimbIOReal();
                 break;
             case SIM:
             case REPLAY:
@@ -96,13 +94,13 @@ public class RobotContainer {
                 gripperIO = new GripperIOSim();
                 hoodIO = new HoodIOSim();
                 shooterIO = new ShooterIOSim();
-                elevatorIO = new ElevatorIOSim();
+                climbIO = new ClimbIOSim();
                 break;
         }
         Intake.initialize(intakeIO);
         Conveyor.initialize(conveyorIO);
-        Elevator.initialize(elevatorIO);
-        Gripper.initialize(gripperIO, () -> Units.Meters.of(0));
+        Climb.initialize(climbIO);
+        Gripper.initialize(gripperIO);
         Hood.initialize(hoodIO);
         Shooter.initialize(shooterIO);
         Constants.initSwerve();
@@ -111,13 +109,12 @@ public class RobotContainer {
         swerveDrive = SwerveDrive.getInstance();
         intake = Intake.getInstance();
         conveyor = Conveyor.getInstance();
-        elevator = Elevator.getInstance();
+        climb = Climb.getInstance();
         hood = Hood.getInstance();
         shooter = Shooter.getInstance();
 
         leds = new LEDs(9, 58);
 
-        Gripper.initialize(gripperIO, () -> Units.Meters.of(0));
         gripper = Gripper.getInstance();
         commandGroups = CommandGroups.getInstance();
 
@@ -193,17 +190,13 @@ public class RobotContainer {
                         0.1,
                         () -> true));
 
-        elevator.setDefaultCommand(
-                elevator.manualElevator(
+        climb.setDefaultCommand(
+                climb.setPower(
                         () ->
                                 MathUtil.applyDeadband(
                                         -xboxController.getLeftTriggerAxis()
                                                 + xboxController.getRightTriggerAxis(),
                                         0.15)));
-
-        gripper.setDefaultCommand(
-                gripper.setWristPower(
-                        () -> MathUtil.applyDeadband(-xboxController.getRightY(), 0.15) * 0.6));
 
         leds.setDefaultCommand(new LEDsDefaultCommand(leds).ignoringDisable(true));
     }
@@ -267,7 +260,7 @@ public class RobotContainer {
                                         .alongWith(
                                                 commandGroups.feedShooter(this::isForceShooting)),
                                 commandGroups.shootToAmp(),
-                                () -> state == ScoreState.State.SHOOT))
+                                () -> state == Constants.State.SHOOT))
                 .onFalse(commandGroups.stopShooting());
 
         driveController
@@ -280,8 +273,8 @@ public class RobotContainer {
                 .whileTrue(intake.outtake().alongWith(gripper.setRollerPower(-0.7)))
                 .onFalse(intake.stop().alongWith(gripper.setRollerPower(0)));
 
-        xboxController.start().onTrue(elevator.lock());
-        xboxController.back().onTrue(elevator.unlock());
+        xboxController.start().onTrue(climb.lock());
+        xboxController.back().onTrue(climb.unlock());
         xboxController
                 .leftBumper()
                 .whileTrue(commandGroups.closeSpeakerWarmup())
@@ -291,8 +284,8 @@ public class RobotContainer {
                 .whileTrue(gripper.setRollerPower(0.4))
                 .onFalse(gripper.setRollerPower(0));
 
-        xboxController.b().onTrue(Commands.runOnce(() -> state = ScoreState.State.SHOOT));
-        xboxController.a().onTrue(Commands.runOnce(() -> state = ScoreState.State.AMP));
+        xboxController.b().onTrue(Commands.runOnce(() -> state = Constants.State.SHOOT));
+        xboxController.a().onTrue(Commands.runOnce(() -> state = Constants.State.AMP));
         xboxController.y().onTrue(commandGroups.shootToSpeaker());
         xboxController
                 .x()

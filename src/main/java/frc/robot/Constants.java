@@ -2,14 +2,16 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.util.GeometryUtil;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.*;
-import frc.robot.scoreStates.ScoreState;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.vision.*;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -125,7 +127,7 @@ public class Constants {
                         SwerveConstants.MAX_X_Y_VELOCITY,
                         Constants.ROBOT_LENGTH.in(Units.Meters) / Math.sqrt(2),
                         new ReplanningConfig()),
-                ScoreState::isRed,
+                Constants::isRed,
                 swerveDrive);
     }
 
@@ -163,14 +165,14 @@ public class Constants {
                                 field,
                                 true,
                                 false);
-                //                driverCamera =
-                //                        new PhotonVisionIOReal(
-                //                                new PhotonCamera("Driver_Camera"),
-                //                                "Driver_Camera",
-                //                                DRIVER_CAMERA_POSE,
-                //                                field,
-                //                                false,
-                //                                true);
+                driverCamera =
+                        new PhotonVisionIOReal(
+                                new PhotonCamera("Driver_Camera"),
+                                "Driver_Camera",
+                                DRIVER_CAMERA_POSE,
+                                field,
+                                false,
+                                true);
                 break;
             default:
                 speakerLeftCamera =
@@ -199,12 +201,24 @@ public class Constants {
                                 SimCameraProperties.LL2_1280_720());
                 break;
         }
-        rightOpi =
-                new VisionModule(
-                        //                driverCamera,
-                        intakeAprilTagCamera);
+        rightOpi = new VisionModule(driverCamera, intakeAprilTagCamera);
         leftOpi = new VisionModule(speakerLeftCamera, speakerRightCamera);
         Vision.initialize(rightOpi, leftOpi);
+    }
+
+    public static boolean isRed() {
+        var alliance = DriverStation.getAlliance();
+        return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
+    }
+
+    public static final Translation2d SPEAKER_POSE_BLUE = new Translation2d(0, 5.547_944_2);
+    public static final Translation2d SPEAKER_POSE_RED =
+            GeometryUtil.flipFieldPosition(SPEAKER_POSE_BLUE);
+
+    public enum State {
+        SHOOT,
+        AMP,
+        CLIMB
     }
 
     public enum Mode {

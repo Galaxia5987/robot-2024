@@ -19,8 +19,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants;
 import frc.robot.lib.controllers.DieterController;
-import frc.robot.scoreStates.ScoreState;
 import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -144,15 +144,8 @@ public class SwerveDrive extends SubsystemBase {
         botPose = pose;
         resetGyro(
                 pose.getRotation()
-                        .minus(
-                                ScoreState.isRed()
-                                        ? Rotation2d.fromDegrees(180)
-                                        : new Rotation2d()));
+                        .minus(Constants.isRed() ? Rotation2d.fromDegrees(180) : new Rotation2d()));
         estimator.resetPosition(pose.getRotation(), modulePositions, pose);
-    }
-
-    public void resetPose() {
-        resetPose(new Pose2d());
     }
 
     public Command checkSwerve() {
