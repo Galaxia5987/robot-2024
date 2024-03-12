@@ -51,8 +51,6 @@ public class SwerveDrive extends SubsystemBase {
                     SwerveConstants.WHEEL_POSITIONS[2],
                     SwerveConstants.WHEEL_POSITIONS[3]);
 
-    private final Derivative acceleration = new Derivative();
-    private final LinearFilter accelFilter = LinearFilter.movingAverage(1);
     @Getter private final SwerveDrivePoseEstimator estimator;
     private final SwerveDriveInputsAutoLogged loggerInputs = new SwerveDriveInputsAutoLogged();
     @Getter @AutoLogOutput private Pose2d botPose = new Pose2d();
@@ -314,19 +312,6 @@ public class SwerveDrive extends SubsystemBase {
                 Math.hypot(
                         loggerInputs.currentSpeeds.vxMetersPerSecond,
                         loggerInputs.currentSpeeds.vyMetersPerSecond);
-
-        acceleration.update(loggerInputs.currentSpeeds.vxMetersPerSecond);
-        SwerveModuleState[] accelerationStates =
-                Arrays.stream(modules)
-                        .map(
-                                (module) ->
-                                        new SwerveModuleState(
-                                                module.getAcceleration(),
-                                                module.getModuleState().angle))
-                        .toList()
-                        .toArray(new SwerveModuleState[0]);
-        loggerInputs.acceleration =
-                kinematics.toChassisSpeeds(accelerationStates).vxMetersPerSecond;
     }
 
     public void updateGyroInputs() {
