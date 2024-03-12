@@ -44,6 +44,7 @@ import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
@@ -63,7 +64,7 @@ public class RobotContainer {
     @Getter @Setter private boolean isForceShooting = false;
     @Getter private Constants.State state = Constants.State.SHOOT;
 
-    public boolean isIntaking = false;
+    @AutoLogOutput boolean useNoteDetection = false;
 
     public final MutableMeasure<Angle> hoodTuningAngle = Units.Degrees.of(115).mutableCopy();
     public final MutableMeasure<Velocity<Angle>> shooterTuningVelocity =
@@ -134,9 +135,9 @@ public class RobotContainer {
                 "followPathRotation",
                 Commands.runOnce(() -> ShootingManager.getInstance().setShooting(false)));
         NamedCommands.registerCommand(
-                "followPathSpeeds", Commands.runOnce(() -> setIntaking(false)));
+                "followPathSpeeds", Commands.runOnce(() -> setUseNoteDetection(false)));
         NamedCommands.registerCommand(
-                "useNoteDetection", Commands.runOnce(() -> setIntaking(true)));
+                "useNoteDetection", Commands.runOnce(() -> setUseNoteDetection(true)));
 
         NamedCommands.registerCommand("prepareShoot", prepare());
         NamedCommands.registerCommand("shootAndIntake", commandGroups.shootAndIntake());
@@ -163,8 +164,8 @@ public class RobotContainer {
         SmartDashboard.putData("autoList", autoChooser);
     }
 
-    private void setIntaking(boolean isIntaking) {
-        this.isIntaking = isIntaking;
+    private void setUseNoteDetection(boolean useNoteDetection) {
+        this.useNoteDetection = useNoteDetection;
     }
 
     public static RobotContainer getInstance() {

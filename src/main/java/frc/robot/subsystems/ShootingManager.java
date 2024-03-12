@@ -57,8 +57,8 @@ public class ShootingManager {
     @Setter private Measure<Distance> maxShootingDistance = Meters.of(10.5);
 
     private boolean isShooting = false;
-    private final Debouncer useAlternateYaw = new Debouncer(0.1);
-    private final Debouncer usePoseEstimation = new Debouncer(0.1);
+    private final Debouncer useAlternateYawBouncer = new Debouncer(0.1);
+    private final Debouncer usePoseEstimationBouncer = new Debouncer(0.1);
 
     @Getter private double distanceToSpeaker = 0;
 
@@ -123,7 +123,8 @@ public class ShootingManager {
 
     public void updateCommandedState() {
         var scoreParameters = vision.getScoreParameters();
-        if (!usePoseEstimation.calculate(scoreParameters.isEmpty())) {
+        if (!usePoseEstimationBouncer.calculate(scoreParameters.isEmpty())
+                && !DriverStation.isAutonomous()) {
             distanceToSpeaker =
                     scoreParameters.stream()
                                     .mapToDouble(
@@ -158,8 +159,8 @@ public class ShootingManager {
                             .map(Optional::get)
                             .toList();
             Rotation2d yawToTarget;
-            boolean useEstimation = useAlternateYaw.calculate(yaws.isEmpty());
-            if (!useEstimation) {
+            boolean useAlternateYaw = useAlternateYawBouncer.calculate(yaws.isEmpty());
+            if (!useAlternateYaw) {
                 yawToTarget =
                         yaws.stream().reduce(new Rotation2d(), Rotation2d::plus).div(yaws.size());
             } else {
@@ -189,7 +190,7 @@ public class ShootingManager {
                         * rotationalVelocity
                         * (HoodConstants.AXIS_DISTANCE_TO_CENTER.in(Meters)
                                 - Math.cos(hoodAngle) * HoodConstants.CM_RADIUS.in(Meters));
-        double effectiveAcceleration = -swerveDrive.getAcceleration() - radialAcceleration;
+        double effectiveAcceleration = swerveDrive.getAcceleration() + radialAcceleration;
 
         double tangentialAcceleration = effectiveAcceleration * Math.cos(hoodAngle - Math.PI / 2);
         double torque =

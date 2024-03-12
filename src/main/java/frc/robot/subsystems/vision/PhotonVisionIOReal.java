@@ -81,13 +81,11 @@ public class PhotonVisionIOReal implements VisionIO {
 
         var latestResult = camera.getLatestResult();
 
-        if (isNoteDetector) {
-            inputs.yawNote = (camera.getLatestResult().getBestTarget().getYaw());
-            if (latestResult.hasTargets()) {
-                yawToNote = OptionalDouble.of(inputs.yawNote);
-            } else {
-                yawToNote = OptionalDouble.empty();
-            }
+        if (isNoteDetector && latestResult.hasTargets()) {
+            inputs.yawNote = latestResult.getBestTarget().getYaw();
+            yawToNote = OptionalDouble.of(inputs.yawNote);
+        } else {
+            yawToNote = OptionalDouble.empty();
         }
 
         var estimatedPose = estimator.update(latestResult);
