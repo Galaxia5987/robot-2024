@@ -145,6 +145,9 @@ public class Robot extends LoggedRobot {
                         "Shooter Tuning Velocity",
                         robotContainer.shooterTuningVelocity.in(Units.RotationsPerSecond)),
                 Units.RotationsPerSecond);
+
+        ShootingManager.getInstance().updateCommandedState();
+        ShootingManager.getInstance().updateHoodChassisCompensation();
     }
 
     /**
@@ -173,9 +176,7 @@ public class Robot extends LoggedRobot {
 
     /** This function is called periodically during autonomous. */
     @Override
-    public void autonomousPeriodic() {
-        ShootingManager.getInstance().updateCommandedState();
-    }
+    public void autonomousPeriodic() {}
 
     /** This function is called once when teleop is enabled. */
     @Override
@@ -189,9 +190,7 @@ public class Robot extends LoggedRobot {
 
     /** This function is called periodically during operator control. */
     @Override
-    public void teleopPeriodic() {
-        ShootingManager.getInstance().updateCommandedStateSimple();
-    }
+    public void teleopPeriodic() {}
 
     /** This function is called once when the robot is disabled. */
     @Override

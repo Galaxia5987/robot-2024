@@ -3,6 +3,7 @@ package frc.robot.subsystems.vision;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.lib.Utils;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -115,9 +116,8 @@ public class PhotonVisionIOReal implements VisionIO {
                                         inputs.distanceToSpeaker,
                                         yaw,
                                         new Rotation2d(toSpeaker.getX(), toSpeaker.getY())
-                                                .minus(
-                                                        SwerveDrive.getInstance()
-                                                                .getOdometryYaw())));
+                                                .minus(SwerveDrive.getInstance().getOdometryYaw()),
+                                        Utils.distanceToSpeakerVarianceFactor(toSpeaker)));
             } else {
                 scoreParameters = Optional.empty();
             }

@@ -57,6 +57,7 @@ public class ShootingManager {
     @Setter private Measure<Distance> maxShootingDistance = Meters.of(10.5);
 
     private boolean isShooting = false;
+    private final Debouncer useAlternateYaw = new Debouncer(0.1);
     private final Debouncer usePoseEstimation = new Debouncer(0.1);
 
     @Getter private double distanceToSpeaker = 0;
@@ -93,8 +94,9 @@ public class ShootingManager {
                 && !lockShoot;
     }
 
-    public void updateCommandedState() {
-        distanceToSpeaker = poseEstimation.getDistanceToSpeaker();
+    public void updateCommandedStateWithPoseEstimation() {
+        var toSpeaker = poseEstimation.getPoseRelativeToSpeaker();
+        distanceToSpeaker = toSpeaker.getNorm() * Utils.distanceToSpeakerVarianceFactor(toSpeaker);
 
         shooterCommandedVelocity.mut_replace(
                 ShooterConstants.VELOCITY_BY_DISTANCE.getInterpolated(
@@ -114,18 +116,20 @@ public class ShootingManager {
                         .value,
                 Degrees);
 
-        var toSpeaker = poseEstimation.getPoseRelativeToSpeaker();
         swerveCommandedAngle
                 .mut_replace(Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI, Radians)
-                .mut_plus(0, Degrees);
+                .mut_minus(4, Degrees);
     }
 
-    public void updateCommandedStateSimple() {
+    public void updateCommandedState() {
         var scoreParameters = vision.getScoreParameters();
-        if (!scoreParameters.isEmpty()) {
+        if (!usePoseEstimation.calculate(scoreParameters.isEmpty())) {
             distanceToSpeaker =
                     scoreParameters.stream()
-                                    .mapToDouble(VisionIO.ScoreParameters::distanceToSpeaker)
+                                    .mapToDouble(
+                                            (param) ->
+                                                    param.distanceToSpeaker()
+                                                            * param.distanceVarianceFactor())
                                     .reduce(0, Double::sum)
                             / scoreParameters.size();
 
@@ -141,7 +145,6 @@ public class ShootingManager {
                             .value,
                     RotationsPerSecond);
 
-            updateHoodChassisCompensation();
             hoodCommandedAngle.mut_replace(
                     HoodConstants.ANGLE_BY_DISTANCE.getInterpolated(
                                     new InterpolatingDouble(distanceToSpeaker))
@@ -155,7 +158,7 @@ public class ShootingManager {
                             .map(Optional::get)
                             .toList();
             Rotation2d yawToTarget;
-            boolean useEstimation = usePoseEstimation.calculate(yaws.isEmpty());
+            boolean useEstimation = useAlternateYaw.calculate(yaws.isEmpty());
             if (!useEstimation) {
                 yawToTarget =
                         yaws.stream().reduce(new Rotation2d(), Rotation2d::plus).div(yaws.size());
@@ -172,7 +175,9 @@ public class ShootingManager {
                             yawToTarget.getRotations()
                                     + swerveDrive.getOdometryYaw().getRotations(),
                             Rotations)
-                    .mut_minus(1, Degrees);
+                    .mut_minus(4, Degrees);
+        } else {
+            updateCommandedStateWithPoseEstimation();
         }
     }
 
@@ -192,7 +197,7 @@ public class ShootingManager {
                         * HoodConstants.MASS.in(Kilograms)
                         * HoodConstants.CM_RADIUS.in(Meters);
 
-        Logger.recordOutput("TorqueChassisCompensation", torque);
+        Logger.recordOutput("Hood/TorqueChassisCompensation", torque);
         hood.setChassisCompensationTorque(torque);
     }
 
