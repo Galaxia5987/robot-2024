@@ -47,7 +47,12 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1.05,
-      "rotationDegrees": 0,
+      "rotationDegrees": 27.836292715751753,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 15.020665986535848,
       "rotateFast": false
     }
   ],
@@ -70,12 +75,6 @@
               "type": "named",
               "data": {
                 "name": "followPathRotation"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "useNoteDetection"
               }
             }
           ]
@@ -100,7 +99,35 @@
               "data": {
                 "name": "adjustToTarget"
               }
-            },
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "use note detection",
+      "waypointRelativePos": 0.4,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "useNoteDetection"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop note detection",
+      "waypointRelativePos": 1.05,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
             {
               "type": "named",
               "data": {

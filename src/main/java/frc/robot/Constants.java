@@ -106,8 +106,8 @@ public class Constants {
                 swerveDrive::resetPose,
                 swerveDrive::getCurrentSpeeds,
                 (speeds) -> {
-                    // Fixes diversion from note during autonomous
-                    if (RobotContainer.getInstance().isIntaking
+                    //                     Fixes diversion from note during autonomous
+                    if (RobotContainer.getInstance().useNoteDetection
                             && Vision.getInstance().getYawToNote().isPresent()) {
                         speeds.vyMetersPerSecond =
                                 SwerveConstants.vyOffsetControllerAutonomous.calculate(

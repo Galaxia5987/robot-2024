@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9203306782681937,
-        "y": 3.613493722713942
+        "x": 2.4213939522026635,
+        "y": 4.3344249538371855
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.850165751613554,
-        "y": 1.9646179463299105
+        "x": 2.3512290255480237,
+        "y": 2.685549177453154
       },
       "isLocked": false,
       "linkedName": "CL"
@@ -132,7 +132,18 @@
               "data": {
                 "name": "adjustToTarget"
               }
-            },
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop note detection",
+      "waypointRelativePos": 2.05,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
             {
               "type": "named",
               "data": {

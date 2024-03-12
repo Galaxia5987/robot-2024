@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9203306782681937,
-        "y": 3.613493722713942
+        "x": 2.9914421367304285,
+        "y": 3.098220042593932
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.7060548421299053,
-        "y": 2.5484329849119054
+        "x": 4.323479416189603,
+        "y": 3.029151442918271
       },
       "isLocked": false,
-      "linkedName": "CL"
+      "linkedName": "C0 bottom"
     },
     {
       "anchor": {
@@ -52,39 +52,39 @@
         "y": 3.613493722713942
       },
       "prevControl": {
-        "x": 6.367745928573116,
-        "y": 4.047708280998874
+        "x": 6.3660197090851876,
+        "y": 4.052626437261739
       },
       "nextControl": {
-        "x": 3.4558962126587893,
-        "y": 3.0321406059706257
+        "x": 3.5242570485140985,
+        "y": 3.0488853285398885
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.9203306782681937,
-        "y": 3.613493722713942
+        "x": 2.9914421367304285,
+        "y": 3.098220042593932
       },
       "prevControl": {
-        "x": 2.766059069008591,
-        "y": 2.966208884076935
+        "x": 3.958402532189681,
+        "y": 3.1475547566479753
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "C Score"
+      "linkedName": "C0 bottom"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 0.65,
-      "rotationDegrees": 25.970294963791652,
+      "rotationDegrees": 12.482994346844224,
       "rotateFast": false
     },
     {
       "waypointRelativePos": 0.25,
-      "rotationDegrees": 0,
+      "rotationDegrees": -22.98885991581987,
       "rotateFast": false
     },
     {
