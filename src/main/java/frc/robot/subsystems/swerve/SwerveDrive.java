@@ -316,7 +316,17 @@ public class SwerveDrive extends SubsystemBase {
                         loggerInputs.currentSpeeds.vyMetersPerSecond);
 
         acceleration.update(loggerInputs.currentSpeeds.vxMetersPerSecond);
-        loggerInputs.acceleration = accelFilter.calculate(acceleration.get());
+        SwerveModuleState[] accelerationStates =
+                Arrays.stream(modules)
+                        .map(
+                                (module) ->
+                                        new SwerveModuleState(
+                                                module.getAcceleration(),
+                                                module.getModuleState().angle))
+                        .toList()
+                        .toArray(new SwerveModuleState[0]);
+        loggerInputs.acceleration =
+                kinematics.toChassisSpeeds(accelerationStates).vxMetersPerSecond;
     }
 
     public void updateGyroInputs() {

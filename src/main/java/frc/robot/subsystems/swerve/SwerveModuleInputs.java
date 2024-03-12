@@ -10,6 +10,7 @@ public class SwerveModuleInputs {
     public double driveMotorVoltage = 0;
     public double driveMotorVelocitySetpoint = 0;
     public double driveMotorPosition = 0;
+    public double driveMotorAcceleration = 0;
 
     public Rotation2d angle = new Rotation2d();
     public Rotation2d angleSetpoint = new Rotation2d();

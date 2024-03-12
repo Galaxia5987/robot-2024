@@ -80,6 +80,10 @@ public class ModuleIOTalonFX implements ModuleIO {
                 Units.rpsToMetersPerSecond(
                         driveMotor.getVelocity().getValue(), SwerveConstants.WHEEL_DIAMETER / 2);
         inputs.driveMotorVoltage = driveMotor.getMotorVoltage().getValue();
+        inputs.driveMotorAcceleration =
+                Units.rpsToMetersPerSecond(
+                        driveMotor.getAcceleration().getValue(),
+                        SwerveConstants.WHEEL_DIAMETER / 2);
 
         inputs.angle =
                 Utils.normalize(Rotation2d.fromRotations(angleMotor.getPosition().getValue()));

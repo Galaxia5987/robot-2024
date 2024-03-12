@@ -99,6 +99,10 @@ public class SwerveModule extends SubsystemBase {
         }
     }
 
+    public double getAcceleration() {
+        return loggerInputs.driveMotorAcceleration;
+    }
+
     @Override
     public void periodic() {
         if (timer.advanceIfElapsed(2)) {
