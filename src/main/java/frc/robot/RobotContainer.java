@@ -285,8 +285,14 @@ public class RobotContainer {
                 .whileTrue(gripper.setRollerPower(0.4))
                 .onFalse(gripper.setRollerPower(0));
 
-        xboxController.b().onTrue(Commands.runOnce(() -> state = Constants.State.SHOOT));
-        xboxController.a().onTrue(Commands.runOnce(() -> state = Constants.State.AMP));
+        xboxController
+                .b()
+                .onTrue(
+                        Commands.runOnce(() -> state = Constants.State.SHOOT)
+                                .ignoringDisable(true));
+        xboxController
+                .a()
+                .onTrue(Commands.runOnce(() -> state = Constants.State.AMP).ignoringDisable(true));
         xboxController.y().onTrue(commandGroups.shootToSpeaker());
         xboxController
                 .x()

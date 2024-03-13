@@ -110,7 +110,7 @@ public class Constants {
                     if (RobotContainer.getInstance().useNoteDetection
                             && Vision.getInstance().getYawToNote().isPresent()) {
                         speeds.vyMetersPerSecond =
-                                SwerveConstants.vyOffsetControllerAutonomous.calculate(
+                                SwerveConstants.VY_NOTE_DETECTION_CONTROLLER.calculate(
                                         Math.sin(
                                                 Math.toRadians(
                                                         Vision.getInstance()
