@@ -5,6 +5,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPoint;
+import com.pathplanner.lib.util.GeometryUtil;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -80,7 +81,7 @@ public class RobotContainer {
             Units.RotationsPerSecond.of(50).mutableCopy();
 
     public int pathIndex = 0;
-    private PathPlannerAuto pathPlannerAuto = new PathPlannerAuto("None");
+    private PathPlannerAuto pathPlannerAuto;
     private List<PathPoint> pathPoints = new ArrayList<>();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -120,6 +121,8 @@ public class RobotContainer {
         Constants.initSwerve();
         Constants.initVision();
 
+        pathPlannerAuto = new PathPlannerAuto("None");
+
         swerveDrive = SwerveDrive.getInstance();
         intake = Intake.getInstance();
         conveyor = Conveyor.getInstance();
@@ -146,7 +149,7 @@ public class RobotContainer {
                 "score",
                 commandGroups
                         .feedShooter(() -> isForceShooting)
-                        .andThen(Commands.runOnce(() -> pathIndex++)));
+                        .andThen(() -> pathIndex = Math.min(pathIndex + 1, pathPoints.size() - 1)));
         NamedCommands.registerCommand("finishScore", gripper.setRollerPower(0).withTimeout(0.05));
         NamedCommands.registerCommand(
                 "followPathRotation",
@@ -188,6 +191,7 @@ public class RobotContainer {
                                 });
                     }
                 };
+        autoChooser.setDefaultOption("None", "None");
         SmartDashboard.putData("autoList", autoChooser);
     }
 
@@ -210,7 +214,11 @@ public class RobotContainer {
     }
 
     public Translation2d getAutoToSpeaker() {
-        return VisionConstants.getSpeakerPose().minus(pathPoints.get(pathIndex).position);
+        return VisionConstants.getSpeakerPose()
+                .minus(
+                        Constants.isRed()
+                                ? GeometryUtil.flipFieldPosition(pathPoints.get(pathIndex).position)
+                                : pathPoints.get(pathIndex).position);
     }
 
     private void configureDefaultCommands() {
