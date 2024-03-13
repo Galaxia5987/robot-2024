@@ -6,7 +6,6 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.ShootingManager;
@@ -21,7 +20,6 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
-import frc.robot.subsystems.vision.LimelightHelpers;
 import java.util.function.BooleanSupplier;
 
 public class CommandGroups {
@@ -69,28 +67,10 @@ public class CommandGroups {
                 .withName("feedShooter");
     }
 
-    public Command intake() {
-        Command blink =
-                new ScheduleCommand(
-                        Commands.repeatingSequence(
-                                        Commands.runOnce(
-                                                () ->
-                                                        LimelightHelpers.setLEDMode_ForceOn(
-                                                                "limelight")),
-                                        Commands.waitSeconds(0.1),
-                                        Commands.runOnce(
-                                                () ->
-                                                        LimelightHelpers.setLEDMode_ForceOff(
-                                                                "limelight")))
-                                .withTimeout(2)
-                                .andThen(
-                                        Commands.runOnce(
-                                                () ->
-                                                        LimelightHelpers.setLEDMode_ForceOff(
-                                                                "limelight"))));
+    public Command intake(Command rumble) {
         return Commands.parallel(intake.intake(), gripper.setRollerPower(0.4))
                 .until(gripper::hasNote)
-                .andThen(Commands.parallel(blink, intake.stop(), gripper.setRollerPower(0)))
+                .andThen(Commands.parallel(intake.stop(), gripper.setRollerPower(0), rumble))
                 .withName("intake");
     }
 
@@ -113,7 +93,7 @@ public class CommandGroups {
     }
 
     public Command intakeBit() {
-        return Commands.sequence(intake().withTimeout(3), intake.stop());
+        return Commands.sequence(intake(Commands.none()).withTimeout(3), intake.stop());
     }
 
     public Command shooterBit() {

@@ -85,7 +85,7 @@ public class SwerveConstants {
     public static double ANGLE_MOTOR_MOMENT_OF_INERTIA = 0.004;
     public static double MAX_X_Y_VELOCITY;
     public static double MAX_OMEGA_VELOCITY;
-    public static PIDController VY_NOTE_DETECTION_CONTROLLER = new PIDController(5, 0, 0.15);
+    public static PIDController VY_NOTE_DETECTION_CONTROLLER = new PIDController(5, 0, 0.3);
 
     public static void initConstants(boolean isWCP, boolean isReal) {
         if (!isReal) {

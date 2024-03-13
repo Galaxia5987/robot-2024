@@ -3,56 +3,56 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.563724819757333,
-        "y": 6.344444227349993
+        "x": 1.9203306782681937,
+        "y": 3.613493722713942
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.586448095973117,
-        "y": 7.005529395674177
+        "x": 5.566714210351499,
+        "y": 0.9768273382700619
       },
       "isLocked": false,
-      "linkedName": "A Score"
+      "linkedName": "C Score"
     },
     {
       "anchor": {
-        "x": 8.118015665417921,
-        "y": 5.796864090161846
+        "x": 8.305389050150424,
+        "y": 2.4475648380683346
       },
       "prevControl": {
-        "x": 7.659777029225685,
-        "y": 6.030858287366392
+        "x": 5.941658037162229,
+        "y": 1.164299251675426
       },
       "nextControl": {
-        "x": 8.164592404675773,
-        "y": 5.773080223306773
+        "x": 8.479488883957725,
+        "y": 2.5420833446555937
       },
       "isLocked": false,
-      "linkedName": "center note line #2"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.563724819757333,
-        "y": 6.344444227349993
+        "x": 1.9203306782681937,
+        "y": 3.613493722713942
       },
       "prevControl": {
-        "x": 5.290439811648857,
-        "y": 7.074597995349838
+        "x": 5.981125808405465,
+        "y": -0.1973388562161738
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "A Score"
+      "linkedName": "C4"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1,
-      "rotationDegrees": -3.900493742381913,
+      "waypointRelativePos": 1.05,
+      "rotationDegrees": 27.836292715751753,
       "rotateFast": false
     },
     {
-      "waypointRelativePos": 0.45,
-      "rotationDegrees": -11.967118138905123,
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 15.020665986535848,
       "rotateFast": false
     }
   ],
@@ -60,7 +60,7 @@
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0.45,
+      "waypointRelativePos": 0.4,
       "command": {
         "type": "parallel",
         "data": {
@@ -70,12 +70,6 @@
               "data": {
                 "name": "intake"
               }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "followPathRotation"
-              }
             }
           ]
         }
@@ -83,7 +77,7 @@
     },
     {
       "name": "stop intake",
-      "waypointRelativePos": 1.6,
+      "waypointRelativePos": 1.45,
       "command": {
         "type": "parallel",
         "data": {
@@ -91,13 +85,13 @@
             {
               "type": "named",
               "data": {
-                "name": "adjustToTarget"
+                "name": "stopIntake"
               }
             },
             {
               "type": "named",
               "data": {
-                "name": "stopIntake"
+                "name": "adjustToTarget"
               }
             }
           ]
@@ -105,8 +99,8 @@
       }
     },
     {
-      "name": "adjust to target",
-      "waypointRelativePos": 1.1,
+      "name": "use note detection",
+      "waypointRelativePos": 0.4,
       "command": {
         "type": "parallel",
         "data": {
@@ -114,9 +108,20 @@
             {
               "type": "named",
               "data": {
-                "name": "adjustToTarget"
+                "name": "useNoteDetection"
               }
-            },
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop note detection",
+      "waypointRelativePos": 1.05,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
             {
               "type": "named",
               "data": {
@@ -128,8 +133,8 @@
       }
     },
     {
-      "name": "detect note",
-      "waypointRelativePos": 0.45,
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -137,7 +142,7 @@
             {
               "type": "named",
               "data": {
-                "name": "useNoteDetection"
+                "name": "followPathRotation"
               }
             }
           ]
@@ -153,13 +158,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 9.462322208025514,
+    "rotation": -35.7889734591833,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "AH123",
+  "folder": "C34L",
   "previewStartingState": {
-    "rotation": 34.230301561891984,
+    "rotation": -36.67434966957313,
     "velocity": 0
   },
   "useDefaultConstraints": true

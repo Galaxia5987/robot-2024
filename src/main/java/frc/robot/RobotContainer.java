@@ -13,10 +13,10 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
@@ -82,7 +82,12 @@ public class RobotContainer {
 
     public int pathIndex = 0;
     private PathPlannerAuto pathPlannerAuto;
-    private List<PathPoint> pathPoints = new ArrayList<>();
+    private List<PathPoint> pathPoints =
+            new ArrayList<>() {
+                {
+                    add(new PathPoint(new Translation2d()));
+                }
+            };
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
@@ -138,7 +143,7 @@ public class RobotContainer {
         // Configure the button bindings and default commands
         configureDefaultCommands();
         configureButtonBindings();
-        NamedCommands.registerCommand("intake", commandGroups.intake());
+        NamedCommands.registerCommand("intake", commandGroups.intake(Commands.none()));
         NamedCommands.registerCommand(
                 "print1", Commands.print("CapsLockIsBetter!!!").repeatedly().withTimeout(2));
         NamedCommands.registerCommand(
@@ -160,6 +165,7 @@ public class RobotContainer {
                 "useNoteDetection", Commands.runOnce(() -> setUseNoteDetection(true)));
 
         NamedCommands.registerCommand("prepareShoot", prepare());
+        NamedCommands.registerCommand("closeShoot", closeShoot());
         NamedCommands.registerCommand("shootAndIntake", commandGroups.shootAndIntake());
         NamedCommands.registerCommand(
                 "adjustToTarget",
@@ -221,6 +227,19 @@ public class RobotContainer {
                                 : pathPoints.get(pathIndex).position);
     }
 
+    public Command closeShoot() {
+        return commandGroups
+                .shootAndConvey(shooterTuningVelocity, false)
+                .raceWith(
+                        hood.setAngle(hoodTuningAngle),
+                        commandGroups.feedWithWait(
+                                () ->
+                                        (shooter.atSetpoint()
+                                                        && conveyor.atSetpoint()
+                                                        && hood.atSetpoint())
+                                                || isForceShooting));
+    }
+
     private void configureDefaultCommands() {
         swerveDrive.setDefaultCommand(
                 swerveDrive.driveCommand(
@@ -243,30 +262,8 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         //        testController.rightBumper().onTrue(commandGroups.allBits());
-
         driveController.triangle().onTrue(Commands.runOnce(swerveDrive::resetGyro));
-        driveController
-                .circle()
-                .whileTrue(
-                        commandGroups
-                                .shootAndConvey(shooterTuningVelocity, false)
-                                .alongWith(
-                                        hood.setAngle(hoodTuningAngle),
-                                        commandGroups.feedWithWait(
-                                                () ->
-                                                        (shooter.atSetpoint()
-                                                                        && conveyor.atSetpoint()
-                                                                        && hood.atSetpoint())
-                                                                || isForceShooting)))
-                .onFalse(commandGroups.stopShooting());
-        driveController
-                .circle()
-                .whileTrue(
-                        swerveDrive.driveAndAdjust(
-                                ShootingManager.getInstance().getSwerveCommandedAngle(),
-                                () -> -driveController.getLeftY(),
-                                () -> -driveController.getLeftX(),
-                                0.1));
+        driveController.circle().whileTrue(closeShoot()).onFalse(commandGroups.stopShooting());
         driveController
                 .square()
                 .whileTrue(
@@ -305,7 +302,28 @@ public class RobotContainer {
 
         driveController
                 .L2()
-                .whileTrue(commandGroups.intake())
+                .whileTrue(
+                        commandGroups.intake(
+                                Commands.sequence(
+                                        Commands.runOnce(
+                                                () -> {
+                                                    xboxController
+                                                            .getHID()
+                                                            .setRumble(
+                                                                    GenericHID.RumbleType
+                                                                            .kBothRumble,
+                                                                    1);
+                                                    System.out.println("vroom");
+                                                }),
+                                        Commands.waitSeconds(2),
+                                        Commands.runOnce(
+                                                () ->
+                                                        xboxController
+                                                                .getHID()
+                                                                .setRumble(
+                                                                        GenericHID.RumbleType
+                                                                                .kBothRumble,
+                                                                        0)))))
                 .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
 
         driveController

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9914421367304285,
-        "y": 3.098220042593932
+        "x": 3.4058537347843933,
+        "y": 2.871280357945332
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.293878587757177,
-        "y": 2.979816728864227
+        "x": 5.1128348410542985,
+        "y": 3.473163869404662
       },
       "isLocked": false,
       "linkedName": "C0 bottom"
@@ -52,24 +52,24 @@
         "y": 3.8481076962153926
       },
       "prevControl": {
-        "x": 6.177132741321415,
-        "y": 4.487554273664739
+        "x": 6.1491136317929405,
+        "y": 4.53565736490401
       },
       "nextControl": {
-        "x": 3.9386686465680643,
-        "y": 3.2462241847560627
+        "x": 3.958402532189681,
+        "y": 3.1968894707020192
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.9914421367304285,
-        "y": 3.098220042593932
+        "x": 3.4058537347843933,
+        "y": 2.871280357945332
       },
       "prevControl": {
-        "x": 4.007737246243725,
-        "y": 2.9600828432426094
+        "x": 4.708290185811142,
+        "y": 3.2856919559992974
       },
       "nextControl": null,
       "isLocked": false,
@@ -84,12 +84,12 @@
     },
     {
       "waypointRelativePos": 0.25,
-      "rotationDegrees": -22.98885991581987,
+      "rotationDegrees": 1.9147799650152437,
       "rotateFast": false
     },
     {
       "waypointRelativePos": 2.9,
-      "rotationDegrees": 20.625039833672133,
+      "rotationDegrees": 3.753808318543773,
       "rotateFast": false
     },
     {
@@ -111,12 +111,6 @@
               "type": "named",
               "data": {
                 "name": "intake"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "followPathRotation"
               }
             },
             {
@@ -147,7 +141,35 @@
               "data": {
                 "name": "adjustToTarget"
               }
-            },
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "follow path rotation",
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathRotation"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "follow path speeds",
+      "waypointRelativePos": 2.1,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
             {
               "type": "named",
               "data": {

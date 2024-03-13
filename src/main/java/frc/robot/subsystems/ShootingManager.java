@@ -64,8 +64,6 @@ public class ShootingManager {
 
     @Getter private double distanceToSpeaker = 0;
 
-    public boolean useChassisCompensation = false;
-
     private ShootingManager() {
         poseEstimation = PoseEstimation.getInstance();
         swerveDrive = SwerveDrive.getInstance();

@@ -1,5 +1,6 @@
 package frc.robot.subsystems.leds;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -8,6 +9,7 @@ import frc.robot.RobotContainer;
 import frc.robot.lib.math.differential.BooleanTrigger;
 import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.gripper.Gripper;
+import frc.robot.subsystems.vision.Vision;
 
 public class LEDsDefaultCommand extends Command {
 
@@ -39,16 +41,19 @@ public class LEDsDefaultCommand extends Command {
 
     @Override
     public void execute() {
-        if (noteTimer.hasElapsed(3)) {
+        if (noteTimer.hasElapsed(2)) {
             switch (RobotContainer.getInstance().getState()) {
                 case SHOOT:
-                    if (ShootingManager.getInstance().getDistanceToSpeaker() < 5) {
+                    if (ShootingManager.getInstance().getDistanceToSpeaker() < 5
+                            && !Vision.getInstance().getScoreParameters().isEmpty()
+                            && Vision.getInstance().getScoreParameters().stream()
+                                    .allMatch((param) -> param.yaw().isPresent())) {
                         primaryColor = Color.kGreen;
-                        secondaryColor = Color.kBlack;
+                        secondaryColor = Color.kGreen;
                         blinkTime = 0.3;
                     } else {
-                        primaryColor = Color.kWhiteSmoke;
-                        secondaryColor = Color.kWhiteSmoke;
+                        primaryColor = Color.kRed;
+                        secondaryColor = Color.kRed;
                         blinkTime = 0.5;
                     }
                     rainbow = false;
@@ -67,8 +72,8 @@ public class LEDsDefaultCommand extends Command {
             noteTrigger.update(gripper.hasNote());
             if (noteTrigger.triggered()) {
                 blinkTime = 0.1;
+                secondaryColor = primaryColor;
                 primaryColor = Color.kWhiteSmoke;
-                secondaryColor = Color.kBlack;
 
                 noteTimer.reset();
             }
@@ -81,7 +86,11 @@ public class LEDsDefaultCommand extends Command {
                 primary = !primary;
             }
 
-            leds.setSolidColor(primary ? primaryColor : secondaryColor);
+            if (!DriverStation.isDisabled()) {
+                leds.setSolidColor(primary ? primaryColor : secondaryColor);
+            } else {
+                leds.setSolidColor(Color.kBlack);
+            }
         }
 
         SmartDashboard.putString(

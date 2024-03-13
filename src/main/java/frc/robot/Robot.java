@@ -107,8 +107,6 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putNumber(
                 "Shooter Tuning Velocity",
                 robotContainer.shooterTuningVelocity.in(Units.RotationsPerSecond));
-
-        ShootingManager.getInstance().useChassisCompensation = true;
     }
 
     /**
@@ -143,7 +141,6 @@ public class Robot extends LoggedRobot {
                 Units.RotationsPerSecond);
 
         ShootingManager.getInstance().updateCommandedState();
-        ShootingManager.getInstance().updateHoodChassisCompensation();
     }
 
     /**

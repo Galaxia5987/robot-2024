@@ -45,7 +45,7 @@ public class ConveyorConstants {
                 KI.initDefault(0.0);
                 KD.initDefault(0.0);
                 KS.initDefault(0.0);
-                KV.initDefault(0.1425);
+                KV.initDefault(0.1125);
                 KA.initDefault(0.0);
 
                 MOTOR_CONFIG
