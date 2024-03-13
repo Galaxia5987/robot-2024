@@ -70,12 +70,6 @@
               "data": {
                 "name": "intake"
               }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "followPathRotation"
-              }
             }
           ]
         }
@@ -132,6 +126,23 @@
               "type": "named",
               "data": {
                 "name": "followPathSpeeds"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathRotation"
               }
             }
           ]

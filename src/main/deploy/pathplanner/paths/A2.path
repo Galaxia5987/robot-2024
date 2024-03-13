@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.261288368730585,
-        "y": 6.9660616244309415
+        "x": 3.563724819757333,
+        "y": 6.344444227349993
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.552481549691769,
-        "y": 6.956311866214085
+        "x": 5.854918000718516,
+        "y": 6.334694469133137
       },
       "isLocked": false,
-      "linkedName": "AH"
+      "linkedName": "A Score"
     },
     {
       "anchor": {
@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 2.9914421367304285,
-        "y": 6.9660616244309415
+        "x": 3.563724819757333,
+        "y": 6.344444227349993
       },
       "prevControl": {
-        "x": 4.629354643324673,
-        "y": 6.946327738809324
+        "x": 5.201637326351575,
+        "y": 6.324710341728376
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Score AH"
+      "linkedName": "A Score"
     }
   ],
   "rotationTargets": [
@@ -60,7 +60,7 @@
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 0.45,
       "command": {
         "type": "parallel",
         "data": {
@@ -99,6 +99,23 @@
               "data": {
                 "name": "stopIntake"
               }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "adjust to target",
+      "waypointRelativePos": 1.1,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "adjustToTarget"
+              }
             },
             {
               "type": "named",
@@ -111,7 +128,7 @@
       }
     },
     {
-      "name": "New Event Marker",
+      "name": "detect note",
       "waypointRelativePos": 0.45,
       "command": {
         "type": "parallel",
@@ -136,7 +153,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 21.25050550713324,
+    "rotation": 9.462322208025514,
     "rotateFast": false
   },
   "reversed": false,
