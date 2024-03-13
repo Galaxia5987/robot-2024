@@ -118,7 +118,7 @@ public class ShootingManager {
 
         swerveCommandedAngle
                 .mut_replace(Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI, Radians)
-                .mut_minus(4, Degrees);
+                .mut_minus(3, Degrees);
     }
 
     public void updateCommandedState() {
@@ -176,7 +176,7 @@ public class ShootingManager {
                             yawToTarget.getRotations()
                                     + swerveDrive.getOdometryYaw().getRotations(),
                             Rotations)
-                    .mut_minus(4, Degrees);
+                    .mut_minus(3, Degrees);
         } else {
             updateCommandedStateWithPoseEstimation();
         }
