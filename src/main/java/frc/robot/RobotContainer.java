@@ -2,9 +2,12 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathPoint;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
@@ -16,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commandGroups.CommandGroups;
+import frc.robot.lib.GalacticProxyCommand;
 import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.climb.ClimbIO;
@@ -41,6 +45,10 @@ import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOReal;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.swerve.SwerveDrive;
+import frc.robot.subsystems.vision.VisionConstants;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -60,7 +68,8 @@ public class RobotContainer {
     private final CommandPS5Controller driveController = new CommandPS5Controller(1);
     //    private final CommandXboxController testController = new CommandXboxController(2);
     private final CommandGroups commandGroups;
-    private final SendableChooser<Command> autoChooser;
+    private final SendableChooser<String> autoChooser;
+    private final HashMap<String, PathPlannerAuto> autos = new HashMap<>();
     @Getter @Setter private boolean isForceShooting = false;
     @Getter private Constants.State state = Constants.State.SHOOT;
 
@@ -69,6 +78,10 @@ public class RobotContainer {
     public final MutableMeasure<Angle> hoodTuningAngle = Units.Degrees.of(115).mutableCopy();
     public final MutableMeasure<Velocity<Angle>> shooterTuningVelocity =
             Units.RotationsPerSecond.of(50).mutableCopy();
+
+    public int pathIndex = 0;
+    private PathPlannerAuto pathPlannerAuto = new PathPlannerAuto("None");
+    private List<PathPoint> pathPoints = new ArrayList<>();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
@@ -129,7 +142,11 @@ public class RobotContainer {
                 "print2", Commands.print("GaiaWasRightInPrintOne!!!").repeatedly().withTimeout(2));
         NamedCommands.registerCommand("stopIntake", intake.stop(false).withTimeout(0.05));
         NamedCommands.registerCommand("retractIntake", intake.stop());
-        NamedCommands.registerCommand("score", commandGroups.feedShooter(() -> isForceShooting));
+        NamedCommands.registerCommand(
+                "score",
+                commandGroups
+                        .feedShooter(() -> isForceShooting)
+                        .andThen(Commands.runOnce(() -> pathIndex++)));
         NamedCommands.registerCommand("finishScore", gripper.setRollerPower(0).withTimeout(0.05));
         NamedCommands.registerCommand(
                 "followPathRotation",
@@ -160,7 +177,17 @@ public class RobotContainer {
                     }
                     return Optional.empty();
                 });
-        autoChooser = AutoBuilder.buildAutoChooser("Safety B");
+        autoChooser =
+                new SendableChooser<>() {
+                    {
+                        List<String> paths = AutoBuilder.getAllAutoNames();
+                        paths.forEach(
+                                (path) -> {
+                                    addOption(path, path);
+                                    autos.put(path, new PathPlannerAuto(path));
+                                });
+                    }
+                };
         SmartDashboard.putData("autoList", autoChooser);
     }
 
@@ -180,6 +207,10 @@ public class RobotContainer {
                 hood.setAngle(ShootingManager.getInstance().getHoodCommandedAngle()),
                 commandGroups.shootAndConvey(
                         ShootingManager.getInstance().getShooterCommandedVelocity(), true));
+    }
+
+    public Translation2d getAutoToSpeaker() {
+        return VisionConstants.getSpeakerPose().minus(pathPoints.get(pathIndex).position);
     }
 
     private void configureDefaultCommands() {
@@ -305,6 +336,24 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return autoChooser.getSelected();
+        return Commands.sequence(
+                Commands.runOnce(() -> pathIndex = 0),
+                Commands.runOnce(
+                        () -> {
+                            pathPlannerAuto = autos.get(autoChooser.getSelected());
+                            pathPoints =
+                                    PathPlannerAuto.getPathGroupFromAutoFile(
+                                                    autoChooser.getSelected())
+                                            .stream()
+                                            .map(
+                                                    (path) ->
+                                                            path.getAllPathPoints()
+                                                                    .get(
+                                                                            path.getAllPathPoints()
+                                                                                            .size()
+                                                                                    - 1))
+                                            .toList();
+                        }),
+                new GalacticProxyCommand(() -> pathPlannerAuto));
     }
 }

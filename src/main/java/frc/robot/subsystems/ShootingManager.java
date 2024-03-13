@@ -4,8 +4,10 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.RobotContainer;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.lib.Utils;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
@@ -95,8 +97,13 @@ public class ShootingManager {
     }
 
     public void updateCommandedStateWithPoseEstimation() {
-        var toSpeaker = poseEstimation.getPoseRelativeToSpeaker();
-        distanceToSpeaker = toSpeaker.getNorm() * Utils.distanceToSpeakerVarianceFactor(toSpeaker);
+        Translation2d toSpeaker;
+        if (DriverStation.isAutonomous()) {
+            toSpeaker = RobotContainer.getInstance().getAutoToSpeaker();
+        } else {
+            toSpeaker = poseEstimation.getPoseRelativeToSpeaker();
+        }
+        distanceToSpeaker = toSpeaker.getNorm();
 
         shooterCommandedVelocity.mut_replace(
                 ShooterConstants.VELOCITY_BY_DISTANCE.getInterpolated(
