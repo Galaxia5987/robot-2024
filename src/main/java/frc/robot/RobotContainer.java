@@ -13,7 +13,6 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
@@ -245,7 +244,7 @@ public class RobotContainer {
                 swerveDrive.driveCommand(
                         () -> -driveController.getLeftY(),
                         () -> -driveController.getLeftX(),
-                        () -> 0.4 * -driveController.getRightX(), // 0.6
+                        () -> 0.6 * -driveController.getRightX(), // 0.6
                         0.1,
                         () -> true));
 
@@ -302,28 +301,7 @@ public class RobotContainer {
 
         driveController
                 .L2()
-                .whileTrue(
-                        commandGroups.intake(
-                                Commands.sequence(
-                                        Commands.runOnce(
-                                                () -> {
-                                                    xboxController
-                                                            .getHID()
-                                                            .setRumble(
-                                                                    GenericHID.RumbleType
-                                                                            .kBothRumble,
-                                                                    1);
-                                                    System.out.println("vroom");
-                                                }),
-                                        Commands.waitSeconds(2),
-                                        Commands.runOnce(
-                                                () ->
-                                                        xboxController
-                                                                .getHID()
-                                                                .setRumble(
-                                                                        GenericHID.RumbleType
-                                                                                .kBothRumble,
-                                                                        0)))))
+                .whileTrue(commandGroups.intake(Commands.none()))
                 .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
 
         driveController
