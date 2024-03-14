@@ -47,6 +47,7 @@ public class ShootingManager {
 
     @Getter private final MutableMeasure<Angle> hoodCommandedAngle = Degrees.zero().mutableCopy();
 
+    @AutoLogOutput(key = "SwerveDrive/commandedAngle")
     @Getter
     private final MutableMeasure<Angle> swerveCommandedAngle = Rotations.zero().mutableCopy();
 
@@ -61,6 +62,7 @@ public class ShootingManager {
     private boolean isShooting = false;
 
     @Getter private double distanceToSpeaker = 0;
+    private final Debouncer usePoseEstimation = new Debouncer(0.1, Debouncer.DebounceType.kFalling);
 
     private ShootingManager() {
         poseEstimation = PoseEstimation.getInstance();
@@ -86,9 +88,9 @@ public class ShootingManager {
                 && conveyor.atSetpoint()
                 && (DriverStation.isAutonomous()
                         || Utils.epsilonEquals(
-                                swerveCommandedAngle.in(Degrees),
-                                swerveDrive.getOdometryYaw().getDegrees(),
-                                2))
+                                Utils.normalize(swerveCommandedAngle.in(Radians)),
+                                Utils.normalize(swerveDrive.getOdometryYaw().getRadians()),
+                                Math.toRadians(2)))
                 && !lockShoot;
     }
 
@@ -99,7 +101,7 @@ public class ShootingManager {
         } else {
             toSpeaker = poseEstimation.getPoseRelativeToSpeaker();
         }
-        distanceToSpeaker = toSpeaker.getNorm();
+        distanceToSpeaker = toSpeaker.getNorm() * Utils.distanceToSpeakerVarianceFactor(toSpeaker);
 
         shooterCommandedVelocity.mut_replace(
                 ShooterConstants.VELOCITY_BY_DISTANCE.getInterpolated(
@@ -125,8 +127,9 @@ public class ShootingManager {
     }
 
     public void updateCommandedState() {
+        Logger.recordOutput("SwerveDrive/commandedAngle", getSwerveCommandedAngle());
         var scoreParameters = vision.getScoreParameters();
-        if (!scoreParameters.isEmpty()
+        if (usePoseEstimation.calculate(!scoreParameters.isEmpty())
                 && !DriverStation.isAutonomous()) {
             distanceToSpeaker =
                     scoreParameters.stream()
@@ -161,25 +164,16 @@ public class ShootingManager {
                             .filter(Optional::isPresent)
                             .map(Optional::get)
                             .toList();
-            Rotation2d yawToTarget;
-            boolean useAlternateYaw = yaws.isEmpty();
-            if (!useAlternateYaw) {
-                yawToTarget =
+            if (!yaws.isEmpty()) {
+                var yawToTarget =
                         yaws.stream().reduce(new Rotation2d(), Rotation2d::plus).div(yaws.size());
-            } else {
-                yawToTarget =
-                        scoreParameters.stream()
-                                .map(VisionIO.ScoreParameters::alternateYaw)
-                                .reduce(new Rotation2d(), Rotation2d::plus)
-                                .div(scoreParameters.size());
+                swerveCommandedAngle
+                        .mut_replace(
+                                yawToTarget.getRotations()
+                                        + swerveDrive.getOdometryYaw().getRotations(),
+                                Rotations)
+                        .mut_minus(3, Degrees);
             }
-
-            swerveCommandedAngle
-                    .mut_replace(
-                            yawToTarget.getRotations()
-                                    + swerveDrive.getOdometryYaw().getRotations(),
-                            Rotations)
-                    .mut_minus(3, Degrees);
         } else {
             updateCommandedStateWithPoseEstimation();
         }

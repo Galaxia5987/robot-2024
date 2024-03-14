@@ -1,5 +1,6 @@
 package frc.robot.subsystems.leds;
 
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,6 +25,7 @@ public class LEDsDefaultCommand extends Command {
     private final Timer timer = new Timer();
     private final BooleanTrigger noteTrigger = new BooleanTrigger();
     private final Timer noteTimer = new Timer();
+    private final Debouncer hasTarget = new Debouncer(1.0, Debouncer.DebounceType.kFalling);
 
     public LEDsDefaultCommand(LEDs leds) {
         this.leds = leds;
@@ -45,9 +47,11 @@ public class LEDsDefaultCommand extends Command {
             switch (RobotContainer.getInstance().getState()) {
                 case SHOOT:
                     if (ShootingManager.getInstance().getDistanceToSpeaker() < 5
-                            && !Vision.getInstance().getScoreParameters().isEmpty()
-                            && Vision.getInstance().getScoreParameters().stream()
-                                    .allMatch((param) -> param.yaw().isPresent())) {
+                            && hasTarget.calculate(
+                                    !Vision.getInstance().getScoreParameters().isEmpty()
+                                            && Vision.getInstance().getScoreParameters().stream()
+                                                    .allMatch(
+                                                            (param) -> param.yaw().isPresent()))) {
                         primaryColor = Color.kGreen;
                         secondaryColor = Color.kGreen;
                         blinkTime = 0.3;

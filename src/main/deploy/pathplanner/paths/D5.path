@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.3762529063519677,
-        "y": 3.1475547566479753
+        "x": 2.649054998537956,
+        "y": 3.4429859444597626
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.487725343073563,
-        "y": 2.094580869227516
+        "x": 3.760527435259551,
+        "y": 2.390012057039303
       },
       "isLocked": false,
       "linkedName": "D0"
@@ -20,24 +20,24 @@
         "y": 0.7897304155653457
       },
       "prevControl": {
-        "x": 7.125691174459273,
-        "y": 0.927492624216019
+        "x": 5.963221740994124,
+        "y": 0.9485777602083012
       },
       "nextControl": {
-        "x": 8.285892636757753,
-        "y": 0.7332444700804813
+        "x": 8.289498832812923,
+        "y": 0.7624475616972773
       },
       "isLocked": false,
       "linkedName": "center note line #5"
     },
     {
       "anchor": {
-        "x": 3.3762529063519677,
-        "y": 3.1475547566479753
+        "x": 2.649054998537956,
+        "y": 3.4429859444597626
       },
       "prevControl": {
-        "x": 5.1420702271603975,
-        "y": 1.5688439069185853
+        "x": 4.241728768764241,
+        "y": 1.3584570393106543
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,13 +49,18 @@
       "waypointRelativePos": 1.0,
       "rotationDegrees": 0,
       "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 0.4,
+      "rotationDegrees": -23.60151495068578,
+      "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.5,
+      "name": "intake",
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -71,19 +76,13 @@
               "data": {
                 "name": "followPathRotation"
               }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "useNoteDetection"
-              }
             }
           ]
         }
       }
     },
     {
-      "name": "New Event Marker",
+      "name": "stop intake",
       "waypointRelativePos": 1.45,
       "command": {
         "type": "parallel",
@@ -100,7 +99,35 @@
               "data": {
                 "name": "adjustToTarget"
               }
-            },
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "start note detection",
+      "waypointRelativePos": 0.7,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "useNoteDetection"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop note detection",
+      "waypointRelativePos": 1.1,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
             {
               "type": "named",
               "data": {

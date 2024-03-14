@@ -91,34 +91,6 @@ public class PhotonVisionIOReal implements VisionIO {
         var estimatedPose = estimator.update(latestResult);
         if (estimatedPose.isPresent()) {
             inputs.poseFieldOriented = estimatedPose.get().estimatedPose;
-            if (calculateScoreParams) {
-                var toSpeaker =
-                        inputs.poseFieldOriented
-                                .getTranslation()
-                                .toTranslation2d()
-                                .minus(VisionConstants.getSpeakerPose());
-                inputs.distanceToSpeaker = toSpeaker.getNorm();
-                var centerTag = latestResult.getTargets();
-                centerTag.removeIf(
-                        (target) -> target.getFiducialId() != VisionConstants.getSpeakerTag1());
-                Optional<Rotation2d> yaw;
-                if (!centerTag.isEmpty()) {
-                    inputs.yawToSpeaker = Rotation2d.fromDegrees(-centerTag.get(0).getYaw());
-                    yaw = Optional.of(inputs.yawToSpeaker);
-                } else {
-                    yaw = Optional.empty();
-                }
-                scoreParameters =
-                        Optional.of(
-                                new ScoreParameters(
-                                        inputs.distanceToSpeaker,
-                                        yaw,
-                                        new Rotation2d(toSpeaker.getX(), toSpeaker.getY())
-                                                .minus(SwerveDrive.getInstance().getOdometryYaw()),
-                                        Utils.distanceToSpeakerVarianceFactor(toSpeaker)));
-            } else {
-                scoreParameters = Optional.empty();
-            }
 
             result = new VisionResult(estimatedPose.get(), true);
             double distanceTraveled =
@@ -141,6 +113,35 @@ public class PhotonVisionIOReal implements VisionIO {
             }
         } else {
             result.setUseForEstimation(false);
+        }
+
+        if (calculateScoreParams && latestResult.hasTargets()) {
+            var toSpeaker =
+                    inputs.poseFieldOriented
+                            .getTranslation()
+                            .toTranslation2d()
+                            .minus(VisionConstants.getSpeakerPose());
+            inputs.distanceToSpeaker = toSpeaker.getNorm();
+            var centerTag = latestResult.getTargets();
+            centerTag.removeIf(
+                    (target) -> target.getFiducialId() != VisionConstants.getSpeakerTag1());
+            Optional<Rotation2d> yaw;
+            if (!centerTag.isEmpty()) {
+                inputs.yawToSpeaker = Rotation2d.fromDegrees(-centerTag.get(0).getYaw());
+                yaw = Optional.of(inputs.yawToSpeaker);
+            } else {
+                yaw = Optional.empty();
+            }
+            scoreParameters =
+                    Optional.of(
+                            new ScoreParameters(
+                                    inputs.distanceToSpeaker,
+                                    yaw,
+                                    new Rotation2d(toSpeaker.getX(), toSpeaker.getY())
+                                            .minus(SwerveDrive.getInstance().getOdometryYaw()),
+                                    Utils.distanceToSpeakerVarianceFactor(toSpeaker)));
+        } else {
+            scoreParameters = Optional.empty();
         }
 
         lastResult = result;

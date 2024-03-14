@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.3762529063519677,
-        "y": 3.1475547566479753
+        "x": 2.649054998537956,
+        "y": 3.4429859444597626
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.7912455938872,
-        "y": 1.1478543469907458
+        "x": 4.064047686073188,
+        "y": 1.443285534802533
       },
       "isLocked": false,
       "linkedName": "D0"
@@ -20,24 +20,24 @@
         "y": 2.4440782784699477
       },
       "prevControl": {
-        "x": 6.046597643937499,
-        "y": 1.7992665666815535
+        "x": 6.131080005336386,
+        "y": 1.127507617385482
       },
       "nextControl": {
-        "x": 8.319591254567126,
-        "y": 2.565405130810262
+        "x": 8.680135819615433,
+        "y": 2.962841646082722
       },
       "isLocked": false,
       "linkedName": "center note line #4"
     },
     {
       "anchor": {
-        "x": 3.3762529063519677,
-        "y": 3.1475547566479753
+        "x": 2.649054998537956,
+        "y": 3.4429859444597626
       },
       "prevControl": {
-        "x": 5.703389640397516,
-        "y": 0.2824869182501917
+        "x": 5.237149875155669,
+        "y": 0.0702650192746889
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,25 +47,25 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1.1,
-      "rotationDegrees": 17.365502164338647,
+      "rotationDegrees": 27.211061455598777,
       "rotateFast": false
     },
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": 0,
+      "rotationDegrees": 16.409321448310937,
       "rotateFast": false
     },
     {
       "waypointRelativePos": 1.65,
-      "rotationDegrees": 33.09015951349984,
+      "rotationDegrees": 0.3533973666021898,
       "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.15,
+      "name": "intake",
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -87,7 +87,7 @@
       }
     },
     {
-      "name": "New Event Marker",
+      "name": "stop intake",
       "waypointRelativePos": 1.5,
       "command": {
         "type": "parallel",
@@ -104,20 +104,14 @@
               "data": {
                 "name": "adjustToTarget"
               }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "followPathSpeeds"
-              }
             }
           ]
         }
       }
     },
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.0,
+      "name": "start note detection",
+      "waypointRelativePos": 0.75,
       "command": {
         "type": "parallel",
         "data": {
@@ -126,6 +120,23 @@
               "type": "named",
               "data": {
                 "name": "useNoteDetection"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop note detection",
+      "waypointRelativePos": 1.1,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathSpeeds"
               }
             }
           ]
