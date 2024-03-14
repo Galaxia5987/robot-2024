@@ -59,8 +59,6 @@ public class ShootingManager {
     @Setter private Measure<Distance> maxShootingDistance = Meters.of(10.5);
 
     private boolean isShooting = false;
-    private final Debouncer useAlternateYawBouncer = new Debouncer(0.1);
-    private final Debouncer usePoseEstimationBouncer = new Debouncer(0.1);
 
     @Getter private double distanceToSpeaker = 0;
 
@@ -128,7 +126,7 @@ public class ShootingManager {
 
     public void updateCommandedState() {
         var scoreParameters = vision.getScoreParameters();
-        if (!usePoseEstimationBouncer.calculate(scoreParameters.isEmpty())
+        if (!scoreParameters.isEmpty()
                 && !DriverStation.isAutonomous()) {
             distanceToSpeaker =
                     scoreParameters.stream()
@@ -164,7 +162,7 @@ public class ShootingManager {
                             .map(Optional::get)
                             .toList();
             Rotation2d yawToTarget;
-            boolean useAlternateYaw = useAlternateYawBouncer.calculate(yaws.isEmpty());
+            boolean useAlternateYaw = yaws.isEmpty();
             if (!useAlternateYaw) {
                 yawToTarget =
                         yaws.stream().reduce(new Rotation2d(), Rotation2d::plus).div(yaws.size());
