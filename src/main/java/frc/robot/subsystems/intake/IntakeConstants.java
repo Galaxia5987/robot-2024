@@ -62,7 +62,7 @@ public class IntakeConstants {
     }
 
     public enum IntakePose {
-        UP(Degrees.of(110).mutableCopy()),
+        UP(Degrees.of(120).mutableCopy()),
         DOWN(Degrees.zero().mutableCopy());
         public final MutableMeasure<Angle> intakePose;
 
