@@ -164,7 +164,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "useNoteDetection", Commands.runOnce(() -> setUseNoteDetection(true)));
 
-        NamedCommands.registerCommand("prepareShoot", prepare());
+        NamedCommands.registerCommand("prepareShoot", prepareShooter());
         NamedCommands.registerCommand("closeShoot", closeShoot());
         NamedCommands.registerCommand("shootAndIntake", commandGroups.shootAndIntake());
         NamedCommands.registerCommand(
@@ -212,7 +212,7 @@ public class RobotContainer {
         return INSTANCE;
     }
 
-    private Command prepare() {
+    private Command prepareShooter() {
         return Commands.parallel(
                 hood.setAngle(ShootingManager.getInstance().getHoodCommandedAngle()),
                 commandGroups.shootAndConvey(
