@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -98,6 +99,7 @@ public class Robot extends LoggedRobot {
         GripperConstants.initConstants();
         HoodConstants.initConstants();
         ShooterConstants.initConstants();
+        Pathfinding.setPathfinder(new LocalADStarAK());
 
         robotContainer = RobotContainer.getInstance();
         compressor.enableDigital();
