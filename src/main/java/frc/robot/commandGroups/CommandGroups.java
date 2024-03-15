@@ -20,6 +20,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
+import java.util.Set;
 import java.util.function.BooleanSupplier;
 
 public class CommandGroups {
@@ -117,6 +118,45 @@ public class CommandGroups {
                 .until(() -> shooter.atSetpoint() && hood.atSetpoint() && conveyor.atSetpoint())
                 .andThen(gripper.setRollerPower(GripperConstants.INTAKE_POWER).withTimeout(0.5))
                 .andThen(gripper.setRollerPower(0));
+    }
+
+    public Command shootToTrap() { // TODO: remove from defer when calibrated
+        return Commands.defer(
+                () ->
+                        Commands.parallel(
+                                        shooter.setVelocity(
+                                                Units.RotationsPerSecond.of(
+                                                                CommandGroupsConstants
+                                                                        .TRAP_TOP_SHOOTER_VELOCITY
+                                                                        .get())
+                                                        .mutableCopy(),
+                                                Units.RotationsPerSecond.of(
+                                                                CommandGroupsConstants
+                                                                        .TRAP_BOTTOM_SHOOTER_VELOCITY
+                                                                        .get())
+                                                        .mutableCopy()),
+                                        conveyor.setVelocity(
+                                                Units.RotationsPerSecond.of(
+                                                                CommandGroupsConstants
+                                                                        .TRAP_CONVEYOR_VELOCITY
+                                                                        .get())
+                                                        .mutableCopy()),
+                                        hood.setAngle(
+                                                Units.Degrees.of(
+                                                                CommandGroupsConstants
+                                                                        .TRAP_HOOD_ANGLE
+                                                                        .get())
+                                                        .mutableCopy()))
+                                .until(
+                                        () ->
+                                                shooter.atSetpoint()
+                                                        && hood.atSetpoint()
+                                                        && conveyor.atSetpoint())
+                                .andThen(
+                                        gripper.setRollerPower(GripperConstants.INTAKE_POWER)
+                                                .withTimeout(0.5))
+                                .andThen(gripper.setRollerPower(0)),
+                Set.of(shooter, hood, conveyor, gripper));
     }
 
     public Command shootToSpeaker(CommandXboxController driveController) {

@@ -16,7 +16,7 @@ public interface ModuleIO {
     default boolean hasPIDChanged(LoggedTunableNumber[] PIDValues) {
         boolean hasChanged = false;
         for (LoggedTunableNumber value : PIDValues) {
-            if (value.hasChanged(hashCode())) hasChanged = true;
+            if (value.hasChanged()) hasChanged = true;
         }
         return hasChanged;
     }

@@ -309,6 +309,11 @@ public class RobotContainer {
                 .whileTrue(intake.outtake().alongWith(gripper.setRollerPower(-0.7)))
                 .onFalse(intake.stop().alongWith(gripper.setRollerPower(0)));
 
+        driveController
+                .L1()
+                .whileTrue(commandGroups.shootToTrap())
+                .onFalse(commandGroups.stopShooting());
+
         xboxController.start().onTrue(climb.lock());
         xboxController.back().onTrue(climb.unlock());
         xboxController
