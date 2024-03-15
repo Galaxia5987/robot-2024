@@ -7,7 +7,6 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPoint;
 import com.pathplanner.lib.util.GeometryUtil;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Angle;
@@ -334,15 +333,6 @@ public class RobotContainer {
                 .x()
                 .onTrue(intake.setAnglePower(-0.3))
                 .onFalse(intake.reset(Units.Degrees.zero().mutableCopy()));
-        driveController
-                .L1()
-                .onTrue(
-                        AutoBuilder.pathfindToPose(
-                                GeometryUtil.flipFieldPose(
-                                        new Pose2d(
-                                                new Translation2d(4.41, 5.02),
-                                                Rotation2d.fromDegrees(-57.72))),
-                                Constants.AUTO_CONSTRAINTS));
 
         xboxController
                 .leftStick()
