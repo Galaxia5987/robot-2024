@@ -113,10 +113,10 @@ public class CommandGroups {
         return shooter.setVelocity(
                         ShooterConstants.TOP_AMP_VELOCITY, ShooterConstants.BOTTOM_AMP_VELOCITY)
                 .alongWith(hood.setAngle(HoodConstants.AMP_ANGLE))
+                .alongWith(conveyor.setVelocity(ConveyorConstants.AMP_VELOCITY))
                 .until(() -> shooter.atSetpoint() && hood.atSetpoint() && conveyor.atSetpoint())
                 .andThen(gripper.setRollerPower(GripperConstants.INTAKE_POWER).withTimeout(0.5))
-                .andThen(gripper.setRollerPower(0))
-                .alongWith(conveyor.setVelocity(ConveyorConstants.AMP_VELOCITY));
+                .andThen(gripper.setRollerPower(0));
     }
 
     public Command shootToSpeaker(CommandXboxController driveController) {
