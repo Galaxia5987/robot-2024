@@ -123,7 +123,7 @@ public class ShootingManager {
 
         swerveCommandedAngle
                 .mut_replace(Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI, Radians)
-                .mut_minus(3, Degrees);
+                .mut_minus(0, Degrees);
     }
 
     public void updateCommandedState() {
