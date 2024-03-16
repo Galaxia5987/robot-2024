@@ -43,44 +43,38 @@ public class LEDsDefaultCommand extends Command {
 
     @Override
     public void execute() {
-        if (noteTimer.hasElapsed(2)) {
-            switch (RobotContainer.getInstance().getState()) {
-                case SHOOT:
-                    if (ShootingManager.getInstance().getDistanceToSpeaker() < 5
-                            && hasTarget.calculate(
-                                    !Vision.getInstance().getScoreParameters().isEmpty()
-                                            && Vision.getInstance().getScoreParameters().stream()
-                                                    .allMatch(
-                                                            (param) -> param.yaw().isPresent()))) {
-                        primaryColor = Color.kGreen;
-                        secondaryColor = Color.kGreen;
-                        blinkTime = 0.3;
-                    } else {
-                        primaryColor = Color.kRed;
-                        secondaryColor = Color.kRed;
-                        blinkTime = 0.5;
-                    }
-                    rainbow = false;
-                    break;
-                case AMP:
-                    primaryColor = Color.kBlue;
-                    secondaryColor = Color.kBlue;
-                    blinkTime = 0.5;
-                    rainbow = false;
-                    break;
-                case CLIMB:
-                    rainbow = true;
-                    break;
-            }
+        switch (RobotContainer.getInstance().getState()) {
+            case SHOOT:
+                if (ShootingManager.getInstance().getDistanceToSpeaker() < 5
+                        && hasTarget.calculate(
+                                !Vision.getInstance().getScoreParameters().isEmpty()
+                                        && Vision.getInstance().getScoreParameters().stream()
+                                                .allMatch((param) -> param.yaw().isPresent()))) {
+                    primaryColor = Color.kGreen;
+                    secondaryColor = Color.kGreen;
+                } else {
+                    primaryColor = Color.kRed;
+                    secondaryColor = Color.kRed;
+                }
+                rainbow = false;
+                break;
+            case AMP:
+                primaryColor = Color.kBlue;
+                secondaryColor = Color.kBlue;
+                rainbow = false;
+                break;
+            case CLIMB:
+                rainbow = true;
+                break;
+        }
 
-            noteTrigger.update(gripper.hasNote());
-            if (noteTrigger.triggered()) {
-                blinkTime = 0.1;
-                secondaryColor = primaryColor;
-                primaryColor = Color.kWhiteSmoke;
-
-                noteTimer.reset();
-            }
+        noteTrigger.update(gripper.hasNote());
+        if (noteTrigger.triggered()) {
+            noteTimer.reset();
+        }
+        if (!noteTimer.hasElapsed(2)) {
+            blinkTime = 0.1;
+            secondaryColor = Color.kWhiteSmoke;
         }
 
         if (rainbow) {

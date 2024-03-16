@@ -261,6 +261,19 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         //        testController.rightBumper().onTrue(commandGroups.allBits());
+        driveController
+                .cross()
+                .whileTrue(
+                        commandGroups
+                                .shootAndConvey(
+                                        Units.RotationsPerSecond.of(80).mutableCopy(), false)
+                                .alongWith(
+                                        hood.setAngle(Units.Degrees.of(95).mutableCopy()),
+                                        commandGroups.feedWithWait(
+                                                () ->
+                                                        (shooter.atSetpoint() && hood.atSetpoint()
+                                                                || isForceShooting))))
+                .onFalse(commandGroups.stopShooting());
         driveController.triangle().onTrue(Commands.runOnce(swerveDrive::resetGyro));
         driveController.circle().whileTrue(closeShoot()).onFalse(commandGroups.stopShooting());
         driveController
@@ -268,23 +281,13 @@ public class RobotContainer {
                 .whileTrue(
                         commandGroups
                                 .shootAndConvey(
-                                        Units.RotationsPerSecond.of(50).mutableCopy(), false)
+                                        Units.RotationsPerSecond.of(73).mutableCopy(), false)
                                 .alongWith(
-                                        hood.setAngle(Units.Degrees.of(108).mutableCopy()),
+                                        hood.setAngle(Units.Degrees.of(83).mutableCopy()),
                                         commandGroups.feedWithWait(
                                                 () ->
-                                                        (shooter.atSetpoint()
-                                                                        && hood.getAngle()
-                                                                                        .minus(
-                                                                                                Units
-                                                                                                        .Degrees
-                                                                                                        .of(
-                                                                                                                107))
-                                                                                        .in(
-                                                                                                Units
-                                                                                                        .Degrees)
-                                                                                < 2)
-                                                                || isForceShooting)))
+                                                        (shooter.atSetpoint() && hood.atSetpoint()
+                                                                || isForceShooting))))
                 .onFalse(commandGroups.stopShooting());
 
         driveController
@@ -309,10 +312,12 @@ public class RobotContainer {
                 .whileTrue(intake.outtake().alongWith(gripper.setRollerPower(-0.7)))
                 .onFalse(intake.stop().alongWith(gripper.setRollerPower(0)));
 
-        driveController
-                .L1()
-                .whileTrue(commandGroups.shootToTrap())
-                .onFalse(commandGroups.stopShooting());
+        //        driveController
+        //                .L1()
+        //
+        // .whileTrue(commandGroups.dtopToTrap().andThen(commandGroups.shootToTrap()))
+        //                .onFalse(commandGroups.stopShooting());
+        driveController.L1().whileTrue(commandGroups.dtopClimb());
 
         xboxController.start().onTrue(climb.lock());
         xboxController.back().onTrue(climb.unlock());
@@ -338,11 +343,6 @@ public class RobotContainer {
                 .x()
                 .onTrue(intake.setAnglePower(-0.3))
                 .onFalse(intake.reset(Units.Degrees.zero().mutableCopy()));
-
-        xboxController
-                .leftStick()
-                .whileTrue(Commands.runOnce(() -> ShootingManager.getInstance().setLockShoot(true)))
-                .onFalse(Commands.runOnce(() -> ShootingManager.getInstance().setLockShoot(false)));
     }
 
     /**

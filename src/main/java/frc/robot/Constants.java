@@ -45,9 +45,9 @@ public class Constants {
             new Transform3d(0.0, 0.0, 0.53, new Rotation3d(0, Math.toRadians(20), 0));
     public static final Measure<Voltage> NOMINAL_VOLTAGE = Units.Volts.of(12);
     public static final Measure<Distance> ROBOT_LENGTH = Units.Meters.of(0.584);
-    public static final Measure<Velocity<Distance>> MAX_VELOCITY = Units.MetersPerSecond.of(4);
+    public static final Measure<Velocity<Distance>> MAX_VELOCITY = Units.MetersPerSecond.of(3);
     public static final Measure<Velocity<Velocity<Distance>>> MAX_ACCELERATION =
-            Units.MetersPerSecondPerSecond.of(2.5);
+            Units.MetersPerSecondPerSecond.of(1.5);
     public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY =
             Units.RotationsPerSecond.of(
                     MAX_VELOCITY.in(Units.MetersPerSecond)
@@ -64,10 +64,10 @@ public class Constants {
                     MAX_ANGULAR_VELOCITY.in(Units.RotationsPerSecond),
                     MAX_ANGULAR_ACCELERATION.in(Units.RotationsPerSecond.per(Units.Second)));
     public static final double[] SWERVE_OFFSETS = {
-        0.794_517_619_862_940_4,
-        0.782_804_769_570_119_2,
-        0.523_762_213_094_055_4,
-        0.577_792_614_444_815_3
+        0.789_566_394_739_159_9,
+        0.780_995_494_524_887_4,
+        0.522_278_363_056_959_1,
+        0.573_587_414_339_685_4
     };
 
     public static Mode CURRENT_MODE = Mode.REAL;

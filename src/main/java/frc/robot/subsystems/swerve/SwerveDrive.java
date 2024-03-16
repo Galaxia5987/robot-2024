@@ -248,7 +248,8 @@ public class SwerveDrive extends SubsystemBase {
                         SwerveConstants.ROTATION_KDIETER.get());
         turnController.setTolerance(turnTolerance);
         turnController.enableContinuousInput(-0.5, 0.5);
-        return run(() ->
+        return run(
+                () ->
                         drive(
                                 0,
                                 0,
@@ -258,8 +259,7 @@ public class SwerveDrive extends SubsystemBase {
                                                 .getRotation()
                                                 .getRotations(),
                                         rotation.in(edu.wpi.first.units.Units.Rotations)),
-                                false))
-                .until(turnController::atSetpoint);
+                                false));
     }
 
     public Command driveAndAdjust(

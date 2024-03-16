@@ -1,5 +1,7 @@
 package frc.robot.commandGroups;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.GeometryUtil;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
@@ -8,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants;
 import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.conveyor.Conveyor;
@@ -20,6 +23,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
+import java.util.List;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
 
@@ -110,11 +114,16 @@ public class CommandGroups {
         return Commands.parallel(gripper.setRollerPower(0.7), intake.intake());
     }
 
-    public Command shootToAmp() {
+    public Command shootToAmp(CommandPS5Controller driveController) {
         return shooter.setVelocity(
                         ShooterConstants.TOP_AMP_VELOCITY, ShooterConstants.BOTTOM_AMP_VELOCITY)
                 .alongWith(hood.setAngle(HoodConstants.AMP_ANGLE))
                 .alongWith(conveyor.setVelocity(ConveyorConstants.AMP_VELOCITY))
+                //                .alongWith(swerveDrive.driveAndAdjust( //TODO: check if this works
+                //                        Units.Rotation.of(90).mutableCopy(),
+                //                        () -> -driveController.getLeftY(),
+                //                        () -> -driveController.getLeftX(),
+                //                        0.1))
                 .until(() -> shooter.atSetpoint() && hood.atSetpoint() && conveyor.atSetpoint())
                 .andThen(gripper.setRollerPower(GripperConstants.INTAKE_POWER).withTimeout(0.5))
                 .andThen(gripper.setRollerPower(0));
@@ -124,6 +133,13 @@ public class CommandGroups {
         return Commands.defer(
                 () ->
                         Commands.parallel(
+                                        swerveDrive.turnCommand(
+                                                Units.Rotations.of(
+                                                                CommandGroupsConstants.TRAP_POSE
+                                                                        .getRotation()
+                                                                        .getRotations())
+                                                        .mutableCopy(),
+                                                0.5 / 360.0),
                                         shooter.setVelocity(
                                                 Units.RotationsPerSecond.of(
                                                                 CommandGroupsConstants
@@ -159,6 +175,15 @@ public class CommandGroups {
                 Set.of(shooter, hood, conveyor, gripper));
     }
 
+    public Command dtopToTrap() {
+        return Commands.defer(
+                () -> {
+                    var optimalPose = CommandGroupsConstants.TRAP_POSE;
+                    return AutoBuilder.pathfindToPose(optimalPose, Constants.AUTO_CONSTRAINTS);
+                },
+                Set.of(swerveDrive));
+    }
+
     public Command shootToSpeaker(CommandXboxController driveController) {
         return Commands.parallel(
                 hood.setAngle(ShootingManager.getInstance().getHoodCommandedAngle()),
@@ -190,6 +215,28 @@ public class CommandGroups {
     public Command closeSpeakerWarmup() {
         return hood.setAngle(Units.Degrees.of(107).mutableCopy())
                 .alongWith(shootAndConvey(Units.RotationsPerSecond.of(50).mutableCopy(), false));
+    }
+
+    public Command dtopClimb() {
+        return Commands.defer(
+                () -> {
+                    var climbPoses =
+                            new java.util.ArrayList<>(List.of(CommandGroupsConstants.CLIMB_POSES));
+                    if (Constants.isRed()) {
+                        climbPoses.replaceAll(GeometryUtil::flipFieldPose);
+                    }
+                    var optimalPose = swerveDrive.getBotPose().nearest(climbPoses);
+                    return AutoBuilder.pathfindToPose(optimalPose, Constants.AUTO_CONSTRAINTS)
+                            .andThen(
+                                    swerveDrive.turnCommand(
+                                            Units.Rotations.of(
+                                                            optimalPose
+                                                                    .getRotation()
+                                                                    .getRotations())
+                                                    .mutableCopy(),
+                                            2.0 / 360.0));
+                },
+                Set.of(swerveDrive));
     }
 
     public Command stopShooting() {

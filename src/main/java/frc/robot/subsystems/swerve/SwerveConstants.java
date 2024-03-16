@@ -140,7 +140,7 @@ public class SwerveConstants {
                 ROTATION_KP.initDefault(2.3);
                 ROTATION_KI.initDefault(0.0);
                 ROTATION_KD.initDefault(0.2);
-                ROTATION_KDIETER.initDefault(0.0);
+                ROTATION_KDIETER.initDefault(0.002);
 
                 ROBOT_WIDTH = 0.585;
                 ROBOT_LENGTH = 0.585;
