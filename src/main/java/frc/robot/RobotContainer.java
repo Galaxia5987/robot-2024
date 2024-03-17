@@ -29,10 +29,7 @@ import frc.robot.subsystems.conveyor.Conveyor;
 import frc.robot.subsystems.conveyor.ConveyorIO;
 import frc.robot.subsystems.conveyor.ConveyorIOReal;
 import frc.robot.subsystems.conveyor.ConveyorIOSim;
-import frc.robot.subsystems.gripper.Gripper;
-import frc.robot.subsystems.gripper.GripperIO;
-import frc.robot.subsystems.gripper.GripperIOReal;
-import frc.robot.subsystems.gripper.GripperIOSim;
+import frc.robot.subsystems.gripper.*;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOReal;
@@ -63,7 +60,7 @@ public class RobotContainer {
     private final Hood hood;
     private final Shooter shooter;
     private final SwerveDrive swerveDrive;
-    private final LEDs leds;
+    public static final LEDs leds = new LEDs(9, 58);
     private final CommandXboxController xboxController = new CommandXboxController(0);
     private final CommandPS5Controller driveController = new CommandPS5Controller(1);
     //    private final CommandXboxController testController = new CommandXboxController(2);
@@ -133,8 +130,6 @@ public class RobotContainer {
         climb = Climb.getInstance();
         hood = Hood.getInstance();
         shooter = Shooter.getInstance();
-
-        leds = new LEDs(9, 58);
 
         gripper = Gripper.getInstance();
         commandGroups = CommandGroups.getInstance();
@@ -263,7 +258,7 @@ public class RobotContainer {
         //        testController.rightBumper().onTrue(commandGroups.allBits());
         driveController
                 .cross()
-                .whileTrue(commandGroups.superPoop(() -> isForceShooting))
+                .whileTrue(commandGroups.superPoop(driveController, () -> isForceShooting))
                 .onFalse(commandGroups.stopShooting());
         driveController.triangle().onTrue(Commands.runOnce(swerveDrive::resetGyro));
         driveController.circle().whileTrue(closeShoot()).onFalse(commandGroups.stopShooting());
@@ -303,11 +298,7 @@ public class RobotContainer {
                 .whileTrue(intake.outtake().alongWith(gripper.setRollerPower(-0.7)))
                 .onFalse(intake.stop().alongWith(gripper.setRollerPower(0)));
 
-        driveController
-                .L1()
-                .whileTrue(commandGroups.shootToTrap())
-                .onFalse(commandGroups.stopShooting());
-//        driveController.L1().whileTrue(commandGroups.dtopClimb());
+        driveController.L1().toggleOnTrue(commandGroups.adjustToAmp(driveController));
 
         xboxController.start().onTrue(climb.lock());
         xboxController.back().onTrue(climb.unlock());

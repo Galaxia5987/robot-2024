@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.RobotContainer;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.lib.Utils;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
@@ -62,7 +61,7 @@ public class ShootingManager {
     private boolean isShooting = false;
 
     @Getter private double distanceToSpeaker = 0;
-    private final Debouncer usePoseEstimation = new Debouncer(0.1, Debouncer.DebounceType.kFalling);
+    private final Debouncer usePoseEstimation = new Debouncer(0.5, Debouncer.DebounceType.kFalling);
 
     private ShootingManager() {
         poseEstimation = PoseEstimation.getInstance();
@@ -95,12 +94,7 @@ public class ShootingManager {
     }
 
     public void updateCommandedStateWithPoseEstimation() {
-        Translation2d toSpeaker;
-        if (DriverStation.isAutonomous()) {
-            toSpeaker = RobotContainer.getInstance().getAutoToSpeaker();
-        } else {
-            toSpeaker = poseEstimation.getPoseRelativeToSpeaker();
-        }
+        Translation2d toSpeaker = poseEstimation.getPoseRelativeToSpeaker();
         distanceToSpeaker = toSpeaker.getNorm() * Utils.distanceToSpeakerVarianceFactor(toSpeaker);
 
         shooterCommandedVelocity.mut_replace(
@@ -129,8 +123,7 @@ public class ShootingManager {
     public void updateCommandedState() {
         Logger.recordOutput("SwerveDrive/commandedAngle", getSwerveCommandedAngle());
         var scoreParameters = vision.getScoreParameters();
-        if (usePoseEstimation.calculate(!scoreParameters.isEmpty())
-                && !DriverStation.isAutonomous()) {
+        if (usePoseEstimation.calculate(!scoreParameters.isEmpty())) {
             distanceToSpeaker =
                     scoreParameters.stream()
                                     .mapToDouble(
@@ -158,21 +151,32 @@ public class ShootingManager {
                             .value,
                     Degrees);
 
-            var yaws =
-                    scoreParameters.stream()
-                            .map(VisionIO.ScoreParameters::yaw)
-                            .filter(Optional::isPresent)
-                            .map(Optional::get)
-                            .toList();
-            if (!yaws.isEmpty()) {
-                var yawToTarget =
-                        yaws.stream().reduce(new Rotation2d(), Rotation2d::plus).div(yaws.size());
+            if (!DriverStation.isAutonomous()) {
+                var yaws =
+                        scoreParameters.stream()
+                                .map(VisionIO.ScoreParameters::yaw)
+                                .filter(Optional::isPresent)
+                                .map(Optional::get)
+                                .toList();
+                if (!yaws.isEmpty()) {
+                    var yawToTarget =
+                            yaws.stream()
+                                    .reduce(new Rotation2d(), Rotation2d::plus)
+                                    .div(yaws.size());
+                    swerveCommandedAngle
+                            .mut_replace(
+                                    yawToTarget.getRotations()
+                                            + swerveDrive.getOdometryYaw().getRotations(),
+                                    Rotations)
+                            .mut_minus(3, Degrees);
+                }
+            } else {
+                var toSpeaker = poseEstimation.getPoseRelativeToSpeaker();
+
                 swerveCommandedAngle
                         .mut_replace(
-                                yawToTarget.getRotations()
-                                        + swerveDrive.getOdometryYaw().getRotations(),
-                                Rotations)
-                        .mut_minus(3, Degrees);
+                                Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI, Radians)
+                        .mut_minus(-1, Degrees);
             }
         } else {
             updateCommandedStateWithPoseEstimation();

@@ -2,6 +2,7 @@ package frc.robot.subsystems.leds;
 
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -77,6 +78,19 @@ public class LEDsDefaultCommand extends Command {
             secondaryColor = Color.kWhiteSmoke;
         }
 
+        if (DriverStation.isDisabled()) {
+            if (DriverStation.isFMSAttached()) {
+                rainbow = true;
+            } else if (RobotController.getBatteryVoltage() < 11.8) {
+                primaryColor = Color.kRed;
+                secondaryColor = Color.kBlack;
+                blinkTime = 0.5;
+            } else {
+                primaryColor = Color.kBlack;
+                secondaryColor = Color.kBlack;
+            }
+        }
+
         if (rainbow) {
             leds.setRainbow();
         } else {
@@ -84,11 +98,7 @@ public class LEDsDefaultCommand extends Command {
                 primary = !primary;
             }
 
-            if (!DriverStation.isDisabled()) {
-                leds.setSolidColor(primary ? primaryColor : secondaryColor);
-            } else {
-                leds.setSolidColor(Color.kBlack);
-            }
+            leds.setSolidColor(primary ? primaryColor : secondaryColor);
         }
 
         SmartDashboard.putString(

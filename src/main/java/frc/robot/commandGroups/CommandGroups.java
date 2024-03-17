@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
+import frc.robot.lib.PoseEstimation;
 import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.conveyor.Conveyor;
@@ -91,7 +92,7 @@ public class CommandGroups {
         return shooter.setVelocity(velocity)
                 .alongWith(
                         conveyor.setVelocity(
-                                useConveyorMap
+                                !useConveyorMap
                                         ? Units.RotationsPerSecond.of(50).mutableCopy()
                                         : ShootingManager.getInstance()
                                                 .getConveyorCommandedVelocity()));
@@ -101,8 +102,8 @@ public class CommandGroups {
         return Commands.sequence(intake(Commands.none()).withTimeout(3), intake.stop());
     }
 
-    public Command shooterBit() {
-        return shootToAmp(null)
+    public Command shooterBit(CommandPS5Controller controller) {
+        return shootToAmp(controller)
                 .andThen(
                         Commands.waitSeconds(3),
                         shooter.stop(),
@@ -119,27 +120,43 @@ public class CommandGroups {
                         ShooterConstants.TOP_AMP_VELOCITY, ShooterConstants.BOTTOM_AMP_VELOCITY)
                 .alongWith(hood.setAngle(HoodConstants.AMP_ANGLE))
                 .alongWith(conveyor.setVelocity(ConveyorConstants.AMP_VELOCITY))
-                //                .alongWith(swerveDrive.driveAndAdjust( //TODO: check if this works
-                //                        Units.Rotation.of(90).mutableCopy(),
-                //                        () -> -driveController.getLeftY(),
-                //                        () -> -driveController.getLeftX(),
-                //                        0.1))
                 .until(() -> shooter.atSetpoint() && hood.atSetpoint() && conveyor.atSetpoint())
                 .andThen(gripper.setRollerPower(GripperConstants.INTAKE_POWER).withTimeout(0.5))
                 .andThen(gripper.setRollerPower(0));
+    }
+
+    public Command adjustToAmp(CommandPS5Controller driveController) {
+        return swerveDrive.driveAndAdjust(
+                Units.Rotation.of(
+                                90
+                                        - PoseEstimation.getInstance()
+                                                .getEstimatedPose()
+                                                .getRotation()
+                                                .getDegrees())
+                        .mutableCopy(),
+                () -> -driveController.getLeftY(),
+                () -> -driveController.getLeftX(),
+                0.1);
     }
 
     public Command shootToTrap() { // TODO: remove from defer when calibrated
         return Commands.defer(
                 () ->
                         Commands.parallel(
-//                                        swerveDrive.turnCommand(
-//                                                Units.Rotations.of(
-//                                                                CommandGroupsConstants.TRAP_POSE
-//                                                                        .getRotation()
-//                                                                        .getRotations())
-//                                                        .mutableCopy(),
-//                                                0.5 / 360.0),
+                                        //
+                                        // swerveDrive.turnCommand(
+                                        //
+                                        // Units.Rotations.of(
+                                        //
+                                        //      CommandGroupsConstants.TRAP_POSE
+                                        //
+                                        //              .getRotation()
+                                        //
+                                        //              .getRotations())
+                                        //
+                                        // .mutableCopy(),
+                                        //                                                0.5 /
+                                        // 360.0),
                                         shooter.setVelocity(
                                                 Units.RotationsPerSecond.of(
                                                                 CommandGroupsConstants
@@ -247,18 +264,22 @@ public class CommandGroups {
                 gripper.setRollerPower(0));
     }
 
-    public Command superPoop(BooleanSupplier isForceShooting) {
-                 return shootAndConvey(
-                        Units.RotationsPerSecond.of(50).mutableCopy(), false)
+    public Command superPoop(CommandPS5Controller controller, BooleanSupplier isForceShooting) {
+        return shootAndConvey(Units.RotationsPerSecond.of(50).mutableCopy(), false)
                 .alongWith(
                         hood.setAngle(Units.Degrees.of(95).mutableCopy()),
                         feedWithWait(
                                 () ->
                                         (shooter.atSetpoint() && hood.atSetpoint()
-                                                || isForceShooting.getAsBoolean())));
+                                                || isForceShooting.getAsBoolean())),
+                        swerveDrive.driveAndAdjust(
+                                Units.Degrees.of(0).mutableCopy(),
+                                () -> -controller.getLeftY(),
+                                () -> -controller.getLeftX(),
+                                0.1));
     }
 
-    public Command allBits() {
-        return Commands.sequence(intakeBit(), shooterBit().withTimeout(3));
+    public Command allBits(CommandPS5Controller controller) {
+        return Commands.sequence(intakeBit(), shooterBit(controller).withTimeout(3));
     }
 }
