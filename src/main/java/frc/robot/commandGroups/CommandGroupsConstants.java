@@ -29,13 +29,13 @@ public class CommandGroupsConstants {
     public static final MutableMeasure<Angle> WRIST_ANGLE_AMP_BACKWARDS =
             Units.Radians.of(2.15).mutableCopy(); // TODO: replace with actual value;
 
-    private static final Pose2d CLIMB_BOTTOM =
-            new Pose2d(new Translation2d(4.41, 5.02), Rotation2d.fromDegrees(-57.72));
-    private static final Pose2d CLIMB_MIDDLE =
-            new Pose2d(new Translation2d(5.96, 4.04), Rotation2d.fromDegrees(180.00));
     private static final Pose2d CLIMB_TOP =
-            new Pose2d(new Translation2d(4.31, 3.13), Rotation2d.fromDegrees(57.72));
-    public static final Pose2d[] CLIMB_POSES = {CLIMB_BOTTOM, CLIMB_MIDDLE, CLIMB_TOP};
+            new Pose2d(new Translation2d(4.39, 4.67), Rotation2d.fromDegrees(-57.72));
+    private static final Pose2d CLIMB_MIDDLE =
+            new Pose2d(new Translation2d(5.59, 4.09), Rotation2d.fromDegrees(180.00));
+    private static final Pose2d CLIMB_BOTTOM =
+            new Pose2d(new Translation2d(4.39, 3.46), Rotation2d.fromDegrees(57.72));
+    public static final Pose2d[] CLIMB_POSES = {CLIMB_TOP, CLIMB_MIDDLE, CLIMB_BOTTOM};
 
     public static final LoggedTunableNumber TRAP_TOP_SHOOTER_VELOCITY =
             new LoggedTunableNumber("Trap/top_shooter_velocity", 30);

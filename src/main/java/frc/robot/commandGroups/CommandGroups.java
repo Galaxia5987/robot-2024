@@ -102,7 +102,7 @@ public class CommandGroups {
     }
 
     public Command shooterBit() {
-        return shootToAmp()
+        return shootToAmp(null)
                 .andThen(
                         Commands.waitSeconds(3),
                         shooter.stop(),
@@ -133,13 +133,13 @@ public class CommandGroups {
         return Commands.defer(
                 () ->
                         Commands.parallel(
-                                        swerveDrive.turnCommand(
-                                                Units.Rotations.of(
-                                                                CommandGroupsConstants.TRAP_POSE
-                                                                        .getRotation()
-                                                                        .getRotations())
-                                                        .mutableCopy(),
-                                                0.5 / 360.0),
+//                                        swerveDrive.turnCommand(
+//                                                Units.Rotations.of(
+//                                                                CommandGroupsConstants.TRAP_POSE
+//                                                                        .getRotation()
+//                                                                        .getRotations())
+//                                                        .mutableCopy(),
+//                                                0.5 / 360.0),
                                         shooter.setVelocity(
                                                 Units.RotationsPerSecond.of(
                                                                 CommandGroupsConstants
@@ -245,6 +245,17 @@ public class CommandGroups {
                 shooter.stop(),
                 conveyor.stop(),
                 gripper.setRollerPower(0));
+    }
+
+    public Command superPoop(BooleanSupplier isForceShooting) {
+                 return shootAndConvey(
+                        Units.RotationsPerSecond.of(50).mutableCopy(), false)
+                .alongWith(
+                        hood.setAngle(Units.Degrees.of(95).mutableCopy()),
+                        feedWithWait(
+                                () ->
+                                        (shooter.atSetpoint() && hood.atSetpoint()
+                                                || isForceShooting.getAsBoolean())));
     }
 
     public Command allBits() {

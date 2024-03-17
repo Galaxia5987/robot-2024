@@ -263,16 +263,7 @@ public class RobotContainer {
         //        testController.rightBumper().onTrue(commandGroups.allBits());
         driveController
                 .cross()
-                .whileTrue(
-                        commandGroups
-                                .shootAndConvey(
-                                        Units.RotationsPerSecond.of(80).mutableCopy(), false)
-                                .alongWith(
-                                        hood.setAngle(Units.Degrees.of(95).mutableCopy()),
-                                        commandGroups.feedWithWait(
-                                                () ->
-                                                        (shooter.atSetpoint() && hood.atSetpoint()
-                                                                || isForceShooting))))
+                .whileTrue(commandGroups.superPoop(() -> isForceShooting))
                 .onFalse(commandGroups.stopShooting());
         driveController.triangle().onTrue(Commands.runOnce(swerveDrive::resetGyro));
         driveController.circle().whileTrue(closeShoot()).onFalse(commandGroups.stopShooting());
@@ -298,7 +289,7 @@ public class RobotContainer {
                                         .shootToSpeaker(driveController)
                                         .alongWith(
                                                 commandGroups.feedShooter(this::isForceShooting)),
-                                commandGroups.shootToAmp(),
+                                commandGroups.shootToAmp(driveController),
                                 () -> state == Constants.State.SHOOT))
                 .onFalse(commandGroups.stopShooting());
 
@@ -312,12 +303,11 @@ public class RobotContainer {
                 .whileTrue(intake.outtake().alongWith(gripper.setRollerPower(-0.7)))
                 .onFalse(intake.stop().alongWith(gripper.setRollerPower(0)));
 
-        //        driveController
-        //                .L1()
-        //
-        // .whileTrue(commandGroups.dtopToTrap().andThen(commandGroups.shootToTrap()))
-        //                .onFalse(commandGroups.stopShooting());
-        driveController.L1().whileTrue(commandGroups.dtopClimb());
+        driveController
+                .L1()
+                .whileTrue(commandGroups.shootToTrap())
+                .onFalse(commandGroups.stopShooting());
+//        driveController.L1().whileTrue(commandGroups.dtopClimb());
 
         xboxController.start().onTrue(climb.lock());
         xboxController.back().onTrue(climb.unlock());

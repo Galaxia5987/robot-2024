@@ -25,7 +25,7 @@ public class Constants {
     public static final double LOOP_TIME = 0.02;
     public static final double AUTO_VISION_MEASUREMENT_MULTIPLIER = 0.5;
     public static final double AUTO_START_VISION_MEASUREMENT_MULTIPLIER = 1_000_000_000;
-    public static final double TELEOP_VISION_MEASUREMENT_MULTIPLIER = 0.5;
+    public static final double TELEOP_VISION_MEASUREMENT_MULTIPLIER = 0.05;
     public static final Transform3d SPEAKER_RIGHT_CAMERA_POSE =
             new Transform3d(
                     -0.065_833,
@@ -45,9 +45,9 @@ public class Constants {
             new Transform3d(0.0, 0.0, 0.53, new Rotation3d(0, Math.toRadians(20), 0));
     public static final Measure<Voltage> NOMINAL_VOLTAGE = Units.Volts.of(12);
     public static final Measure<Distance> ROBOT_LENGTH = Units.Meters.of(0.584);
-    public static final Measure<Velocity<Distance>> MAX_VELOCITY = Units.MetersPerSecond.of(3);
+    public static final Measure<Velocity<Distance>> MAX_VELOCITY = Units.MetersPerSecond.of(2.0);
     public static final Measure<Velocity<Velocity<Distance>>> MAX_ACCELERATION =
-            Units.MetersPerSecondPerSecond.of(1.5);
+            Units.MetersPerSecondPerSecond.of(1);
     public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY =
             Units.RotationsPerSecond.of(
                     MAX_VELOCITY.in(Units.MetersPerSecond)
