@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7167669684840067,
-      "y": 6.67517683109546
+      "x": 1.4127312870010371,
+      "y": 3.07
     },
-    "rotation": 63.43494882292201
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -16,19 +16,25 @@
           "data": {
             "commands": [
               {
+                "type": "named",
+                "data": {
+                  "name": "prepareShoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "adjustToTarget"
+                }
+              },
+              {
                 "type": "sequential",
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "adjustToTarget"
-                      }
-                    },
-                    {
                       "type": "path",
                       "data": {
-                        "pathName": "A0"
+                        "pathName": "D0"
                       }
                     },
                     {
@@ -52,43 +58,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "AH"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "score"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "finishScore"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "A1"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "score"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "finishScore"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "A2"
+                        "pathName": "D4"
                       }
                     },
                     {

@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 4.089487893669082,
-        "y": 2.3772998187936465
+        "x": 3.159180164514176,
+        "y": 3.0488853285398885
       },
       "prevControl": {
-        "x": 3.586273810317839,
-        "y": 2.249029562253134
+        "x": 2.655966081162933,
+        "y": 2.920615071999376
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,6 +42,23 @@
               "type": "named",
               "data": {
                 "name": "adjustToTarget"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "start shoot",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
               }
             }
           ]

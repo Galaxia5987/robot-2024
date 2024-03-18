@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 3.8992008753248286,
-        "y": 7.202868251890351
+        "x": 4.1064066743518115,
+        "y": 6.670053340106681
       },
       "prevControl": {
-        "x": 3.267716535433072,
-        "y": 7.114065766593072
+        "x": 3.465055391649246,
+        "y": 6.877259139133664
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Score AH"
+      "linkedName": "A Score"
     }
   ],
   "rotationTargets": [
@@ -87,6 +87,12 @@
               "type": "named",
               "data": {
                 "name": "adjustToTarget"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
               }
             }
           ]

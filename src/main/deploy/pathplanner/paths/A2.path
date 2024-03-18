@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.563724819757333,
-        "y": 6.344444227349993
+        "x": 4.1064066743518115,
+        "y": 6.670053340106681
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.586448095973117,
-        "y": 7.005529395674177
+        "x": 5.704851409702821,
+        "y": 6.719388054160724
       },
       "isLocked": false,
       "linkedName": "A Score"
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 3.563724819757333,
-        "y": 6.344444227349993
+        "x": 4.1064066743518115,
+        "y": 6.670053340106681
       },
       "prevControl": {
-        "x": 5.290439811648857,
-        "y": 7.074597995349838
+        "x": 5.576581153162308,
+        "y": 6.82792442507962
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,20 +47,32 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1,
-      "rotationDegrees": -3.900493742381913,
+      "rotationDegrees": -21.464665960120904,
       "rotateFast": false
     },
     {
       "waypointRelativePos": 0.45,
-      "rotationDegrees": -11.967118138905123,
+      "rotationDegrees": -17.67358309591712,
       "rotateFast": false
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 1.7,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 4.5,
+        "maxAcceleration": 2.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0.45,
+      "waypointRelativePos": 0.25,
       "command": {
         "type": "parallel",
         "data": {
@@ -75,6 +87,12 @@
               "type": "named",
               "data": {
                 "name": "followPathRotation"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "stopShooter"
               }
             }
           ]
@@ -98,6 +116,12 @@
               "type": "named",
               "data": {
                 "name": "stopIntake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
               }
             }
           ]
@@ -159,7 +183,7 @@
   "reversed": false,
   "folder": "AH123",
   "previewStartingState": {
-    "rotation": 34.230301561891984,
+    "rotation": 7.943471810590396,
     "velocity": 0
   },
   "useDefaultConstraints": true

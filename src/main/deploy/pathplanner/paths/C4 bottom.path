@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 3.0703776792168984,
-        "y": 3.1574216994587836
+        "x": 4.165608331216664,
+        "y": 2.2299290752427665
       },
       "prevControl": {
-        "x": 4.787225728297611,
-        "y": 0.5624157402160964
+        "x": 5.704851409702819,
+        "y": 1.3221703366483653
       },
       "nextControl": null,
       "isLocked": false,
@@ -56,19 +56,7 @@
       "rotateFast": false
     }
   ],
-  "constraintZones": [
-    {
-      "name": "Fast Fast",
-      "minWaypointRelativePos": 1.0,
-      "maxWaypointRelativePos": 2.0,
-      "constraints": {
-        "maxVelocity": 5.0,
-        "maxAcceleration": 3.5,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0
-      }
-    }
-  ],
+  "constraintZones": [],
   "eventMarkers": [
     {
       "name": "intake",
@@ -88,8 +76,8 @@
       }
     },
     {
-      "name": "stop intake",
-      "waypointRelativePos": 1.45,
+      "name": "stop intake and shoot",
+      "waypointRelativePos": 1.6,
       "command": {
         "type": "parallel",
         "data": {
@@ -104,6 +92,12 @@
               "type": "named",
               "data": {
                 "name": "adjustToTarget"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
               }
             }
           ]
@@ -145,7 +139,7 @@
       }
     },
     {
-      "name": "New Event Marker",
+      "name": "follow path rotation and stop shoot",
       "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
@@ -155,6 +149,12 @@
               "type": "named",
               "data": {
                 "name": "followPathRotation"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "stopShooter"
               }
             }
           ]

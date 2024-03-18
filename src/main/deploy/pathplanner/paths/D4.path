@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.089487893669082,
-        "y": 2.3772998187936465
+        "x": 3.159180164514176,
+        "y": 3.0488853285398885
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.494788279162863,
-        "y": 1.3935895489479986
+        "x": 4.205076102459898,
+        "y": 1.5293761356753486
       },
       "isLocked": false,
       "linkedName": "D0"
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 4.089487893669082,
-        "y": 2.3772998187936465
+        "x": 3.159180164514176,
+        "y": 3.0488853285398885
       },
       "prevControl": {
-        "x": 6.0100650871772485,
-        "y": 0.538698481105949
+        "x": 5.300306754459664,
+        "y": 0.2565405130810273
       },
       "nextControl": null,
       "isLocked": false,
@@ -137,6 +137,40 @@
               "type": "named",
               "data": {
                 "name": "followPathSpeeds"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop shoot",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "stopShooter"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "shoot",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
               }
             }
           ]

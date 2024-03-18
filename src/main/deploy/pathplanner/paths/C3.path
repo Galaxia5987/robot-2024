@@ -149,7 +149,7 @@
       }
     },
     {
-      "name": "New Event Marker",
+      "name": "followPathRotation",
       "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
@@ -159,6 +159,40 @@
               "type": "named",
               "data": {
                 "name": "followPathRotation"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop shoot",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "stopShooter"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "start shoot",
+      "waypointRelativePos": 2.15,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
               }
             }
           ]

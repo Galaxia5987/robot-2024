@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 3.0703776792168984,
-        "y": 3.1574216994587836
+        "x": 4.165608331216664,
+        "y": 2.2299290752427665
       },
       "prevControl": {
-        "x": 6.286270150887881,
-        "y": -0.011694154442441373
+        "x": 7.381500802887645,
+        "y": -0.9391867786584585
       },
       "nextControl": null,
       "isLocked": false,
@@ -133,7 +133,7 @@
       }
     },
     {
-      "name": "New Event Marker",
+      "name": "follow path rotation",
       "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
@@ -143,6 +143,40 @@
               "type": "named",
               "data": {
                 "name": "followPathRotation"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop shoot",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "stopShooter"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "start shoot",
+      "waypointRelativePos": 1.1,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
               }
             }
           ]
