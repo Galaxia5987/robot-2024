@@ -12,6 +12,7 @@ import frc.robot.lib.math.differential.BooleanTrigger;
 import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.vision.Vision;
+import java.util.function.BooleanSupplier;
 
 public class LEDsDefaultCommand extends Command {
 
@@ -27,9 +28,11 @@ public class LEDsDefaultCommand extends Command {
     private final BooleanTrigger noteTrigger = new BooleanTrigger();
     private final Timer noteTimer = new Timer();
     private final Debouncer hasTarget = new Debouncer(1.0, Debouncer.DebounceType.kFalling);
+    private final BooleanSupplier intaking;
 
-    public LEDsDefaultCommand(LEDs leds) {
+    public LEDsDefaultCommand(LEDs leds, BooleanSupplier intaking) {
         this.leds = leds;
+        this.intaking = intaking;
         addRequirements(leds);
     }
 
@@ -68,6 +71,10 @@ public class LEDsDefaultCommand extends Command {
                 rainbow = true;
                 break;
         }
+        if (intaking.getAsBoolean()) {
+            primaryColor = Color.kWhiteSmoke;
+            secondaryColor = Color.kWhiteSmoke;
+        }
 
         noteTrigger.update(gripper.hasNote());
         if (noteTrigger.triggered()) {
@@ -75,13 +82,15 @@ public class LEDsDefaultCommand extends Command {
         }
         if (!noteTimer.hasElapsed(2)) {
             blinkTime = 0.1;
+            primaryColor = Color.kBlack;
             secondaryColor = Color.kWhiteSmoke;
         }
 
         if (DriverStation.isDisabled()) {
             if (DriverStation.isFMSAttached()) {
                 rainbow = true;
-            } else if (RobotController.getBatteryVoltage() < 11.8) {
+            } else if (RobotController.getBatteryVoltage() < 12.2) {
+
                 primaryColor = Color.kRed;
                 secondaryColor = Color.kBlack;
                 blinkTime = 0.5;

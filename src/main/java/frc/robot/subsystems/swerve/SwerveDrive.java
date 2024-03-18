@@ -266,7 +266,8 @@ public class SwerveDrive extends SubsystemBase {
             MutableMeasure<Angle> rotation,
             DoubleSupplier xJoystick,
             DoubleSupplier yJoystick,
-            double deadband) {
+            double deadband,
+            boolean usePoseEstimation) {
         DieterController turnController =
                 new DieterController(
                         SwerveConstants.ROTATION_KP.get(),
@@ -281,7 +282,9 @@ public class SwerveDrive extends SubsystemBase {
                                 MathUtil.applyDeadband(xJoystick.getAsDouble(), deadband),
                                 MathUtil.applyDeadband(yJoystick.getAsDouble(), deadband),
                                 turnController.calculate(
-                                        getOdometryYaw().getRotations(),
+                                        usePoseEstimation
+                                                ? getBotPose().getRotation().getRotations()
+                                                : getOdometryYaw().getRotations(),
                                         rotation.in(edu.wpi.first.units.Units.Rotations)),
                                 true));
     }

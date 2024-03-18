@@ -85,6 +85,8 @@ public class RobotContainer {
                 }
             };
 
+    private boolean ampPressed = true;
+
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
         HoodIO hoodIO;
@@ -170,6 +172,13 @@ public class RobotContainer {
                         () ->
                                 Constants.VISION_MEASUREMENT_MULTIPLIER =
                                         Constants.AUTO_VISION_MEASUREMENT_MULTIPLIER));
+        NamedCommands.registerCommand("shoot", prepareShooter());
+        NamedCommands.registerCommand(
+                "stopShooter",
+                Commands.parallel(
+                        hood.setAngle(Units.Degrees.of(114).mutableCopy()),
+                        shooter.stop(),
+                        conveyor.stop()));
 
         PPHolonomicDriveController.setRotationTargetOverride(
                 () -> {
@@ -251,7 +260,8 @@ public class RobotContainer {
                                                 + xboxController.getRightTriggerAxis(),
                                         0.15)));
 
-        leds.setDefaultCommand(new LEDsDefaultCommand(leds).ignoringDisable(true));
+        leds.setDefaultCommand(
+                new LEDsDefaultCommand(leds, driveController.L2()).ignoringDisable(true));
     }
 
     private void configureButtonBindings() {
@@ -279,14 +289,18 @@ public class RobotContainer {
         driveController
                 .R2()
                 .whileTrue(
-                        Commands.either(
-                                commandGroups
-                                        .shootToSpeaker(driveController)
-                                        .alongWith(
-                                                commandGroups.feedShooter(this::isForceShooting)),
-                                commandGroups.shootToAmp(driveController),
-                                () -> state == Constants.State.SHOOT))
+                        commandGroups
+                                .shootToSpeaker(driveController)
+                                .alongWith(commandGroups.feedShooter(this::isForceShooting)))
                 .onFalse(commandGroups.stopShooting());
+        driveController
+                .R2()
+                .onTrue(
+                        Commands.runOnce(
+                                () -> {
+                                    ampPressed = true;
+                                    state = Constants.State.SHOOT;
+                                }));
 
         driveController
                 .L2()
@@ -299,6 +313,38 @@ public class RobotContainer {
                 .onFalse(intake.stop().alongWith(gripper.setRollerPower(0)));
 
         driveController.L1().toggleOnTrue(commandGroups.adjustToAmp(driveController));
+        driveController
+                .L1()
+                .onTrue(
+                        Commands.runOnce(() -> ampPressed = !ampPressed)
+                                .andThen(
+                                        Commands.either(
+                                                gripper.setRollerPower(
+                                                                GripperConstants.INTAKE_POWER)
+                                                        .withTimeout(0.5)
+                                                        .andThen(
+                                                                gripper.setRollerPower(0)
+                                                                        .withTimeout(0.02)
+                                                                        .andThen(
+                                                                                commandGroups
+                                                                                        .stopShooting())),
+                                                commandGroups.shootToAmp(driveController),
+                                                () -> ampPressed)));
+        driveController
+                .L1()
+                .onTrue(
+                        Commands.runOnce(
+                                () -> {
+                                    if (ampPressed) {
+                                        state = Constants.State.SHOOT;
+                                    } else {
+                                        state = Constants.State.AMP;
+                                    }
+                                }));
+        driveController.povUp().onTrue(commandGroups.openClimb());
+        driveController
+                .povUp()
+                .whileTrue(Commands.waitSeconds(0.5).andThen(commandGroups.dtopClimb()));
 
         xboxController.start().onTrue(climb.lock());
         xboxController.back().onTrue(climb.unlock());
@@ -311,19 +357,13 @@ public class RobotContainer {
                 .whileTrue(gripper.setRollerPower(0.4))
                 .onFalse(gripper.setRollerPower(0));
 
-        xboxController
-                .b()
-                .onTrue(
-                        Commands.runOnce(() -> state = Constants.State.SHOOT)
-                                .ignoringDisable(true));
-        xboxController
-                .a()
-                .onTrue(Commands.runOnce(() -> state = Constants.State.AMP).ignoringDisable(true));
         xboxController.y().onTrue(commandGroups.shootToSpeaker());
         xboxController
                 .x()
                 .onTrue(intake.setAnglePower(-0.3))
-                .onFalse(intake.reset(Units.Degrees.zero().mutableCopy()));
+                .onFalse(
+                        intake.reset(Units.Degrees.zero().mutableCopy())
+                                .alongWith(intake.setAnglePower(0)));
     }
 
     /**
