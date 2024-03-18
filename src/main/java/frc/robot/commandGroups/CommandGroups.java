@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
-import frc.robot.lib.PoseEstimation;
 import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.conveyor.Conveyor;
@@ -120,23 +119,23 @@ public class CommandGroups {
                         ShooterConstants.TOP_AMP_VELOCITY, ShooterConstants.BOTTOM_AMP_VELOCITY)
                 .alongWith(hood.setAngle(HoodConstants.AMP_ANGLE))
                 .alongWith(conveyor.setVelocity(ConveyorConstants.AMP_VELOCITY))
-                .until(() -> shooter.atSetpoint() && hood.atSetpoint() && conveyor.atSetpoint())
-                .andThen(gripper.setRollerPower(GripperConstants.INTAKE_POWER).withTimeout(0.5))
-                .andThen(gripper.setRollerPower(0));
+                .until(() -> shooter.atSetpoint() && hood.atSetpoint() && conveyor.atSetpoint());
+        // conveyor.atSetpoint())
+        //
+        // .andThen(gripper.setRollerPower(GripperConstants.INTAKE_POWER).withTimeout(0.5))
+        //                .andThen(gripper.setRollerPower(0));
     }
 
     public Command adjustToAmp(CommandPS5Controller driveController) {
-        return swerveDrive.driveAndAdjust(
-                Units.Rotation.of(
-                                90
-                                        - PoseEstimation.getInstance()
-                                                .getEstimatedPose()
-                                                .getRotation()
-                                                .getDegrees())
-                        .mutableCopy(),
-                () -> -driveController.getLeftY(),
-                () -> -driveController.getLeftX(),
-                0.1);
+        return Commands.defer(
+                () ->
+                        swerveDrive.driveAndAdjust(
+                                Units.Degrees.of(Constants.isRed() ? -90 : 90).mutableCopy(),
+                                () -> -driveController.getLeftY(),
+                                () -> -driveController.getLeftX(),
+                                0.1,
+                                true),
+                Set.of(swerveDrive));
     }
 
     public Command shootToTrap() { // TODO: remove from defer when calibrated
@@ -209,7 +208,8 @@ public class CommandGroups {
                         ShootingManager.getInstance().getSwerveCommandedAngle(),
                         () -> -driveController.getLeftY(),
                         () -> -driveController.getLeftX(),
-                        0.1));
+                        0.1,
+                        false));
     }
 
     public Command shootToSpeaker(CommandPS5Controller driveController) {
@@ -220,7 +220,8 @@ public class CommandGroups {
                         ShootingManager.getInstance().getSwerveCommandedAngle(),
                         () -> -driveController.getLeftY(),
                         () -> -driveController.getLeftX(),
-                        0.1));
+                        0.1,
+                        false));
     }
 
     public Command shootToSpeaker() {
@@ -232,6 +233,13 @@ public class CommandGroups {
     public Command closeSpeakerWarmup() {
         return hood.setAngle(Units.Degrees.of(107).mutableCopy())
                 .alongWith(shootAndConvey(Units.RotationsPerSecond.of(50).mutableCopy(), false));
+    }
+
+    public Command openClimb() {
+        return climb.setPower(() -> 0.5)
+                .withTimeout(0.35)
+                .alongWith(climb.unlock().withTimeout(1))
+                .andThen(climb.setPower(() -> -0.3).withTimeout(2));
     }
 
     public Command dtopClimb() {
@@ -272,14 +280,41 @@ public class CommandGroups {
                                 () ->
                                         (shooter.atSetpoint() && hood.atSetpoint()
                                                 || isForceShooting.getAsBoolean())),
-                        swerveDrive.driveAndAdjust(
-                                Units.Degrees.of(0).mutableCopy(),
-                                () -> -controller.getLeftY(),
-                                () -> -controller.getLeftX(),
-                                0.1));
+                        Commands.defer(
+                                () ->
+                                        swerveDrive.driveAndAdjust(
+                                                Units.Degrees.of(Constants.isRed() ? 180 : 0)
+                                                        .mutableCopy(),
+                                                () -> -controller.getLeftY(),
+                                                () -> -controller.getLeftX(),
+                                                0.1,
+                                                true),
+                                Set.of(swerveDrive)));
+    }
+
+    public Command hoodStressTesting() {
+        return Commands.repeatingSequence(
+                        hood.setAngle(Units.Degrees.of(40).mutableCopy()).withTimeout(2),
+                        hood.setAngle(Units.Degrees.of(114).mutableCopy()).withTimeout(2))
+                .withTimeout(11);
+    }
+
+    public Command intakeStressTesting() {
+        return Commands.repeatingSequence(
+                        intake.intake().withTimeout(2), intake.stop().withTimeout(2))
+                .withTimeout(11);
     }
 
     public Command allBits(CommandPS5Controller controller) {
-        return Commands.sequence(intakeBit(), shooterBit(controller).withTimeout(3));
+        return Commands.sequence(
+                intakeBit(),
+                shooterBit(controller).withTimeout(3),
+                hoodStressTesting()
+                        .alongWith(
+                                shootAndConvey(
+                                        Units.RotationsPerSecond.of(50).mutableCopy(), false)),
+                intakeStressTesting(),
+                swerveDrive.checkSwerve().withTimeout(5),
+                Commands.run(swerveDrive::lock).withTimeout(1));
     }
 }
