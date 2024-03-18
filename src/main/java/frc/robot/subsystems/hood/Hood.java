@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -73,7 +74,7 @@ public class Hood extends SubsystemBase {
         return Utils.epsilonEquals(
                 inputs.absoluteEncoderAngle.in(Units.Degrees),
                 inputs.angleSetpoint.in(Units.Degrees),
-                0.5);
+                DriverStation.isAutonomous() ? 1.0 : 0.5);
     }
 
     public boolean atSetpointFast() {
