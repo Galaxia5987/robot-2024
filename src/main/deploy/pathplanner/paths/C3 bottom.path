@@ -199,7 +199,7 @@
     },
     {
       "name": "start shoot",
-      "waypointRelativePos": 2.3,
+      "waypointRelativePos": 2.8,
       "command": {
         "type": "parallel",
         "data": {

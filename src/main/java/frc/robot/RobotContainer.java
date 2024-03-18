@@ -124,8 +124,6 @@ public class RobotContainer {
         Constants.initSwerve();
         Constants.initVision();
 
-        pathPlannerAuto = new PathPlannerAuto("None");
-
         swerveDrive = SwerveDrive.getInstance();
         intake = Intake.getInstance();
         conveyor = Conveyor.getInstance();
@@ -196,11 +194,12 @@ public class RobotContainer {
                         paths.forEach(
                                 (path) -> {
                                     addOption(path, path);
+                                    System.out.println("Creating - " + path);
                                     autos.put(path, new PathPlannerAuto(path));
                                 });
                     }
                 };
-        autoChooser.setDefaultOption("None", "None");
+        autoChooser.setDefaultOption("Safety score", "Safety score");
         SmartDashboard.putData("autoList", autoChooser);
     }
 
@@ -215,7 +214,7 @@ public class RobotContainer {
         return INSTANCE;
     }
 
-    private Command prepareShooter() {
+    public Command prepareShooter() {
         return Commands.parallel(
                 hood.setAngle(ShootingManager.getInstance().getHoodCommandedAngle()),
                 commandGroups.shootAndConvey(
