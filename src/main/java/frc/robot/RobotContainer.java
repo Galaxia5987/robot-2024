@@ -267,9 +267,9 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        //        testController.rightBumper().onTrue(commandGroups.allBits(driveController));
-        //        testController.leftBumper().onTrue(commandGroups.swerveBit());
-        //        testController.a().onTrue(commandGroups.openClimb());
+        testController.rightBumper().onTrue(commandGroups.allBits(driveController));
+        testController.leftBumper().onTrue(commandGroups.swerveBit());
+        testController.a().onTrue(commandGroups.openClimb());
 
         driveController
                 .cross()
@@ -346,15 +346,6 @@ public class RobotContainer {
                                         state = Constants.State.AMP;
                                     }
                                 }));
-        driveController.povUp().onTrue(commandGroups.openClimb());
-        driveController
-                .povUp()
-                .whileTrue(Commands.waitSeconds(0.5).andThen(commandGroups.dtopClimb()));
-        driveController.povUp().onTrue(Commands.runOnce(() -> state = Constants.State.CLIMB));
-        driveController
-                .povDown()
-                .whileTrue(commandGroups.dtopToTrap().andThen(commandGroups.shootToTrap()))
-                .onFalse(commandGroups.stopShooting());
 
         xboxController.start().onTrue(climb.lock());
         xboxController.back().onTrue(climb.unlock());
