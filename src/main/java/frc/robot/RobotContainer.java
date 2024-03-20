@@ -365,6 +365,11 @@ public class RobotContainer {
                 .onFalse(
                         intake.reset(Units.Degrees.zero().mutableCopy())
                                 .alongWith(intake.setAnglePower(0)));
+
+        xboxController
+                .a()
+                .whileTrue(gripper.setRollerPower(-0.4))
+                .onFalse(gripper.setRollerPower(0));
     }
 
     /**
