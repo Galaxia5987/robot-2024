@@ -63,7 +63,7 @@ public class RobotContainer {
     public static final LEDs leds = new LEDs(9, 58);
     private final CommandXboxController xboxController = new CommandXboxController(0);
     private final CommandPS5Controller driveController = new CommandPS5Controller(1);
-    //    private final CommandXboxController testController = new CommandXboxController(2);
+    private final CommandXboxController testController = new CommandXboxController(2);
     private final CommandGroups commandGroups;
     private final SendableChooser<String> autoChooser;
     private final HashMap<String, PathPlannerAuto> autos = new HashMap<>();
@@ -267,8 +267,10 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        //        testController.rightBumper().onTrue(commandGroups.allBits(driveController));
-        //        testController.leftBumper().onTrue(commandGroups.swerveBit());
+//        testController.rightBumper().onTrue(commandGroups.allBits(driveController));
+//        testController.leftBumper().onTrue(commandGroups.swerveBit());
+//        testController.a().onTrue(commandGroups.openClimb());
+
         driveController
                 .cross()
                 .whileTrue(commandGroups.superPoop(driveController, () -> isForceShooting))
@@ -348,6 +350,13 @@ public class RobotContainer {
         driveController
                 .povUp()
                 .whileTrue(Commands.waitSeconds(0.5).andThen(commandGroups.dtopClimb()));
+        driveController.povUp().onTrue(Commands.runOnce(() -> state = Constants.State.CLIMB));
+        driveController
+                .povDown()
+                .whileTrue(commandGroups.dtopToTrap().andThen(commandGroups.shootToTrap()))
+                .onFalse(commandGroups.stopShooting());
+
+        driveController.L1().whileTrue(commandGroups.dtopClimb());
 
         xboxController.start().onTrue(climb.lock());
         xboxController.back().onTrue(climb.unlock());
