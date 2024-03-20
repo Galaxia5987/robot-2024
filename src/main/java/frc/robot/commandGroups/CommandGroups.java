@@ -126,10 +126,6 @@ public class CommandGroups {
                 .alongWith(hood.setAngle(HoodConstants.AMP_ANGLE))
                 .alongWith(conveyor.setVelocity(ConveyorConstants.AMP_VELOCITY))
                 .until(() -> shooter.atSetpoint() && hood.atSetpoint() && conveyor.atSetpoint());
-        // conveyor.atSetpoint())
-        //
-        // .andThen(gripper.setRollerPower(GripperConstants.INTAKE_POWER).withTimeout(0.5))
-        //                .andThen(gripper.setRollerPower(0));
     }
 
     public Command adjustToAmp(CommandPS5Controller driveController) {
@@ -148,20 +144,6 @@ public class CommandGroups {
         return Commands.defer(
                 () ->
                         Commands.parallel(
-                                        //
-                                        // swerveDrive.turnCommand(
-                                        //
-                                        // Units.Rotations.of(
-                                        //
-                                        //      CommandGroupsConstants.TRAP_POSE
-                                        //
-                                        //              .getRotation()
-                                        //
-                                        //              .getRotations())
-                                        //
-                                        // .mutableCopy(),
-                                        //                                                0.5 /
-                                        // 360.0),
                                         shooter.setVelocity(
                                                 Units.RotationsPerSecond.of(
                                                                 CommandGroupsConstants
