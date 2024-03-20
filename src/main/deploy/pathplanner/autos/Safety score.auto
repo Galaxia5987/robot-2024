@@ -24,13 +24,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "score"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "prepareShoot"
+                  "name": "closeShoot"
                 }
               }
             ]
