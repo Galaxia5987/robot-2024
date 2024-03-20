@@ -102,12 +102,18 @@ public class CommandGroups {
     }
 
     public Command shooterBit(CommandPS5Controller controller) {
-        return shootToAmp(controller)
+        return shooter.setVelocity(
+                        ShooterConstants.TOP_AMP_VELOCITY, ShooterConstants.BOTTOM_AMP_VELOCITY)
+                .alongWith(hood.setAngle(HoodConstants.AMP_ANGLE))
+                .alongWith(conveyor.setVelocity(ConveyorConstants.AMP_VELOCITY))
+                .until(() -> hood.atSetpointFast() && shooter.atSetpoint() && conveyor.atSetpoint())
+                .andThen(gripper.setRollerPower(0.7).withTimeout(1))
                 .andThen(
-                        Commands.waitSeconds(3),
-                        shooter.stop(),
-                        conveyor.stop(),
-                        hood.setAngle(Units.Degrees.of(114).mutableCopy()));
+                        Commands.parallel(
+                                        shooter.stop(),
+                                        conveyor.stop(),
+                                        hood.setAngle(Units.Degrees.of(114).mutableCopy()))
+                                .withTimeout(1));
     }
 
     public Command shootAndIntake() {
@@ -301,20 +307,28 @@ public class CommandGroups {
 
     public Command intakeStressTesting() {
         return Commands.repeatingSequence(
-                        intake.intake().withTimeout(2), intake.stop().withTimeout(2))
+                        intake.intake(),
+                        Commands.waitSeconds(2),
+                        intake.stop(),
+                        Commands.waitSeconds(2))
                 .withTimeout(11);
+    }
+
+    public Command swerveBit() {
+        return Commands.sequence(
+                swerveDrive.checkSwerve().withTimeout(5),
+                Commands.run(swerveDrive::lock).withTimeout(1));
     }
 
     public Command allBits(CommandPS5Controller controller) {
         return Commands.sequence(
                 intakeBit(),
-                shooterBit(controller).withTimeout(3),
+                shooterBit(controller),
                 hoodStressTesting()
-                        .alongWith(
+                        .raceWith(
                                 shootAndConvey(
                                         Units.RotationsPerSecond.of(50).mutableCopy(), false)),
-                intakeStressTesting(),
-                swerveDrive.checkSwerve().withTimeout(5),
-                Commands.run(swerveDrive::lock).withTimeout(1));
+                stopShooting().withTimeout(1),
+                intakeStressTesting());
     }
 }
