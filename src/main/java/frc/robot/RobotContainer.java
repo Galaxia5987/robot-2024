@@ -222,6 +222,9 @@ public class RobotContainer {
     }
 
     public Translation2d getAutoToSpeaker() {
+        if (pathPoints.isEmpty()) {
+            return new Translation2d();
+        }
         return VisionConstants.getSpeakerPose()
                 .minus(
                         Constants.isRed()
@@ -264,7 +267,8 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        //        testController.rightBumper().onTrue(commandGroups.allBits());
+        //        testController.rightBumper().onTrue(commandGroups.allBits(driveController));
+        //        testController.leftBumper().onTrue(commandGroups.swerveBit());
         driveController
                 .cross()
                 .whileTrue(commandGroups.superPoop(driveController, () -> isForceShooting))
