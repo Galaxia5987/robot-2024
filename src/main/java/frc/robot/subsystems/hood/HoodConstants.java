@@ -63,7 +63,7 @@ public class HoodConstants {
                 kV.initDefault(0);
                 kA.initDefault(0.0);
                 kG.initDefault(9.0);
-                ABSOLUTE_ENCODER_OFFSET.initDefault((155.91796875 - 33.48) / 360.0);
+                ABSOLUTE_ENCODER_OFFSET.initDefault((155.917_968_75 - 33.48) / 360.0);
             case SIM:
             case REPLAY:
                 kP.initDefault(10);
