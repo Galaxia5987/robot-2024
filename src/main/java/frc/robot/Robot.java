@@ -107,6 +107,9 @@ public class Robot extends LoggedRobot {
         robotContainer = RobotContainer.getInstance();
         compressor.enableDigital();
 
+        CommandScheduler.getInstance()
+                .onCommandInitialize(
+                        command -> System.out.println("Command initialized: " + command));
         SmartDashboard.putNumber(
                 "Hood Tuning Angle", robotContainer.hoodTuningAngle.in(Units.Degrees));
         SmartDashboard.putNumber(
