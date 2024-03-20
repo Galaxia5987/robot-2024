@@ -136,19 +136,10 @@ public class Constants {
         VisionModule leftOpi;
         VisionIO speakerLeftCamera;
         VisionIO speakerRightCamera;
-        VisionIO intakeAprilTagCamera;
         VisionIO driverCamera;
         var field = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
         switch (CURRENT_MODE) {
             case REAL:
-                intakeAprilTagCamera =
-                        new PhotonVisionIOReal(
-                                new PhotonCamera("OV2311_0"),
-                                "Intake_AprilTag_Camera",
-                                INTAKE_APRILTAG_CAMERA_POSE,
-                                field,
-                                false,
-                                false);
                 speakerRightCamera =
                         new PhotonVisionIOReal(
                                 new PhotonCamera("OV2311_1"),
@@ -187,12 +178,6 @@ public class Constants {
                                 SPEAKER_RIGHT_CAMERA_POSE,
                                 field,
                                 SimCameraProperties.LL2_1280_720());
-                intakeAprilTagCamera =
-                        new VisionSimIO(
-                                new PhotonCamera("Intake_AprilTag_Camera"),
-                                INTAKE_APRILTAG_CAMERA_POSE,
-                                field,
-                                SimCameraProperties.LL2_1280_720());
                 driverCamera =
                         new VisionSimIO(
                                 new PhotonCamera("Driver_Camera"),
@@ -201,7 +186,7 @@ public class Constants {
                                 SimCameraProperties.LL2_1280_720());
                 break;
         }
-        rightOpi = new VisionModule(driverCamera, intakeAprilTagCamera);
+        rightOpi = new VisionModule(driverCamera);
         leftOpi = new VisionModule(speakerLeftCamera, speakerRightCamera);
         Vision.initialize(rightOpi, leftOpi);
     }
