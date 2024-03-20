@@ -132,7 +132,7 @@ public class CommandGroups {
         return Commands.defer(
                 () ->
                         swerveDrive.driveAndAdjust(
-                                Units.Degrees.of(Constants.isRed() ? -90 : 90).mutableCopy(),
+                                Units.Degrees.of(-90).mutableCopy(),
                                 () -> -driveController.getLeftY(),
                                 () -> -driveController.getLeftX(),
                                 0.1,
