@@ -267,17 +267,7 @@ public class CommandGroups {
                         feedWithWait(
                                 () ->
                                         (shooter.atSetpoint() && hood.atSetpoint()
-                                                || isForceShooting.getAsBoolean())),
-                        Commands.defer(
-                                () ->
-                                        swerveDrive.driveAndAdjust(
-                                                Units.Degrees.of(Constants.isRed() ? 180 : 0)
-                                                        .mutableCopy(),
-                                                () -> -controller.getLeftY(),
-                                                () -> -controller.getLeftX(),
-                                                0.1,
-                                                true),
-                                Set.of(swerveDrive)));
+                                                || isForceShooting.getAsBoolean())));
     }
 
     public Command hoodStressTesting() {
