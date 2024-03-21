@@ -31,11 +31,11 @@ public class Climb extends SubsystemBase {
     }
 
     public Command lock() {
-        return Commands.runOnce(io::closeStopper);
+        return Commands.runOnce(io::closeStopper).withTimeout(1).andThen(io::disableServo);
     }
 
     public Command unlock() {
-        return Commands.runOnce(io::openStopper);
+        return Commands.runOnce(io::openStopper).withTimeout(1).andThen(io::disableServo);
     }
 
     public Command setPower(DoubleSupplier power) {
