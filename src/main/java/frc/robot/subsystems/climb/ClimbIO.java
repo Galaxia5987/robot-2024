@@ -9,7 +9,5 @@ public interface ClimbIO {
 
     void closeStopper();
 
-    default void disableServo() {}
-
     void updateInputs(ClimbInputs inputs);
 }
