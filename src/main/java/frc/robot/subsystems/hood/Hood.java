@@ -114,7 +114,7 @@ public class Hood extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs();
-        if (encoderTimer.advanceIfElapsed(2)) {
+        if (encoderTimer.advanceIfElapsed(0.5)) {
             io.updateInternalEncoder();
         }
         if (timer.advanceIfElapsed(0.1)) {
