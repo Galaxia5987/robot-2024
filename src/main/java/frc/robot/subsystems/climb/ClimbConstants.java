@@ -11,7 +11,7 @@ public class ClimbConstants { // TODO: check real values
 
     public static final double GEAR_RATIO = 12.0;
 
-    public static final MutableMeasure<Angle> OPEN_POSITION = Units.Degrees.of(35).mutableCopy();
+    public static final MutableMeasure<Angle> OPEN_POSITION = Units.Degrees.of(40).mutableCopy();
     public static final MutableMeasure<Angle> LOCKED_POSITION = Units.Degrees.of(140).mutableCopy();
 
     public static void initConstants() {
