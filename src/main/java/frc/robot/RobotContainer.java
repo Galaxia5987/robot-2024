@@ -13,6 +13,7 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
@@ -84,6 +85,7 @@ public class RobotContainer {
                     add(new PathPoint(new Translation2d()));
                 }
             };
+    private final Timer scoreTimer = new Timer();
 
     private boolean ampPressed = true;
 
@@ -134,6 +136,9 @@ public class RobotContainer {
         gripper = Gripper.getInstance();
         commandGroups = CommandGroups.getInstance();
 
+        scoreTimer.start();
+        scoreTimer.reset();
+
         // Configure the button bindings and default commands
         configureDefaultCommands();
         configureButtonBindings();
@@ -146,9 +151,16 @@ public class RobotContainer {
         NamedCommands.registerCommand("retractIntake", intake.stop());
         NamedCommands.registerCommand(
                 "score",
-                commandGroups
-                        .feedShooter(() -> isForceShooting)
-                        .andThen(() -> pathIndex = Math.min(pathIndex + 1, pathPoints.size() - 1)));
+                Commands.runOnce(scoreTimer::reset)
+                        .andThen(
+                                commandGroups
+                                        .feedShooter(() -> scoreTimer.hasElapsed(3))
+                                        .andThen(
+                                                () ->
+                                                        pathIndex =
+                                                                Math.min(
+                                                                        pathIndex + 1,
+                                                                        pathPoints.size() - 1))));
         NamedCommands.registerCommand("finishScore", gripper.setRollerPower(0).withTimeout(0.05));
         NamedCommands.registerCommand(
                 "followPathRotation",
