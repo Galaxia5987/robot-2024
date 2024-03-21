@@ -350,12 +350,12 @@ public class RobotContainer {
         xboxController.start().onTrue(climb.lock());
         xboxController.back().onTrue(climb.unlock());
         xboxController
-                .leftBumper()
-                .whileTrue(commandGroups.closeSpeakerWarmup())
-                .onFalse(commandGroups.stopShooting());
-        xboxController
                 .rightBumper()
                 .whileTrue(gripper.setRollerPower(0.4))
+                .onFalse(gripper.setRollerPower(0));
+        xboxController
+                .leftBumper()
+                .whileTrue(gripper.setRollerPower(-0.4))
                 .onFalse(gripper.setRollerPower(0));
 
         xboxController.y().onTrue(commandGroups.shootToSpeaker());
@@ -365,11 +365,6 @@ public class RobotContainer {
                 .onFalse(
                         intake.reset(Units.Degrees.zero().mutableCopy())
                                 .alongWith(intake.setAnglePower(0)));
-
-        xboxController
-                .a()
-                .whileTrue(gripper.setRollerPower(-0.4))
-                .onFalse(gripper.setRollerPower(0));
     }
 
     /**
