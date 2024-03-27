@@ -190,11 +190,11 @@ public class Constants {
                                 DRIVER_CAMERA_POSE,
                                 field,
                                 SimCameraProperties.LL2_1280_720());
+                break;
             case REPLAY:
             default:
                 speakerLeftCamera = new VisionIO() {};
                 speakerRightCamera = new VisionIO() {};
-                intakeAprilTagCamera = new VisionIO() {};
                 driverCamera = new VisionIO() {};
                 break;
         }
