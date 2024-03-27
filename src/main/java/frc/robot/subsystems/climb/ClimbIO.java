@@ -3,11 +3,11 @@ package frc.robot.subsystems.climb;
 public interface ClimbIO {
     ClimbInputsAutoLogged inputs = new ClimbInputsAutoLogged();
 
-    void setPower(double power);
+    default void setPower(double power) {}
 
-    void openStopper();
+    default void openStopper() {}
 
-    void closeStopper();
+    default void closeStopper() {}
 
-    void updateInputs(ClimbInputs inputs);
+    default void updateInputs(ClimbInputs inputs) {}
 }

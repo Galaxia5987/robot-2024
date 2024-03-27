@@ -9,17 +9,17 @@ public interface IntakeIO {
 
     IntakeInputsAutoLogged inputs = new IntakeInputsAutoLogged();
 
-    void setAngle(MutableMeasure<Angle> angle);
+    default void setAngle(MutableMeasure<Angle> angle) {}
 
-    void setRollerSpeed(double speed);
+    default void setRollerSpeed(double speed) {}
 
-    void setCenterRollerSpeed(double speed);
+    default void setCenterRollerSpeed(double speed) {}
 
-    void reset(Measure<Angle> angle);
+    default void reset(Measure<Angle> angle) {}
 
-    void setAnglePower(double power);
+    default void setAnglePower(double power) {}
 
-    void updateInputs();
+    default void updateInputs() {}
 
     @AutoLog
     class IntakeInputs {

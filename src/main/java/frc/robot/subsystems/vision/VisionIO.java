@@ -7,21 +7,22 @@ import edu.wpi.first.math.geometry.Translation2d;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import org.littletonrobotics.junction.AutoLog;
+import org.photonvision.EstimatedRobotPose;
 
 public interface VisionIO {
 
     record ScoreParameters(
             Translation2d toSpeaker, Optional<Rotation2d> yaw, Rotation2d alternateYaw) {}
 
-    void setPipeLine(int pipeLineIndex);
+    default void setPipeLine(int pipeLineIndex) {}
 
-    void updateInputs(VisionInputs inputs);
+    default void updateInputs(VisionInputs inputs) {}
 
-    VisionResult getLatestResult();
+    default VisionResult getLatestResult() {return null;}
 
-    Transform3d getCameraToRobot();
+    default Transform3d getCameraToRobot() {return new Transform3d();}
 
-    String getName();
+    default String getName() {return "Camera";}
 
     default Optional<ScoreParameters> getScoreParameters() {
         return Optional.empty();

@@ -92,11 +92,17 @@ public class Constants {
                         }
                         yield new GyroIOReal();
                     }
-                    default -> {
+                    case SIM -> {
                         for (int i = 0; i < moduleIOs.length; i++) {
                             moduleIOs[i] = new ModuleIOSim(new SwerveModuleInputsAutoLogged());
                         }
                         yield new GyroIOSim();
+                    }
+                    default -> {
+                        for (int i = 0; i < moduleIOs.length; i++) {
+                            moduleIOs[i] = new ModuleIO() {};
+                        }
+                        yield new GyroIO() {};
                     }
                 };
         SwerveDrive.initialize(gyroIO, SWERVE_OFFSETS, moduleIOs);
@@ -165,7 +171,7 @@ public class Constants {
                                 false,
                                 true);
                 break;
-            default:
+            case SIM:
                 speakerLeftCamera =
                         new VisionSimIO(
                                 new PhotonCamera("Speaker_Left_Camera"),
@@ -184,6 +190,12 @@ public class Constants {
                                 DRIVER_CAMERA_POSE,
                                 field,
                                 SimCameraProperties.LL2_1280_720());
+            case REPLAY:
+            default:
+                speakerLeftCamera = new VisionIO() {};
+                speakerRightCamera = new VisionIO() {};
+                intakeAprilTagCamera = new VisionIO() {};
+                driverCamera = new VisionIO() {};
                 break;
         }
         rightOpi = new VisionModule(driverCamera);

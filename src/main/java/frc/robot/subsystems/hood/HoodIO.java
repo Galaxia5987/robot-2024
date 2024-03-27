@@ -8,14 +8,14 @@ import org.littletonrobotics.junction.AutoLog;
 public interface HoodIO {
     HoodInputsAutoLogged inputs = new HoodInputsAutoLogged();
 
-    void updateInternalEncoder();
+    default void updateInternalEncoder() {}
 
-    void setAngle(MutableMeasure<Angle> angle);
+    default void setAngle(MutableMeasure<Angle> angle) {}
 
     default void setAngle(MutableMeasure<Angle> angle, double torqueChassisCompensation) {}
 
     /** Update the inputs of the hood */
-    void updateInputs();
+    default void updateInputs() {}
 
     @AutoLog
     class HoodInputs {
