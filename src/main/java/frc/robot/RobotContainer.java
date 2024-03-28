@@ -107,14 +107,21 @@ public class RobotContainer {
                 climbIO = new ClimbIOReal();
                 break;
             case SIM:
-            case REPLAY:
-            default:
                 intakeIO = new IntakeIOSim();
                 conveyorIO = new ConveyorIOSim();
                 gripperIO = new GripperIOSim();
                 hoodIO = new HoodIOSim();
                 shooterIO = new ShooterIOSim();
                 climbIO = new ClimbIOSim();
+                break;
+            case REPLAY:
+            default:
+                intakeIO = new IntakeIO() {};
+                conveyorIO = new ConveyorIO() {};
+                gripperIO = new GripperIO() {};
+                hoodIO = new HoodIO() {};
+                shooterIO = new ShooterIO() {};
+                climbIO = new ClimbIO() {};
                 break;
         }
         Intake.initialize(intakeIO);
