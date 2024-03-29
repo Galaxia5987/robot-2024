@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9203306782681937,
-        "y": 3.613493722713942
+        "x": 2.4213939522026635,
+        "y": 4.3344249538371855
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.850165751613554,
-        "y": 1.9646179463299105
+        "x": 2.093550340946837,
+        "y": 2.022723276215783
       },
       "isLocked": false,
       "linkedName": "CL"
@@ -20,12 +20,12 @@
         "y": 3.613493722713942
       },
       "prevControl": {
-        "x": 3.6861479990766246,
-        "y": 3.028786000591945
+        "x": 3.5266774799829124,
+        "y": 2.6779545561613025
       },
       "nextControl": {
-        "x": 5.213717101513713,
-        "y": 3.8500597115796276
+        "x": 5.295704057884577,
+        "y": 4.005106098657276
       },
       "isLocked": false,
       "linkedName": null
@@ -49,27 +49,27 @@
     {
       "anchor": {
         "x": 4.773704362223539,
-        "y": 3.718741112695901
+        "y": 3.613493722713942
       },
       "prevControl": {
-        "x": 5.648265032613916,
-        "y": 4.5433268876354
+        "x": 5.82519134001925,
+        "y": 4.195879507183558
       },
       "nextControl": {
-        "x": 3.545818145767345,
-        "y": 2.561019822894347
+        "x": 4.027471131865342,
+        "y": 3.200178451638955
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.9203306782681937,
-        "y": 3.613493722713942
+        "x": 3.0901115648385162,
+        "y": 2.65420761610754
       },
       "prevControl": {
-        "x": 2.3530143926384723,
-        "y": 3.1340333905739044
+        "x": 3.958402532189681,
+        "y": 2.752877044215627
       },
       "nextControl": null,
       "isLocked": false,
@@ -101,12 +101,6 @@
             {
               "type": "named",
               "data": {
-                "name": "followPathRotation"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
                 "name": "useNoteDetection"
               }
             }
@@ -132,11 +126,73 @@
               "data": {
                 "name": "adjustToTarget"
               }
-            },
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop note detection",
+      "waypointRelativePos": 2.05,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
             {
               "type": "named",
               "data": {
                 "name": "followPathSpeeds"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "followPathRotation",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathRotation"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop shoot",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "stopShooter"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "start shoot",
+      "waypointRelativePos": 2.85,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
               }
             }
           ]

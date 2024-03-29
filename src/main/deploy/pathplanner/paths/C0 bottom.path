@@ -1,0 +1,70 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.7417791758660457,
+        "y": 4.410523436431489
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.7284734569469153,
+        "y": 3.8579746390262013
+      },
+      "isLocked": false,
+      "linkedName": "C"
+    },
+    {
+      "anchor": {
+        "x": 3.4058537347843933,
+        "y": 2.871280357945332
+      },
+      "prevControl": {
+        "x": 2.5474297102440366,
+        "y": 3.285691955999297
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "C0 bottom"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "start shoot",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.5,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -45.00000000000005,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "C34L",
+  "previewStartingState": {
+    "rotation": -60.37625124882624,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

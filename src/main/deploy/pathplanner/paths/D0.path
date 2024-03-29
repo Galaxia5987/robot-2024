@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3381784483283943,
-        "y": 3.1199226293939524
+        "x": 1.4127312870010371,
+        "y": 3.07
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.686447589419395,
-        "y": 3.2392807805558634
+        "x": 2.0639495125144114,
+        "y": 3.1785363709188963
       },
       "isLocked": false,
       "linkedName": "D"
     },
     {
       "anchor": {
-        "x": 2.0138839138077134,
-        "y": 3.344528170537823
+        "x": 3.159180164514176,
+        "y": 3.0488853285398885
       },
       "prevControl": {
-        "x": 1.686447589419395,
-        "y": 3.262669089440744
+        "x": 2.655966081162933,
+        "y": 2.920615071999376
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,20 +30,55 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "adjust to target",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "adjustToTarget"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "start shoot",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.5,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 2.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -38.48019824834294,
+    "rotation": -46.105105761681855,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "D345",
   "previewStartingState": null,
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

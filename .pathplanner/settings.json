@@ -4,13 +4,9 @@
   "holonomicMode": true,
   "pathFolders": [
     "AH123",
-    "CL34",
-    "Center line",
-    "D345",
-    "Lower",
-    "Middle",
     "C34L",
-    "Upper"
+    "CL34",
+    "D345"
   ],
   "autoFolders": [],
   "defaultMaxVel": 4.5,

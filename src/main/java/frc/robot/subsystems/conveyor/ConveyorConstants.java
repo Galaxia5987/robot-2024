@@ -21,7 +21,7 @@ public class ConveyorConstants {
     public static final MutableMeasure<Velocity<Angle>> STOP_VELOCITY =
             Units.RotationsPerSecond.of(0).mutableCopy();
     public static final MutableMeasure<Velocity<Angle>> AMP_VELOCITY =
-            RotationsPerSecond.of(70).mutableCopy();
+            RotationsPerSecond.of(30).mutableCopy();
     public static final double VELOCITY_CONVERSION_FACTOR = 1 / 60.0;
     public static final double GEAR_RATIO = 1.0;
     public static LoggedTunableNumber KP = new LoggedTunableNumber("Conveyor/kP");
@@ -45,7 +45,7 @@ public class ConveyorConstants {
                 KI.initDefault(0.0);
                 KD.initDefault(0.0);
                 KS.initDefault(0.0);
-                KV.initDefault(0.1425);
+                KV.initDefault(0.1125);
                 KA.initDefault(0.0);
 
                 MOTOR_CONFIG

@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.*;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.lib.webconstants.LoggedTunableNumber;
+import java.awt.*;
 
 public class SwerveConstants {
     public static final double NEO_CURRENT_LIMIT = 40;
@@ -84,10 +85,11 @@ public class SwerveConstants {
     public static double ANGLE_MOTOR_MOMENT_OF_INERTIA = 0.004;
     public static double MAX_X_Y_VELOCITY;
     public static double MAX_OMEGA_VELOCITY;
-    public static PIDController vyOffsetControllerAutonomous = new PIDController(0, 0, 0);
+    public static PIDController VY_NOTE_DETECTION_CONTROLLER = new PIDController(5, 0, 0.3);
 
     public static void initConstants(boolean isWCP, boolean isReal) {
         if (!isReal) {
+
             DRIVE_KP.initDefault(2.0);
             DRIVE_KI.initDefault(0.0);
             DRIVE_KD.initDefault(0.0);
@@ -138,7 +140,7 @@ public class SwerveConstants {
                 ROTATION_KP.initDefault(2.3);
                 ROTATION_KI.initDefault(0.0);
                 ROTATION_KD.initDefault(0.2);
-                ROTATION_KDIETER.initDefault(0.0);
+                ROTATION_KDIETER.initDefault(0.002);
 
                 ROBOT_WIDTH = 0.585;
                 ROBOT_LENGTH = 0.585;

@@ -1,0 +1,183 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.4058537347843933,
+        "y": 2.871280357945332
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.438443953810986,
+        "y": 1.0656298235673392
+      },
+      "isLocked": false,
+      "linkedName": "C Bottom Score"
+    },
+    {
+      "anchor": {
+        "x": 8.305389050150424,
+        "y": 2.4475648380683346
+      },
+      "prevControl": {
+        "x": 6.800082061702586,
+        "y": 1.8944530196752711
+      },
+      "nextControl": {
+        "x": 8.491335964312738,
+        "y": 2.515889396850159
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.4058537347843933,
+        "y": 2.871280357945332
+      },
+      "prevControl": {
+        "x": 5.112834841054298,
+        "y": 1.3216073156605903
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "C0 bottom"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.05,
+      "rotationDegrees": 27.836292715751753,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 15.020665986535848,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "intake",
+      "waypointRelativePos": 0.4,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop intake and shoot",
+      "waypointRelativePos": 1.6,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "stopIntake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "adjustToTarget"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "use note detection",
+      "waypointRelativePos": 0.4,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "useNoteDetection"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop note detection",
+      "waypointRelativePos": 1.05,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathSpeeds"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "follow path rotation and stop shoot",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathRotation"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "stopShooter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.5,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -35.7889734591833,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "C34L",
+  "previewStartingState": {
+    "rotation": -36.67434966957313,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

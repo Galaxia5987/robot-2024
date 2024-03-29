@@ -72,11 +72,11 @@ public class Shooter extends SubsystemBase {
         return Utils.epsilonEquals(
                         topRollerInputs.velocity.in(Units.RotationsPerSecond),
                         topRollerInputs.velocitySetpoint.in(Units.RotationsPerSecond),
-                        0.5)
+                        1)
                 && Utils.epsilonEquals(
                         bottomRollerInputs.velocity.in(Units.RotationsPerSecond),
                         bottomRollerInputs.velocitySetpoint.in(Units.RotationsPerSecond),
-                        0.5);
+                        1);
     }
 
     /** Updates the state of the shooter. */

@@ -248,7 +248,8 @@ public class SwerveDrive extends SubsystemBase {
                         SwerveConstants.ROTATION_KDIETER.get());
         turnController.setTolerance(turnTolerance);
         turnController.enableContinuousInput(-0.5, 0.5);
-        return run(() ->
+        return run(
+                () ->
                         drive(
                                 0,
                                 0,
@@ -258,15 +259,15 @@ public class SwerveDrive extends SubsystemBase {
                                                 .getRotation()
                                                 .getRotations(),
                                         rotation.in(edu.wpi.first.units.Units.Rotations)),
-                                false))
-                .until(turnController::atSetpoint);
+                                false));
     }
 
     public Command driveAndAdjust(
             MutableMeasure<Angle> rotation,
             DoubleSupplier xJoystick,
             DoubleSupplier yJoystick,
-            double deadband) {
+            double deadband,
+            boolean usePoseEstimation) {
         DieterController turnController =
                 new DieterController(
                         SwerveConstants.ROTATION_KP.get(),
@@ -281,7 +282,9 @@ public class SwerveDrive extends SubsystemBase {
                                 MathUtil.applyDeadband(xJoystick.getAsDouble(), deadband),
                                 MathUtil.applyDeadband(yJoystick.getAsDouble(), deadband),
                                 turnController.calculate(
-                                        getOdometryYaw().getRotations(),
+                                        usePoseEstimation
+                                                ? getBotPose().getRotation().getRotations()
+                                                : getOdometryYaw().getRotations(),
                                         rotation.in(edu.wpi.first.units.Units.Rotations)),
                                 true));
     }

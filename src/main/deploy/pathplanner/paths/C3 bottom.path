@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9203306782681937,
-        "y": 3.613493722713942
+        "x": 3.4058537347843933,
+        "y": 2.871280357945332
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.7060548421299053,
-        "y": 2.5484329849119054
+        "x": 5.1128348410542985,
+        "y": 3.473163869404662
       },
       "isLocked": false,
-      "linkedName": "CL"
+      "linkedName": "C Bottom Score"
     },
     {
       "anchor": {
-        "x": 5.972489095100195,
-        "y": 3.989759837031259
+        "x": 5.9613919227838466,
+        "y": 4.1638498661612715
       },
       "prevControl": {
-        "x": 4.614717422813848,
-        "y": 3.7393621025958077
+        "x": 4.619487700513864,
+        "y": 3.897442410269436
       },
       "nextControl": {
-        "x": 6.857065091498726,
-        "y": 4.152891702244794
+        "x": 6.843665483678437,
+        "y": 4.339007117221228
       },
       "isLocked": false,
       "linkedName": null
@@ -36,60 +36,60 @@
         "y": 4.122214464115091
       },
       "prevControl": {
-        "x": 7.067541981262038,
-        "y": 4.055845444402233
+        "x": 7.066624825486464,
+        "y": 4.168635254162852
       },
       "nextControl": {
-        "x": 8.445480001693555,
-        "y": 4.130431280159154
+        "x": 8.497196225161682,
+        "y": 4.114515152107228
       },
       "isLocked": false,
       "linkedName": "center note line #3"
     },
     {
       "anchor": {
-        "x": 5.122759927859106,
-        "y": 3.613493722713942
+        "x": 5.02403235575702,
+        "y": 3.8481076962153926
       },
       "prevControl": {
-        "x": 6.367745928573116,
-        "y": 4.047708280998874
+        "x": 6.1491136317929405,
+        "y": 4.53565736490401
       },
       "nextControl": {
-        "x": 3.4558962126587893,
-        "y": 3.0321406059706257
+        "x": 3.958402532189681,
+        "y": 3.1968894707020192
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.9203306782681937,
-        "y": 3.613493722713942
+        "x": 3.4058537347843933,
+        "y": 2.871280357945332
       },
       "prevControl": {
-        "x": 2.766059069008591,
-        "y": 2.966208884076935
+        "x": 4.708290185811142,
+        "y": 3.2856919559992974
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "C Score"
+      "linkedName": "C0 bottom"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 0.65,
-      "rotationDegrees": 25.970294963791652,
+      "rotationDegrees": 12.482994346844224,
       "rotateFast": false
     },
     {
       "waypointRelativePos": 0.25,
-      "rotationDegrees": 0,
+      "rotationDegrees": 1.9147799650152437,
       "rotateFast": false
     },
     {
       "waypointRelativePos": 2.9,
-      "rotationDegrees": 20.625039833672133,
+      "rotationDegrees": 3.753808318543773,
       "rotateFast": false
     },
     {
@@ -111,12 +111,6 @@
               "type": "named",
               "data": {
                 "name": "intake"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "followPathRotation"
               }
             },
             {
@@ -147,11 +141,73 @@
               "data": {
                 "name": "adjustToTarget"
               }
-            },
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "follow path rotation",
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathRotation"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "follow path speeds",
+      "waypointRelativePos": 2.1,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
             {
               "type": "named",
               "data": {
                 "name": "followPathSpeeds"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop shoot",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "stopShooter"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "start shoot",
+      "waypointRelativePos": 2.8,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
               }
             }
           ]

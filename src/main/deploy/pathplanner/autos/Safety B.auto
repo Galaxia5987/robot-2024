@@ -12,6 +12,18 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "closeShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "finishScore"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [

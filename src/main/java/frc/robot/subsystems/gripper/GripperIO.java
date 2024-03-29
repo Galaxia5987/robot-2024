@@ -6,7 +6,7 @@ public interface GripperIO {
 
     GripperInputsAutoLogged inputs = new GripperInputsAutoLogged();
 
-    void setRollerMotorPower(double power);
+    default void setRollerMotorPower(double power) {}
 
-    void updateInputs();
+    default void updateInputs() {}
 }

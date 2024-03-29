@@ -57,7 +57,11 @@ public class Conveyor extends SubsystemBase {
     }
 
     public Command stop() {
-        return runOnce(io::stop);
+        return runOnce(
+                () -> {
+                    inputs.velocitySetpoint.mut_replace(0, Units.RotationsPerSecond);
+                    io.stop();
+                });
     }
 
     @Override

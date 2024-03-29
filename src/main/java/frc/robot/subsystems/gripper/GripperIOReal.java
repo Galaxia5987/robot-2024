@@ -13,7 +13,7 @@ import frc.robot.Ports;
 public class GripperIOReal implements GripperIO {
     private final CANSparkMax rollerMotor;
     private final Timer timer = new Timer();
-    private final DigitalInput sensor = new DigitalInput(2);
+    private final DigitalInput sensor = new DigitalInput(1);
 
     public GripperIOReal() {
         rollerMotor =

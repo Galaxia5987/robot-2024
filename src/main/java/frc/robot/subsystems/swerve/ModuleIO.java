@@ -4,38 +4,51 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.lib.webconstants.LoggedTunableNumber;
 
 public interface ModuleIO {
-    void updateInputs();
+    default void updateInputs() {}
 
-    SwerveModuleInputsAutoLogged getInputs();
+    default SwerveModuleInputsAutoLogged getInputs() {
+        return new SwerveModuleInputsAutoLogged();
+    }
 
-    void updatePID();
+    default void updatePID() {}
 
     default boolean hasPIDChanged(LoggedTunableNumber[] PIDValues) {
         boolean hasChanged = false;
         for (LoggedTunableNumber value : PIDValues) {
-            if (value.hasChanged(hashCode())) hasChanged = true;
+            if (value.hasChanged()) hasChanged = true;
         }
         return hasChanged;
     }
 
-    Rotation2d getAngle();
+    default Rotation2d getAngle() {
+        return new Rotation2d();
+    }
 
-    void setAngle(Rotation2d angle);
+    default void setAngle(Rotation2d angle) {}
 
-    double getVelocity();
+    default double getVelocity() {
+        return 0;
+    }
 
-    void setVelocity(double velocity);
+    default void setVelocity(double velocity) {}
 
-    SwerveModuleState getModuleState();
+    default SwerveModuleState getModuleState() {
+        return new SwerveModuleState();
+    }
 
-    SwerveModulePosition getModulePosition();
+    default SwerveModulePosition getModulePosition() {
+        return new SwerveModulePosition();
+    }
 
-    void stop();
+    default void stop() {}
 
-    Command checkModule();
+    default Command checkModule() {
+        return Commands.none();
+    }
 
     default void updateOffset(Rotation2d offset) {}
 

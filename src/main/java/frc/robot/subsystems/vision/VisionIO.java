@@ -3,6 +3,7 @@ package frc.robot.subsystems.vision;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import org.littletonrobotics.junction.AutoLog;
@@ -10,20 +11,23 @@ import org.littletonrobotics.junction.AutoLog;
 public interface VisionIO {
 
     record ScoreParameters(
-            double distanceToSpeaker,
-            Optional<Rotation2d> yaw,
-            Rotation2d alternateYaw,
-            double distanceVarianceFactor) {}
+            Translation2d toSpeaker, Optional<Rotation2d> yaw, Rotation2d alternateYaw) {}
 
-    void setPipeLine(int pipeLineIndex);
+    default void setPipeLine(int pipeLineIndex) {}
 
-    void updateInputs(VisionInputs inputs);
+    default void updateInputs(VisionInputs inputs) {}
 
-    VisionResult getLatestResult();
+    default VisionResult getLatestResult() {
+        return null;
+    }
 
-    Transform3d getCameraToRobot();
+    default Transform3d getCameraToRobot() {
+        return new Transform3d();
+    }
 
-    String getName();
+    default String getName() {
+        return "Camera";
+    }
 
     default Optional<ScoreParameters> getScoreParameters() {
         return Optional.empty();
