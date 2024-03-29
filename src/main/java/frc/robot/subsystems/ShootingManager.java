@@ -129,7 +129,8 @@ public class ShootingManager {
         var scoreParameters = vision.getScoreParameters();
         if (!DriverStation.isAutonomous()) {
             Translation2d toSpeaker;
-            if (useScoreParams.calculate(!scoreParameters.isEmpty())) {
+            boolean hasSpeaker = useScoreParams.calculate(!scoreParameters.isEmpty());
+            if (hasSpeaker) {
                 toSpeaker =
                         scoreParameters.stream()
                                 .map(VisionIO.ScoreParameters::toSpeaker)
@@ -166,7 +167,7 @@ public class ShootingManager {
                             .filter(Optional::isPresent)
                             .map(Optional::get)
                             .toList();
-            if (!yaws.isEmpty()) {
+            if (!yaws.isEmpty() && hasSpeaker) {
                 var yawToTarget =
                         yaws.stream().reduce(new Rotation2d(), Rotation2d::plus).div(yaws.size());
                 swerveCommandedAngle
@@ -180,6 +181,10 @@ public class ShootingManager {
                                                 : swerveDrive.getOdometryYaw().getRotations()),
                                 Rotations)
                         .mut_minus(3, Degrees);
+            } else {
+                swerveCommandedAngle
+                        .mut_replace(Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI, Radians)
+                        .mut_minus(0, Degrees);
             }
         } else {
             updateCommandedStateWithPoseEstimation();
