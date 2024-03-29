@@ -12,7 +12,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule extends SubsystemBase {
 
-    private final SwerveModuleInputsAutoLogged loggerInputs;
+    private final SwerveModuleInputsAutoLogged inputs;
 
     private final ModuleIO io;
 
@@ -25,14 +25,14 @@ public class SwerveModule extends SubsystemBase {
         this.number = number;
         this.offset = offset;
 
-        loggerInputs = io.getInputs();
+        inputs = io.getInputs();
 
         timer.start();
         timer.reset();
     }
 
     public void setVelocity(double velocity) {
-        var angleError = loggerInputs.angleSetpoint.minus(loggerInputs.angle);
+        var angleError = inputs.angleSetpoint.minus(inputs.angle);
         velocity *= angleError.getCos();
         io.setVelocity(velocity);
     }
@@ -52,7 +52,7 @@ public class SwerveModule extends SubsystemBase {
      * @param moduleState A module state to set the module to.
      */
     public void setModuleState(SwerveModuleState moduleState) {
-        moduleState = SwerveModuleState.optimize(moduleState, loggerInputs.angle);
+        moduleState = SwerveModuleState.optimize(moduleState, inputs.angle);
         setVelocity(moduleState.speedMetersPerSecond);
         io.setAngle(moduleState.angle);
     }
@@ -63,7 +63,7 @@ public class SwerveModule extends SubsystemBase {
      * @return Position of the module.
      */
     public SwerveModulePosition getModulePosition() {
-        return new SwerveModulePosition(loggerInputs.moduleDistance, loggerInputs.angle);
+        return new SwerveModulePosition(inputs.moduleDistance, inputs.angle);
     }
 
     /**
@@ -72,7 +72,7 @@ public class SwerveModule extends SubsystemBase {
      * @return Position of the absolute encoder. [sensor ticks]
      */
     public double getPosition() {
-        return loggerInputs.absolutePosition;
+        return inputs.absolutePosition;
     }
 
     /**
@@ -95,12 +95,13 @@ public class SwerveModule extends SubsystemBase {
     public void updateInputs() {
         io.updateInputs();
         if (timer.advanceIfElapsed(0.1)) {
-            Logger.processInputs("module_" + number, loggerInputs);
+            Logger.processInputs("module_" + number, inputs);
         }
+
     }
 
     public double getAcceleration() {
-        return loggerInputs.driveMotorAcceleration;
+        return inputs.driveMotorAcceleration;
     }
 
     @Override
@@ -117,12 +118,12 @@ public class SwerveModule extends SubsystemBase {
 
     public void updateSysIdRoutineLog(SysIdRoutineLog log) {
         log.motor("" + number)
-                .voltage(edu.wpi.first.units.Units.Volts.of(loggerInputs.angleMotorAppliedVoltage))
+                .voltage(edu.wpi.first.units.Units.Volts.of(inputs.angleMotorAppliedVoltage))
                 .angularPosition(
-                        edu.wpi.first.units.Units.Rotations.of(loggerInputs.angle.getRotations()))
+                        edu.wpi.first.units.Units.Rotations.of(inputs.angle.getRotations()))
                 .angularVelocity(
                         edu.wpi.first.units.Units.RotationsPerSecond.of(
-                                loggerInputs.driveMotorVelocity
+                                inputs.driveMotorVelocity
                                         / (SwerveConstants.WHEEL_DIAMETER * Math.PI)));
     }
 }

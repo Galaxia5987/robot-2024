@@ -21,23 +21,27 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.lib.controllers.DieterController;
+import lombok.Getter;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
+
 import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.stream.Stream;
-import lombok.Getter;
-import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
 
 public class SwerveDrive extends SubsystemBase {
     public static final Lock odometryLock = new ReentrantLock();
     private static SwerveDrive INSTANCE = null;
     private final SwerveModule[] modules; // FL, FR, RL, RR
 
-    @Getter @AutoLogOutput
+    @Getter
+    @AutoLogOutput
     private final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
+    @AutoLogOutput
+    private ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
 
     private final GyroIO gyro;
 
@@ -49,9 +53,12 @@ public class SwerveDrive extends SubsystemBase {
                     SwerveConstants.WHEEL_POSITIONS[2],
                     SwerveConstants.WHEEL_POSITIONS[3]);
 
-    @Getter private final SwerveDrivePoseEstimator estimator;
+    @Getter
+    private final SwerveDrivePoseEstimator estimator;
     private final SwerveDriveInputsAutoLogged loggerInputs = new SwerveDriveInputsAutoLogged();
-    @Getter @AutoLogOutput private Pose2d botPose = new Pose2d();
+    @Getter
+    @AutoLogOutput
+    private Pose2d botPose = new Pose2d();
 
     private boolean inCharacterizationMode = false;
 
@@ -166,11 +173,11 @@ public class SwerveDrive extends SubsystemBase {
 
     public void lock() {
         loggerInputs.desiredModuleStates =
-                new SwerveModuleState[] {
-                    new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
-                    new SwerveModuleState(0, Rotation2d.fromDegrees(135)),
-                    new SwerveModuleState(0, Rotation2d.fromDegrees(315)),
-                    new SwerveModuleState(0, Rotation2d.fromDegrees(225))
+                new SwerveModuleState[]{
+                        new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
+                        new SwerveModuleState(0, Rotation2d.fromDegrees(135)),
+                        new SwerveModuleState(0, Rotation2d.fromDegrees(315)),
+                        new SwerveModuleState(0, Rotation2d.fromDegrees(225))
                 };
     }
 
@@ -210,8 +217,8 @@ public class SwerveDrive extends SubsystemBase {
     /**
      * Sets the desired percentage of x, y and omega speeds for the frc.robot.subsystems.swerve
      *
-     * @param xOutput percentage of the max possible x speed
-     * @param yOutput percentage of the max possible the y speed
+     * @param xOutput     percentage of the max possible x speed
+     * @param yOutput     percentage of the max possible the y speed
      * @param omegaOutput percentage of the max possible rotation speed
      */
     public void drive(double xOutput, double yOutput, double omegaOutput, boolean fieldOriented) {
@@ -290,17 +297,8 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void updateSwerveInputs() {
-        for (int i = 0; i < modules.length; i++) {
-            loggerInputs.absolutePositions[i] = modules[i].getPosition();
-            loggerInputs.currentModuleStates[i] = modules[i].getModuleState();
-        }
 
-        loggerInputs.currentSpeeds =
-                kinematics.toChassisSpeeds(
-                        loggerInputs.currentModuleStates[0],
-                        loggerInputs.currentModuleStates[1],
-                        loggerInputs.currentModuleStates[2],
-                        loggerInputs.currentModuleStates[3]);
+
 
         loggerInputs.linearVelocity =
                 Math.hypot(
@@ -320,9 +318,7 @@ public class SwerveDrive extends SubsystemBase {
 
     @Override
     public void periodic() {
-        for (SwerveModule module : modules) {
-            module.updateInputs();
-        }
+        Arrays.stream(modules).forEach(SwerveModule::updateInputs);
         updateGyroInputs();
         updateSwerveInputs();
         updateModulePositions();
@@ -338,6 +334,12 @@ public class SwerveDrive extends SubsystemBase {
         }
 
         Logger.processInputs("SwerveDrive", loggerInputs);
+
+        chassisSpeeds = kinematics.toChassisSpeeds(
+                loggerInputs.currentModuleStates[0],
+                loggerInputs.currentModuleStates[1],
+                loggerInputs.currentModuleStates[2],
+                loggerInputs.currentModuleStates[3]);
     }
 
     public Command characterize() {
