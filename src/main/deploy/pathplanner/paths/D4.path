@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0138839138077134,
-        "y": 3.344528170537823
+        "x": 3.159180164514176,
+        "y": 3.0488853285398885
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.4288766013429455,
-        "y": 1.3448277608805934
+        "x": 4.205076102459898,
+        "y": 1.5293761356753486
       },
       "isLocked": false,
       "linkedName": "D0"
@@ -20,24 +20,24 @@
         "y": 2.4440782784699477
       },
       "prevControl": {
-        "x": 6.130226277546571,
-        "y": 1.5904050041718334
+        "x": 6.385670463650441,
+        "y": 1.3419042222730615
       },
       "nextControl": {
-        "x": 8.306264318215028,
-        "y": 2.6058281272331203
+        "x": 8.686885428068733,
+        "y": 2.953336266919309
       },
       "isLocked": false,
       "linkedName": "center note line #4"
     },
     {
       "anchor": {
-        "x": 2.0138839138077134,
-        "y": 3.344528170537823
+        "x": 3.159180164514176,
+        "y": 3.0488853285398885
       },
       "prevControl": {
-        "x": 4.341020647853261,
-        "y": 0.4794603321400393
+        "x": 5.300306754459664,
+        "y": 0.2565405130810273
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,25 +47,25 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1.1,
-      "rotationDegrees": 0,
+      "rotationDegrees": 27.211061455598777,
       "rotateFast": false
     },
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": 0,
+      "rotationDegrees": 16.409321448310937,
       "rotateFast": false
     },
     {
       "waypointRelativePos": 1.65,
-      "rotationDegrees": 0,
+      "rotationDegrees": 0.3533973666021898,
       "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.1,
+      "name": "intake",
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -87,8 +87,8 @@
       }
     },
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 1.35,
+      "name": "stop intake",
+      "waypointRelativePos": 1.5,
       "command": {
         "type": "parallel",
         "data": {
@@ -108,11 +108,79 @@
           ]
         }
       }
+    },
+    {
+      "name": "start note detection",
+      "waypointRelativePos": 0.75,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "useNoteDetection"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop note detection",
+      "waypointRelativePos": 1.1,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathSpeeds"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop shoot",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "stopShooter"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "shoot",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 4.5,
+    "maxAcceleration": 2.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -124,5 +192,5 @@
   "reversed": false,
   "folder": "D345",
   "previewStartingState": null,
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

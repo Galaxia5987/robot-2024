@@ -16,12 +16,6 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "prepareShoot"
-                }
-              },
-              {
                 "type": "sequential",
                 "data": {
                   "commands": [
@@ -59,12 +53,6 @@
                       "type": "path",
                       "data": {
                         "pathName": "AH"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.2
                       }
                     },
                     {

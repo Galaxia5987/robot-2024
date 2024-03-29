@@ -7,9 +7,11 @@ public interface ConveyorIO {
 
     ConveyorInputsAutoLogged inputs = new ConveyorInputsAutoLogged();
 
-    void setVelocity(MutableMeasure<Velocity<Angle>> velocity);
+    default void setVelocity(MutableMeasure<Velocity<Angle>> velocity) {}
 
-    void updateInputs();
+    default void updateInputs() {}
+
+    default void stop() {}
 
     @AutoLog
     class ConveyorInputs {

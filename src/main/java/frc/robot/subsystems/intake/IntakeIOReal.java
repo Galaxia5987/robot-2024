@@ -37,7 +37,7 @@ public class IntakeIOReal implements IntakeIO {
         spinMotor.burnFlash();
         centerMotor.burnFlash();
 
-        angleMotor.setPosition(110);
+        angleMotor.setPosition(IntakePose.UP.intakePose.in(Units.Degrees));
 
         BaseStatusSignal.setUpdateFrequencyForAll(
                 100, angleMotor.getPosition(), angleMotor.getMotorVoltage());

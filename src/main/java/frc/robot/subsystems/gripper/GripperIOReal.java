@@ -4,8 +4,6 @@ import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkLimitSwitch;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
@@ -15,7 +13,7 @@ import frc.robot.Ports;
 public class GripperIOReal implements GripperIO {
     private final CANSparkMax rollerMotor;
     private final Timer timer = new Timer();
-    private final DigitalInput sensor = new DigitalInput(2);
+    private final DigitalInput sensor = new DigitalInput(1);
 
     public GripperIOReal() {
         rollerMotor =
@@ -46,12 +44,6 @@ public class GripperIOReal implements GripperIO {
         rollerMotor.set(power);
     }
 
-    @Override
-    public void setAngleMotorPower(double power) {}
-
-    @Override
-    public void setAngle(MutableMeasure<Angle> angle) {}
-
     public boolean hasNote() {
         return !sensor.get();
     }
@@ -61,11 +53,5 @@ public class GripperIOReal implements GripperIO {
         inputs.rollerMotorVoltage.mut_replace(
                 rollerMotor.get() * RobotController.getBatteryVoltage(), Units.Volts);
         inputs.hasNote = hasNote();
-        inputs.encoderPosition.mut_replace(
-                inputs.noOffsetEncoderPosition.in(Units.Rotations)
-                        - GripperConstants.ABSOLUTE_ENCODER_OFFSET.get(),
-                Units.Rotations);
-        inputs.encoderPosition.mut_replace(
-                Math.IEEEremainder(inputs.encoderPosition.in(Units.Rotations), 1), Units.Rotations);
     }
 }

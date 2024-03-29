@@ -2,14 +2,16 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.util.GeometryUtil;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.*;
-import frc.robot.scoreStates.ScoreState;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.swerve.*;
 import frc.robot.subsystems.vision.*;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -21,39 +23,31 @@ public class Constants {
     public static final int CONFIG_TIMEOUT = 100; // [ms]
 
     public static final double LOOP_TIME = 0.02;
-
-    public static Mode CURRENT_MODE = Mode.REAL;
-
     public static final double AUTO_VISION_MEASUREMENT_MULTIPLIER = 0.5;
     public static final double AUTO_START_VISION_MEASUREMENT_MULTIPLIER = 1_000_000_000;
-    public static final double TELEOP_VISION_MEASUREMENT_MULTIPLIER = 0.5;
-
-    @AutoLogOutput
-    static double VISION_MEASUREMENT_MULTIPLIER = AUTO_START_VISION_MEASUREMENT_MULTIPLIER;
-
-    public static final Transform3d BACK_LEFT_CAMERA_POSE =
+    public static final double TELEOP_VISION_MEASUREMENT_MULTIPLIER = 0.05;
+    public static final Transform3d SPEAKER_RIGHT_CAMERA_POSE =
             new Transform3d(
-                    -0.289_36,
-                    0.341_15,
-                    0.2,
-                    new Rotation3d(0, -Math.toRadians(31.92), Math.toRadians(180)));
-    public static final Transform3d BACK_RIGHT_CAMERA_POSE =
+                    -0.065_833,
+                    -0.040_05,
+                    0.608_178,
+                    new Rotation3d(0, -Math.toRadians(25), Math.toRadians(180)));
+    public static final Transform3d SPEAKER_LEFT_CAMERA_POSE =
             new Transform3d(
-                    -0.346_52,
-                    -0.285_32,
-                    0.2,
-                    new Rotation3d(0, -Math.toRadians(31.92), -Math.toRadians(100)));
-    public static final Transform3d FRONT_LEFT_CAMERA_POSE =
-            new Transform3d(0.061, 0.2848, 0.55, new Rotation3d(0, -Math.toRadians(10.0), 0));
-    public static final Transform3d FRONT_RIGHT_CAMERA_POSE =
-            new Transform3d(0.061, -0.2848, 0.55, new Rotation3d(0, -Math.toRadians(25.0), 0));
-
+                    -0.065_833,
+                    0.039_95,
+                    0.608_178,
+                    new Rotation3d(0, -Math.toRadians(25), Math.toRadians(180)));
+    public static final Transform3d INTAKE_APRILTAG_CAMERA_POSE =
+            new Transform3d(
+                    -0.012_852, -0.0005, 0.635_282, new Rotation3d(0, -Math.toRadians(25), 0));
+    public static final Transform3d DRIVER_CAMERA_POSE =
+            new Transform3d(0.0, 0.0, 0.53, new Rotation3d(0, Math.toRadians(20), 0));
     public static final Measure<Voltage> NOMINAL_VOLTAGE = Units.Volts.of(12);
-
     public static final Measure<Distance> ROBOT_LENGTH = Units.Meters.of(0.584);
-    public static final Measure<Velocity<Distance>> MAX_VELOCITY = Units.MetersPerSecond.of(4);
+    public static final Measure<Velocity<Distance>> MAX_VELOCITY = Units.MetersPerSecond.of(2.0);
     public static final Measure<Velocity<Velocity<Distance>>> MAX_ACCELERATION =
-            Units.MetersPerSecondPerSecond.of(2.5);
+            Units.MetersPerSecondPerSecond.of(1);
     public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY =
             Units.RotationsPerSecond.of(
                     MAX_VELOCITY.in(Units.MetersPerSecond)
@@ -63,26 +57,23 @@ public class Constants {
                     .of(
                             MAX_ACCELERATION.in(Units.MetersPerSecondPerSecond)
                                     / (ROBOT_LENGTH.in(Units.Meters) / Math.sqrt(2)));
-
     public static final PathConstraints AUTO_CONSTRAINTS =
             new PathConstraints(
                     MAX_VELOCITY.in(Units.MetersPerSecond),
                     MAX_ACCELERATION.in(Units.MetersPerSecondPerSecond),
                     MAX_ANGULAR_VELOCITY.in(Units.RotationsPerSecond),
                     MAX_ANGULAR_ACCELERATION.in(Units.RotationsPerSecond.per(Units.Second)));
-
-    public enum Mode {
-        REAL,
-        SIM,
-        REPLAY
-    }
-
     public static final double[] SWERVE_OFFSETS = {
-        0.794_517_619_862_940_4,
-        0.782_804_769_570_119_2,
-        0.523_762_213_094_055_4,
-        0.577_792_614_444_815_3
+        0.792_610_669_815_266_7,
+        0.780_174_219_504_355_5,
+        0.522_181_563_054_539_1,
+        0.574_873_139_371_828_5
     };
+
+    public static Mode CURRENT_MODE = Mode.REAL;
+
+    @AutoLogOutput
+    static double VISION_MEASUREMENT_MULTIPLIER = AUTO_START_VISION_MEASUREMENT_MULTIPLIER;
 
     public static void initSwerve() {
         ModuleIO[] moduleIOs = new ModuleIO[4];
@@ -101,11 +92,17 @@ public class Constants {
                         }
                         yield new GyroIOReal();
                     }
-                    default -> {
+                    case SIM -> {
                         for (int i = 0; i < moduleIOs.length; i++) {
                             moduleIOs[i] = new ModuleIOSim(new SwerveModuleInputsAutoLogged());
                         }
                         yield new GyroIOSim();
+                    }
+                    default -> {
+                        for (int i = 0; i < moduleIOs.length; i++) {
+                            moduleIOs[i] = new ModuleIO() {};
+                        }
+                        yield new GyroIO() {};
                     }
                 };
         SwerveDrive.initialize(gyroIO, SWERVE_OFFSETS, moduleIOs);
@@ -114,67 +111,116 @@ public class Constants {
                 () -> swerveDrive.getEstimator().getEstimatedPosition(),
                 swerveDrive::resetPose,
                 swerveDrive::getCurrentSpeeds,
-                (speeds) -> swerveDrive.drive(speeds, false),
+                (speeds) -> {
+                    //                     Fixes diversion from note during autonomous
+                    if (RobotContainer.getInstance().useNoteDetection
+                            && Vision.getInstance().getYawToNote().isPresent()) {
+                        speeds.vyMetersPerSecond =
+                                SwerveConstants.VY_NOTE_DETECTION_CONTROLLER.calculate(
+                                        Math.sin(
+                                                Math.toRadians(
+                                                        Vision.getInstance()
+                                                                .getYawToNote()
+                                                                .getAsDouble())),
+                                        0);
+                    }
+
+                    swerveDrive.drive(speeds, false);
+                },
                 new HolonomicPathFollowerConfig(
                         new PIDConstants(5.5, 0, 0.15),
                         new PIDConstants(3, 0, 0.4),
                         SwerveConstants.MAX_X_Y_VELOCITY,
                         Constants.ROBOT_LENGTH.in(Units.Meters) / Math.sqrt(2),
                         new ReplanningConfig()),
-                ScoreState::isRed,
+                Constants::isRed,
                 swerveDrive);
     }
 
     public static void initVision() {
         VisionModule rightOpi;
         VisionModule leftOpi;
-        VisionModule lamelight;
+        VisionIO speakerLeftCamera;
+        VisionIO speakerRightCamera;
+        VisionIO driverCamera;
+        var field = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
         switch (CURRENT_MODE) {
             case REAL:
-                lamelight = new VisionModule(new LimelightIO("limelight", true));
-                rightOpi =
-                        new VisionModule(
-                                new PhotonVisionIOReal(
-                                        new PhotonCamera("Back_right_camera"),
-                                        BACK_RIGHT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                                        false));
-                leftOpi =
-                        new VisionModule(
-                                new PhotonVisionIOReal(
-                                        new PhotonCamera("Back_left_camera"),
-                                        BACK_LEFT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                                        true));
+                speakerRightCamera =
+                        new PhotonVisionIOReal(
+                                new PhotonCamera("OV2311_1"),
+                                "Speaker_Right_Camera",
+                                SPEAKER_RIGHT_CAMERA_POSE,
+                                field,
+                                true,
+                                false);
+                speakerLeftCamera =
+                        new PhotonVisionIOReal(
+                                new PhotonCamera("OV2311_2"),
+                                "Speaker_Left_Camera",
+                                SPEAKER_LEFT_CAMERA_POSE,
+                                field,
+                                true,
+                                false);
+                driverCamera =
+                        new PhotonVisionIOReal(
+                                new PhotonCamera("Driver_Camera"),
+                                "Driver_Camera",
+                                DRIVER_CAMERA_POSE,
+                                field,
+                                false,
+                                true);
                 break;
+            case SIM:
+                speakerLeftCamera =
+                        new VisionSimIO(
+                                new PhotonCamera("Speaker_Left_Camera"),
+                                SPEAKER_LEFT_CAMERA_POSE,
+                                field,
+                                SimCameraProperties.LL2_1280_720());
+                speakerRightCamera =
+                        new VisionSimIO(
+                                new PhotonCamera("Speaker_Right_Camera"),
+                                SPEAKER_RIGHT_CAMERA_POSE,
+                                field,
+                                SimCameraProperties.LL2_1280_720());
+                driverCamera =
+                        new VisionSimIO(
+                                new PhotonCamera("Driver_Camera"),
+                                DRIVER_CAMERA_POSE,
+                                field,
+                                SimCameraProperties.LL2_1280_720());
+                break;
+            case REPLAY:
             default:
-                lamelight = new VisionModule();
-                rightOpi =
-                        new VisionModule(
-                                new VisionSimIO(
-                                        new PhotonCamera("Front left camera"),
-                                        FRONT_LEFT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                                        SimCameraProperties.PI4_LIFECAM_640_480()),
-                                new VisionSimIO(
-                                        new PhotonCamera("Front right camera"),
-                                        FRONT_RIGHT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                                        SimCameraProperties.PI4_LIFECAM_640_480()));
-                leftOpi =
-                        new VisionModule(
-                                new VisionSimIO(
-                                        new PhotonCamera("Back left camera"),
-                                        BACK_LEFT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                                        SimCameraProperties.PI4_LIFECAM_640_480()),
-                                new VisionSimIO(
-                                        new PhotonCamera("Back right camera"),
-                                        BACK_RIGHT_CAMERA_POSE,
-                                        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
-                                        SimCameraProperties.PI4_LIFECAM_640_480()));
+                speakerLeftCamera = new VisionIO() {};
+                speakerRightCamera = new VisionIO() {};
+                driverCamera = new VisionIO() {};
                 break;
         }
-        Vision.initialize(rightOpi, leftOpi, lamelight);
+        rightOpi = new VisionModule(driverCamera);
+        leftOpi = new VisionModule(speakerLeftCamera, speakerRightCamera);
+        Vision.initialize(rightOpi, leftOpi);
+    }
+
+    public static boolean isRed() {
+        var alliance = DriverStation.getAlliance();
+        return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
+    }
+
+    public static final Translation2d SPEAKER_POSE_BLUE = new Translation2d(0, 5.547_944_2);
+    public static final Translation2d SPEAKER_POSE_RED =
+            GeometryUtil.flipFieldPosition(SPEAKER_POSE_BLUE);
+
+    public enum State {
+        SHOOT,
+        AMP,
+        CLIMB
+    }
+
+    public enum Mode {
+        REAL,
+        SIM,
+        REPLAY
     }
 }

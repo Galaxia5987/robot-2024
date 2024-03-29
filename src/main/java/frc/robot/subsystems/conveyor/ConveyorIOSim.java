@@ -34,6 +34,11 @@ public class ConveyorIOSim implements ConveyorIO {
     }
 
     @Override
+    public void stop() {
+        conveyor.setInputVoltage(0);
+    }
+
+    @Override
     public void updateInputs() {
         conveyor.update(Timer.getFPGATimestamp());
         inputs.currentVelocity.mut_replace((conveyor.getVelocity()), Units.RotationsPerSecond);

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9203306782681937,
-        "y": 3.613493722713942
+        "x": 3.0901115648385162,
+        "y": 2.65420761610754
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.451965319885056,
-        "y": 1.1811095986864348
+        "x": 6.697027325678587,
+        "y": -0.28833399547141036
       },
       "isLocked": false,
       "linkedName": "C Score"
@@ -20,24 +20,24 @@
         "y": 2.4475648380683346
       },
       "prevControl": {
-        "x": 6.130276323856595,
-        "y": 1.687444799309739
+        "x": 6.150595125726627,
+        "y": 1.6863604625925368
       },
       "nextControl": {
-        "x": 8.43786274708181,
-        "y": 2.4938594095766153
+        "x": 8.437705464093723,
+        "y": 2.4943070495156956
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.9203306782681937,
-        "y": 3.613493722713942
+        "x": 3.9090678181356378,
+        "y": 2.4475648380683346
       },
       "prevControl": {
-        "x": 5.136223149939177,
-        "y": 0.4443778688127172
+        "x": 5.4830774426170805,
+        "y": -0.36303593291922825
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,7 +47,12 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1.05,
-      "rotationDegrees": 0,
+      "rotationDegrees": 27.836292715751753,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 15.020665986535848,
       "rotateFast": false
     }
   ],
@@ -64,12 +69,6 @@
               "type": "named",
               "data": {
                 "name": "intake"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "followPathRotation"
               }
             }
           ]
@@ -98,11 +97,96 @@
           ]
         }
       }
+    },
+    {
+      "name": "use note detection",
+      "waypointRelativePos": 0.4,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "useNoteDetection"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop note detection",
+      "waypointRelativePos": 1.05,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathSpeeds"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "follow path rotation",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "followPathRotation"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stop shoot",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "stopShooter"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "start shoot",
+      "waypointRelativePos": 1.6,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 4.5,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

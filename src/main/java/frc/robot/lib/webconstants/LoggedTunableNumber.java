@@ -89,11 +89,11 @@ public class LoggedTunableNumber {
      * @return True if the number has changed since the last time this method was called, false
      *     otherwise.
      */
-    public boolean hasChanged(int id) {
+    public boolean hasChanged() {
         double currentValue = get();
-        Double lastValue = lastHasChangedValues.get(id);
+        Double lastValue = lastHasChangedValues.get(0);
         if (lastValue == null || currentValue != lastValue) {
-            lastHasChangedValues.put(id, currentValue);
+            lastHasChangedValues.put(0, currentValue);
             return true;
         }
 
@@ -103,7 +103,7 @@ public class LoggedTunableNumber {
     public void ifChanged(int hash, DoubleConsumer action) {
         GeneralRobotLoop.register(
                 () -> {
-                    if (hasChanged(hash)) {
+                    if (hasChanged()) {
                         action.accept(get());
                     }
                 });
@@ -113,7 +113,7 @@ public class LoggedTunableNumber {
             int hash, Consumer<double[]> action, LoggedTunableNumber... numbers) {
         GeneralRobotLoop.register(
                 () -> {
-                    if (Arrays.stream(numbers).allMatch((number) -> number.hasChanged(hash))) {
+                    if (Arrays.stream(numbers).allMatch((number) -> number.hasChanged())) {
                         action.accept(
                                 Arrays.stream(numbers)
                                         .mapToDouble(LoggedTunableNumber::get)

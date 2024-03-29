@@ -1,11 +1,7 @@
 package frc.robot.subsystems.conveyor;
 
-import static frc.robot.subsystems.conveyor.ConveyorConstants.*;
-
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkLowLevel;
-import com.revrobotics.CANSparkMax;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
@@ -14,36 +10,26 @@ import frc.robot.Ports;
 
 public class ConveyorIOReal implements ConveyorIO {
 
-    private CANSparkMax roller =
-            new CANSparkMax(Ports.Conveyor.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
-    public static SimpleMotorFeedforward feed =
-            new SimpleMotorFeedforward(KS.get(), KV.get(), KA.get());
+    private final TalonFX roller = new TalonFX(Ports.Conveyor.MOTOR_ID);
+    private final VelocityVoltage control = new VelocityVoltage(0).withEnableFOC(true);
 
     public ConveyorIOReal() {
-        roller.restoreFactoryDefaults();
-        roller.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        roller.setInverted(true);
-        roller.getPIDController().setP(KP.get());
-        roller.getPIDController().setI(KI.get());
-        roller.getPIDController().setD(KD.get());
-        roller.getEncoder()
-                .setVelocityConversionFactor(ConveyorConstants.VELOCITY_CONVERSION_FACTOR);
-        roller.burnFlash();
+        roller.getConfigurator().apply(ConveyorConstants.MOTOR_CONFIG);
     }
 
     @Override
     public void setVelocity(MutableMeasure<Velocity<Angle>> velocity) {
-        roller.getPIDController()
-                .setReference(
-                        velocity.in(Units.RotationsPerSecond),
-                        CANSparkBase.ControlType.kVelocity,
-                        0,
-                        feed.calculate(velocity.in(Units.RotationsPerSecond)));
+        roller.setControl(control.withVelocity(velocity.in(Units.RotationsPerSecond)));
+    }
+
+    @Override
+    public void stop() {
+        roller.stopMotor();
     }
 
     @Override
     public void updateInputs() {
         inputs.currentVelocity.mut_replace(
-                (roller.getEncoder().getVelocity()), Units.RotationsPerSecond);
+                roller.getVelocity().getValue(), Units.RotationsPerSecond);
     }
 }

@@ -102,4 +102,8 @@ public class Utils {
                 translation_part.getY() / Constants.LOOP_TIME,
                 dtheta / Constants.LOOP_TIME);
     }
+
+    public static double distanceToSpeakerVarianceFactor(Translation2d toSpeaker) {
+        return Math.cos(0.2 * toSpeaker.getY() / toSpeaker.getX());
+    }
 }

@@ -18,7 +18,7 @@ public class HoodConstants {
     public static Measure<Distance> HOOD_LENGTH = Units.Meters.of(0.4);
     public static Measure<Dimensionless> POSITION_TOLERANCE = Units.Percent.of(0.5);
     public static Measure<Velocity<Angle>> MAX_VELOCITY = Units.RotationsPerSecond.of(1);
-    public static final MutableMeasure<Angle> AMP_ANGLE = Units.Degrees.of(114).mutableCopy();
+    public static final MutableMeasure<Angle> AMP_ANGLE = Units.Degrees.of(118).mutableCopy();
     public static Measure<Velocity<Velocity<Angle>>> MAX_ACCELERATION =
             Units.RotationsPerSecond.per(Units.Second).of(4);
     public static final double GEAR_RATIO = 3.0 * (36.0 / 18.0) * (158.0 / 18.0);
@@ -31,6 +31,8 @@ public class HoodConstants {
     public static final Measure<Angle> SIMULATION_OFFSET = Units.Degrees.of(-54);
     public static final LoggedTunableNumber ABSOLUTE_ENCODER_OFFSET =
             new LoggedTunableNumber("Hood/EncoderOffset");
+
+    public static final int ENCODER_TICKS_PER_REVOLUTION = 4096;
 
     public static final LoggedTunableNumber kP = new LoggedTunableNumber("Hood/kP");
     public static final LoggedTunableNumber kI = new LoggedTunableNumber("Hood/kI");
@@ -54,14 +56,14 @@ public class HoodConstants {
     public static void initConstants() {
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                kP.initDefault(970);
-                kI.initDefault(3);
-                kD.initDefault(210);
-                kS.initDefault(1.5);
+                kP.initDefault(900);
+                kI.initDefault(0);
+                kD.initDefault(150);
+                kS.initDefault(0.5);
                 kV.initDefault(0);
                 kA.initDefault(0.0);
-                kG.initDefault(20.0);
-                ABSOLUTE_ENCODER_OFFSET.initDefault((274.33 - 33.48) / 360.0);
+                kG.initDefault(9.0);
+                ABSOLUTE_ENCODER_OFFSET.initDefault((77.08 - 33.48) / 360.0);
             case SIM:
             case REPLAY:
                 kP.initDefault(10);

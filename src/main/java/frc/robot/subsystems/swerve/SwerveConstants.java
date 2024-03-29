@@ -1,8 +1,10 @@
 package frc.robot.subsystems.swerve;
 
 import com.ctre.phoenix6.configs.*;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.lib.webconstants.LoggedTunableNumber;
+import java.awt.*;
 
 public class SwerveConstants {
     public static final double NEO_CURRENT_LIMIT = 40;
@@ -83,9 +85,11 @@ public class SwerveConstants {
     public static double ANGLE_MOTOR_MOMENT_OF_INERTIA = 0.004;
     public static double MAX_X_Y_VELOCITY;
     public static double MAX_OMEGA_VELOCITY;
+    public static PIDController VY_NOTE_DETECTION_CONTROLLER = new PIDController(5, 0, 0.3);
 
     public static void initConstants(boolean isWCP, boolean isReal) {
         if (!isReal) {
+
             DRIVE_KP.initDefault(2.0);
             DRIVE_KI.initDefault(0.0);
             DRIVE_KD.initDefault(0.0);
@@ -119,12 +123,12 @@ public class SwerveConstants {
         } else {
             if (isWCP) {
                 //                DRIVE_KP.initDefault(0.35747925);
-                DRIVE_KP.initDefault(0.0);
+                DRIVE_KP.initDefault(0.3);
                 DRIVE_KI.initDefault(0.0);
                 DRIVE_KD.initDefault(0.0);
                 DRIVE_KV.initDefault(0.675_205);
                 DRIVE_KS.initDefault(0.248_33);
-                DRIVE_KA.initDefault(0.100_370_75);
+                DRIVE_KA.initDefault(0.05);
 
                 ANGLE_KP.initDefault(28.0);
                 ANGLE_KI.initDefault(0.0);
@@ -136,11 +140,11 @@ public class SwerveConstants {
                 ROTATION_KP.initDefault(2.3);
                 ROTATION_KI.initDefault(0.0);
                 ROTATION_KD.initDefault(0.2);
-                ROTATION_KDIETER.initDefault(0.0);
+                ROTATION_KDIETER.initDefault(0.002);
 
                 ROBOT_WIDTH = 0.585;
                 ROBOT_LENGTH = 0.585;
-                WHEEL_DIAMETER = 0.102;
+                WHEEL_DIAMETER = 0.098_54;
                 DRIVE_REDUCTION = (1 / 2.0) * (24.0 / 22.0) * (15.0 / 45.0);
                 ANGLE_REDUCTION = (14.0 / 72.0) * 0.5;
 

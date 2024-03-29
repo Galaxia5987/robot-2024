@@ -37,5 +37,6 @@ public class GyroIOReal implements GyroIO {
     @Override
     public void updateInputs(SwerveDriveInputs inputs) {
         inputs.gyroOffset = gyroOffset;
+        inputs.acceleration = gyro.getWorldLinearAccelX(); // TODO: Make sure it's really x
     }
 }

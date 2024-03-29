@@ -4,16 +4,13 @@
   "holonomicMode": true,
   "pathFolders": [
     "AH123",
+    "C34L",
     "CL34",
-    "Center line",
-    "D345",
-    "Lower",
-    "Middle",
-    "Upper"
+    "D345"
   ],
   "autoFolders": [],
-  "defaultMaxVel": 4.0,
-  "defaultMaxAccel": 2.0,
+  "defaultMaxVel": 4.5,
+  "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 4.5

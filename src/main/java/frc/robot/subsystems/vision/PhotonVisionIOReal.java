@@ -3,8 +3,10 @@ package frc.robot.subsystems.vision;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.subsystems.swerve.SwerveDrive;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.OptionalDouble;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -15,6 +17,7 @@ public class PhotonVisionIOReal implements VisionIO {
     private final PhotonPoseEstimator estimator;
     private final Transform3d robotToCamera;
     private final boolean calculateScoreParams;
+    private boolean isNoteDetector;
     private VisionResult result =
             new VisionResult(
                     new EstimatedRobotPose(
@@ -32,15 +35,21 @@ public class PhotonVisionIOReal implements VisionIO {
                             PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR),
                     false);
     private Optional<ScoreParameters> scoreParameters = Optional.empty();
+    private OptionalDouble yawToNote = OptionalDouble.empty();
+    private final String name;
 
     public PhotonVisionIOReal(
             PhotonCamera camera,
+            String name,
             Transform3d robotToCamera,
             AprilTagFieldLayout field,
-            boolean calculateScoreParams) {
+            boolean calculateScoreParams,
+            boolean isNoteDetector) {
         this.camera = camera;
+        this.name = name;
         this.robotToCamera = robotToCamera;
         this.calculateScoreParams = calculateScoreParams;
+        this.isNoteDetector = isNoteDetector;
         camera.setPipelineIndex(0);
         estimator =
                 new PhotonPoseEstimator(
@@ -56,6 +65,11 @@ public class PhotonVisionIOReal implements VisionIO {
     }
 
     @Override
+    public OptionalDouble getYawToNote() {
+        return yawToNote;
+    }
+
+    @Override
     public Optional<ScoreParameters> getScoreParameters() {
         return scoreParameters;
     }
@@ -66,35 +80,16 @@ public class PhotonVisionIOReal implements VisionIO {
 
         var latestResult = camera.getLatestResult();
 
+        if (isNoteDetector && latestResult.hasTargets()) {
+            inputs.yawNote = latestResult.getBestTarget().getYaw();
+            yawToNote = OptionalDouble.of(inputs.yawNote);
+        } else {
+            yawToNote = OptionalDouble.empty();
+        }
+
         var estimatedPose = estimator.update(latestResult);
         if (estimatedPose.isPresent()) {
             inputs.poseFieldOriented = estimatedPose.get().estimatedPose;
-            if (calculateScoreParams) {
-                var toSpeaker =
-                        inputs.poseFieldOriented
-                                .getTranslation()
-                                .toTranslation2d()
-                                .minus(VisionConstants.getSpeakerPose());
-                toSpeaker = new Translation2d(toSpeaker.getX(), toSpeaker.getY());
-                inputs.distanceToSpeaker = toSpeaker.getNorm();
-
-                var centerTag =
-                        latestResult.getTargets().stream()
-                                .filter(
-                                        (target) ->
-                                                target.getFiducialId()
-                                                        == VisionConstants.getSpeakerTag1())
-                                .toList();
-                if (!centerTag.isEmpty()) {
-                    var yaw = centerTag.get(0).getYaw();
-                    inputs.yawToSpeaker = Rotation2d.fromDegrees(yaw);
-                }
-                scoreParameters =
-                        Optional.of(
-                                new ScoreParameters(inputs.distanceToSpeaker, Optional.empty()));
-            } else {
-                scoreParameters = Optional.empty();
-            }
 
             result = new VisionResult(estimatedPose.get(), true);
             double distanceTraveled =
@@ -119,6 +114,34 @@ public class PhotonVisionIOReal implements VisionIO {
             result.setUseForEstimation(false);
         }
 
+        if (calculateScoreParams && latestResult.hasTargets()) {
+            var toSpeaker =
+                    inputs.poseFieldOriented
+                            .getTranslation()
+                            .toTranslation2d()
+                            .minus(VisionConstants.getSpeakerPose());
+            inputs.distanceToSpeaker = toSpeaker.getNorm();
+            var centerTag = latestResult.getTargets();
+            centerTag.removeIf(
+                    (target) -> target.getFiducialId() != VisionConstants.getSpeakerTag1());
+            Optional<Rotation2d> yaw;
+            if (!centerTag.isEmpty()) {
+                inputs.yawToSpeaker = Rotation2d.fromDegrees(-centerTag.get(0).getYaw());
+                yaw = Optional.of(inputs.yawToSpeaker);
+            } else {
+                yaw = Optional.empty();
+            }
+            scoreParameters =
+                    Optional.of(
+                            new ScoreParameters(
+                                    toSpeaker,
+                                    yaw,
+                                    new Rotation2d(toSpeaker.getX(), toSpeaker.getY())
+                                            .minus(SwerveDrive.getInstance().getOdometryYaw())));
+        } else {
+            scoreParameters = Optional.empty();
+        }
+
         lastResult = result;
     }
 
@@ -134,6 +157,6 @@ public class PhotonVisionIOReal implements VisionIO {
 
     @Override
     public String getName() {
-        return camera.getName();
+        return name;
     }
 }

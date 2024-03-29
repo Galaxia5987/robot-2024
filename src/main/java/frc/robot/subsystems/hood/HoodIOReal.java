@@ -1,23 +1,26 @@
 package frc.robot.subsystems.hood;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.controls.*;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.Ports;
 import frc.robot.lib.Utils;
 
 public class HoodIOReal implements HoodIO {
     private final TalonFX motor;
-    private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(Ports.Hood.ENCODER_ID);
+    private final TalonSRX encoder = new TalonSRX(Ports.Hood.ENCODER_ID);
     private final PositionTorqueCurrentFOC positionControl = new PositionTorqueCurrentFOC(0);
 
     public HoodIOReal() {
         motor = new TalonFX(Ports.Hood.MOTOR_ID);
         motor.getConfigurator().apply(HoodConstants.MOTOR_CONFIGURATION);
+
+        encoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
     }
 
     @Override
@@ -39,7 +42,7 @@ public class HoodIOReal implements HoodIO {
                         .withFeedForward(
                                 Math.signum(
                                                         inputs.angleSetpoint
-                                                                .minus(inputs.internalAngle)
+                                                                .minus(inputs.absoluteEncoderAngle)
                                                                 .in(Units.Degrees))
                                                 * HoodConstants.kS.get()
                                         + torqueChassisCompensation
@@ -48,7 +51,9 @@ public class HoodIOReal implements HoodIO {
 
     private double getEncoderPosition() {
         double val =
-                absoluteEncoder.getAbsolutePosition() - HoodConstants.ABSOLUTE_ENCODER_OFFSET.get();
+                ((encoder.getSelectedSensorPosition() % HoodConstants.ENCODER_TICKS_PER_REVOLUTION)
+                                / HoodConstants.ENCODER_TICKS_PER_REVOLUTION)
+                        - HoodConstants.ABSOLUTE_ENCODER_OFFSET.get();
         return Utils.normalize(Rotation2d.fromRotations(val)).getRotations();
     }
 
@@ -58,6 +63,8 @@ public class HoodIOReal implements HoodIO {
         inputs.absoluteEncoderAngle.mut_replace(getEncoderPosition(), Units.Rotations);
         inputs.voltage.mut_replace(motor.getMotorVoltage().getValue(), Units.Volts);
         inputs.absoluteEncoderAngleNoOffset.mut_replace(
-                absoluteEncoder.getAbsolutePosition(), Units.Rotations);
+                ((encoder.getSelectedSensorPosition() % HoodConstants.ENCODER_TICKS_PER_REVOLUTION)
+                        / HoodConstants.ENCODER_TICKS_PER_REVOLUTION),
+                Units.Rotations);
     }
 }

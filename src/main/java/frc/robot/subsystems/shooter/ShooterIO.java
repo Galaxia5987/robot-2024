@@ -9,14 +9,14 @@ public interface ShooterIO {
     RollerInputsAutoLogged topRollerInputs = new RollerInputsAutoLogged();
     RollerInputsAutoLogged bottomRollerInputs = new RollerInputsAutoLogged();
 
-    void setTopVelocity(MutableMeasure<Velocity<Angle>> velocity);
+    default void setTopVelocity(MutableMeasure<Velocity<Angle>> velocity) {}
 
-    void setBottomVelocity(MutableMeasure<Velocity<Angle>> velocity);
+    default void setBottomVelocity(MutableMeasure<Velocity<Angle>> velocity) {}
 
-    void stop();
+    default void stop() {}
 
     /** Update the inputs of the Shooter */
-    void updateInputs();
+    default void updateInputs() {}
 
     @AutoLog
     class RollerInputs {

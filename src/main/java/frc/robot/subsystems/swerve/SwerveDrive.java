@@ -2,7 +2,6 @@ package frc.robot.subsystems.swerve;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -20,9 +19,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants;
 import frc.robot.lib.controllers.DieterController;
-import frc.robot.lib.math.differential.Derivative;
-import frc.robot.scoreStates.ScoreState;
 import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -51,8 +49,6 @@ public class SwerveDrive extends SubsystemBase {
                     SwerveConstants.WHEEL_POSITIONS[2],
                     SwerveConstants.WHEEL_POSITIONS[3]);
 
-    private final Derivative acceleration = new Derivative();
-    private final LinearFilter accelFilter = LinearFilter.movingAverage(15);
     @Getter private final SwerveDrivePoseEstimator estimator;
     private final SwerveDriveInputsAutoLogged loggerInputs = new SwerveDriveInputsAutoLogged();
     @Getter @AutoLogOutput private Pose2d botPose = new Pose2d();
@@ -148,15 +144,8 @@ public class SwerveDrive extends SubsystemBase {
         botPose = pose;
         resetGyro(
                 pose.getRotation()
-                        .minus(
-                                ScoreState.isRed()
-                                        ? Rotation2d.fromDegrees(180)
-                                        : new Rotation2d()));
+                        .minus(Constants.isRed() ? Rotation2d.fromDegrees(180) : new Rotation2d()));
         estimator.resetPosition(pose.getRotation(), modulePositions, pose);
-    }
-
-    public void resetPose() {
-        resetPose(new Pose2d());
     }
 
     public Command checkSwerve() {
@@ -259,7 +248,8 @@ public class SwerveDrive extends SubsystemBase {
                         SwerveConstants.ROTATION_KDIETER.get());
         turnController.setTolerance(turnTolerance);
         turnController.enableContinuousInput(-0.5, 0.5);
-        return run(() ->
+        return run(
+                () ->
                         drive(
                                 0,
                                 0,
@@ -269,15 +259,15 @@ public class SwerveDrive extends SubsystemBase {
                                                 .getRotation()
                                                 .getRotations(),
                                         rotation.in(edu.wpi.first.units.Units.Rotations)),
-                                false))
-                .until(turnController::atSetpoint);
+                                false));
     }
 
     public Command driveAndAdjust(
             MutableMeasure<Angle> rotation,
             DoubleSupplier xJoystick,
             DoubleSupplier yJoystick,
-            double deadband) {
+            double deadband,
+            boolean usePoseEstimation) {
         DieterController turnController =
                 new DieterController(
                         SwerveConstants.ROTATION_KP.get(),
@@ -285,13 +275,16 @@ public class SwerveDrive extends SubsystemBase {
                         SwerveConstants.ROTATION_KD.get(),
                         SwerveConstants.ROTATION_KDIETER.get());
         turnController.enableContinuousInput(-0.5, 0.5);
+        turnController.setTolerance(2 / 360.0);
         return run(
                 () ->
                         drive(
                                 MathUtil.applyDeadband(xJoystick.getAsDouble(), deadband),
                                 MathUtil.applyDeadband(yJoystick.getAsDouble(), deadband),
                                 turnController.calculate(
-                                        getOdometryYaw().getRotations(),
+                                        usePoseEstimation
+                                                ? getBotPose().getRotation().getRotations()
+                                                : getOdometryYaw().getRotations(),
                                         rotation.in(edu.wpi.first.units.Units.Rotations)),
                                 true));
     }
@@ -313,9 +306,6 @@ public class SwerveDrive extends SubsystemBase {
                 Math.hypot(
                         loggerInputs.currentSpeeds.vxMetersPerSecond,
                         loggerInputs.currentSpeeds.vyMetersPerSecond);
-
-        acceleration.update(loggerInputs.currentSpeeds.vxMetersPerSecond);
-        loggerInputs.acceleration = accelFilter.calculate(acceleration.get());
     }
 
     public void updateGyroInputs() {
