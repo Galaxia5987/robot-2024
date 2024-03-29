@@ -313,6 +313,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void updateGyroInputs() {
+
         loggerInputs.rawYaw = gyro.getRawYaw();
         loggerInputs.yaw = gyro.getYaw();
         gyro.updateInputs(loggerInputs);
@@ -327,7 +328,6 @@ public class SwerveDrive extends SubsystemBase {
         updateSwerveOutputs();
         Arrays.stream(modules).forEach(SwerveModule::updateInputs);
         updateGyroInputs();
-        updateSwerveInputs();
         updateModulePositions();
         estimator.update(getOdometryYaw(), getModulePositions());
         botPose = estimator.getEstimatedPosition();
