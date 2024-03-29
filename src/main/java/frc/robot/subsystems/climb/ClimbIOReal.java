@@ -7,12 +7,14 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.StrictFollower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Ports;
 
 public class ClimbIOReal implements ClimbIO {
     private final Servo servo;
     private final TalonFX mainMotor;
     private final TalonFX auxMotor;
+    private final Timer timer = new Timer();
 
     private final DutyCycleOut powerControl = new DutyCycleOut(0).withEnableFOC(true);
 
@@ -24,6 +26,9 @@ public class ClimbIOReal implements ClimbIO {
         auxMotor.getConfigurator().apply(ClimbConstants.AUX_MOTOR_CONFIGURATION);
 
         auxMotor.setControl(new StrictFollower(mainMotor.getDeviceID()));
+
+        timer.reset();
+        timer.start();
     }
 
     @Override
@@ -32,13 +37,21 @@ public class ClimbIOReal implements ClimbIO {
     }
 
     public void openStopper() {
+        timer.reset();
         inputs.stopperSetpoint = ClimbConstants.OPEN_POSITION;
         servo.set(ClimbConstants.OPEN_POSITION.in(Rotations));
+        if (timer.advanceIfElapsed(1)){
+            servo.setDisabled();
+        }
     }
 
     public void closeStopper() {
+        timer.reset();
         inputs.stopperSetpoint = ClimbConstants.LOCKED_POSITION;
         servo.set(ClimbConstants.LOCKED_POSITION.in(Rotations));
+        if (timer.advanceIfElapsed(1)){
+            servo.setDisabled();
+        }
     }
 
     public void stopMotor() {
