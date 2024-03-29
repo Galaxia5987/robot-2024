@@ -42,6 +42,8 @@ public class SwerveDrive extends SubsystemBase {
     private final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
     @AutoLogOutput
     private ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
+    @AutoLogOutput
+    private double linearVelocity = 0;
 
     private final GyroIO gyro;
 
@@ -296,11 +298,15 @@ public class SwerveDrive extends SubsystemBase {
                                 true));
     }
 
-    public void updateSwerveInputs() {
+    public void updateSwerveOutputs() {
+        chassisSpeeds = kinematics.toChassisSpeeds(
+                loggerInputs.currentModuleStates[0],
+                loggerInputs.currentModuleStates[1],
+                loggerInputs.currentModuleStates[2],
+                loggerInputs.currentModuleStates[3]);
 
 
-
-        loggerInputs.linearVelocity =
+        linearVelocity =
                 Math.hypot(
                         loggerInputs.currentSpeeds.vxMetersPerSecond,
                         loggerInputs.currentSpeeds.vyMetersPerSecond);
@@ -318,6 +324,7 @@ public class SwerveDrive extends SubsystemBase {
 
     @Override
     public void periodic() {
+        updateSwerveOutputs();
         Arrays.stream(modules).forEach(SwerveModule::updateInputs);
         updateGyroInputs();
         updateSwerveInputs();
@@ -335,11 +342,7 @@ public class SwerveDrive extends SubsystemBase {
 
         Logger.processInputs("SwerveDrive", loggerInputs);
 
-        chassisSpeeds = kinematics.toChassisSpeeds(
-                loggerInputs.currentModuleStates[0],
-                loggerInputs.currentModuleStates[1],
-                loggerInputs.currentModuleStates[2],
-                loggerInputs.currentModuleStates[3]);
+
     }
 
     public Command characterize() {
