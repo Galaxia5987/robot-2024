@@ -10,7 +10,9 @@ import frc.robot.lib.webconstants.LoggedTunableNumber;
 public interface ModuleIO {
     default void updateInputs() {}
 
-    default SwerveModuleInputsAutoLogged getInputs() {return new SwerveModuleInputsAutoLogged();}
+    default SwerveModuleInputsAutoLogged getInputs() {
+        return new SwerveModuleInputsAutoLogged();
+    }
 
     default void updatePID() {}
 
@@ -22,21 +24,31 @@ public interface ModuleIO {
         return hasChanged;
     }
 
-    default Rotation2d getAngle() {return new Rotation2d();}
+    default Rotation2d getAngle() {
+        return new Rotation2d();
+    }
 
     default void setAngle(Rotation2d angle) {}
 
-    default double getVelocity() {return 0;}
+    default double getVelocity() {
+        return 0;
+    }
 
     default void setVelocity(double velocity) {}
 
-    default SwerveModuleState getModuleState() {return new SwerveModuleState();}
+    default SwerveModuleState getModuleState() {
+        return new SwerveModuleState();
+    }
 
-    default SwerveModulePosition getModulePosition() {return new SwerveModulePosition();}
+    default SwerveModulePosition getModulePosition() {
+        return new SwerveModulePosition();
+    }
 
     default void stop() {}
 
-    default Command checkModule() {return Commands.none();}
+    default Command checkModule() {
+        return Commands.none();
+    }
 
     default void updateOffset(Rotation2d offset) {}
 
