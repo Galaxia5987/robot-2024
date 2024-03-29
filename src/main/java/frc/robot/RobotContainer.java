@@ -303,7 +303,7 @@ public class RobotContainer {
                                 .shootAndConvey(
                                         Units.RotationsPerSecond.of(73).mutableCopy(), false)
                                 .alongWith(
-                                        hood.setAngle(Units.Degrees.of(83).mutableCopy()),
+                                        hood.setAngle(Units.Degrees.of(84).mutableCopy()),
                                         commandGroups.feedWithWait(
                                                 () ->
                                                         (shooter.atSetpoint() && hood.atSetpoint()
