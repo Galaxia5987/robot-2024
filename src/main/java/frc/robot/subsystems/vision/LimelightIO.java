@@ -13,11 +13,9 @@ public class LimelightIO implements VisionIO {
     private final boolean calculateScoreParams;
     private VisionResult result =
             new VisionResult(
-                    new EstimatedRobotPose(
                             new Pose3d(),
                             0,
-                            new ArrayList<>(),
-                            PhotonPoseEstimator.PoseStrategy.AVERAGE_BEST_TARGETS),
+                    new double[0],
                     false);
 
     public LimelightIO(String name, boolean calculateScoreParams) {
@@ -44,11 +42,6 @@ public class LimelightIO implements VisionIO {
         } else {
             inputs.seesSpeaker = false;
         }
-    }
-
-    @Override
-    public VisionResult getLatestResult() {
-        return result;
     }
 
     @Override
