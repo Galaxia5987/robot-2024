@@ -4,7 +4,6 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import java.util.ArrayList;
-import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonPoseEstimator;
 
@@ -20,7 +19,6 @@ public class LimelightIO implements VisionIO {
                             new ArrayList<>(),
                             PhotonPoseEstimator.PoseStrategy.AVERAGE_BEST_TARGETS),
                     false);
-    private Optional<ScoreParameters> parameters = Optional.empty();
 
     public LimelightIO(String name, boolean calculateScoreParams) {
         this.name = name;
@@ -36,25 +34,15 @@ public class LimelightIO implements VisionIO {
     public void updateInputs(VisionInputs inputs) {
         if (calculateScoreParams && LimelightHelpers.getTV(name)) {
             inputs.poseFieldOriented = LimelightHelpers.getBotPose3d_wpiBlue(name);
-            inputs.distanceToSpeaker =
+            inputs.toSpeaker =
                     inputs.poseFieldOriented
                             .getTranslation()
                             .toTranslation2d()
-                            .getDistance(VisionConstants.getSpeakerPose());
+                            .minus(VisionConstants.getSpeakerPose());
             inputs.yawToSpeaker = Rotation2d.fromDegrees(LimelightHelpers.getTX(name));
-            parameters =
-                    Optional.of(
-                            new ScoreParameters(
-                                    VisionConstants.getSpeakerPose()
-                                            .minus(
-                                                    inputs.poseFieldOriented
-                                                            .getTranslation()
-                                                            .toTranslation2d()),
-                                    Optional.of(
-                                            Rotation2d.fromDegrees(LimelightHelpers.getTX(name))),
-                                    new Rotation2d()));
+            inputs.seesSpeaker = true;
         } else {
-            parameters = Optional.empty();
+            inputs.seesSpeaker = false;
         }
     }
 
@@ -71,10 +59,5 @@ public class LimelightIO implements VisionIO {
     @Override
     public String getName() {
         return name;
-    }
-
-    @Override
-    public Optional<ScoreParameters> getScoreParameters() {
-        return parameters;
     }
 }

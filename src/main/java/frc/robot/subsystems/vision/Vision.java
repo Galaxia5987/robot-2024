@@ -1,10 +1,8 @@
 package frc.robot.subsystems.vision;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.OptionalDouble;
+import java.util.*;
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
@@ -37,13 +35,13 @@ public class Vision extends SubsystemBase {
         return params;
     }
 
-    public OptionalDouble getYawToNote() {
+    public Optional<Rotation2d> getYawToNote() {
         for (VisionModule module : modules) {
             if (module.getYawToNote().isPresent()) {
                 return module.getYawToNote();
             }
         }
-        return OptionalDouble.empty();
+        return Optional.empty();
     }
 
     @Override

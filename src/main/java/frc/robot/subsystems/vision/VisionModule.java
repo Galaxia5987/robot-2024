@@ -1,10 +1,10 @@
 package frc.robot.subsystems.vision;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalDouble;
 
 public class VisionModule {
     public final VisionIO[] ios;
@@ -23,19 +23,24 @@ public class VisionModule {
     }
 
     public List<VisionIO.ScoreParameters> getScoreParameters() {
-        return Arrays.stream(ios)
-                .map(VisionIO::getScoreParameters)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+        return Arrays.stream(inputs)
+                .filter((inputs) -> inputs.hasScoreParams)
+                .map(
+                        (inputs) ->
+                                new VisionIO.ScoreParameters(
+                                        inputs.toSpeaker,
+                                        inputs.seesSpeaker
+                                                ? Optional.of(inputs.yawToSpeaker)
+                                                : Optional.empty()))
                 .toList();
     }
 
-    public OptionalDouble getYawToNote() {
-        for (VisionIO io : ios) {
-            if (io.getYawToNote().isPresent()) {
-                return io.getYawToNote();
+    public Optional<Rotation2d> getYawToNote() {
+        for (var inputs : inputs) {
+            if (inputs.hasNote) {
+                return Optional.of(inputs.yawNote);
             }
         }
-        return OptionalDouble.empty();
+        return Optional.empty();
     }
 }

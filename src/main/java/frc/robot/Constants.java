@@ -117,12 +117,7 @@ public class Constants {
                             && Vision.getInstance().getYawToNote().isPresent()) {
                         speeds.vyMetersPerSecond =
                                 SwerveConstants.VY_NOTE_DETECTION_CONTROLLER.calculate(
-                                        Math.sin(
-                                                Math.toRadians(
-                                                        Vision.getInstance()
-                                                                .getYawToNote()
-                                                                .getAsDouble())),
-                                        0);
+                                        Vision.getInstance().getYawToNote().get().getSin());
                     }
 
                     swerveDrive.drive(speeds, false);

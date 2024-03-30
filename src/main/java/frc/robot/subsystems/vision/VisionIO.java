@@ -5,13 +5,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import java.util.Optional;
-import java.util.OptionalDouble;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface VisionIO {
 
-    record ScoreParameters(
-            Translation2d toSpeaker, Optional<Rotation2d> yaw, Rotation2d alternateYaw) {}
+    record ScoreParameters(Translation2d toSpeaker, Optional<Rotation2d> yaw) {}
 
     default void setPipeLine(int pipeLineIndex) {}
 
@@ -29,21 +27,15 @@ public interface VisionIO {
         return "Camera";
     }
 
-    default Optional<ScoreParameters> getScoreParameters() {
-        return Optional.empty();
-    }
-
-    default OptionalDouble getYawToNote() {
-        return OptionalDouble.empty();
-    }
-
     @AutoLog
     class VisionInputs {
         public Pose3d poseFieldOriented = new Pose3d();
         public boolean isConnected = false;
         public boolean seesSpeaker = false;
-        public double distanceToSpeaker;
-        public Rotation2d yawToSpeaker;
-        public double yawNote = 0;
+        public boolean hasScoreParams = false;
+        public Translation2d toSpeaker = new Translation2d();
+        public Rotation2d yawToSpeaker = new Rotation2d();
+        public boolean hasNote = false;
+        public Rotation2d yawNote = new Rotation2d();
     }
 }
