@@ -37,21 +37,18 @@ public class ClimbIOReal implements ClimbIO {
     }
 
     public void openStopper() {
-        timer.reset();
         inputs.stopperSetpoint = ClimbConstants.OPEN_POSITION;
         servo.set(ClimbConstants.OPEN_POSITION.in(Rotations));
-        if (timer.advanceIfElapsed(1)) {
-            servo.setDisabled();
-        }
     }
 
     public void closeStopper() {
-        timer.reset();
         inputs.stopperSetpoint = ClimbConstants.LOCKED_POSITION;
         servo.set(ClimbConstants.LOCKED_POSITION.in(Rotations));
-        if (timer.advanceIfElapsed(1)) {
-            servo.setDisabled();
-        }
+    }
+
+    @Override
+    public void disableStopper() {
+        servo.setDisabled();
     }
 
     public void stopMotor() {

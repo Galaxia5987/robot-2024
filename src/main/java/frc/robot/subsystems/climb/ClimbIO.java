@@ -9,5 +9,7 @@ public interface ClimbIO {
 
     default void closeStopper() {}
 
+    default void disableStopper() {}
+
     default void updateInputs(ClimbInputs inputs) {}
 }
