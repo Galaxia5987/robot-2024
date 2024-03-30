@@ -117,12 +117,6 @@
               "data": {
                 "name": "stopIntake"
               }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "shoot"
-              }
             }
           ]
         }
@@ -162,6 +156,23 @@
               "type": "named",
               "data": {
                 "name": "useNoteDetection"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "shoot",
+      "waypointRelativePos": 1.55,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
               }
             }
           ]
