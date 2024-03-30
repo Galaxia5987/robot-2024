@@ -26,15 +26,15 @@
                       }
                     },
                     {
-                      "type": "path",
-                      "data": {
-                        "pathName": "C0 bottom"
-                      }
-                    },
-                    {
                       "type": "named",
                       "data": {
                         "name": "setVisionMeasurementAuto"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "C0 bottom"
                       }
                     },
                     {
