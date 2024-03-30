@@ -97,7 +97,6 @@ public class SwerveModule extends SubsystemBase {
         if (timer.advanceIfElapsed(0.1)) {
             Logger.processInputs("module_" + number, inputs);
         }
-
     }
 
     public double getAcceleration() {

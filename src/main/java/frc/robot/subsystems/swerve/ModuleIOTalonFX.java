@@ -99,7 +99,6 @@ public class ModuleIOTalonFX implements ModuleIO {
 
         inputs.absolutePosition = encoder.getAbsolutePosition();
         inputs.moduleState = getModuleState();
-
     }
 
     @Override
