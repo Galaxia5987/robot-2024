@@ -35,7 +35,7 @@ public class GyroIOReal implements GyroIO {
     public void updateInputs(SwerveDriveInputs inputs) {
         inputs.gyroOffset = gyroOffset;
         inputs.acceleration = gyro.getWorldLinearAccelX(); // TODO: Make sure it's really x
-        inputs.rawYaw = getYaw();
-        inputs.yaw = getRawYaw();
+        inputs.yaw = getYaw();
+        inputs.rawYaw = getRawYaw();
     }
 }

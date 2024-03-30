@@ -314,7 +314,7 @@ public class RobotContainer {
                 .rightTrigger()
                 .whileTrue(
                         commandGroups
-                                .shootToSpeaker(operatorController)
+                                .shootToSpeaker(driverController)
                                 .alongWith(commandGroups.feedShooter(this::isForceShooting)))
                 .onFalse(commandGroups.stopShooting());
         driverController

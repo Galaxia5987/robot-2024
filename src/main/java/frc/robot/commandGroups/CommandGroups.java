@@ -210,7 +210,7 @@ public class CommandGroups {
                         () -> -driveController.getLeftY(),
                         () -> -driveController.getLeftX(),
                         0.1,
-                        false));
+                        true));
     }
 
     public Command shootToSpeaker(CommandPS5Controller driveController) {
