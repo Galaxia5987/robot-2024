@@ -20,12 +20,12 @@
         "y": 2.4475648380683346
       },
       "prevControl": {
-        "x": 6.800082061702586,
-        "y": 1.8944530196752711
+        "x": 8.10314618084707,
+        "y": 2.2768786504494134
       },
       "nextControl": {
-        "x": 8.491335964312738,
-        "y": 2.515889396850159
+        "x": 8.45678076164544,
+        "y": 2.575334356772247
       },
       "isLocked": false,
       "linkedName": null
@@ -91,12 +91,6 @@
             {
               "type": "named",
               "data": {
-                "name": "adjustToTarget"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
                 "name": "shoot"
               }
             }
@@ -132,6 +126,12 @@
               "type": "named",
               "data": {
                 "name": "followPathSpeeds"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "adjustToTarget"
               }
             }
           ]
