@@ -55,7 +55,7 @@ public class Robot extends LoggedRobot {
         if (Robot.isReal()) {
             Constants.CURRENT_MODE = Constants.Mode.REAL;
         } else {
-            Constants.CURRENT_MODE = Constants.Mode.SIM;
+            Constants.CURRENT_MODE = Constants.Mode.REPLAY;
         }
 
         // Initialize logger

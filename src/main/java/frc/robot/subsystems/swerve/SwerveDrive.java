@@ -39,6 +39,8 @@ public class SwerveDrive extends SubsystemBase {
     @Getter @AutoLogOutput
     private final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
 
+    @AutoLogOutput private SwerveModuleState[] currentModuleStates;
+    @AutoLogOutput private SwerveModuleState[] desiredModuleStates;
     @AutoLogOutput private ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
     @AutoLogOutput private double linearVelocity = 0;
 
@@ -63,6 +65,12 @@ public class SwerveDrive extends SubsystemBase {
         modules = new SwerveModule[moduleIOs.length];
         for (int i = 0; i < moduleIOs.length; i++) {
             modules[i] = new SwerveModule(moduleIOs[i], i + 1, wheelOffsets[i]);
+        }
+        currentModuleStates = new SwerveModuleState[modules.length];
+        desiredModuleStates = new SwerveModuleState[modules.length];
+        for (int i = 0; i < modules.length; i++) {
+            currentModuleStates[i] = new SwerveModuleState();
+            desiredModuleStates[i] = new SwerveModuleState();
         }
 
         updateModulePositions();
@@ -126,7 +134,7 @@ public class SwerveDrive extends SubsystemBase {
      * @param desiredModuleStates The desired module states to set the modules to.
      */
     public void setModuleStates(SwerveModuleState[] desiredModuleStates) {
-        inputs.desiredModuleStates = desiredModuleStates;
+        this.desiredModuleStates = desiredModuleStates;
     }
 
     public void updateModulePositions() {
@@ -168,7 +176,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void lock() {
-        inputs.desiredModuleStates =
+        desiredModuleStates =
                 new SwerveModuleState[] {
                     new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
                     new SwerveModuleState(0, Rotation2d.fromDegrees(135)),
@@ -293,12 +301,14 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void updateSwerveOutputs() {
+        currentModuleStates = kinematics.toSwerveModuleStates(inputs.currentSpeeds);
+
         chassisSpeeds =
                 kinematics.toChassisSpeeds(
-                        inputs.currentModuleStates[0],
-                        inputs.currentModuleStates[1],
-                        inputs.currentModuleStates[2],
-                        inputs.currentModuleStates[3]);
+                        currentModuleStates[0],
+                        currentModuleStates[1],
+                        currentModuleStates[2],
+                        currentModuleStates[3]);
 
         linearVelocity =
                 Math.hypot(
@@ -324,10 +334,10 @@ public class SwerveDrive extends SubsystemBase {
         botPose = estimator.getEstimatedPosition();
 
         SwerveDriveKinematics.desaturateWheelSpeeds(
-                inputs.desiredModuleStates, SwerveConstants.MAX_X_Y_VELOCITY);
+                desiredModuleStates, SwerveConstants.MAX_X_Y_VELOCITY);
         if (!inCharacterizationMode) {
             for (int i = 0; i < modules.length; i++) {
-                modules[i].setModuleState(inputs.desiredModuleStates[i]);
+                modules[i].setModuleState(desiredModuleStates[i]);
             }
         }
 

@@ -88,7 +88,8 @@ public class ShootingManager {
                 && (DriverStation.isAutonomous()
                         || Utils.epsilonEquals(
                                 Utils.normalize(swerveCommandedAngle.in(Radians)),
-                                Utils.normalize(swerveDrive.getBotPose().getRotation().getRadians()),
+                                Utils.normalize(
+                                        swerveDrive.getBotPose().getRotation().getRadians()),
                                 Math.toRadians(2)))
                 && !lockShoot;
     }

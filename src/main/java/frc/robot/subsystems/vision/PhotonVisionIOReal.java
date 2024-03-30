@@ -2,9 +2,6 @@ package frc.robot.subsystems.vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.wpilibj.DriverStation;
-import java.util.ArrayList;
-import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 
@@ -62,7 +59,8 @@ public class PhotonVisionIOReal implements VisionIO {
             var tags = latestResult.getTargets();
             inputs.distanceToTargets = new double[tags.size()];
             for (int i = 0; i < tags.size(); i++) {
-                inputs.distanceToTargets[i] = tags.get(i).getBestCameraToTarget().getTranslation().getNorm();
+                inputs.distanceToTargets[i] =
+                        tags.get(i).getBestCameraToTarget().getTranslation().getNorm();
             }
             inputs.timestamp = estimatedPose.get().timestampSeconds;
             inputs.hasNewPose = true;
@@ -71,10 +69,11 @@ public class PhotonVisionIOReal implements VisionIO {
         }
 
         if (calculateScoreParams && latestResult.hasTargets()) {
-            inputs.toSpeaker = inputs.poseFieldOriented
-                    .getTranslation()
-                    .toTranslation2d()
-                    .minus(VisionConstants.getSpeakerPose());
+            inputs.toSpeaker =
+                    inputs.poseFieldOriented
+                            .getTranslation()
+                            .toTranslation2d()
+                            .minus(VisionConstants.getSpeakerPose());
             var centerTag = latestResult.getTargets();
             centerTag.removeIf(
                     (target) -> target.getFiducialId() != VisionConstants.getSpeakerTag1());

@@ -31,15 +31,11 @@ public class Climb extends SubsystemBase {
     }
 
     public Command lock() {
-        return Commands.run(io::closeStopper)
-                .withTimeout(0.5)
-                .andThen(io::disableStopper);
+        return Commands.run(io::closeStopper).withTimeout(0.5).andThen(io::disableStopper);
     }
 
     public Command unlock() {
-        return Commands.run(io::openStopper)
-                .withTimeout(0.5)
-                .andThen(io::disableStopper);
+        return Commands.run(io::openStopper).withTimeout(0.5).andThen(io::disableStopper);
     }
 
     public Command setPower(DoubleSupplier power) {
@@ -49,7 +45,7 @@ public class Climb extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs(inputs);
-        if (timer.advanceIfElapsed(0.1)) {
+        if (timer.advanceIfElapsed(0.0)) {
             Logger.processInputs(this.getClass().getSimpleName(), inputs);
         }
     }

@@ -67,7 +67,7 @@ public class Conveyor extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs();
-        if (timer.advanceIfElapsed(0.1)) {
+        if (timer.advanceIfElapsed(0.0)) {
             Logger.processInputs("Conveyor", inputs);
         }
     }

@@ -3,20 +3,12 @@ package frc.robot.subsystems.vision;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
-import java.util.ArrayList;
-import org.photonvision.EstimatedRobotPose;
-import org.photonvision.PhotonPoseEstimator;
 
 public class LimelightIO implements VisionIO {
 
     private final String name;
     private final boolean calculateScoreParams;
-    private VisionResult result =
-            new VisionResult(
-                            new Pose3d(),
-                            0,
-                    new double[0],
-                    false);
+    private VisionResult result = new VisionResult(new Pose3d(), 0, new double[0], false);
 
     public LimelightIO(String name, boolean calculateScoreParams) {
         this.name = name;
