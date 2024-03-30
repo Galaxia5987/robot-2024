@@ -183,7 +183,8 @@ public class ShootingManager {
                         .mut_minus(3, Degrees);
             } else {
                 swerveCommandedAngle
-                        .mut_replace(Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI, Radians)
+                        .mut_replace(
+                                Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI, Radians)
                         .mut_minus(0, Degrees);
             }
         } else {
