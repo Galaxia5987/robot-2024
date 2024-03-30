@@ -14,23 +14,7 @@ public class PhotonVisionIOReal implements VisionIO {
     private final PhotonPoseEstimator estimator;
     private final Transform3d robotToCamera;
     private final boolean calculateScoreParams;
-    private boolean isNoteDetector;
-    private VisionResult result =
-            new VisionResult(
-                    new EstimatedRobotPose(
-                            new Pose3d(),
-                            0,
-                            new ArrayList<>(),
-                            PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR),
-                    false);
-    private VisionResult lastResult =
-            new VisionResult(
-                    new EstimatedRobotPose(
-                            new Pose3d(),
-                            0,
-                            new ArrayList<>(),
-                            PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR),
-                    false);
+    private final boolean isNoteDetector;
     private final String name;
 
     public PhotonVisionIOReal(
@@ -75,37 +59,22 @@ public class PhotonVisionIOReal implements VisionIO {
         var estimatedPose = estimator.update(latestResult);
         if (estimatedPose.isPresent()) {
             inputs.poseFieldOriented = estimatedPose.get().estimatedPose;
-
-            result = new VisionResult(estimatedPose.get(), true);
-            double distanceTraveled =
-                    result.getEstimatedRobotPose()
-                            .estimatedPose
-                            .minus(lastResult.getEstimatedRobotPose().estimatedPose)
-                            .getTranslation()
-                            .getNorm();
-            if ((DriverStation.isEnabled() && distanceTraveled > 0.2)
-                    || (result.getEstimatedRobotPose().estimatedPose.getZ() > 0.1)
-                    || (VisionConstants.outOfBounds(result.getEstimatedRobotPose().estimatedPose))
-                    || result.getEstimatedRobotPose().targetsUsed.stream()
-                            .anyMatch(
-                                    (target) ->
-                                            target.getBestCameraToTarget()
-                                                            .getTranslation()
-                                                            .getNorm()
-                                                    > 5.0)) {
-                result.setUseForEstimation(false);
+            var tags = latestResult.getTargets();
+            inputs.distanceToTargets = new double[tags.size()];
+            for (int i = 0; i < tags.size(); i++) {
+                inputs.distanceToTargets[i] = tags.get(i).getBestCameraToTarget().getTranslation().getNorm();
             }
+            inputs.timestamp = estimatedPose.get().timestampSeconds;
+            inputs.hasNewPose = true;
         } else {
-            result.setUseForEstimation(false);
+            inputs.hasNewPose = false;
         }
 
         if (calculateScoreParams && latestResult.hasTargets()) {
-            var toSpeaker =
-                    inputs.poseFieldOriented
-                            .getTranslation()
-                            .toTranslation2d()
-                            .minus(VisionConstants.getSpeakerPose());
-            inputs.toSpeaker = toSpeaker;
+            inputs.toSpeaker = inputs.poseFieldOriented
+                    .getTranslation()
+                    .toTranslation2d()
+                    .minus(VisionConstants.getSpeakerPose());
             var centerTag = latestResult.getTargets();
             centerTag.removeIf(
                     (target) -> target.getFiducialId() != VisionConstants.getSpeakerTag1());
@@ -119,13 +88,6 @@ public class PhotonVisionIOReal implements VisionIO {
         } else {
             inputs.hasScoreParams = false;
         }
-
-        lastResult = result;
-    }
-
-    @Override
-    public VisionResult getLatestResult() {
-        return result;
     }
 
     @Override

@@ -15,10 +15,6 @@ public interface VisionIO {
 
     default void updateInputs(VisionInputs inputs) {}
 
-    default VisionResult getLatestResult() {
-        return null;
-    }
-
     default Transform3d getCameraToRobot() {
         return new Transform3d();
     }
@@ -29,7 +25,10 @@ public interface VisionIO {
 
     @AutoLog
     class VisionInputs {
+        public boolean hasNewPose = false;
         public Pose3d poseFieldOriented = new Pose3d();
+        public double[] distanceToTargets = new double[0];
+        public double timestamp = 0;
         public boolean isConnected = false;
         public boolean seesSpeaker = false;
         public boolean hasScoreParams = false;

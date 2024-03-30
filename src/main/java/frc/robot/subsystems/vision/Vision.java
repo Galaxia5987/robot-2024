@@ -10,11 +10,11 @@ public class Vision extends SubsystemBase {
     private static Vision INSTANCE = null;
 
     private final frc.robot.subsystems.vision.VisionModule[] modules;
-    private final VisionResult[] results;
+    private final List<VisionResult> results;
 
     private Vision(frc.robot.subsystems.vision.VisionModule... modules) {
         this.modules = modules;
-        results = new VisionResult[modules.length];
+        results = new ArrayList<>();
     }
 
     public static Vision getInstance() {
@@ -26,7 +26,7 @@ public class Vision extends SubsystemBase {
     }
 
     public VisionResult[] getResults() {
-        return results;
+        return results.toArray(new VisionResult[0]);
     }
 
     public List<VisionIO.ScoreParameters> getScoreParameters() {
@@ -46,12 +46,13 @@ public class Vision extends SubsystemBase {
 
     @Override
     public void periodic() {
-        for (int i = 0; i < modules.length; i++) {
-            VisionModule module = modules[i];
-            for (int j = 0; j < modules[i].ios.length; j++) {
+        results.clear();
+        for (VisionModule module : modules) {
+            module.updateEstimationResults();
+            for (int j = 0; j < module.ios.length; j++) {
                 module.ios[j].updateInputs(module.inputs[j]);
                 Logger.processInputs(module.ios[j].getName(), module.inputs[j]);
-                results[i] = module.ios[j].getLatestResult();
+                results.addAll(Set.of(module.results));
             }
         }
     }

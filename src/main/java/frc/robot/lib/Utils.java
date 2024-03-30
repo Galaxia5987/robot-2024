@@ -8,6 +8,7 @@ import edu.wpi.first.units.Units;
 import frc.robot.Constants;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.DoubleStream;
 
 public class Utils {
     public static final double EPSILON = 1e-9;
@@ -38,8 +39,8 @@ public class Utils {
      * @param ambiguities the ambiguities to average.
      * @return the average of the ambiguities.
      */
-    public static double averageAmbiguity(List<Double> ambiguities) {
-        return 1.0 / ambiguities.stream().map((num) -> 1.0 / num).reduce(0.0, Double::sum);
+    public static double averageAmbiguity(DoubleStream ambiguities) {
+        return 1.0 / ambiguities.map((num) -> 1.0 / num).reduce(0.0, Double::sum);
     }
 
     public static double normalize(double angleRadians) {

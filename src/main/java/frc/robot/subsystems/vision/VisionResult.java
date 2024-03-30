@@ -1,15 +1,7 @@
 package frc.robot.subsystems.vision;
 
+import edu.wpi.first.math.geometry.Pose3d;
 import lombok.Getter;
-import lombok.Setter;
-import org.photonvision.EstimatedRobotPose;
 
-public class VisionResult {
-    @Setter @Getter private EstimatedRobotPose estimatedRobotPose;
-    @Setter @Getter private boolean useForEstimation;
-
-    public VisionResult(EstimatedRobotPose pose, boolean useForEstimation) {
-        this.estimatedRobotPose = pose;
-        this.useForEstimation = useForEstimation;
-    }
+public record VisionResult(Pose3d estimatedRobotPose, double timestamp, double[] distanceToTargets, boolean useForEstimation) {
 }
