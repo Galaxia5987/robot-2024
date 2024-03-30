@@ -33,7 +33,7 @@ public class GripperConstants {
     public static final Measure<Angle> OUTTAKE_ANGLE = Units.Degrees.of(-80);
     public static final double ANGLE_MOTOR_GEAR_RATIO = 58.5;
     public static final InvertedValue ANGLE_INVERTED_VALUE = InvertedValue.Clockwise_Positive;
-    public static final boolean ROLLER_INVERTED_VALUE = true;
+    public static final boolean ROLLER_INVERTED_VALUE = false;
     public static final int CURRENT_LIMIT = 40;
     public static final MutableMeasure<Angle> WRIST_TRAP_ANGLE =
             Units.Degrees.of(120).mutableCopy(); // TODO: replace with actual value
