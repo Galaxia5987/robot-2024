@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.RobotContainer;
 import frc.robot.lib.PoseEstimation;
 import frc.robot.lib.Utils;
 import frc.robot.lib.math.interpolation.InterpolatingDouble;
@@ -96,9 +95,6 @@ public class ShootingManager {
 
     public void updateCommandedStateWithPoseEstimation() {
         Translation2d toSpeaker = poseEstimation.getPoseRelativeToSpeaker();
-        if (DriverStation.isAutonomous()) {
-            toSpeaker = RobotContainer.getInstance().getAutoToSpeaker();
-        }
         distanceToSpeaker = toSpeaker.getNorm() * Utils.distanceToSpeakerVarianceFactor(toSpeaker);
 
         shooterCommandedVelocity.mut_replace(
@@ -121,7 +117,7 @@ public class ShootingManager {
 
         swerveCommandedAngle
                 .mut_replace(Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI, Radians)
-                .mut_minus(0, Degrees);
+                .mut_minus(3, Degrees);
     }
 
     public void updateCommandedState() {
@@ -173,19 +169,14 @@ public class ShootingManager {
                 swerveCommandedAngle
                         .mut_replace(
                                 yawToTarget.getRotations()
-                                        + (DriverStation.isAutonomous()
-                                                ? swerveDrive
-                                                        .getBotPose()
-                                                        .getRotation()
-                                                        .getRotations()
-                                                : swerveDrive.getOdometryYaw().getRotations()),
+                                        + (swerveDrive.getBotPose().getRotation().getRotations()),
                                 Rotations)
                         .mut_minus(3, Degrees);
             } else {
                 swerveCommandedAngle
                         .mut_replace(
                                 Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI, Radians)
-                        .mut_minus(0, Degrees);
+                        .mut_minus(3, Degrees);
             }
         } else {
             updateCommandedStateWithPoseEstimation();
