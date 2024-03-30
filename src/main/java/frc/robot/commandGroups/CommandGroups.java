@@ -149,7 +149,7 @@ public class CommandGroups {
                                 () -> -driveController.getLeftX(),
                                 0.1,
                                 true),
-                Set.of(swerveDrive));
+                Set.of(swerveDrive)).unless(() -> !gripper.hasNote());
     }
 
     public Command shootToTrap() { // TODO: remove from defer when calibrated
