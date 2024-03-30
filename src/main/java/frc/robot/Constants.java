@@ -191,6 +191,7 @@ public class Constants {
                 speakerLeftCamera = new VisionIO() {};
                 speakerRightCamera = new VisionIO() {};
                 driverCamera = new VisionIO() {};
+
                 break;
         }
         rightOpi = new VisionModule(driverCamera);

@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -115,6 +116,8 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putNumber(
                 "Shooter Tuning Velocity",
                 robotContainer.shooterTuningVelocity.in(Units.RotationsPerSecond));
+
+        DriverStation.silenceJoystickConnectionWarning(true);
     }
 
     /**

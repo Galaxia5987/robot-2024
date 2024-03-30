@@ -62,8 +62,8 @@ public class RobotContainer {
     private final Shooter shooter;
     private final SwerveDrive swerveDrive;
     public static final LEDs leds = new LEDs(9, 58);
-    private final CommandXboxController xboxController = new CommandXboxController(0);
-    private final CommandPS5Controller driveController = new CommandPS5Controller(1);
+    private final CommandXboxController driverController = new CommandXboxController(0);
+    private final CommandPS5Controller operatorController = new CommandPS5Controller(1);
     private final CommandXboxController testController = new CommandXboxController(2);
     private final CommandGroups commandGroups;
     private final SendableChooser<String> autoChooser;
@@ -267,9 +267,9 @@ public class RobotContainer {
     private void configureDefaultCommands() {
         swerveDrive.setDefaultCommand(
                 swerveDrive.driveCommand(
-                        () -> -driveController.getLeftY(),
-                        () -> -driveController.getLeftX(),
-                        () -> 0.6 * -driveController.getRightX(), // 0.6
+                        () -> -driverController.getLeftY(),
+                        () -> -driverController.getLeftX(),
+                        () -> 0.6 * -driverController.getRightX(), // 0.6
                         0.1,
                         () -> true));
 
@@ -277,109 +277,90 @@ public class RobotContainer {
                 climb.setPower(
                         () ->
                                 MathUtil.applyDeadband(
-                                        -xboxController.getLeftTriggerAxis()
-                                                + xboxController.getRightTriggerAxis(),
+                                        -(operatorController.getL2Axis() + 1)/2
+                                                + (operatorController.getR2Axis() + 1)/2,
                                         0.15)));
 
         leds.setDefaultCommand(
-                new LEDsDefaultCommand(leds, driveController.L2()).ignoringDisable(true));
+                new LEDsDefaultCommand(leds, driverController.leftTrigger()).ignoringDisable(true));
     }
 
     private void configureButtonBindings() {
-        testController.rightBumper().onTrue(commandGroups.allBits(driveController));
+        testController.rightBumper().onTrue(commandGroups.allBits(operatorController));
         testController.leftBumper().onTrue(commandGroups.swerveBit());
         testController.a().onTrue(commandGroups.openClimb());
 
-        driveController
-                .cross()
-                .whileTrue(commandGroups.superPoop(driveController, () -> isForceShooting))
+        driverController
+                .a()
+                .whileTrue(commandGroups.superPoop(operatorController, () -> isForceShooting))
                 .onFalse(commandGroups.stopShooting());
-        driveController.triangle().onTrue(Commands.runOnce(swerveDrive::resetGyro));
-        driveController.circle().whileTrue(closeShoot()).onFalse(commandGroups.stopShooting());
-        driveController
-                .square()
+        driverController.y().onTrue(Commands.runOnce(swerveDrive::resetGyro));
+        driverController.b().whileTrue(closeShoot()).onFalse(commandGroups.stopShooting());
+        driverController
+                .x()
                 .whileTrue(
                         commandGroups
                                 .shootAndConvey(
                                         Units.RotationsPerSecond.of(73).mutableCopy(), false)
                                 .alongWith(
-                                        hood.setAngle(Units.Degrees.of(83).mutableCopy()),
+                                        hood.setAngle(Units.Degrees.of(84).mutableCopy()),
                                         commandGroups.feedWithWait(
                                                 () ->
                                                         (shooter.atSetpoint() && hood.atSetpoint()
                                                                 || isForceShooting))))
                 .onFalse(commandGroups.stopShooting());
 
-        driveController
-                .R2()
+        driverController
+                .rightTrigger()
                 .whileTrue(
                         commandGroups
-                                .shootToSpeaker(driveController)
+                                .shootToSpeaker(operatorController)
                                 .alongWith(commandGroups.feedShooter(this::isForceShooting)))
                 .onFalse(commandGroups.stopShooting());
-        driveController
-                .R2()
+        driverController
+                .rightTrigger()
                 .onTrue(
                         Commands.runOnce(
-                                () -> {
-                                    ampPressed = true;
-                                    state = Constants.State.SHOOT;
-                                }));
+                                () -> state = Constants.State.SHOOT));
 
-        driveController
-                .L2()
+        driverController
+                .leftTrigger()
                 .whileTrue(commandGroups.intake(Commands.none()))
                 .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
 
-        driveController
-                .R1()
+        driverController
+                .rightBumper()
                 .whileTrue(intake.outtake().alongWith(gripper.setRollerPower(-0.7)))
                 .onFalse(intake.stop().alongWith(gripper.setRollerPower(0)));
 
-        driveController.L1().toggleOnTrue(commandGroups.adjustToAmp(driveController));
-        driveController
-                .L1()
+        driverController
+                .leftBumper().whileTrue(commandGroups.adjustToAmp(driverController));
+        driverController
+                .leftBumper()
+                .whileTrue(commandGroups.shootToAmp(operatorController))
+                .onFalse(commandGroups.stopShooting());
+        driverController
+                .leftBumper()
                 .onTrue(
-                        Commands.runOnce(() -> ampPressed = !ampPressed)
-                                .andThen(
-                                        Commands.either(
-                                                gripper.setRollerPower(
-                                                                GripperConstants.INTAKE_POWER)
-                                                        .withTimeout(0.5)
-                                                        .andThen(
-                                                                gripper.setRollerPower(0)
-                                                                        .withTimeout(0.02)
-                                                                        .andThen(
-                                                                                commandGroups
-                                                                                        .stopShooting())),
-                                                commandGroups.shootToAmp(driveController),
-                                                () -> ampPressed)));
-        driveController
-                .L1()
-                .onTrue(
-                        Commands.runOnce(
-                                () -> {
-                                    if (ampPressed) {
-                                        state = Constants.State.SHOOT;
-                                    } else {
-                                        state = Constants.State.AMP;
-                                    }
-                                }));
+                        Commands.runOnce(() -> state = Constants.State.AMP))
+                .onFalse(
+                        Commands.runOnce(() -> state = Constants.State.SHOOT));
 
-        xboxController.start().onTrue(climb.lock());
-        xboxController.back().onTrue(climb.unlock());
-        xboxController
-                .rightBumper()
+        operatorController.options().onTrue(climb.lock());
+        operatorController.create().onTrue(climb.unlock()
+                .alongWith(Commands.runOnce(() -> state = Constants.State.CLIMB)));
+        operatorController
+                .R1()
                 .whileTrue(gripper.setRollerPower(0.4))
                 .onFalse(gripper.setRollerPower(0));
-        xboxController
-                .leftBumper()
+        operatorController
+                .L1()
                 .whileTrue(gripper.setRollerPower(-0.4))
                 .onFalse(gripper.setRollerPower(0));
 
-        xboxController.y().onTrue(commandGroups.shootToSpeaker());
-        xboxController
-                .x()
+        operatorController.triangle().onTrue(commandGroups.shootToSpeaker());
+        operatorController
+                .square()
                 .onTrue(intake.setAnglePower(-0.3))
                 .onFalse(
                         intake.reset(Units.Degrees.zero().mutableCopy())

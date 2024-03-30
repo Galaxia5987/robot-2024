@@ -83,7 +83,7 @@ public class LEDsDefaultCommand extends Command {
         if (!noteTimer.hasElapsed(2)) {
             blinkTime = 0.1;
             primaryColor = Color.kBlack;
-            secondaryColor = Color.kWhiteSmoke;
+            secondaryColor = Color.kYellow;
         }
 
         if (DriverStation.isDisabled()) {
