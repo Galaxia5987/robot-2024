@@ -267,9 +267,9 @@ public class RobotContainer {
     private void configureDefaultCommands() {
         swerveDrive.setDefaultCommand(
                 swerveDrive.driveCommand(
-                        () -> -driveController.getLeftY(),
-                        () -> -driveController.getLeftX(),
-                        () -> 0.6 * -driveController.getRightX(), // 0.6
+                        () -> -xboxController.getLeftY(),
+                        () -> -xboxController.getLeftX(),
+                        () -> 0.6 * -xboxController.getRightX(), // 0.6
                         0.1,
                         () -> true));
 
@@ -277,12 +277,12 @@ public class RobotContainer {
                 climb.setPower(
                         () ->
                                 MathUtil.applyDeadband(
-                                        -xboxController.getLeftTriggerAxis()
-                                                + xboxController.getRightTriggerAxis(),
+                                        -(driveController.getL2Axis() + 1)/2
+                                                + (driveController.getR2Axis() + 1)/2,
                                         0.15)));
 
         leds.setDefaultCommand(
-                new LEDsDefaultCommand(leds, driveController.L2()).ignoringDisable(true));
+                new LEDsDefaultCommand(leds, xboxController.leftTrigger()).ignoringDisable(true));
     }
 
     private void configureButtonBindings() {
@@ -290,14 +290,14 @@ public class RobotContainer {
         testController.leftBumper().onTrue(commandGroups.swerveBit());
         testController.a().onTrue(commandGroups.openClimb());
 
-        driveController
-                .cross()
+        xboxController
+                .a()
                 .whileTrue(commandGroups.superPoop(driveController, () -> isForceShooting))
                 .onFalse(commandGroups.stopShooting());
-        driveController.triangle().onTrue(Commands.runOnce(swerveDrive::resetGyro));
-        driveController.circle().whileTrue(closeShoot()).onFalse(commandGroups.stopShooting());
-        driveController
-                .square()
+        xboxController.y().onTrue(Commands.runOnce(swerveDrive::resetGyro));
+        xboxController.b().whileTrue(closeShoot()).onFalse(commandGroups.stopShooting());
+        xboxController
+                .x()
                 .whileTrue(
                         commandGroups
                                 .shootAndConvey(
@@ -310,15 +310,15 @@ public class RobotContainer {
                                                                 || isForceShooting))))
                 .onFalse(commandGroups.stopShooting());
 
-        driveController
-                .R2()
+        xboxController
+                .rightTrigger()
                 .whileTrue(
                         commandGroups
                                 .shootToSpeaker(driveController)
                                 .alongWith(commandGroups.feedShooter(this::isForceShooting)))
                 .onFalse(commandGroups.stopShooting());
-        driveController
-                .R2()
+        xboxController
+                .rightTrigger()
                 .onTrue(
                         Commands.runOnce(
                                 () -> {
@@ -326,19 +326,20 @@ public class RobotContainer {
                                     state = Constants.State.SHOOT;
                                 }));
 
-        driveController
-                .L2()
+        xboxController
+                .leftTrigger()
                 .whileTrue(commandGroups.intake(Commands.none()))
                 .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
 
-        driveController
-                .R1()
+        xboxController
+                .rightBumper()
                 .whileTrue(intake.outtake().alongWith(gripper.setRollerPower(-0.7)))
                 .onFalse(intake.stop().alongWith(gripper.setRollerPower(0)));
 
-        driveController.L1().toggleOnTrue(commandGroups.adjustToAmp(driveController));
-        driveController
-                .L1()
+        xboxController
+                .leftBumper().toggleOnTrue(commandGroups.adjustToAmp(xboxController));
+        xboxController
+                .leftBumper()
                 .onTrue(
                         Commands.runOnce(() -> ampPressed = !ampPressed)
                                 .andThen(
@@ -354,8 +355,8 @@ public class RobotContainer {
                                                                                         .stopShooting())),
                                                 commandGroups.shootToAmp(driveController),
                                                 () -> ampPressed)));
-        driveController
-                .L1()
+        xboxController
+                .leftBumper()
                 .onTrue(
                         Commands.runOnce(
                                 () -> {
@@ -366,20 +367,20 @@ public class RobotContainer {
                                     }
                                 }));
 
-        xboxController.start().onTrue(climb.lock());
-        xboxController.back().onTrue(climb.unlock());
-        xboxController
-                .rightBumper()
+        driveController.options().onTrue(climb.lock());
+        driveController.create().onTrue(climb.unlock());
+        driveController
+                .R1()
                 .whileTrue(gripper.setRollerPower(0.4))
                 .onFalse(gripper.setRollerPower(0));
-        xboxController
-                .leftBumper()
+        driveController
+                .L1()
                 .whileTrue(gripper.setRollerPower(-0.4))
                 .onFalse(gripper.setRollerPower(0));
 
-        xboxController.y().onTrue(commandGroups.shootToSpeaker());
-        xboxController
-                .x()
+        driveController.triangle().onTrue(commandGroups.shootToSpeaker());
+        driveController
+                .square()
                 .onTrue(intake.setAnglePower(-0.3))
                 .onFalse(
                         intake.reset(Units.Degrees.zero().mutableCopy())

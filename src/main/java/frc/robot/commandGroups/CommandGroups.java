@@ -140,6 +140,18 @@ public class CommandGroups {
                 Set.of(swerveDrive));
     }
 
+    public Command adjustToAmp(CommandXboxController driveController) {
+        return Commands.defer(
+                () ->
+                        swerveDrive.driveAndAdjust(
+                                Units.Degrees.of(-90).mutableCopy(),
+                                () -> -driveController.getLeftY(),
+                                () -> -driveController.getLeftX(),
+                                0.1,
+                                true),
+                Set.of(swerveDrive));
+    }
+
     public Command shootToTrap() { // TODO: remove from defer when calibrated
         return Commands.defer(
                 () ->
