@@ -38,11 +38,6 @@ public class VisionSimIO implements VisionIO {
     public void setPipeLine(int pipeLineIndex) {}
 
     @Override
-    public VisionResult getLatestResult() {
-        return new VisionResult(result, true);
-    }
-
-    @Override
     public Transform3d getCameraToRobot() {
         return robotToCam;
     }

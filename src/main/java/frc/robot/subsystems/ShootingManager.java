@@ -61,7 +61,7 @@ public class ShootingManager {
     private boolean isShooting = false;
 
     @Getter private double distanceToSpeaker = 0;
-    private final Debouncer useScoreParams = new Debouncer(0.5, Debouncer.DebounceType.kFalling);
+    private final Debouncer useScoreParams = new Debouncer(1.0, Debouncer.DebounceType.kFalling);
 
     private ShootingManager() {
         poseEstimation = PoseEstimation.getInstance();
@@ -88,7 +88,8 @@ public class ShootingManager {
                 && (DriverStation.isAutonomous()
                         || Utils.epsilonEquals(
                                 Utils.normalize(swerveCommandedAngle.in(Radians)),
-                                Utils.normalize(swerveDrive.getBotPose().getRotation().getRadians()),
+                                Utils.normalize(
+                                        swerveDrive.getBotPose().getRotation().getRadians()),
                                 Math.toRadians(2)))
                 && !lockShoot;
     }
@@ -116,7 +117,7 @@ public class ShootingManager {
                 Degrees);
 
         swerveCommandedAngle
-                .mut_replace(Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI, Radians)
+                .mut_replace(Math.IEEEremainder(Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI, 2 * Math.PI), Radians)
                 .mut_minus(3, Degrees);
     }
 
@@ -175,7 +176,7 @@ public class ShootingManager {
             } else {
                 swerveCommandedAngle
                         .mut_replace(
-                                Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI, Radians)
+                                Math.IEEEremainder(Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI, 2 * Math.PI), Radians)
                         .mut_minus(3, Degrees);
             }
         } else {

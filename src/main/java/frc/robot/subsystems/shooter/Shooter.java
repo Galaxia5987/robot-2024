@@ -83,7 +83,7 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs();
-        if (timer.advanceIfElapsed(0.1)) {
+        if (timer.advanceIfElapsed(0.0)) {
             Logger.processInputs(SUBSYSTEM_NAME + "/TopRoller", topRollerInputs);
             Logger.processInputs(SUBSYSTEM_NAME + "/BottomRoller", bottomRollerInputs);
         }

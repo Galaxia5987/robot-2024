@@ -2,19 +2,10 @@ package frc.robot.subsystems.swerve;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import org.littletonrobotics.junction.AutoLog;
 
 @AutoLog
 public class SwerveDriveInputs {
-    public SwerveModuleState[] currentModuleStates = new SwerveModuleState[4];
-    public SwerveModuleState[] desiredModuleStates = {
-        new SwerveModuleState(),
-        new SwerveModuleState(),
-        new SwerveModuleState(),
-        new SwerveModuleState()
-    };
-
     // x, y, omega
     public ChassisSpeeds currentSpeeds = new ChassisSpeeds();
     public ChassisSpeeds desiredSpeeds = new ChassisSpeeds();

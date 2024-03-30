@@ -117,7 +117,7 @@ public class Hood extends SubsystemBase {
         if (encoderTimer.advanceIfElapsed(0.5)) {
             io.updateInternalEncoder();
         }
-        if (timer.advanceIfElapsed(0.1)) {
+        if (timer.advanceIfElapsed(0.0)) {
             Logger.processInputs("Hood", inputs);
         }
 

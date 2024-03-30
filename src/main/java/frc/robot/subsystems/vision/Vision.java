@@ -1,10 +1,8 @@
 package frc.robot.subsystems.vision;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.OptionalDouble;
+import java.util.*;
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
@@ -12,11 +10,11 @@ public class Vision extends SubsystemBase {
     private static Vision INSTANCE = null;
 
     private final frc.robot.subsystems.vision.VisionModule[] modules;
-    private final VisionResult[] results;
+    private final List<VisionResult> results;
 
     private Vision(frc.robot.subsystems.vision.VisionModule... modules) {
         this.modules = modules;
-        results = new VisionResult[modules.length];
+        results = new ArrayList<>();
     }
 
     public static Vision getInstance() {
@@ -28,7 +26,7 @@ public class Vision extends SubsystemBase {
     }
 
     public VisionResult[] getResults() {
-        return results;
+        return results.toArray(new VisionResult[0]);
     }
 
     public List<VisionIO.ScoreParameters> getScoreParameters() {
@@ -37,23 +35,24 @@ public class Vision extends SubsystemBase {
         return params;
     }
 
-    public OptionalDouble getYawToNote() {
+    public Optional<Rotation2d> getYawToNote() {
         for (VisionModule module : modules) {
             if (module.getYawToNote().isPresent()) {
                 return module.getYawToNote();
             }
         }
-        return OptionalDouble.empty();
+        return Optional.empty();
     }
 
     @Override
     public void periodic() {
-        for (int i = 0; i < modules.length; i++) {
-            VisionModule module = modules[i];
-            for (int j = 0; j < modules[i].ios.length; j++) {
+        results.clear();
+        for (VisionModule module : modules) {
+            module.updateEstimationResults();
+            for (int j = 0; j < module.ios.length; j++) {
                 module.ios[j].updateInputs(module.inputs[j]);
                 Logger.processInputs(module.ios[j].getName(), module.inputs[j]);
-                results[i] = module.ios[j].getLatestResult();
+                results.addAll(Set.of(module.results));
             }
         }
     }

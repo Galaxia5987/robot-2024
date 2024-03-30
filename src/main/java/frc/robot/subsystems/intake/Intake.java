@@ -109,13 +109,13 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs();
-        if (timer.advanceIfElapsed(0.1)) {
+        if (timer.advanceIfElapsed(0.0)) {
             Logger.processInputs(this.getClass().getSimpleName(), inputs);
         }
         Logger.recordOutput(
                 "IntakePose",
                 new Pose3d(
-                        new Translation3d(0.327, 0, 0.165),
+                        new Translation3d(0.327, 0, 0.065),
                         new Rotation3d(0, -inputs.currentAngle.in(Units.Radians), 0)));
         intakeLigament.setAngle(inputs.currentAngle.in(Units.Degrees));
     }

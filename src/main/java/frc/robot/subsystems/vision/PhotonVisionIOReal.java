@@ -2,12 +2,6 @@ package frc.robot.subsystems.vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.subsystems.swerve.SwerveDrive;
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.OptionalDouble;
-import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 
@@ -17,25 +11,7 @@ public class PhotonVisionIOReal implements VisionIO {
     private final PhotonPoseEstimator estimator;
     private final Transform3d robotToCamera;
     private final boolean calculateScoreParams;
-    private boolean isNoteDetector;
-    private VisionResult result =
-            new VisionResult(
-                    new EstimatedRobotPose(
-                            new Pose3d(),
-                            0,
-                            new ArrayList<>(),
-                            PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR),
-                    false);
-    private VisionResult lastResult =
-            new VisionResult(
-                    new EstimatedRobotPose(
-                            new Pose3d(),
-                            0,
-                            new ArrayList<>(),
-                            PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR),
-                    false);
-    private Optional<ScoreParameters> scoreParameters = Optional.empty();
-    private OptionalDouble yawToNote = OptionalDouble.empty();
+    private final boolean isNoteDetector;
     private final String name;
 
     public PhotonVisionIOReal(
@@ -65,89 +41,52 @@ public class PhotonVisionIOReal implements VisionIO {
     }
 
     @Override
-    public OptionalDouble getYawToNote() {
-        return yawToNote;
-    }
-
-    @Override
-    public Optional<ScoreParameters> getScoreParameters() {
-        return scoreParameters;
-    }
-
-    @Override
     public void updateInputs(VisionInputs inputs) {
         inputs.isConnected = camera.isConnected();
 
         var latestResult = camera.getLatestResult();
 
         if (isNoteDetector && latestResult.hasTargets()) {
-            inputs.yawNote = latestResult.getBestTarget().getYaw();
-            yawToNote = OptionalDouble.of(inputs.yawNote);
+            inputs.yawNote = Rotation2d.fromDegrees(latestResult.getBestTarget().getYaw());
+            inputs.hasNote = true;
         } else {
-            yawToNote = OptionalDouble.empty();
+            inputs.hasNote = false;
         }
 
         var estimatedPose = estimator.update(latestResult);
         if (estimatedPose.isPresent()) {
             inputs.poseFieldOriented = estimatedPose.get().estimatedPose;
-
-            result = new VisionResult(estimatedPose.get(), true);
-            double distanceTraveled =
-                    result.getEstimatedRobotPose()
-                            .estimatedPose
-                            .minus(lastResult.getEstimatedRobotPose().estimatedPose)
-                            .getTranslation()
-                            .getNorm();
-            if ((DriverStation.isEnabled() && distanceTraveled > 0.2)
-                    || (result.getEstimatedRobotPose().estimatedPose.getZ() > 0.1)
-                    || (VisionConstants.outOfBounds(result.getEstimatedRobotPose().estimatedPose))
-                    || result.getEstimatedRobotPose().targetsUsed.stream()
-                            .anyMatch(
-                                    (target) ->
-                                            target.getBestCameraToTarget()
-                                                            .getTranslation()
-                                                            .getNorm()
-                                                    > 5.0)) {
-                result.setUseForEstimation(false);
+            var tags = latestResult.getTargets();
+            inputs.distanceToTargets = new double[tags.size()];
+            for (int i = 0; i < tags.size(); i++) {
+                inputs.distanceToTargets[i] =
+                        tags.get(i).getBestCameraToTarget().getTranslation().getNorm();
             }
+            inputs.timestamp = estimatedPose.get().timestampSeconds;
+            inputs.hasNewPose = true;
         } else {
-            result.setUseForEstimation(false);
+            inputs.hasNewPose = false;
         }
 
         if (calculateScoreParams && latestResult.hasTargets()) {
-            var toSpeaker =
+            inputs.toSpeaker =
                     inputs.poseFieldOriented
                             .getTranslation()
                             .toTranslation2d()
                             .minus(VisionConstants.getSpeakerPose());
-            inputs.distanceToSpeaker = toSpeaker.getNorm();
             var centerTag = latestResult.getTargets();
             centerTag.removeIf(
                     (target) -> target.getFiducialId() != VisionConstants.getSpeakerTag1());
-            Optional<Rotation2d> yaw;
             if (!centerTag.isEmpty()) {
                 inputs.yawToSpeaker = Rotation2d.fromDegrees(-centerTag.get(0).getYaw());
-                yaw = Optional.of(inputs.yawToSpeaker);
+                inputs.seesSpeaker = true;
             } else {
-                yaw = Optional.empty();
+                inputs.seesSpeaker = false;
             }
-            scoreParameters =
-                    Optional.of(
-                            new ScoreParameters(
-                                    toSpeaker,
-                                    yaw,
-                                    new Rotation2d(toSpeaker.getX(), toSpeaker.getY())
-                                            .minus(SwerveDrive.getInstance().getOdometryYaw())));
+            inputs.hasScoreParams = true;
         } else {
-            scoreParameters = Optional.empty();
+            inputs.hasScoreParams = false;
         }
-
-        lastResult = result;
-    }
-
-    @Override
-    public VisionResult getLatestResult() {
-        return result;
     }
 
     @Override

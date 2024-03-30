@@ -75,6 +75,8 @@ public class Constants {
     @AutoLogOutput
     static double VISION_MEASUREMENT_MULTIPLIER = AUTO_START_VISION_MEASUREMENT_MULTIPLIER;
 
+    private static double yawToNote = 0;
+
     public static void initSwerve() {
         ModuleIO[] moduleIOs = new ModuleIO[4];
         GyroIO gyroIO =
@@ -113,16 +115,12 @@ public class Constants {
                 swerveDrive::getCurrentSpeeds,
                 (speeds) -> {
                     //                     Fixes diversion from note during autonomous
-                    if (RobotContainer.getInstance().useNoteDetection
-                            && Vision.getInstance().getYawToNote().isPresent()) {
+                    if (RobotContainer.getInstance().useNoteDetection) {
+                        if (Vision.getInstance().getYawToNote().isPresent()) {
+                            yawToNote = Vision.getInstance().getYawToNote().get().getSin();
+                        }
                         speeds.vyMetersPerSecond =
-                                SwerveConstants.VY_NOTE_DETECTION_CONTROLLER.calculate(
-                                        Math.sin(
-                                                Math.toRadians(
-                                                        Vision.getInstance()
-                                                                .getYawToNote()
-                                                                .getAsDouble())),
-                                        0);
+                                SwerveConstants.VY_NOTE_DETECTION_CONTROLLER.calculate(yawToNote);
                     }
 
                     swerveDrive.drive(speeds, false);
@@ -142,6 +140,7 @@ public class Constants {
         VisionModule leftOpi;
         VisionIO speakerLeftCamera;
         VisionIO speakerRightCamera;
+        VisionIO intakeAprilTagCamera;
         VisionIO driverCamera;
         var field = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
         switch (CURRENT_MODE) {
@@ -161,6 +160,14 @@ public class Constants {
                                 SPEAKER_LEFT_CAMERA_POSE,
                                 field,
                                 true,
+                                false);
+                intakeAprilTagCamera =
+                        new PhotonVisionIOReal(
+                                new PhotonCamera("OV2311_0"),
+                                "Intake_AprilTag_Camera",
+                                INTAKE_APRILTAG_CAMERA_POSE,
+                                field,
+                                false,
                                 false);
                 driverCamera =
                         new PhotonVisionIOReal(
@@ -184,6 +191,12 @@ public class Constants {
                                 SPEAKER_RIGHT_CAMERA_POSE,
                                 field,
                                 SimCameraProperties.LL2_1280_720());
+                intakeAprilTagCamera =
+                        new VisionSimIO(
+                                new PhotonCamera("OV2311_0"),
+                                INTAKE_APRILTAG_CAMERA_POSE,
+                                field,
+                                SimCameraProperties.LL2_1280_720());
                 driverCamera =
                         new VisionSimIO(
                                 new PhotonCamera("Driver_Camera"),
@@ -195,11 +208,11 @@ public class Constants {
             default:
                 speakerLeftCamera = new VisionIO() {};
                 speakerRightCamera = new VisionIO() {};
+                intakeAprilTagCamera = new VisionIO() {};
                 driverCamera = new VisionIO() {};
-
                 break;
         }
-        rightOpi = new VisionModule(driverCamera);
+        rightOpi = new VisionModule(driverCamera, intakeAprilTagCamera);
         leftOpi = new VisionModule(speakerLeftCamera, speakerRightCamera);
         Vision.initialize(rightOpi, leftOpi);
     }

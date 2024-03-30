@@ -39,6 +39,11 @@ public class SwerveDrive extends SubsystemBase {
     @Getter @AutoLogOutput
     private final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
 
+    @AutoLogOutput private SwerveModuleState[] currentModuleStates;
+    @AutoLogOutput private SwerveModuleState[] desiredModuleStates;
+    @AutoLogOutput private ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
+    @AutoLogOutput private double linearVelocity = 0;
+
     private final GyroIO gyro;
 
     @Getter
@@ -50,7 +55,7 @@ public class SwerveDrive extends SubsystemBase {
                     SwerveConstants.WHEEL_POSITIONS[3]);
 
     @Getter private final SwerveDrivePoseEstimator estimator;
-    private final SwerveDriveInputsAutoLogged loggerInputs = new SwerveDriveInputsAutoLogged();
+    private final SwerveDriveInputsAutoLogged inputs = new SwerveDriveInputsAutoLogged();
     @Getter @AutoLogOutput private Pose2d botPose = new Pose2d();
 
     private boolean inCharacterizationMode = false;
@@ -60,6 +65,12 @@ public class SwerveDrive extends SubsystemBase {
         modules = new SwerveModule[moduleIOs.length];
         for (int i = 0; i < moduleIOs.length; i++) {
             modules[i] = new SwerveModule(moduleIOs[i], i + 1, wheelOffsets[i]);
+        }
+        currentModuleStates = new SwerveModuleState[modules.length];
+        desiredModuleStates = new SwerveModuleState[modules.length];
+        for (int i = 0; i < modules.length; i++) {
+            currentModuleStates[i] = new SwerveModuleState();
+            desiredModuleStates[i] = new SwerveModuleState();
         }
 
         updateModulePositions();
@@ -96,7 +107,7 @@ public class SwerveDrive extends SubsystemBase {
      * @return Yaw angle reading from gyro. [rad]
      */
     public Rotation2d getRawYaw() {
-        return loggerInputs.rawYaw;
+        return inputs.rawYaw;
     }
 
     /**
@@ -105,7 +116,7 @@ public class SwerveDrive extends SubsystemBase {
      * @return Yaw angle with offset. [rad]
      */
     public Rotation2d getYaw() {
-        return loggerInputs.yaw;
+        return inputs.yaw;
     }
 
     @AutoLogOutput
@@ -123,7 +134,7 @@ public class SwerveDrive extends SubsystemBase {
      * @param desiredModuleStates The desired module states to set the modules to.
      */
     public void setModuleStates(SwerveModuleState[] desiredModuleStates) {
-        loggerInputs.desiredModuleStates = desiredModuleStates;
+        this.desiredModuleStates = desiredModuleStates;
     }
 
     public void updateModulePositions() {
@@ -133,11 +144,11 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public double getVelocity() {
-        return loggerInputs.linearVelocity;
+        return inputs.linearVelocity;
     }
 
     public ChassisSpeeds getCurrentSpeeds() {
-        return loggerInputs.currentSpeeds;
+        return inputs.currentSpeeds;
     }
 
     public void resetPose(Pose2d pose) {
@@ -165,7 +176,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void lock() {
-        loggerInputs.desiredModuleStates =
+        desiredModuleStates =
                 new SwerveModuleState[] {
                     new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
                     new SwerveModuleState(0, Rotation2d.fromDegrees(135)),
@@ -187,7 +198,7 @@ public class SwerveDrive extends SubsystemBase {
      * @param fieldOriented Should the drive be field oriented.
      */
     public void drive(ChassisSpeeds chassisSpeeds, boolean fieldOriented) {
-        loggerInputs.desiredSpeeds = chassisSpeeds;
+        inputs.desiredSpeeds = chassisSpeeds;
 
         ChassisSpeeds fieldOrientedChassisSpeeds =
                 ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -289,55 +300,48 @@ public class SwerveDrive extends SubsystemBase {
                                 true));
     }
 
-    public void updateSwerveInputs() {
-        for (int i = 0; i < modules.length; i++) {
-            loggerInputs.absolutePositions[i] = modules[i].getPosition();
-            loggerInputs.currentModuleStates[i] = modules[i].getModuleState();
-        }
+    public void updateSwerveOutputs() {
+        currentModuleStates = kinematics.toSwerveModuleStates(inputs.currentSpeeds);
 
-        loggerInputs.currentSpeeds =
+        chassisSpeeds =
                 kinematics.toChassisSpeeds(
-                        loggerInputs.currentModuleStates[0],
-                        loggerInputs.currentModuleStates[1],
-                        loggerInputs.currentModuleStates[2],
-                        loggerInputs.currentModuleStates[3]);
+                        currentModuleStates[0],
+                        currentModuleStates[1],
+                        currentModuleStates[2],
+                        currentModuleStates[3]);
 
-        loggerInputs.linearVelocity =
+        linearVelocity =
                 Math.hypot(
-                        loggerInputs.currentSpeeds.vxMetersPerSecond,
-                        loggerInputs.currentSpeeds.vyMetersPerSecond);
+                        inputs.currentSpeeds.vxMetersPerSecond,
+                        inputs.currentSpeeds.vyMetersPerSecond);
     }
 
     public void updateGyroInputs() {
-        loggerInputs.rawYaw = gyro.getRawYaw();
-        loggerInputs.yaw = gyro.getYaw();
-        gyro.updateInputs(loggerInputs);
+        gyro.updateInputs(inputs);
     }
 
     public double getAcceleration() {
-        return loggerInputs.acceleration;
+        return inputs.acceleration;
     }
 
     @Override
     public void periodic() {
-        for (SwerveModule module : modules) {
-            module.updateInputs();
-        }
+        updateSwerveOutputs();
+        Arrays.stream(modules).forEach(SwerveModule::updateInputs);
         updateGyroInputs();
-        updateSwerveInputs();
         updateModulePositions();
         estimator.update(getOdometryYaw(), getModulePositions());
         botPose = estimator.getEstimatedPosition();
 
         SwerveDriveKinematics.desaturateWheelSpeeds(
-                loggerInputs.desiredModuleStates, SwerveConstants.MAX_X_Y_VELOCITY);
+                desiredModuleStates, SwerveConstants.MAX_X_Y_VELOCITY);
         if (!inCharacterizationMode) {
             for (int i = 0; i < modules.length; i++) {
-                modules[i].setModuleState(loggerInputs.desiredModuleStates[i]);
+                modules[i].setModuleState(desiredModuleStates[i]);
             }
         }
 
-        Logger.processInputs("SwerveDrive", loggerInputs);
+        Logger.processInputs("SwerveDrive", inputs);
     }
 
     public Command characterize() {

@@ -73,7 +73,7 @@ public class RobotContainer {
 
     @AutoLogOutput boolean useNoteDetection = false;
 
-    public final MutableMeasure<Angle> hoodTuningAngle = Units.Degrees.of(115).mutableCopy();
+    public final MutableMeasure<Angle> hoodTuningAngle = Units.Degrees.of(110).mutableCopy();
     public final MutableMeasure<Velocity<Angle>> shooterTuningVelocity =
             Units.RotationsPerSecond.of(50).mutableCopy();
 
@@ -277,8 +277,8 @@ public class RobotContainer {
                 climb.setPower(
                         () ->
                                 MathUtil.applyDeadband(
-                                        -(operatorController.getL2Axis() + 1)/2
-                                                + (operatorController.getR2Axis() + 1)/2,
+                                        -(operatorController.getL2Axis() + 1) / 2
+                                                + (operatorController.getR2Axis() + 1) / 2,
                                         0.15)));
 
         leds.setDefaultCommand(
@@ -314,14 +314,12 @@ public class RobotContainer {
                 .rightTrigger()
                 .whileTrue(
                         commandGroups
-                                .shootToSpeaker(operatorController)
+                                .shootToSpeaker(driverController)
                                 .alongWith(commandGroups.feedShooter(this::isForceShooting)))
                 .onFalse(commandGroups.stopShooting());
         driverController
                 .rightTrigger()
-                .onTrue(
-                        Commands.runOnce(
-                                () -> state = Constants.State.SHOOT));
+                .onTrue(Commands.runOnce(() -> state = Constants.State.SHOOT));
 
         driverController
                 .leftTrigger()
@@ -333,22 +331,22 @@ public class RobotContainer {
                 .whileTrue(intake.outtake().alongWith(gripper.setRollerPower(-0.7)))
                 .onFalse(intake.stop().alongWith(gripper.setRollerPower(0)));
 
-        driverController
-                .leftBumper().whileTrue(commandGroups.adjustToAmp(driverController));
+        driverController.leftBumper().whileTrue(commandGroups.adjustToAmp(driverController));
         driverController
                 .leftBumper()
                 .whileTrue(commandGroups.shootToAmp(operatorController))
                 .onFalse(commandGroups.stopShooting());
         driverController
                 .leftBumper()
-                .onTrue(
-                        Commands.runOnce(() -> state = Constants.State.AMP))
-                .onFalse(
-                        Commands.runOnce(() -> state = Constants.State.SHOOT));
+                .onTrue(Commands.runOnce(() -> state = Constants.State.AMP))
+                .onFalse(Commands.runOnce(() -> state = Constants.State.SHOOT));
 
         operatorController.options().onTrue(climb.lock());
-        operatorController.create().onTrue(climb.unlock()
-                .alongWith(Commands.runOnce(() -> state = Constants.State.CLIMB)));
+        operatorController
+                .create()
+                .onTrue(
+                        climb.unlock()
+                                .alongWith(Commands.runOnce(() -> state = Constants.State.CLIMB)));
         operatorController
                 .R1()
                 .whileTrue(gripper.setRollerPower(0.4))

@@ -9,9 +9,9 @@ import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionResult;
+import java.util.Arrays;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.DoubleStream;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 public class PoseEstimation {
@@ -40,24 +40,17 @@ public class PoseEstimation {
             return;
         }
         for (VisionResult result : results) {
-            if (result == null || !result.isUseForEstimation()) {
+            if (result == null || !result.useForEstimation()) {
                 continue;
             }
-            Stream<Double> distances =
-                    result.getEstimatedRobotPose().targetsUsed.stream()
-                            .map(
-                                    (target) ->
-                                            target.getBestCameraToTarget()
-                                                    .getTranslation()
-                                                    .getNorm());
+            DoubleStream distances = Arrays.stream(result.distanceToTargets());
             var ambiguities = distances.map((d) -> d * d);
-            double stddev =
-                    multiplier * Utils.averageAmbiguity(ambiguities.collect(Collectors.toList()));
+            double stddev = multiplier * Utils.averageAmbiguity(ambiguities);
             swerveDrive
                     .getEstimator()
                     .addVisionMeasurement(
-                            result.getEstimatedRobotPose().estimatedPose.toPose2d(),
-                            result.getEstimatedRobotPose().timestampSeconds,
+                            result.estimatedRobotPose().toPose2d(),
+                            result.timestamp(),
                             VecBuilder.fill(
                                     stddev,
                                     stddev,

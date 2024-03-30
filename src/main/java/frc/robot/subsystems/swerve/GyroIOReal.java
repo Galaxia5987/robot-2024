@@ -14,17 +14,14 @@ public class GyroIOReal implements GyroIO {
         gyro.reset();
     }
 
-    @Override
     public Rotation2d getYaw() {
         return getRawYaw().minus(gyroOffset);
     }
 
-    @Override
     public Rotation2d getRawYaw() {
         return new Rotation2d(-MathUtil.angleModulus(Math.toRadians(gyro.getAngle())));
     }
 
-    @Override
     public Rotation2d getPitch() {
         return new Rotation2d(gyro.getPitch());
     }
@@ -38,5 +35,7 @@ public class GyroIOReal implements GyroIO {
     public void updateInputs(SwerveDriveInputs inputs) {
         inputs.gyroOffset = gyroOffset;
         inputs.acceleration = gyro.getWorldLinearAccelX(); // TODO: Make sure it's really x
+        inputs.yaw = getYaw();
+        inputs.rawYaw = getRawYaw();
     }
 }

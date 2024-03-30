@@ -96,6 +96,9 @@ public class ModuleIOTalonFX implements ModuleIO {
         inputs.moduleState = getModuleState();
 
         inputs.encoderConnected = encoder.isConnected();
+
+        inputs.absolutePosition = encoder.getAbsolutePosition();
+        inputs.moduleState = getModuleState();
     }
 
     @Override
