@@ -130,7 +130,7 @@ public class SwerveConstants {
                 DRIVE_KS.initDefault(0.248_33);
                 DRIVE_KA.initDefault(0.05);
 
-                ANGLE_KP.initDefault(28.0);
+                ANGLE_KP.initDefault(100.0);
                 ANGLE_KI.initDefault(0.0);
                 ANGLE_KD.initDefault(0.0);
                 ANGLE_KS.initDefault(0.335_905);
