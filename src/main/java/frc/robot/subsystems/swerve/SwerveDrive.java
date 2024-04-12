@@ -43,6 +43,7 @@ public class SwerveDrive extends SubsystemBase {
     @AutoLogOutput private SwerveModuleState[] desiredModuleStates;
     @AutoLogOutput private ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
     @AutoLogOutput private double linearVelocity = 0;
+    @AutoLogOutput private double[] absolutePositions = new double[4];
 
     private final GyroIO gyro;
 
@@ -144,11 +145,11 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public double getVelocity() {
-        return inputs.linearVelocity;
+        return linearVelocity;
     }
 
     public ChassisSpeeds getCurrentSpeeds() {
-        return inputs.currentSpeeds;
+        return chassisSpeeds;
     }
 
     public void resetPose(Pose2d pose) {
@@ -301,19 +302,15 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void updateSwerveOutputs() {
-        currentModuleStates = kinematics.toSwerveModuleStates(inputs.currentSpeeds);
-
-        chassisSpeeds =
-                kinematics.toChassisSpeeds(
-                        currentModuleStates[0],
-                        currentModuleStates[1],
-                        currentModuleStates[2],
-                        currentModuleStates[3]);
-
+        currentModuleStates =
+                Arrays.stream(modules)
+                        .map(SwerveModule::getModuleState)
+                        .toList()
+                        .toArray(new SwerveModuleState[0]);
+        chassisSpeeds = kinematics.toChassisSpeeds(currentModuleStates);
         linearVelocity =
-                Math.hypot(
-                        inputs.currentSpeeds.vxMetersPerSecond,
-                        inputs.currentSpeeds.vyMetersPerSecond);
+                Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
+        absolutePositions = Arrays.stream(modules).mapToDouble(SwerveModule::getPosition).toArray();
     }
 
     public void updateGyroInputs() {
