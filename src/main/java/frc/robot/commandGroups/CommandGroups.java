@@ -274,12 +274,13 @@ public class CommandGroups {
                 gripper.setRollerPower(0));
     }
 
-    public Command superPoop(CommandPS5Controller controller, BooleanSupplier isForceShooting) { //TODO: check
+    public Command superPoop(
+            CommandPS5Controller controller, BooleanSupplier isForceShooting) { // TODO: check
         return Commands.defer(
                 () ->
                         Commands.parallel(
                                 shootAndConvey(
-                                        Units.RotationsPerSecond.of(50).mutableCopy(), false),
+                                        Units.RotationsPerSecond.of(40).mutableCopy(), false),
                                 hood.setAngle(Units.Degrees.of(95).mutableCopy()),
                                 feedWithWait(
                                         () ->
