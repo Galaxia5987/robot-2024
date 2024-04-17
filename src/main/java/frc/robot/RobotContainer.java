@@ -13,6 +13,7 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -264,6 +265,21 @@ public class RobotContainer {
                                                 || isForceShooting));
     }
 
+    private Command rumbleSequence() {
+        return Commands.sequence(
+                Commands.runOnce(
+                        () ->
+                                driverController
+                                        .getHID()
+                                        .setRumble(GenericHID.RumbleType.kBothRumble, 1.0)),
+                Commands.waitSeconds(0.5),
+                Commands.runOnce(
+                        () ->
+                                driverController
+                                        .getHID()
+                                        .setRumble(GenericHID.RumbleType.kBothRumble, 0.0)));
+    }
+
     private void configureDefaultCommands() {
         swerveDrive.setDefaultCommand(
                 swerveDrive.driveCommand(
@@ -323,7 +339,7 @@ public class RobotContainer {
 
         driverController
                 .leftTrigger()
-                .whileTrue(commandGroups.intake(Commands.none()))
+                .whileTrue(commandGroups.intake(rumbleSequence()))
                 .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
 
         driverController
