@@ -117,7 +117,11 @@ public class ShootingManager {
                 Degrees);
 
         swerveCommandedAngle
-                .mut_replace(Math.IEEEremainder(Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI, 2 * Math.PI), Radians)
+                .mut_replace(
+                        Math.IEEEremainder(
+                                Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI,
+                                2 * Math.PI),
+                        Radians)
                 .mut_minus(3, Degrees);
     }
 
@@ -176,7 +180,10 @@ public class ShootingManager {
             } else {
                 swerveCommandedAngle
                         .mut_replace(
-                                Math.IEEEremainder(Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI, 2 * Math.PI), Radians)
+                                Math.IEEEremainder(
+                                        Math.atan2(toSpeaker.getY(), toSpeaker.getX()) - Math.PI,
+                                        2 * Math.PI),
+                                Radians)
                         .mut_minus(3, Degrees);
             }
         } else {

@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -26,6 +27,8 @@ import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.VisionConstants;
 import java.util.List;
+
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -41,6 +44,9 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  * project.
  */
 public class Robot extends LoggedRobot {
+    @AutoLogOutput private final Pose3d emptyElevatorPose1 = new Pose3d();
+    @AutoLogOutput private final Pose3d emptyElevatorPose2 = new Pose3d();
+    @AutoLogOutput private final Pose3d emptyGripperPose = new Pose3d();
     private final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
     private RobotContainer robotContainer;
     private Command autonomousCommand;
@@ -55,7 +61,7 @@ public class Robot extends LoggedRobot {
         if (Robot.isReal()) {
             Constants.CURRENT_MODE = Constants.Mode.REAL;
         } else {
-            Constants.CURRENT_MODE = Constants.Mode.REPLAY;
+            Constants.CURRENT_MODE = Constants.Mode.SIM;
         }
 
         // Initialize logger
