@@ -47,4 +47,6 @@ public class CommandGroupsConstants {
             new LoggedTunableNumber("Trap/hood_angle", 108);
     public static final Pose2d TRAP_POSE =
             new Pose2d(new Translation2d(12.38, 5.33), new Rotation2d(0.818));
+
+    public static final Translation2d SUPER_POOP_POSE = new Translation2d(0.28, 7.42);
 }

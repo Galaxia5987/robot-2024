@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
+import frc.robot.lib.Utils;
 import frc.robot.subsystems.ShootingManager;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.conveyor.Conveyor;
@@ -273,14 +274,32 @@ public class CommandGroups {
                 gripper.setRollerPower(0));
     }
 
-    public Command superPoop(CommandPS5Controller controller, BooleanSupplier isForceShooting) {
-        return shootAndConvey(Units.RotationsPerSecond.of(50).mutableCopy(), false)
-                .alongWith(
-                        hood.setAngle(Units.Degrees.of(95).mutableCopy()),
-                        feedWithWait(
-                                () ->
-                                        (shooter.atSetpoint() && hood.atSetpoint()
-                                                || isForceShooting.getAsBoolean())));
+    public Command superPoop(CommandPS5Controller controller, BooleanSupplier isForceShooting) { //TODO: check
+        return Commands.defer(
+                () ->
+                        Commands.parallel(
+                                shootAndConvey(
+                                        Units.RotationsPerSecond.of(50).mutableCopy(), false),
+                                hood.setAngle(Units.Degrees.of(95).mutableCopy()),
+                                feedWithWait(
+                                        () ->
+                                                (shooter.atSetpoint() && hood.atSetpoint()
+                                                        || isForceShooting.getAsBoolean())),
+                                swerveDrive.driveAndAdjust(
+                                        Units.Radians.of(
+                                                        Utils.calcRotationToTranslation(
+                                                                        SwerveDrive.getInstance()
+                                                                                .getBotPose()
+                                                                                .getTranslation(),
+                                                                        CommandGroupsConstants
+                                                                                .SUPER_POOP_POSE)
+                                                                .getRadians())
+                                                .mutableCopy(),
+                                        () -> -controller.getLeftY(),
+                                        () -> -controller.getLeftX(),
+                                        0.1,
+                                        true)),
+                Set.of(swerveDrive));
     }
 
     public Command hoodStressTesting() {
