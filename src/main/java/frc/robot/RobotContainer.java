@@ -265,19 +265,14 @@ public class RobotContainer {
                                                 || isForceShooting));
     }
 
-    private Command rumbleSequence() {
-        return Commands.sequence(
-                Commands.runOnce(
-                        () ->
-                                driverController
-                                        .getHID()
-                                        .setRumble(GenericHID.RumbleType.kBothRumble, 1.0)),
-                Commands.waitSeconds(0.5),
-                Commands.runOnce(
-                        () ->
-                                driverController
-                                        .getHID()
-                                        .setRumble(GenericHID.RumbleType.kBothRumble, 0.0)));
+    private Command startRumble() {
+        return Commands.runOnce(
+                () -> driverController.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 1.0));
+    }
+
+    private Command stopRumble() {
+        return Commands.runOnce(
+                () -> driverController.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.0));
     }
 
     private void configureDefaultCommands() {
@@ -339,8 +334,8 @@ public class RobotContainer {
 
         driverController
                 .leftTrigger()
-                .whileTrue(commandGroups.intake(rumbleSequence()))
-                .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0)));
+                .whileTrue(commandGroups.intake(startRumble()))
+                .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0), stopRumble()));
 
         driverController
                 .rightBumper()
