@@ -1,5 +1,6 @@
 package frc.robot.commandGroups;
 
+import com.pathplanner.lib.util.GeometryUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -48,5 +49,7 @@ public class CommandGroupsConstants {
     public static final Pose2d TRAP_POSE =
             new Pose2d(new Translation2d(12.38, 5.33), new Rotation2d(0.818));
 
-    public static final Translation2d SUPER_POOP_POSE = new Translation2d(0.28, 7.42);
+    public static final Translation2d SUPER_POOP_POSE_BLUE = new Translation2d(0.28, 7.42);
+
+    public static final Translation2d SUPER_POOP_POSE_RED = GeometryUtil.flipFieldPosition(SUPER_POOP_POSE_BLUE);
 }

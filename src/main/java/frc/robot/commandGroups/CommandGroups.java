@@ -6,6 +6,7 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
@@ -292,8 +293,7 @@ public class CommandGroups {
                                                                         SwerveDrive.getInstance()
                                                                                 .getBotPose()
                                                                                 .getTranslation(),
-                                                                        CommandGroupsConstants
-                                                                                .SUPER_POOP_POSE)
+                                                                        Constants.isRed() ? CommandGroupsConstants.SUPER_POOP_POSE_RED : CommandGroupsConstants.SUPER_POOP_POSE_BLUE)
                                                                 .getRadians())
                                                 .mutableCopy(),
                                         () -> -controller.getLeftY(),
