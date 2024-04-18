@@ -51,5 +51,6 @@ public class CommandGroupsConstants {
 
     public static final Translation2d SUPER_POOP_POSE_BLUE = new Translation2d(0.28, 7.42);
 
-    public static final Translation2d SUPER_POOP_POSE_RED = GeometryUtil.flipFieldPosition(SUPER_POOP_POSE_BLUE);
+    public static final Translation2d SUPER_POOP_POSE_RED =
+            GeometryUtil.flipFieldPosition(SUPER_POOP_POSE_BLUE);
 }
