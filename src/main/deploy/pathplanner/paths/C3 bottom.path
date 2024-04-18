@@ -112,12 +112,6 @@
               "data": {
                 "name": "intake"
               }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "useNoteDetection"
-              }
             }
           ]
         }
@@ -164,12 +158,6 @@
         "type": "parallel",
         "data": {
           "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "followPathSpeeds"
-              }
-            },
             {
               "type": "named",
               "data": {

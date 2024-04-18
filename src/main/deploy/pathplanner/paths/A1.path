@@ -117,23 +117,6 @@
       }
     },
     {
-      "name": "follow path speeds",
-      "waypointRelativePos": 1.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "followPathSpeeds"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
       "name": "adjust to target",
       "waypointRelativePos": 1.1,
       "command": {
@@ -144,23 +127,6 @@
               "type": "named",
               "data": {
                 "name": "adjustToTarget"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "useNoteDetection",
-      "waypointRelativePos": 0.25,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "useNoteDetection"
               }
             }
           ]

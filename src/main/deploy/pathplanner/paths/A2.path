@@ -122,29 +122,6 @@
               "data": {
                 "name": "adjustToTarget"
               }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "followPathSpeeds"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "detect note",
-      "waypointRelativePos": 0.45,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "useNoteDetection"
-              }
             }
           ]
         }

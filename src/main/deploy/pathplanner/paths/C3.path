@@ -97,12 +97,6 @@
               "data": {
                 "name": "intake"
               }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "useNoteDetection"
-              }
             }
           ]
         }
@@ -119,29 +113,6 @@
               "type": "named",
               "data": {
                 "name": "stopIntake"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "stop note detection",
-      "waypointRelativePos": 2.05,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "followPathSpeeds"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "adjustToTarget"
               }
             }
           ]

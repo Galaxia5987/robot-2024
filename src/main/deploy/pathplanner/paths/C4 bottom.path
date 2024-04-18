@@ -99,46 +99,6 @@
       }
     },
     {
-      "name": "use note detection",
-      "waypointRelativePos": 0.4,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "useNoteDetection"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "stop note detection",
-      "waypointRelativePos": 1.05,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "followPathSpeeds"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "adjustToTarget"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
       "name": "follow path rotation and stop shoot",
       "waypointRelativePos": 0,
       "command": {

@@ -113,12 +113,6 @@
               "data": {
                 "name": "adjustToTarget"
               }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "followPathSpeeds"
-              }
             }
           ]
         }
@@ -135,12 +129,6 @@
               "type": "named",
               "data": {
                 "name": "intake"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "useNoteDetection"
               }
             }
           ]

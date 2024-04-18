@@ -110,40 +110,6 @@
       }
     },
     {
-      "name": "start note detection",
-      "waypointRelativePos": 0.75,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "useNoteDetection"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "stop note detection",
-      "waypointRelativePos": 1.1,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "followPathSpeeds"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
       "name": "stop shoot",
       "waypointRelativePos": 0,
       "command": {
