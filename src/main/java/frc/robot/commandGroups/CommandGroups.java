@@ -280,7 +280,7 @@ public class CommandGroups {
                 () ->
                         Commands.parallel(
                                 shootAndConvey(
-                                        Units.RotationsPerSecond.of(40).mutableCopy(), false),
+                                        Units.RotationsPerSecond.of(45).mutableCopy(), false),
                                 hood.setAngle(Units.Degrees.of(95).mutableCopy()),
                                 feedWithWait(
                                         () ->
@@ -297,7 +297,8 @@ public class CommandGroups {
                                                                                         .SUPER_POOP_POSE_RED
                                                                                 : CommandGroupsConstants
                                                                                         .SUPER_POOP_POSE_BLUE)
-                                                                .getRadians()).minus(Units.Degrees.of(180))
+                                                                .getRadians())
+                                                .minus(Units.Degrees.of(180))
                                                 .mutableCopy(),
                                         () -> -controller.getLeftY(),
                                         () -> -controller.getLeftX(),
