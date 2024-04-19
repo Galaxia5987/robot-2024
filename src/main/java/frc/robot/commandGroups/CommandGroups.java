@@ -74,10 +74,10 @@ public class CommandGroups {
     }
 
     public Command intake(Command rumble, boolean isOverride) {
-        return Commands.parallel(intake.intake(), gripper.setRollerPower(0.4))
-                .until(() -> gripper.hasNote() || isOverride)
+        return Commands.defer(()->Commands.parallel(intake.intake(), Commands.either(gripper.setRollerPower(0.4),
+                        gripper.setRollerPower(0.4).until(() -> gripper.hasNote()), ()->isOverride))
                 .andThen(Commands.parallel(intake.stop(), gripper.setRollerPower(0), rumble))
-                .withName("intake");
+                .withName("intake"), Set.of(intake));
     }
 
     public Command shootAndConvey(
