@@ -73,6 +73,7 @@ public class RobotContainer {
     @Getter private Constants.State state = Constants.State.SHOOT;
 
     @AutoLogOutput boolean useNoteDetection = false;
+    private boolean isIntakeOverride = false;
 
     public final MutableMeasure<Angle> hoodTuningAngle = Units.Degrees.of(110).mutableCopy();
     public final MutableMeasure<Velocity<Angle>> shooterTuningVelocity =
@@ -150,7 +151,7 @@ public class RobotContainer {
         // Configure the button bindings and default commands
         configureDefaultCommands();
         configureButtonBindings();
-        NamedCommands.registerCommand("intake", commandGroups.intake(Commands.none()));
+        NamedCommands.registerCommand("intake", commandGroups.intake(Commands.none(), false));
         NamedCommands.registerCommand(
                 "print1", Commands.print("CapsLockIsBetter!!!").repeatedly().withTimeout(2));
         NamedCommands.registerCommand(
@@ -334,7 +335,7 @@ public class RobotContainer {
 
         driverController
                 .leftTrigger()
-                .whileTrue(commandGroups.intake(startRumble()))
+                .whileTrue(commandGroups.intake(startRumble(), isIntakeOverride))
                 .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0), stopRumble()));
 
         driverController
@@ -374,6 +375,9 @@ public class RobotContainer {
                 .onFalse(
                         intake.reset(Units.Degrees.zero().mutableCopy())
                                 .alongWith(intake.setAnglePower(0)));
+
+        operatorController.povUp().onTrue(Commands.runOnce(() -> isIntakeOverride = true));
+        operatorController.povDown().onTrue(Commands.runOnce(() -> isIntakeOverride = false));
     }
 
     /**

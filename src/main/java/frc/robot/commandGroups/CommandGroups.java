@@ -73,9 +73,9 @@ public class CommandGroups {
                 .withName("feedShooter");
     }
 
-    public Command intake(Command rumble) {
+    public Command intake(Command rumble, boolean isOverride) {
         return Commands.parallel(intake.intake(), gripper.setRollerPower(0.4))
-                .until(gripper::hasNote)
+                .until(() -> gripper.hasNote() || isOverride)
                 .andThen(Commands.parallel(intake.stop(), gripper.setRollerPower(0), rumble))
                 .withName("intake");
     }
@@ -99,7 +99,7 @@ public class CommandGroups {
     }
 
     public Command intakeBit() {
-        return Commands.sequence(intake(Commands.none()).withTimeout(3), intake.stop());
+        return Commands.sequence(intake(Commands.none(), false).withTimeout(3), intake.stop());
     }
 
     public Command shooterBit(CommandPS5Controller controller) {
