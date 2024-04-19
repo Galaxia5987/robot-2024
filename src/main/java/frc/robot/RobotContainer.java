@@ -45,9 +45,10 @@ import frc.robot.subsystems.shooter.ShooterIOReal;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.VisionConstants;
-
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
