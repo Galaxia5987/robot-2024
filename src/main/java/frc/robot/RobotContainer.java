@@ -3,7 +3,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.intake.IntakeIOReal;
 
 public class RobotContainer {
@@ -28,7 +27,6 @@ public class RobotContainer {
     private void configureButtonBindings() {
         controller.a().whileTrue(intake.intake()).onFalse(intake.stop());
         controller.b().whileTrue(intake.outtake()).onFalse(intake.stop());
-
     }
 
     /**

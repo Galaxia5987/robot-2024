@@ -7,5 +7,4 @@ public class IntakeConstants {
     public static final double openingAngle = Math.toRadians(90);
     public static final double intakeSpinVoltage = 6;
     public static final double outtakeSpinVoltage = -6;
-
 }

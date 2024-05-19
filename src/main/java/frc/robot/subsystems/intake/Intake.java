@@ -20,49 +20,56 @@ public class Intake extends SubsystemBase {
         return INSTANCE;
     }
 
-
     // setAngle
     // setSpin
     // intake -> intake angle down && intake spin intake
     // stop
-    //outtake
+    // outtake
 
     public Command setAngle(double angle) {
-        return Commands.run(() -> {
-            inputs.angleMotorSetPoint = angle;
-            io.setAngle(angle);
-        }).withName("set intake angle");
+        return Commands.run(
+                        () -> {
+                            inputs.angleMotorSetPoint = angle;
+                            io.setAngle(angle);
+                        })
+                .withName("set intake angle");
     }
 
     public Command setSpinVoltage(double voltage) {
-        return Commands.run(() -> {
-            inputs.spinMotorSetPoint = voltage;
-            io.setVoltage(voltage);
-        }).withName("set spin voltage");
+        return Commands.run(
+                        () -> {
+                            inputs.spinMotorSetPoint = voltage;
+                            io.setVoltage(voltage);
+                        })
+                .withName("set spin voltage");
     }
 
     public Command stop() {
-        return Commands.run(() -> {
-            setAngle(IntakeConstants.openingAngle);
-            setSpinVoltage(0);
-        }).withName("stop intake");
-
+        return Commands.run(
+                        () -> {
+                            setAngle(IntakeConstants.openingAngle);
+                            setSpinVoltage(0);
+                        })
+                .withName("stop intake");
     }
 
     public Command intake() {
-        return Commands.run(() -> {
-            setAngle(IntakeConstants.closingAngle);
-            setSpinVoltage(IntakeConstants.intakeSpinVoltage);
-        }).withName("intake");
+        return Commands.run(
+                        () -> {
+                            setAngle(IntakeConstants.closingAngle);
+                            setSpinVoltage(IntakeConstants.intakeSpinVoltage);
+                        })
+                .withName("intake");
     }
 
     public Command outtake() {
-        return Commands.run(() -> {
-            setAngle(IntakeConstants.closingAngle);
-            setSpinVoltage(IntakeConstants.outtakeSpinVoltage);
-        }).withName("outtake");
+        return Commands.run(
+                        () -> {
+                            setAngle(IntakeConstants.closingAngle);
+                            setSpinVoltage(IntakeConstants.outtakeSpinVoltage);
+                        })
+                .withName("outtake");
     }
-
 
     @Override
     public void periodic() {
