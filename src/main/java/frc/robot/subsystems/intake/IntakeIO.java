@@ -1,35 +1,22 @@
 package frc.robot.subsystems.intake;
 
-import static edu.wpi.first.units.Units.*;
-
-import edu.wpi.first.units.*;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface IntakeIO {
-
     IntakeInputsAutoLogged inputs = new IntakeInputsAutoLogged();
 
-    default void setAngle(MutableMeasure<Angle> angle) {}
+    void updateInput();
 
-    default void setRollerSpeed(double speed) {}
+    void setAngle(double angle);
 
-    default void setCenterRollerSpeed(double speed) {}
-
-    default void reset(Measure<Angle> angle) {}
-
-    default void setAnglePower(double power) {}
-
-    default void updateInputs() {}
+    void setVoltage(double voltage);
 
     @AutoLog
     class IntakeInputs {
-        MutableMeasure<Angle> currentAngle =
-                Degrees.of(110).mutableCopy(); // TODO: check default value
-        MutableMeasure<Angle> angleSetpoint = MutableMeasure.zero(Radians);
-        double rollerSpeedSetpoint = 0;
-        double centerRollerSpeedSetpoint = 0;
-        MutableMeasure<Voltage> angleMotorVoltage = MutableMeasure.zero(Volts);
-        MutableMeasure<Voltage> spinMotorVoltage = MutableMeasure.zero(Volts);
-        MutableMeasure<Voltage> centerMotorVoltage = MutableMeasure.zero(Volts);
+        public double angle = 0.0;
+        public double angleMotorSetPoint = 0.0;
+        public double angleMotorVoltage = 0.0;
+        public double spinMotorSetPoint = 0.0;
+        public double spinMotorVoltage = 0.0;
     }
 }

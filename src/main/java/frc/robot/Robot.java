@@ -5,26 +5,8 @@
 package frc.robot;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commandGroups.CommandGroupsConstants;
-import frc.robot.lib.PoseEstimation;
-import frc.robot.subsystems.ShootingManager;
-import frc.robot.subsystems.climb.ClimbConstants;
-import frc.robot.subsystems.conveyor.ConveyorConstants;
-import frc.robot.subsystems.gripper.GripperConstants;
-import frc.robot.subsystems.hood.HoodConstants;
-import frc.robot.subsystems.intake.IntakeConstants;
-import frc.robot.subsystems.shooter.ShooterConstants;
-import frc.robot.subsystems.swerve.SwerveConstants;
-import frc.robot.subsystems.swerve.SwerveDrive;
-import frc.robot.subsystems.vision.VisionConstants;
-import java.util.List;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -40,10 +22,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  * project.
  */
 public class Robot extends LoggedRobot {
-    private final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
     private RobotContainer robotContainer;
     private Command autonomousCommand;
-    private final Field2d field2d = new Field2d();
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -95,26 +75,13 @@ public class Robot extends LoggedRobot {
 
         Logger.start();
 
-        SwerveConstants.initConstants(true, Robot.isReal());
-        IntakeConstants.initConstants();
-        ConveyorConstants.initConstants();
-        ClimbConstants.initConstants();
-        GripperConstants.initConstants();
-        HoodConstants.initConstants();
-        ShooterConstants.initConstants();
         Pathfinding.setPathfinder(new LocalADStarAK());
 
         robotContainer = RobotContainer.getInstance();
-        compressor.enableDigital();
 
         CommandScheduler.getInstance()
                 .onCommandInitialize(
                         command -> System.out.println("Command initialized: " + command));
-        SmartDashboard.putNumber(
-                "Hood Tuning Angle", robotContainer.hoodTuningAngle.in(Units.Degrees));
-        SmartDashboard.putNumber(
-                "Shooter Tuning Velocity",
-                robotContainer.shooterTuningVelocity.in(Units.RotationsPerSecond));
     }
 
     /**
@@ -126,36 +93,7 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void robotPeriodic() {
-        PoseEstimation.getInstance()
-                .processVisionMeasurements(Constants.VISION_MEASUREMENT_MULTIPLIER);
         CommandScheduler.getInstance().run();
-        SmartDashboard.putData(CommandScheduler.getInstance());
-
-        Logger.recordOutput(
-                "Robot/OptimalClimbPose",
-                SwerveDrive.getInstance()
-                        .getBotPose()
-                        .nearest(List.of(CommandGroupsConstants.CLIMB_POSES)));
-
-        Logger.recordOutput(
-                "Robot/DistanceToSpeaker", ShootingManager.getInstance().getDistanceToSpeaker());
-        Logger.recordOutput("Robot/IsShooting", ShootingManager.getInstance().isShooting());
-        Logger.recordOutput("Robot/ReadyToShoot", ShootingManager.getInstance().readyToShoot());
-        field2d.setRobotPose(PoseEstimation.getInstance().getEstimatedPose());
-        Logger.recordOutput("Robot/SpeakerPose", VisionConstants.getSpeakerPose());
-        SmartDashboard.putData("Field", field2d);
-
-        robotContainer.hoodTuningAngle.mut_replace(
-                SmartDashboard.getNumber(
-                        "Hood Tuning Angle", robotContainer.hoodTuningAngle.in(Units.Degrees)),
-                Units.Degrees);
-        robotContainer.shooterTuningVelocity.mut_replace(
-                SmartDashboard.getNumber(
-                        "Shooter Tuning Velocity",
-                        robotContainer.shooterTuningVelocity.in(Units.RotationsPerSecond)),
-                Units.RotationsPerSecond);
-
-        ShootingManager.getInstance().updateCommandedState();
     }
 
     /**

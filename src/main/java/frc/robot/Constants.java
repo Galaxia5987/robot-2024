@@ -1,24 +1,17 @@
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.GeometryUtil;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.subsystems.swerve.*;
-import frc.robot.subsystems.vision.*;
 import org.littletonrobotics.junction.AutoLogOutput;
-import org.photonvision.PhotonCamera;
-import org.photonvision.simulation.SimCameraProperties;
 
 public class Constants {
+
+    public static final double toRadiansFromRotation = 6.283_185;
 
     public static final int CONFIG_TIMEOUT = 100; // [ms]
 
@@ -74,134 +67,6 @@ public class Constants {
 
     @AutoLogOutput
     static double VISION_MEASUREMENT_MULTIPLIER = AUTO_START_VISION_MEASUREMENT_MULTIPLIER;
-
-    public static void initSwerve() {
-        ModuleIO[] moduleIOs = new ModuleIO[4];
-        GyroIO gyroIO =
-                switch (CURRENT_MODE) {
-                    case REAL -> {
-                        for (int i = 0; i < moduleIOs.length; i++) {
-                            moduleIOs[i] =
-                                    new ModuleIOTalonFX(
-                                            Ports.SwerveDrive.DRIVE_IDS[i],
-                                            Ports.SwerveDrive.ANGLE_IDS[i],
-                                            Ports.SwerveDrive.ENCODER_IDS[i],
-                                            SwerveConstants.DRIVE_MOTOR_CONFIGS,
-                                            SwerveConstants.ANGLE_MOTOR_CONFIGS,
-                                            new SwerveModuleInputsAutoLogged());
-                        }
-                        yield new GyroIOReal();
-                    }
-                    case SIM -> {
-                        for (int i = 0; i < moduleIOs.length; i++) {
-                            moduleIOs[i] = new ModuleIOSim(new SwerveModuleInputsAutoLogged());
-                        }
-                        yield new GyroIOSim();
-                    }
-                    default -> {
-                        for (int i = 0; i < moduleIOs.length; i++) {
-                            moduleIOs[i] = new ModuleIO() {};
-                        }
-                        yield new GyroIO() {};
-                    }
-                };
-        SwerveDrive.initialize(gyroIO, SWERVE_OFFSETS, moduleIOs);
-        SwerveDrive swerveDrive = SwerveDrive.getInstance();
-        AutoBuilder.configureHolonomic(
-                () -> swerveDrive.getEstimator().getEstimatedPosition(),
-                swerveDrive::resetPose,
-                swerveDrive::getCurrentSpeeds,
-                (speeds) -> {
-                    //                     Fixes diversion from note during autonomous
-                    if (RobotContainer.getInstance().useNoteDetection
-                            && Vision.getInstance().getYawToNote().isPresent()) {
-                        speeds.vyMetersPerSecond =
-                                SwerveConstants.VY_NOTE_DETECTION_CONTROLLER.calculate(
-                                        Math.sin(
-                                                Math.toRadians(
-                                                        Vision.getInstance()
-                                                                .getYawToNote()
-                                                                .getAsDouble())),
-                                        0);
-                    }
-
-                    swerveDrive.drive(speeds, false);
-                },
-                new HolonomicPathFollowerConfig(
-                        new PIDConstants(5.5, 0, 0.15),
-                        new PIDConstants(3, 0, 0.4),
-                        SwerveConstants.MAX_X_Y_VELOCITY,
-                        Constants.ROBOT_LENGTH.in(Units.Meters) / Math.sqrt(2),
-                        new ReplanningConfig()),
-                Constants::isRed,
-                swerveDrive);
-    }
-
-    public static void initVision() {
-        VisionModule rightOpi;
-        VisionModule leftOpi;
-        VisionIO speakerLeftCamera;
-        VisionIO speakerRightCamera;
-        VisionIO driverCamera;
-        var field = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-        switch (CURRENT_MODE) {
-            case REAL:
-                speakerRightCamera =
-                        new PhotonVisionIOReal(
-                                new PhotonCamera("OV2311_1"),
-                                "Speaker_Right_Camera",
-                                SPEAKER_RIGHT_CAMERA_POSE,
-                                field,
-                                true,
-                                false);
-                speakerLeftCamera =
-                        new PhotonVisionIOReal(
-                                new PhotonCamera("OV2311_2"),
-                                "Speaker_Left_Camera",
-                                SPEAKER_LEFT_CAMERA_POSE,
-                                field,
-                                true,
-                                false);
-                driverCamera =
-                        new PhotonVisionIOReal(
-                                new PhotonCamera("Driver_Camera"),
-                                "Driver_Camera",
-                                DRIVER_CAMERA_POSE,
-                                field,
-                                false,
-                                true);
-                break;
-            case SIM:
-                speakerLeftCamera =
-                        new VisionSimIO(
-                                new PhotonCamera("Speaker_Left_Camera"),
-                                SPEAKER_LEFT_CAMERA_POSE,
-                                field,
-                                SimCameraProperties.LL2_1280_720());
-                speakerRightCamera =
-                        new VisionSimIO(
-                                new PhotonCamera("Speaker_Right_Camera"),
-                                SPEAKER_RIGHT_CAMERA_POSE,
-                                field,
-                                SimCameraProperties.LL2_1280_720());
-                driverCamera =
-                        new VisionSimIO(
-                                new PhotonCamera("Driver_Camera"),
-                                DRIVER_CAMERA_POSE,
-                                field,
-                                SimCameraProperties.LL2_1280_720());
-                break;
-            case REPLAY:
-            default:
-                speakerLeftCamera = new VisionIO() {};
-                speakerRightCamera = new VisionIO() {};
-                driverCamera = new VisionIO() {};
-                break;
-        }
-        rightOpi = new VisionModule(driverCamera);
-        leftOpi = new VisionModule(speakerLeftCamera, speakerRightCamera);
-        Vision.initialize(rightOpi, leftOpi);
-    }
 
     public static boolean isRed() {
         var alliance = DriverStation.getAlliance();
