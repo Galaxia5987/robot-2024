@@ -15,6 +15,12 @@ public class SwerveConstants {
                     .withStatorCurrentLimit(80)
                     .withStatorCurrentLimitEnable(true)
                     .withSupplyCurrentLimitEnable(true);
+    public static final CurrentLimitsConfigs FL_TALON_FX_CURRENT_LIMITS =
+            new CurrentLimitsConfigs()
+                    .withSupplyCurrentLimit(30)
+                    .withStatorCurrentLimit(60)
+                    .withStatorCurrentLimitEnable(true)
+                    .withSupplyCurrentLimitEnable(true);
 
     public static final double VOLT_COMP_SATURATION = 12;
     public static final double NEUTRAL_DEADBAND = 0.0;
@@ -80,6 +86,7 @@ public class SwerveConstants {
     public static double ANGLE_REDUCTION;
     public static FeedbackConfigs FEEDBACK_CONFIGS_ANGLE;
     public static TalonFXConfiguration ANGLE_MOTOR_CONFIGS;
+    public static TalonFXConfiguration FRONT_LEFT_ANGLE_MOTOR_CONFIGS;
 
     public static double DRIVE_MOTOR_MOMENT_OF_INERTIA = 0.025;
     public static double ANGLE_MOTOR_MOMENT_OF_INERTIA = 0.004;
@@ -227,5 +234,15 @@ public class SwerveConstants {
                                 new MotionMagicConfigs()
                                         .withMotionMagicCruiseVelocity(30)
                                         .withMotionMagicAcceleration(120));
+
+        FRONT_LEFT_ANGLE_MOTOR_CONFIGS = new TalonFXConfiguration()
+                .withVoltage(VOLTAGE_CONFIGS)
+                .withCurrentLimits(FL_TALON_FX_CURRENT_LIMITS)
+                .withFeedback(FEEDBACK_CONFIGS_ANGLE)
+                .withMotorOutput(MOTOR_OUTPUT_CONFIGS)
+                .withMotionMagic(
+                        new MotionMagicConfigs()
+                                .withMotionMagicCruiseVelocity(30)
+                                .withMotionMagicAcceleration(120));
     }
 }

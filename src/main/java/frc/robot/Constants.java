@@ -82,7 +82,15 @@ public class Constants {
         GyroIO gyroIO =
                 switch (CURRENT_MODE) {
                     case REAL -> {
-                        for (int i = 0; i < moduleIOs.length; i++) {
+                        moduleIOs[0] =
+                            new ModuleIOTalonFX(
+                                    Ports.SwerveDrive.DRIVE_IDS[1],
+                                    Ports.SwerveDrive.ANGLE_IDS[1],
+                                    Ports.SwerveDrive.ENCODER_IDS[1],
+                                    SwerveConstants.DRIVE_MOTOR_CONFIGS,
+                                    SwerveConstants.FRONT_LEFT_ANGLE_MOTOR_CONFIGS,
+                                    new SwerveModuleInputsAutoLogged());
+                        for (int i = 1; i < moduleIOs.length; i++) {
                             moduleIOs[i] =
                                     new ModuleIOTalonFX(
                                             Ports.SwerveDrive.DRIVE_IDS[i],
@@ -115,13 +123,13 @@ public class Constants {
                 swerveDrive::getCurrentSpeeds,
                 (speeds) -> {
                     //                     Fixes diversion from note during autonomous
-                    if (RobotContainer.getInstance().useNoteDetection) {
-                        if (Vision.getInstance().getYawToNote().isPresent()) {
-                            yawToNote = Vision.getInstance().getYawToNote().get().getSin();
-                        }
-                        speeds.vyMetersPerSecond =
-                                SwerveConstants.VY_NOTE_DETECTION_CONTROLLER.calculate(yawToNote);
-                    }
+//                    if (RobotContainer.getInstance().useNoteDetection) {
+//                        if (Vision.getInstance().getYawToNote().isPresent()) {
+//                            yawToNote = Vision.getInstance().getYawToNote().get().getSin();
+//                        }
+//                        speeds.vyMetersPerSecond =
+//                                SwerveConstants.VY_NOTE_DETECTION_CONTROLLER.calculate(yawToNote);
+//                    }
 
                     swerveDrive.drive(speeds, false);
                 },

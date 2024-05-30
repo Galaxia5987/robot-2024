@@ -11,21 +11,14 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Ports;
 
 public class ClimbIOReal implements ClimbIO {
-    private final Servo servo;
     private final TalonFX mainMotor;
-    private final TalonFX auxMotor;
     private final Timer timer = new Timer();
 
     private final DutyCycleOut powerControl = new DutyCycleOut(0).withEnableFOC(true);
 
     public ClimbIOReal() {
         mainMotor = new TalonFX(Ports.Elevator.MAIN_ID);
-        auxMotor = new TalonFX(Ports.Elevator.AUX_ID);
-        servo = new Servo(Ports.Elevator.ELEVATOR_SERVO_PORT);
         mainMotor.getConfigurator().apply(ClimbConstants.MAIN_MOTOR_CONFIGURATION);
-        auxMotor.getConfigurator().apply(ClimbConstants.AUX_MOTOR_CONFIGURATION);
-
-        auxMotor.setControl(new StrictFollower(mainMotor.getDeviceID()));
 
         timer.reset();
         timer.start();
@@ -34,21 +27,6 @@ public class ClimbIOReal implements ClimbIO {
     @Override
     public void setPower(double power) {
         mainMotor.setControl(powerControl.withOutput(power));
-    }
-
-    public void openStopper() {
-        inputs.stopperSetpoint = ClimbConstants.OPEN_POSITION;
-        servo.set(ClimbConstants.OPEN_POSITION.in(Rotations));
-    }
-
-    public void closeStopper() {
-        inputs.stopperSetpoint = ClimbConstants.LOCKED_POSITION;
-        servo.set(ClimbConstants.LOCKED_POSITION.in(Rotations));
-    }
-
-    @Override
-    public void disableStopper() {
-        servo.setDisabled();
     }
 
     public void stopMotor() {
@@ -61,7 +39,6 @@ public class ClimbIOReal implements ClimbIO {
 
     @Override
     public void updateInputs(ClimbInputs inputs) {
-        inputs.stopperAngle.mut_replace(servo.getAngle(), Degrees);
         inputs.appliedVoltage.mut_replace(mainMotor.getMotorVoltage().getValue(), Volts);
     }
 }

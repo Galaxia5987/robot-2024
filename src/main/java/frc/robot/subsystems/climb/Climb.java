@@ -30,14 +30,6 @@ public class Climb extends SubsystemBase {
         INSTANCE = new Climb(io);
     }
 
-    public Command lock() {
-        return Commands.run(io::closeStopper).withTimeout(0.5).andThen(io::disableStopper);
-    }
-
-    public Command unlock() {
-        return Commands.run(io::openStopper).withTimeout(0.5).andThen(io::disableStopper);
-    }
-
     public Command setPower(DoubleSupplier power) {
         return Commands.parallel(run(() -> io.setPower(power.getAsDouble())));
     }

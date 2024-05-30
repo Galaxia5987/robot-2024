@@ -21,8 +21,10 @@ public class ClimbConstants { // TODO: check real values
                                 .withInverted(InvertedValue.Clockwise_Positive)
                                 .withNeutralMode(NeutralModeValue.Brake))
                 .CurrentLimits
-                .withStatorCurrentLimitEnable(false)
-                .withSupplyCurrentLimitEnable(false);
+                .withStatorCurrentLimitEnable(true)
+                .withSupplyCurrentLimitEnable(true)
+                .withStatorCurrentLimit(40)
+                .withSupplyCurrentLimit(40);
 
         AUX_MOTOR_CONFIGURATION.withMotorOutput(
                 new MotorOutputConfigs()

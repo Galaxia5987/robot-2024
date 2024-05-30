@@ -32,6 +32,7 @@ import frc.robot.subsystems.conveyor.ConveyorIO;
 import frc.robot.subsystems.conveyor.ConveyorIOReal;
 import frc.robot.subsystems.conveyor.ConveyorIOSim;
 import frc.robot.subsystems.gripper.*;
+import frc.robot.subsystems.holder.Holder;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOReal;
@@ -55,28 +56,13 @@ import org.littletonrobotics.junction.AutoLogOutput;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
-    private final Intake intake;
-    private final Conveyor conveyor;
+    private final Holder holder;
     private final Climb climb;
-    private final Gripper gripper;
-    private final Hood hood;
-    private final Shooter shooter;
     private final SwerveDrive swerveDrive;
-    public static final LEDs leds = new LEDs(9, 58);
     private final CommandXboxController driverController = new CommandXboxController(0);
-    private final CommandPS5Controller operatorController = new CommandPS5Controller(1);
-    private final CommandXboxController testController = new CommandXboxController(2);
     private final CommandGroups commandGroups;
     private final SendableChooser<String> autoChooser;
     private final HashMap<String, PathPlannerAuto> autos = new HashMap<>();
-    @Getter @Setter private boolean isForceShooting = false;
-    @Getter private Constants.State state = Constants.State.SHOOT;
-
-    @AutoLogOutput boolean useNoteDetection = false;
-
-    public final MutableMeasure<Angle> hoodTuningAngle = Units.Degrees.of(110).mutableCopy();
-    public final MutableMeasure<Velocity<Angle>> shooterTuningVelocity =
-            Units.RotationsPerSecond.of(50).mutableCopy();
 
     public int pathIndex = 0;
     private PathPlannerAuto pathPlannerAuto;
@@ -88,60 +74,27 @@ public class RobotContainer {
             };
     private final Timer scoreTimer = new Timer();
 
-    private boolean ampPressed = true;
-
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer() {
-        HoodIO hoodIO;
-        IntakeIO intakeIO;
-        ConveyorIO conveyorIO;
-        ShooterIO shooterIO;
-        GripperIO gripperIO;
         ClimbIO climbIO;
         switch (Constants.CURRENT_MODE) {
             case REAL:
-                intakeIO = new IntakeIOReal();
-                conveyorIO = new ConveyorIOReal();
-                gripperIO = new GripperIOReal();
-                hoodIO = new HoodIOReal();
-                shooterIO = new ShooterIOReal();
                 climbIO = new ClimbIOReal();
                 break;
             case SIM:
-                intakeIO = new IntakeIOSim();
-                conveyorIO = new ConveyorIOSim();
-                gripperIO = new GripperIOSim();
-                hoodIO = new HoodIOSim();
-                shooterIO = new ShooterIOSim();
                 climbIO = new ClimbIOSim();
                 break;
             case REPLAY:
             default:
-                intakeIO = new IntakeIO() {};
-                conveyorIO = new ConveyorIO() {};
-                gripperIO = new GripperIO() {};
-                hoodIO = new HoodIO() {};
-                shooterIO = new ShooterIO() {};
                 climbIO = new ClimbIO() {};
                 break;
         }
-        Intake.initialize(intakeIO);
-        Conveyor.initialize(conveyorIO);
         Climb.initialize(climbIO);
-        Gripper.initialize(gripperIO);
-        Hood.initialize(hoodIO);
-        Shooter.initialize(shooterIO);
         Constants.initSwerve();
-        Constants.initVision();
 
         swerveDrive = SwerveDrive.getInstance();
-        intake = Intake.getInstance();
-        conveyor = Conveyor.getInstance();
         climb = Climb.getInstance();
-        hood = Hood.getInstance();
-        shooter = Shooter.getInstance();
-
-        gripper = Gripper.getInstance();
+        holder = Holder.getInstance();
         commandGroups = CommandGroups.getInstance();
 
         scoreTimer.start();
@@ -155,8 +108,6 @@ public class RobotContainer {
                 "print1", Commands.print("CapsLockIsBetter!!!").repeatedly().withTimeout(2));
         NamedCommands.registerCommand(
                 "print2", Commands.print("GaiaWasRightInPrintOne!!!").repeatedly().withTimeout(2));
-        NamedCommands.registerCommand("stopIntake", intake.stop(false).withTimeout(0.05));
-        NamedCommands.registerCommand("retractIntake", intake.stop());
         NamedCommands.registerCommand(
                 "score",
                 Commands.runOnce(scoreTimer::reset)
@@ -169,17 +120,9 @@ public class RobotContainer {
                                                                 Math.min(
                                                                         pathIndex + 1,
                                                                         pathPoints.size() - 1))));
-        NamedCommands.registerCommand("finishScore", gripper.setRollerPower(0).withTimeout(0.05));
         NamedCommands.registerCommand(
                 "followPathRotation",
                 Commands.runOnce(() -> ShootingManager.getInstance().setShooting(false)));
-        NamedCommands.registerCommand(
-                "followPathSpeeds", Commands.runOnce(() -> setUseNoteDetection(false)));
-        NamedCommands.registerCommand(
-                "useNoteDetection", Commands.runOnce(() -> setUseNoteDetection(true)));
-
-        NamedCommands.registerCommand("prepareShoot", prepareShooter());
-        NamedCommands.registerCommand("closeShoot", closeShoot());
         NamedCommands.registerCommand("shootAndIntake", commandGroups.shootAndIntake());
         NamedCommands.registerCommand(
                 "adjustToTarget",
@@ -190,23 +133,7 @@ public class RobotContainer {
                         () ->
                                 Constants.VISION_MEASUREMENT_MULTIPLIER =
                                         Constants.AUTO_VISION_MEASUREMENT_MULTIPLIER));
-        NamedCommands.registerCommand("shoot", prepareShooter());
-        NamedCommands.registerCommand(
-                "stopShooter",
-                Commands.parallel(
-                        hood.setAngle(Units.Degrees.of(114).mutableCopy()),
-                        shooter.stop(),
-                        conveyor.stop()));
 
-        PPHolonomicDriveController.setRotationTargetOverride(
-                () -> {
-                    if (ShootingManager.getInstance().isShooting()) {
-                        return Optional.of(
-                                new Rotation2d(
-                                        ShootingManager.getInstance().getSwerveCommandedAngle()));
-                    }
-                    return Optional.empty();
-                });
         autoChooser =
                 new SendableChooser<>() {
                     {
@@ -223,56 +150,11 @@ public class RobotContainer {
         SmartDashboard.putData("autoList", autoChooser);
     }
 
-    private void setUseNoteDetection(boolean useNoteDetection) {
-        this.useNoteDetection = useNoteDetection;
-    }
-
     public static RobotContainer getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new RobotContainer();
         }
         return INSTANCE;
-    }
-
-    public Command prepareShooter() {
-        return Commands.parallel(
-                hood.setAngle(ShootingManager.getInstance().getHoodCommandedAngle()),
-                commandGroups.shootAndConvey(
-                        ShootingManager.getInstance().getShooterCommandedVelocity(), true));
-    }
-
-    public Translation2d getAutoToSpeaker() {
-        if (pathPoints.isEmpty()) {
-            return new Translation2d();
-        }
-        return VisionConstants.getSpeakerPose()
-                .minus(
-                        Constants.isRed()
-                                ? GeometryUtil.flipFieldPosition(pathPoints.get(pathIndex).position)
-                                : pathPoints.get(pathIndex).position);
-    }
-
-    public Command closeShoot() {
-        return commandGroups
-                .shootAndConvey(shooterTuningVelocity, false)
-                .raceWith(
-                        hood.setAngle(hoodTuningAngle),
-                        commandGroups.feedWithWait(
-                                () ->
-                                        (shooter.atSetpoint()
-                                                        && conveyor.atSetpoint()
-                                                        && hood.atSetpoint())
-                                                || isForceShooting));
-    }
-
-    private Command startRumble() {
-        return Commands.runOnce(
-                () -> driverController.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 1.0));
-    }
-
-    private Command stopRumble() {
-        return Commands.runOnce(
-                () -> driverController.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.0));
     }
 
     private void configureDefaultCommands() {
@@ -288,92 +170,15 @@ public class RobotContainer {
                 climb.setPower(
                         () ->
                                 MathUtil.applyDeadband(
-                                        -(operatorController.getL2Axis() + 1) / 2
-                                                + (operatorController.getR2Axis() + 1) / 2,
+                                        -(driverController.getLeftTriggerAxis() + 1) / 2
+                                                + (driverController.getRightTriggerAxis() + 1) / 2,
                                         0.15)));
-
-        leds.setDefaultCommand(
-                new LEDsDefaultCommand(leds, driverController.leftTrigger()).ignoringDisable(true));
     }
 
     private void configureButtonBindings() {
-        testController.rightBumper().onTrue(commandGroups.allBits(operatorController));
-        testController.leftBumper().onTrue(commandGroups.swerveBit());
-        testController.a().onTrue(commandGroups.openClimb());
-
-        driverController
-                .a()
-                .whileTrue(commandGroups.superPoop(operatorController, () -> isForceShooting))
-                .onFalse(commandGroups.stopShooting());
         driverController.y().onTrue(Commands.runOnce(swerveDrive::resetGyro));
-        driverController.b().whileTrue(closeShoot()).onFalse(commandGroups.stopShooting());
-        driverController
-                .x()
-                .whileTrue(
-                        commandGroups
-                                .shootAndConvey(
-                                        Units.RotationsPerSecond.of(73).mutableCopy(), false)
-                                .alongWith(
-                                        hood.setAngle(Units.Degrees.of(84).mutableCopy()),
-                                        commandGroups.feedWithWait(
-                                                () ->
-                                                        (shooter.atSetpoint() && hood.atSetpoint()
-                                                                || isForceShooting))))
-                .onFalse(commandGroups.stopShooting());
-
-        driverController
-                .rightTrigger()
-                .whileTrue(
-                        commandGroups
-                                .shootToSpeaker(driverController)
-                                .alongWith(commandGroups.feedShooter(this::isForceShooting)))
-                .onFalse(commandGroups.stopShooting());
-        driverController
-                .rightTrigger()
-                .onTrue(Commands.runOnce(() -> state = Constants.State.SHOOT));
-
-        driverController
-                .leftTrigger()
-                .whileTrue(commandGroups.intake(startRumble()))
-                .onFalse(Commands.parallel(intake.stop(), gripper.setRollerPower(0), stopRumble()));
-
-        driverController
-                .rightBumper()
-                .whileTrue(intake.outtake().alongWith(gripper.setRollerPower(-0.7)))
-                .onFalse(intake.stop().alongWith(gripper.setRollerPower(0)));
-
-        driverController.leftBumper().whileTrue(commandGroups.adjustToAmp(driverController));
-        driverController
-                .leftBumper()
-                .whileTrue(commandGroups.shootToAmp(operatorController))
-                .onFalse(commandGroups.stopShooting());
-        driverController
-                .leftBumper()
-                .onTrue(Commands.runOnce(() -> state = Constants.State.AMP))
-                .onFalse(Commands.runOnce(() -> state = Constants.State.SHOOT));
-
-        operatorController.options().onTrue(climb.lock());
-        operatorController
-                .create()
-                .onTrue(
-                        climb.unlock()
-                                .alongWith(Commands.runOnce(() -> state = Constants.State.CLIMB)));
-        operatorController
-                .R1()
-                .whileTrue(gripper.setRollerPower(0.4))
-                .onFalse(gripper.setRollerPower(0));
-        operatorController
-                .L1()
-                .whileTrue(gripper.setRollerPower(-0.4))
-                .onFalse(gripper.setRollerPower(0));
-
-        operatorController.triangle().onTrue(commandGroups.shootToSpeaker());
-        operatorController
-                .square()
-                .onTrue(intake.setAnglePower(-0.3))
-                .onFalse(
-                        intake.reset(Units.Degrees.zero().mutableCopy())
-                                .alongWith(intake.setAnglePower(0)));
+        driverController.rightBumper().whileTrue(holder.setPower(0.3))
+                .onFalse(holder.setPower(0));
     }
 
     /**
