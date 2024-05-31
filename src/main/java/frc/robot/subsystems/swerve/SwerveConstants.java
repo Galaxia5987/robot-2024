@@ -235,14 +235,15 @@ public class SwerveConstants {
                                         .withMotionMagicCruiseVelocity(30)
                                         .withMotionMagicAcceleration(120));
 
-        FRONT_LEFT_ANGLE_MOTOR_CONFIGS = new TalonFXConfiguration()
-                .withVoltage(VOLTAGE_CONFIGS)
-                .withCurrentLimits(FL_TALON_FX_CURRENT_LIMITS)
-                .withFeedback(FEEDBACK_CONFIGS_ANGLE)
-                .withMotorOutput(MOTOR_OUTPUT_CONFIGS)
-                .withMotionMagic(
-                        new MotionMagicConfigs()
-                                .withMotionMagicCruiseVelocity(30)
-                                .withMotionMagicAcceleration(120));
+        FRONT_LEFT_ANGLE_MOTOR_CONFIGS =
+                new TalonFXConfiguration()
+                        .withVoltage(VOLTAGE_CONFIGS)
+                        .withCurrentLimits(FL_TALON_FX_CURRENT_LIMITS)
+                        .withFeedback(FEEDBACK_CONFIGS_ANGLE)
+                        .withMotorOutput(MOTOR_OUTPUT_CONFIGS)
+                        .withMotionMagic(
+                                new MotionMagicConfigs()
+                                        .withMotionMagicCruiseVelocity(30)
+                                        .withMotionMagicAcceleration(120));
     }
 }

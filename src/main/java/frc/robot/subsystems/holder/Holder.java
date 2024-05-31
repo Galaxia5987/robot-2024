@@ -12,7 +12,7 @@ public class Holder extends SubsystemBase {
     private static Holder INSTANCE = null;
     private final TalonSRX spinMotor;
 
-    public Holder(){
+    public Holder() {
         spinMotor = new TalonSRX(Ports.Gripper.ROLLER_ID);
         spinMotor.enableVoltageCompensation(true);
         spinMotor.enableCurrentLimit(true);
@@ -22,14 +22,14 @@ public class Holder extends SubsystemBase {
         spinMotor.setInverted(false);
     }
 
-    public static Holder getInstance(){
-        if (INSTANCE==null){
+    public static Holder getInstance() {
+        if (INSTANCE == null) {
             INSTANCE = new Holder();
         }
         return INSTANCE;
     }
 
-    public Command setPower(double power){
-        return Commands.run(()->spinMotor.set(ControlMode.PercentOutput, power));
+    public Command setPower(double power) {
+        return Commands.run(() -> spinMotor.set(ControlMode.PercentOutput, power));
     }
 }

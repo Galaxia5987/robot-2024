@@ -7,8 +7,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrive;
-import frc.robot.subsystems.vision.Vision;
-import frc.robot.subsystems.vision.VisionResult;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.DoubleStream;
@@ -18,13 +16,11 @@ public class PoseEstimation {
     private static PoseEstimation INSTANCE = null;
 
     private final SwerveDrive swerveDrive;
-    private final Vision vision;
 
     private Translation2d speakerPose;
 
     private PoseEstimation() {
         swerveDrive = SwerveDrive.getInstance();
-        vision = Vision.getInstance();
     }
 
     public static PoseEstimation getInstance() {
@@ -32,32 +28,6 @@ public class PoseEstimation {
             INSTANCE = new PoseEstimation();
         }
         return INSTANCE;
-    }
-
-    public void processVisionMeasurements(double multiplier) {
-        var results = vision.getResults();
-        if (results == null) {
-            return;
-        }
-        for (VisionResult result : results) {
-            if (result == null || !result.useForEstimation()) {
-                continue;
-            }
-            DoubleStream distances = Arrays.stream(result.distanceToTargets());
-            var ambiguities = distances.map((d) -> d * d);
-            double stddev = multiplier * Utils.averageAmbiguity(ambiguities);
-            swerveDrive
-                    .getEstimator()
-                    .addVisionMeasurement(
-                            result.estimatedRobotPose().toPose2d(),
-                            result.timestamp(),
-                            VecBuilder.fill(
-                                    stddev,
-                                    stddev,
-                                    stddev
-                                            * SwerveConstants.MAX_OMEGA_VELOCITY
-                                            / SwerveConstants.MAX_X_Y_VELOCITY));
-        }
     }
 
     @AutoLogOutput(key = "Robot/EstimatedRobotPose")

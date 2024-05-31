@@ -13,7 +13,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.swerve.*;
-import frc.robot.subsystems.vision.*;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.photonvision.PhotonCamera;
 import org.photonvision.simulation.SimCameraProperties;
@@ -64,10 +63,7 @@ public class Constants {
                     MAX_ANGULAR_VELOCITY.in(Units.RotationsPerSecond),
                     MAX_ANGULAR_ACCELERATION.in(Units.RotationsPerSecond.per(Units.Second)));
     public static final double[] SWERVE_OFFSETS = {
-        0.791_566_169_789_154_3,
-        0.778_840_419_471_010_5,
-        0.523_270_138_081_753_5,
-        0.578_518_514_462_962_9
+            0.7881023697025592,0.02712487567812189,0.28127435703185893,0.5767079644176991
     };
 
     public static Mode CURRENT_MODE = Mode.REAL;
@@ -83,13 +79,13 @@ public class Constants {
                 switch (CURRENT_MODE) {
                     case REAL -> {
                         moduleIOs[0] =
-                            new ModuleIOTalonFX(
-                                    Ports.SwerveDrive.DRIVE_IDS[1],
-                                    Ports.SwerveDrive.ANGLE_IDS[1],
-                                    Ports.SwerveDrive.ENCODER_IDS[1],
-                                    SwerveConstants.DRIVE_MOTOR_CONFIGS,
-                                    SwerveConstants.FRONT_LEFT_ANGLE_MOTOR_CONFIGS,
-                                    new SwerveModuleInputsAutoLogged());
+                                new ModuleIOTalonFX(
+                                        Ports.SwerveDrive.DRIVE_IDS[0],
+                                        Ports.SwerveDrive.ANGLE_IDS[0],
+                                        Ports.SwerveDrive.ENCODER_IDS[0],
+                                        SwerveConstants.DRIVE_MOTOR_CONFIGS,
+                                        SwerveConstants.FRONT_LEFT_ANGLE_MOTOR_CONFIGS,
+                                        new SwerveModuleInputsAutoLogged());
                         for (int i = 1; i < moduleIOs.length; i++) {
                             moduleIOs[i] =
                                     new ModuleIOTalonFX(
@@ -123,13 +119,15 @@ public class Constants {
                 swerveDrive::getCurrentSpeeds,
                 (speeds) -> {
                     //                     Fixes diversion from note during autonomous
-//                    if (RobotContainer.getInstance().useNoteDetection) {
-//                        if (Vision.getInstance().getYawToNote().isPresent()) {
-//                            yawToNote = Vision.getInstance().getYawToNote().get().getSin();
-//                        }
-//                        speeds.vyMetersPerSecond =
-//                                SwerveConstants.VY_NOTE_DETECTION_CONTROLLER.calculate(yawToNote);
-//                    }
+                    //                    if (RobotContainer.getInstance().useNoteDetection) {
+                    //                        if (Vision.getInstance().getYawToNote().isPresent()) {
+                    //                            yawToNote =
+                    // Vision.getInstance().getYawToNote().get().getSin();
+                    //                        }
+                    //                        speeds.vyMetersPerSecond =
+                    //
+                    // SwerveConstants.VY_NOTE_DETECTION_CONTROLLER.calculate(yawToNote);
+                    //                    }
 
                     swerveDrive.drive(speeds, false);
                 },
@@ -141,88 +139,6 @@ public class Constants {
                         new ReplanningConfig()),
                 Constants::isRed,
                 swerveDrive);
-    }
-
-    public static void initVision() {
-        VisionModule rightOpi;
-        VisionModule leftOpi;
-        VisionIO speakerLeftCamera;
-        VisionIO speakerRightCamera;
-        VisionIO intakeAprilTagCamera;
-        VisionIO driverCamera;
-        var field = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-        switch (CURRENT_MODE) {
-            case REAL:
-                speakerRightCamera =
-                        new PhotonVisionIOReal(
-                                new PhotonCamera("OV2311_1"),
-                                "Speaker_Right_Camera",
-                                SPEAKER_RIGHT_CAMERA_POSE,
-                                field,
-                                true,
-                                false);
-                speakerLeftCamera =
-                        new PhotonVisionIOReal(
-                                new PhotonCamera("OV2311_2"),
-                                "Speaker_Left_Camera",
-                                SPEAKER_LEFT_CAMERA_POSE,
-                                field,
-                                true,
-                                false);
-                intakeAprilTagCamera =
-                        new PhotonVisionIOReal(
-                                new PhotonCamera("OV2311_0"),
-                                "Intake_AprilTag_Camera",
-                                INTAKE_APRILTAG_CAMERA_POSE,
-                                field,
-                                false,
-                                false);
-                driverCamera =
-                        new PhotonVisionIOReal(
-                                new PhotonCamera("Driver_Camera"),
-                                "Driver_Camera",
-                                DRIVER_CAMERA_POSE,
-                                field,
-                                false,
-                                true);
-                break;
-            case SIM:
-                speakerLeftCamera =
-                        new VisionSimIO(
-                                new PhotonCamera("Speaker_Left_Camera"),
-                                SPEAKER_LEFT_CAMERA_POSE,
-                                field,
-                                SimCameraProperties.LL2_1280_720());
-                speakerRightCamera =
-                        new VisionSimIO(
-                                new PhotonCamera("Speaker_Right_Camera"),
-                                SPEAKER_RIGHT_CAMERA_POSE,
-                                field,
-                                SimCameraProperties.LL2_1280_720());
-                intakeAprilTagCamera =
-                        new VisionSimIO(
-                                new PhotonCamera("OV2311_0"),
-                                INTAKE_APRILTAG_CAMERA_POSE,
-                                field,
-                                SimCameraProperties.LL2_1280_720());
-                driverCamera =
-                        new VisionSimIO(
-                                new PhotonCamera("Driver_Camera"),
-                                DRIVER_CAMERA_POSE,
-                                field,
-                                SimCameraProperties.LL2_1280_720());
-                break;
-            case REPLAY:
-            default:
-                speakerLeftCamera = new VisionIO() {};
-                speakerRightCamera = new VisionIO() {};
-                intakeAprilTagCamera = new VisionIO() {};
-                driverCamera = new VisionIO() {};
-                break;
-        }
-        rightOpi = new VisionModule(driverCamera, intakeAprilTagCamera);
-        leftOpi = new VisionModule(speakerLeftCamera, speakerRightCamera);
-        Vision.initialize(rightOpi, leftOpi);
     }
 
     public static boolean isRed() {

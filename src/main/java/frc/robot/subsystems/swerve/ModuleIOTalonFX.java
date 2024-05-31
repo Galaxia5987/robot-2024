@@ -41,8 +41,8 @@ public class ModuleIOTalonFX implements ModuleIO {
             SwerveModuleInputsAutoLogged inputs) {
         this.inputs = inputs;
 
-        this.driveMotor = new TalonFX(driveMotorID, "swerveDrive");
-        this.angleMotor = new TalonFX(angleMotorID, "swerveDrive");
+        this.driveMotor = new TalonFX(driveMotorID);
+        this.angleMotor = new TalonFX(angleMotorID);
 
         this.encoder = new DutyCycleEncoder(encoderID);
 
