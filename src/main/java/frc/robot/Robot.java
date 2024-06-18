@@ -135,10 +135,8 @@ public class Robot extends LoggedRobot {
                         .getBotPose()
                         .nearest(List.of(CommandGroupsConstants.CLIMB_POSES)));
 
-
         field2d.setRobotPose(PoseEstimation.getInstance().getEstimatedPose());
         SmartDashboard.putData("Field", field2d);
-
     }
 
     /**
