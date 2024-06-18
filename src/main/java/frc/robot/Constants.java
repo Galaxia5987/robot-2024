@@ -6,7 +6,6 @@ import com.pathplanner.lib.util.GeometryUtil;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -14,8 +13,6 @@ import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.swerve.*;
 import org.littletonrobotics.junction.AutoLogOutput;
-import org.photonvision.PhotonCamera;
-import org.photonvision.simulation.SimCameraProperties;
 
 public class Constants {
 
@@ -63,7 +60,7 @@ public class Constants {
                     MAX_ANGULAR_VELOCITY.in(Units.RotationsPerSecond),
                     MAX_ANGULAR_ACCELERATION.in(Units.RotationsPerSecond.per(Units.Second)));
     public static final double[] SWERVE_OFFSETS = {
-            0.7881023697025592,0.02712487567812189,0.28127435703185893,0.5767079644176991
+            0.7914845947871149,0.026063400651585016,0.28097685702442143,0.5741329893533247
     };
 
     public static Mode CURRENT_MODE = Mode.REAL;
