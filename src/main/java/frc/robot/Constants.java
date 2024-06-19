@@ -60,7 +60,7 @@ public class Constants {
                     MAX_ANGULAR_VELOCITY.in(Units.RotationsPerSecond),
                     MAX_ANGULAR_ACCELERATION.in(Units.RotationsPerSecond.per(Units.Second)));
     public static final double[] SWERVE_OFFSETS = {
-            0.7914845947871149,0.026063400651585016,0.28097685702442143,0.5741329893533247
+            0.7913026197825654,0.025138350628458764,0.28135765703394144,0.5748986893724672
     };
 
     public static Mode CURRENT_MODE = Mode.REAL;
