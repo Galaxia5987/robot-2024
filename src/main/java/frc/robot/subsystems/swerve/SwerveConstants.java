@@ -17,8 +17,8 @@ public class SwerveConstants {
                     .withSupplyCurrentLimitEnable(true);
     public static final CurrentLimitsConfigs FL_TALON_FX_CURRENT_LIMITS =
             new CurrentLimitsConfigs()
-                    .withSupplyCurrentLimit(30)
-                    .withStatorCurrentLimit(60)
+                    .withSupplyCurrentLimit(40)//TODO: make sure to change back if we move the port back
+                    .withStatorCurrentLimit(80)
                     .withStatorCurrentLimitEnable(true)
                     .withSupplyCurrentLimitEnable(true);
 
