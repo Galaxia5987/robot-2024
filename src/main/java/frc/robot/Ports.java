@@ -18,7 +18,7 @@ public final class Ports {
 
     public static final class Gripper {
         public static final int ANGLE_ID = 6;
-        public static final int ROLLER_ID = 40;
+        public static final int ROLLER_ID = 28;
         public static final int ENCODER_ID = 7;
     }
 
