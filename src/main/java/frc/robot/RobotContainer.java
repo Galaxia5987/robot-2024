@@ -123,7 +123,9 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         driverController.y().onTrue(Commands.runOnce(swerveDrive::resetGyro));
+
         driverController.rightBumper().whileTrue(holder.setPower(0.8)).onFalse(holder.setPower(0));
+
         driverController.leftBumper().whileTrue(holder.setPower(-0.7)).onFalse(holder.setPower(0));
     }
 
