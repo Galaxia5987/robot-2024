@@ -23,7 +23,7 @@ public class ClimbIOReal implements ClimbIO {
 
     @Override
     public void setPower(double power) {
-        mainMotor.setControl(powerControl.withOutput(power));
+        mainMotor.setControl(powerControl.withOutput(power-0.035));
     }
 
     public void stopMotor() {
