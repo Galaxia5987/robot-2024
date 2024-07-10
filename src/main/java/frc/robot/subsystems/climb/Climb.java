@@ -34,6 +34,14 @@ public class Climb extends SubsystemBase {
         return Commands.parallel(run(() -> io.setPower(power.getAsDouble())));
     }
 
+    public Command setPosition(double position){
+        return run(()->io.setPosition(position)).withTimeout(1.5);
+    }
+
+    public Command reset(){
+        return runOnce(io::reset);
+    }
+
     @Override
     public void periodic() {
         io.updateInputs(inputs);

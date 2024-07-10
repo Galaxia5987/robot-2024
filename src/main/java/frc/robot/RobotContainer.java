@@ -25,7 +25,7 @@ import java.util.List;
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
     private final Holder holder;
-    private final Climb climb;
+    private final Climb elevator;
     private final SwerveDrive swerveDrive;
     private final CommandXboxController driverController = new CommandXboxController(0);
     private final SendableChooser<String> autoChooser;
@@ -60,7 +60,7 @@ public class RobotContainer {
         Constants.initSwerve();
 
         swerveDrive = SwerveDrive.getInstance();
-        climb = Climb.getInstance();
+        elevator = Climb.getInstance();
         holder = Holder.getInstance();
 
         scoreTimer.start();
@@ -112,21 +112,20 @@ public class RobotContainer {
                         0.15,
                         () -> true));
 
-        climb.setDefaultCommand(
-                climb.setPower(
+        elevator.setDefaultCommand(
+                elevator.setPower(
                         () ->
                                 MathUtil.applyDeadband(
-                                        -(driverController.getLeftTriggerAxis() + 1) / 2
-                                                + (driverController.getRightTriggerAxis() + 1) / 2,
+                                        +(driverController.getLeftTriggerAxis() + 1) / 2
+                                                - (driverController.getRightTriggerAxis() + 1) / 2,
                                         0.15)));
     }
 
     private void configureButtonBindings() {
-        driverController.y().onTrue(Commands.runOnce(swerveDrive::resetGyro));
-
-        driverController.rightBumper().whileTrue(holder.setPower(0.8)).onFalse(holder.setPower(0));
-
-        driverController.leftBumper().whileTrue(holder.setPower(-0.7)).onFalse(holder.setPower(0));
+        driverController.y().onTrue(elevator.reset());
+        driverController.x().onTrue(elevator.setPosition(10));
+        driverController.a().onTrue(elevator.setPosition(15));
+        driverController.b().onTrue(elevator.setPosition(30));
     }
 
     /**

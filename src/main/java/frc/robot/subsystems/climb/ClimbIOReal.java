@@ -3,13 +3,17 @@ package frc.robot.subsystems.climb;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Ports;
 
 public class ClimbIOReal implements ClimbIO {
     private final TalonFX mainMotor;
     private final Timer timer = new Timer();
+
+    private final PositionDutyCycle positionControl = new PositionDutyCycle(0);
 
     private final DutyCycleOut powerControl = new DutyCycleOut(0).withEnableFOC(true);
 
@@ -23,19 +27,27 @@ public class ClimbIOReal implements ClimbIO {
 
     @Override
     public void setPower(double power) {
-        mainMotor.setControl(powerControl.withOutput(power-0.035));
+        mainMotor.setControl(powerControl.withOutput(power+0.035));
+    }
+
+    @Override
+    public void setPosition(double position) {
+        inputs.desiredMotorRotation.mut_replace(position, Rotations);
+        mainMotor.setControl(positionControl.withPosition(position));
     }
 
     public void stopMotor() {
         mainMotor.stopMotor();
     }
 
-    public void manualReset() {
+    @Override
+    public void reset() {
         mainMotor.setPosition(0);
     }
 
     @Override
     public void updateInputs(ClimbInputs inputs) {
+        inputs.motorRotation.mut_replace(mainMotor.getPosition().getValue(), Rotations);
         inputs.appliedVoltage.mut_replace(mainMotor.getMotorVoltage().getValue(), Volts);
     }
 }
