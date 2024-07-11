@@ -107,7 +107,7 @@ public class Robot extends LoggedRobot {
         ShooterConstants.initConstants();
         Pathfinding.setPathfinder(new LocalADStarAK());
 
-        robotContainer = RobotContainer.getInstance();
+        robotContainer = RobotContainer.INSTANCE;
         compressor.enableDigital();
 
         CommandScheduler.getInstance()
@@ -129,14 +129,14 @@ public class Robot extends LoggedRobot {
         CommandScheduler.getInstance().run();
         SmartDashboard.putData(CommandScheduler.getInstance());
 
-        Logger.recordOutput(
-                "Robot/OptimalClimbPose",
-                SwerveDrive.getInstance()
-                        .getBotPose()
-                        .nearest(List.of(CommandGroupsConstants.CLIMB_POSES)));
+//        Logger.recordOutput(
+//                "Robot/OptimalClimbPose",
+//                SwerveDrive.getInstance()
+//                        .getBotPose()
+//                        .nearest(List.of(CommandGroupsConstants.CLIMB_POSES)));
 
-        field2d.setRobotPose(PoseEstimation.getInstance().getEstimatedPose());
-        SmartDashboard.putData("Field", field2d);
+//        field2d.setRobotPose(PoseEstimation.getInstance().getEstimatedPose());
+//        SmartDashboard.putData("Field", field2d);
     }
 
     /**

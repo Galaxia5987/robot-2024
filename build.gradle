@@ -6,10 +6,9 @@ plugins {
     id "com.diffplug.spotless" version "6.23.3"
     id "com.peterabeles.gversion" version "1.10"
     id "io.freefair.lombok" version "8.4"
+    id 'org.jetbrains.kotlin.jvm'
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
 
@@ -95,6 +94,7 @@ dependencies {
     def akitJson = new groovy.json.JsonSlurper().parseText(new File(projectDir.getAbsolutePath() + "/vendordeps/AdvantageKit.json").text)
     annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:$akitJson.version"
     implementation 'com.opencsv:opencsv:5.8'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
 configurations.all {
@@ -163,4 +163,7 @@ spotless {
         trimTrailingWhitespace()
         endWithNewline()
     }
+}
+kotlin {
+    jvmToolchain(17)
 }

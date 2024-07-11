@@ -25,7 +25,7 @@ public class ClimbConstants { // TODO: check real values
                 .withSupplyCurrentLimit(40);
 
         PID_CONFIGS
-                .withKP(0.1).withKI(0).withKD(0.005).withKG(0);
+                .withKP(0.1).withKI(0).withKD(0.018).withKG(0);
 
         MAIN_MOTOR_CONFIGURATION
                 .withMotorOutput(

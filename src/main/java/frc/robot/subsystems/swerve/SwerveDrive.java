@@ -216,7 +216,7 @@ public class SwerveDrive extends SubsystemBase {
         if (fieldOriented) {
             chassisSpeeds = fieldOrientedChassisSpeeds;
         }
-        setModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
+//        setModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
     }
 
     /**
